@@ -7,6 +7,14 @@
 
 package frc.robot;
 
+import frc.robot.Subsystem.ClimberSubsystem.ClimberSubsystem;
+import frc.robot.Subsystem.DriveSubsystem.DriveSubsystem;
+import frc.robot.Subsystem.LightingSubsystem.LightingSubsystem;
+import frc.robot.Subsystem.NavigationSubsystem.NavigationSubsystem;
+import frc.robot.Subsystem.ScoringSubsystem.ScoringSubsystem;
+import frc.robot.Subsystem.VisionSubsystem.VisionSubsystem;
+
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
