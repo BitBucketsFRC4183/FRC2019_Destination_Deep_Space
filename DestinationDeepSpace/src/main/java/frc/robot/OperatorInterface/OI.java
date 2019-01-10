@@ -1,4 +1,4 @@
-package frc.robot.OperatorInterface;
+package frc.robot.operatorinterface;
 
 
 import java.util.HashSet;

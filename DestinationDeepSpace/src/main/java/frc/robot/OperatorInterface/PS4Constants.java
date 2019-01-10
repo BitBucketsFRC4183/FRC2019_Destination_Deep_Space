@@ -1,4 +1,4 @@
-package frc.robot.OperatorInterface;
+package frc.robot.operatorinterface;
 
 // These constants should be used in place of literals
 public enum PS4Constants {
