@@ -16,6 +16,7 @@ import frc.robot.subsystem.vision.VisionSubsystem;
 
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -77,6 +78,46 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
+    // NOTE: Normally one should not need to worry about the current order of execution
+    // within the scheduler and the InterativeRobotBase underneath the TimeRobot class
+    // our Robot is derived from.
+    // However, the order is imporant to understanding what interpretations can be
+    // made on records of operator inputs and responses.
+    //
+    // The current order (as identified by examining the Scheduler run and iterative loop
+    // functions) is as follows:
+    //
+    //  IterativeRobotBase.loopFunc() runs on each Timed cycle
+    //    Checks for mode (Disabled, Auto, TeleOp, else Test)
+    //      Runs the appropriate xInit function if there was a mode transition
+    //      Runs the appropriate xPeriodic function
+    //    Runs robotPeriodic()
+    //    Updates the Smartdashboard
+    //    Updates the LiveWindow
+    //    Updates the Shuffleboard
+    //
+    //  Scheduler.getInstance().run(), below
+    //    Exits when Robot is Disabled
+    //    Queries Buttons in reverse index order to ensure that Button #0 is highest priority
+    //    Executes each Subsystem.periodic() function
+    //    Executes each Command scheduled by all previous actions
+    //    Adds any new commands for next cycle
+    //    Adds in any default commands for next cycle
+    //    
+    // Graphically the sequence looks like the following
+    //    loopFunc      |-----------------|
+    //    xPeriodic      |----|
+    //    robotPerodic        |-----|
+    //    dashboards                |----|
+    //
+    // We can execute the Scheduler in any of the periodic functions.
+    // Here we choose to do so in the robotPeriodic function to produce
+    // the following sequence each timing iteration
+    //
+    // {Insert pic tonight}
+
+    Scheduler.getInstance().run();
   }
 
   /**
