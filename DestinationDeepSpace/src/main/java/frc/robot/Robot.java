@@ -19,6 +19,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  // Primary Subsystems that make up the major robot functions
+  private DriveSubsystem    driveSubsystem;
+  private ClimberSubsystem  climberSubsystem;
+  private ScoringSubsystem  scoringSubsystem;
+
+  // Support Subsystem that supplement the major robot functions
+  private NavigationSubsystem navigationSubsystem;
+  private VisionSubsystem     visionSubsystem;
+  private LightingSubsystem   lightingSubsystem;
+
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -30,6 +42,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+    // Create the robot subsystems at initialization
+    // Doing it here rather than in a constructor eliminates potential global dependencies
+    driveSubsystem = new DriveSubsystem();
+    climberSubsystem = new ClimberSubsystem();
+    scoringSubsystem = new ScoringSubsystem();
+
+    navigationSubsystem = new NavigationSubsystem();
+    visionSubsystem = new VisionSubsystem();
+    lightingSubsystem = new LightingSubsystem();
+
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
