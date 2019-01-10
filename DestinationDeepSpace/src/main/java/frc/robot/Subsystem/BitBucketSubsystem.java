@@ -5,11 +5,9 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Subsystem;
-import frc.robot.Subsystem.SubsystemUtilities.DiagnosticsState;
+package frc.robot.subsystem;
+import frc.robot.subsystem.SubsystemUtilities.DiagnosticsState;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
