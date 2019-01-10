@@ -5,20 +5,35 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
-
-import edu.wpi.first.wpilibj.command.Subsystem;
+package frc.robot.subsystem;
 
 /**
  * Add your docs here.
  */
-public class LightingSubsystem extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+public class SubsystemUtilities {
+    public enum SubsystemTelemetryState 
+	{
+		OFF,
+		ON
+	}
+	
+	public enum DiagnosticsInformation 
+	{
+		SUBSYSTEM_BASIC,
+		SUBSYSTEM_EXTENDED
+	}
+	
+	public enum BITMode
+	{
+		INIT, 
+		EXTENDED
+	}
 
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-  }
+	public enum DiagnosticsState 
+	{ 
+		UNKNOWN,
+		PASS,
+		FAIL
+	}
+
 }
