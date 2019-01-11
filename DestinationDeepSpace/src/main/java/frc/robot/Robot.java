@@ -107,15 +107,23 @@ public class Robot extends TimedRobot {
     //    
     // Graphically the sequence looks like the following
     //    loopFunc      |-----------------|
-    //    xPeriodic      |----|
-    //    robotPerodic        |-----|
+    //    xPeriodic      |----|          |
+    //    robotPerodic        |-----|    |
     //    dashboards                |----|
     //
     // We can execute the Scheduler in any of the periodic functions.
     // Here we choose to do so in the robotPeriodic function to produce
-    // the following sequence each timing iteration
+    // the following sequence each timing iteration.
     //
-    // {Insert pic tonight}
+    //    loopFunc      |---------------------------|
+    //    xPeriodic      |----|                     |
+    //    robotPerodic        |---------------------|
+    //    Scheduler           |---------------|    |
+    //    buttons             |---|           |    |
+    //    Subsystem.periodic      |---|       |    |
+    //    Commands                    |---|   |    |
+    //    Add Commands                    |---|    |
+    //    dashboards                          |----|
 
     Scheduler.getInstance().run();
   }
@@ -138,6 +146,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledPeriodic() {
+    // NOTE: because this code executes before robotPeriodic in each iteration
+    // the actions here occur BEFORE the scheduled commands run; this means that
+    // commands can be added during this execution cycle and will be acted upon
+    // within the current cycle.
 
   }
 
@@ -164,6 +176,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    // NOTE: because this code executes before robotPeriodic in each iteration
+    // the actions here occur BEFORE the scheduled commands run; this means that
+    // commands can be added during this execution cycle and will be acted upon
+    // within the current cycle.
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -189,6 +205,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    // NOTE: because this code executes before robotPeriodic in each iteration
+    // the actions here occur BEFORE the scheduled commands run; this means that
+    // commands can be added during this execution cycle and will be acted upon
+    // within the current cycle.
   }
 
   /**
@@ -205,5 +225,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    // NOTE: because this code executes before robotPeriodic in each iteration
+    // the actions here occur BEFORE the scheduled commands run; this means that
+    // commands can be added during this execution cycle and will be acted upon
+    // within the current cycle.
   }
 }
