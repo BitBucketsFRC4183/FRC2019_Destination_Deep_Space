@@ -1,0 +1,6 @@
+[submodule "BucketVision"]
+	path = BucketVision
+	url = https://github.com/BitBucketsFRC4183/BucketVision
+[submodule "BucketLights"]
+	path = BucketLights
+	url = https://github.com/BitBucketsFRC4183/BucketLights
