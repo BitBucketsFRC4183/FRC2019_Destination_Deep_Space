@@ -7,7 +7,6 @@
 
 package frc.robot.subsystem.lighting;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.subsystem.BitBucketSubsystem;
 
 /**
