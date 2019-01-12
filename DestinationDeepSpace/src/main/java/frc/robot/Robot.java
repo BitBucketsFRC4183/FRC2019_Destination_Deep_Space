@@ -13,31 +13,41 @@ import frc.robot.subsystem.lighting.LightingSubsystem;
 import frc.robot.subsystem.navigation.NavigationSubsystem;
 import frc.robot.subsystem.scoring.ScoringSubsystem;
 import frc.robot.subsystem.vision.VisionSubsystem;
+import frc.robot.operatorinterface.OI;
 
-
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.kauailabs.navx.frc.AHRS;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
  * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
+ * creating this project, you must also update the build.grsadle file in the
  * project.
  */
 public class Robot extends TimedRobot {
 
+  // Use this runMode variable to determine the 
+	// current running mode of the Robot.
+	public enum RunMode { DISABLED, AUTO, TELEOP, TEST };
+	public static RunMode runMode = RunMode.DISABLED;
+	public static RunMode lastState = runMode;	
   // Primary Subsystems that make up the major robot functions
-  private DriveSubsystem    driveSubsystem;
-  private ClimberSubsystem  climberSubsystem;
-  private ScoringSubsystem  scoringSubsystem;
+  public static DriveSubsystem    driveSubsystem;
+  public static ClimberSubsystem  climberSubsystem;
+  public static ScoringSubsystem  scoringSubsystem;
+
+  public static OI oi;
 
   // Support Subsystem that supplement the major robot functions
-  private NavigationSubsystem navigationSubsystem;
-  private VisionSubsystem     visionSubsystem;
-  private LightingSubsystem   lightingSubsystem;
+  public static NavigationSubsystem navigationSubsystem;
+  public static VisionSubsystem     visionSubsystem;
+  public static LightingSubsystem   lightingSubsystem;
 
 
   private static final String kDefaultAuto = "Default";
@@ -45,13 +55,14 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  public static AHRS imu;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
-
+    oi = OI.instance();
     // Create the robot subsystems at initialization
     // Doing it here rather than in a constructor eliminates potential global dependencies
     driveSubsystem = new DriveSubsystem();
@@ -62,6 +73,7 @@ public class Robot extends TimedRobot {
     visionSubsystem = new VisionSubsystem();
     lightingSubsystem = new LightingSubsystem();
 
+    imu = new AHRS(SPI.Port.kMXP);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -136,7 +148,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-
+    oi.setDisabledMode();
   }
 
   /**
@@ -169,6 +181,7 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    oi.setAutoMode();
   }
 
   /**
@@ -198,6 +211,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
+    oi.setTeleopMode();
   }
 
   /**
