@@ -55,10 +55,10 @@ public class RobotMap {
     public static final int LOW_STATUS_FRAME_PERIOD_MS         = 100;
     
     /*DRIVE SUBSYSTEM*/
-    public static final int LEFT_DRIVE_MOTOR_FRONT_ID  = 0;
-	public static final int LEFT_DRIVE_MOTOR_REAR_ID   = 0;
-	public static final int RIGHT_DRIVE_MOTOR_FRONT_ID = 0;
-    public static final int RIGHT_DRIVE_MOTOR_REAR_ID  = 0;
+    public static final int LEFT_DRIVE_MOTOR_FRONT_ID  = 1;	// TODO: These are Junior's Numbers, consider 
+	public static final int LEFT_DRIVE_MOTOR_REAR_ID   = 4;
+	public static final int RIGHT_DRIVE_MOTOR_FRONT_ID = 2;
+    public static final int RIGHT_DRIVE_MOTOR_REAR_ID  = 3;
     
     public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG = true;
    	public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG = false;
