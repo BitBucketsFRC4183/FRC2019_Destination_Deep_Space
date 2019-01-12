@@ -13,6 +13,9 @@ import frc.robot.utils.CommandUtils;
 import frc.robot.Robot;
 
 public class DriveLock extends Command {
+
+  private final OI oi = OI.instance();
+
   public DriveLock() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chaSssis)
@@ -29,7 +32,7 @@ public class DriveLock extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.oi.sbtnShake.get())
+    if(oi.sbtnShake.get())
     	{
     		Robot.driveSubsystem.doLockDrive(.1*sineWave(10.0));	/// TODO: MAYBE need it, but interface should be in inches not ticks
     	}
@@ -42,13 +45,13 @@ public class DriveLock extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if( Robot.oi.btnDriveLock.get() || Robot.oi.sbtnShake.get())
+    if( oi.btnDriveLock.get() || oi.sbtnShake.get())
     {
       // Stay in state
       return false; 
     }
     
-    if (Robot.oi.btnAlignLock.get()) 
+    if (oi.btnAlignLock.get()) 
     {
       return CommandUtils.stateChange(this, new AlignLock());
     }
