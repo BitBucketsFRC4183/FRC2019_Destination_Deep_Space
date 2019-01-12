@@ -36,7 +36,8 @@ public class Robot extends TimedRobot {
 	// current running mode of the Robot.
 	public enum RunMode { DISABLED, AUTO, TELEOP, TEST };
 	public static RunMode runMode = RunMode.DISABLED;
-	public static RunMode lastState = runMode;	
+  public static RunMode lastState = runMode;	
+  
   // Primary Subsystems that make up the major robot functions
   public static DriveSubsystem    driveSubsystem;
   public static ClimberSubsystem  climberSubsystem;
@@ -55,7 +56,6 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  public static AHRS imu;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -72,8 +72,6 @@ public class Robot extends TimedRobot {
     navigationSubsystem = new NavigationSubsystem();
     visionSubsystem = new VisionSubsystem();
     lightingSubsystem = new LightingSubsystem();
-
-    imu = new AHRS(SPI.Port.kMXP);
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
