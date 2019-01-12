@@ -81,7 +81,7 @@ public class OI {
 	/**
 	 * If your Command needs rising or falling edge detect on a button,
 	 * use this method to get a ButtonEvent for that purpose.
-	 * In initialize(), get your ButtonEvent: Robot.oi.ButtonEvent btnShoot = Robot.oi.getBtnEvt( Robot.oi.btnShoot).
+	 * In initialize(), get your ButtonEvent: oi.ButtonEvent btnShoot = oi.getBtnEvt( oi.btnShoot).
 	 * In isFinished(), test the ButtonEvent: btnShoot.onPressed() or btnShoot.onReleased().
 	 * 
 	 * @param btn The Logical button 

@@ -27,12 +27,15 @@ import frc.robot.utils.JoystickScale;//for sam <3
  * Add your docs here.
  */
 public class DriveSubsystem extends BitBucketSubsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+
+	private final OI oi = OI.instance();
+
+  	// Put methods for controlling this subsystem
+  	// here. Call these from Commands.
 
 	private final AHRS ahrs = BitBucketsAHRS.instance();
 
-  private final double INCH_PER_WHEEL_ROT = RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
+  	private final double INCH_PER_WHEEL_ROT = RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
 	
 
 	// Can adjust these to help the robot drive straight with zero turn stick.
@@ -346,12 +349,12 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		fwdStick = forwardJoystickScaleChooser.getSelected().rescale(fwdStick);
 		turnStick = turnJoystickScaleChooser.getSelected().rescale(turnStick);
 		
-		if(Robot.oi.btnLowSensitiveDrive.get()) 
+		if(oi.btnLowSensitiveDrive.get()) 
 		{
 			fwdStick *= LOW_SENS_GAIN;
 			turnStick *= LOW_SENS_GAIN;
 		}
-		if(Robot.oi.btnInvertAxis.get()) {
+		if(oi.btnInvertAxis.get()) {
 			fwdStick *= -1.0;
 		}
 		double maxSteer = 1.0 - Math.abs(fwdStick) / 2.0;	// Reduce steering by up to 50%
@@ -388,10 +391,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	public void doAlignDrive(double fwdStick, double turnStick) {
 					
-		if(Robot.oi.btnLowSensitiveDrive.get())
+		if(oi.btnLowSensitiveDrive.get())
 			fwdStick *= LOW_SENS_GAIN;
 		
-		if(Robot.oi.btnInvertAxis.get()) {
+		if(oi.btnInvertAxis.get()) {
 			fwdStick *= -1.0;
 		}
 		
