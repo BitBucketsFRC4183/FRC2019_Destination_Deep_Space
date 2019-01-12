@@ -13,6 +13,9 @@ import frc.robot.utils.CommandUtils;
 import frc.robot.Robot;
 
 public class DriverControl extends Command {
+
+  private static OI oi = OI.instance();
+
   public DriverControl() 
   {
       // Use requires() here to declare subsystem dependencies
@@ -29,22 +32,22 @@ public class DriverControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() 
   {
-    Robot.driveSubsystem.arcadeDrive(Robot.oi.axisForward.get(), Robot.oi.axisTurn.get());
+    Robot.driveSubsystem.arcadeDrive(oi.axisForward.get(), oi.axisTurn.get());
 
   }
 
   // Make this return true when this Command no longer needs to run execute()
   protected boolean isFinished() 
   {
-    if (Robot.oi.btnDriveLock.get() || Robot.oi.sbtnShake.get())
+    if (oi.btnDriveLock.get() || oi.sbtnShake.get())
     {
       return CommandUtils.stateChange(this, new DriveLock());
     }
-    else if(Robot.oi.btnAlignLock.get()) 
+    else if(oi.btnAlignLock.get()) 
     {
       return CommandUtils.stateChange(this, new AlignLock());
     }
-    else if (Robot.oi.btn180.get())
+    else if (oi.btn180.get())
     {
       return CommandUtils.stateChange(this, new TurnBy(180.0,5.0));
     } 
