@@ -14,14 +14,14 @@ import frc.robot.Robot;
 import frc.robot.operatorinterface.OI;
 
 public class DriverControl extends Command {
-
   private static OI oi = OI.instance();
+  private final DriveSubsystem driveSubsystem = DriveSubsystem.instance();
 
   public DriverControl() 
   {
       // Use requires() here to declare subsystem dependencies
       // eg. requires(chassis);
-    requires( Robot.driveSubsystem);
+    requires( driveSubsystem);
   }
 
   // Called just before this Command runs the first time
@@ -33,7 +33,7 @@ public class DriverControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() 
   {
-    Robot.driveSubsystem.arcadeDrive(oi.axisForward.get(), oi.axisTurn.get());
+    driveSubsystem.arcadeDrive(oi.axisForward.get(), oi.axisTurn.get());
 
   }
 

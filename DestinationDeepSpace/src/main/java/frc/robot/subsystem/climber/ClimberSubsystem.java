@@ -13,10 +13,18 @@ import frc.robot.subsystem.BitBucketSubsystem;
  * Add your docs here.
  */
 public class ClimberSubsystem extends BitBucketSubsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  	// Put methods for controlling this subsystem
+  	// here. Call these from Commands.
 
-  @Override
+	// Singleton method; use ClimberSubsystem.instance() to get the ClimberSubsystem instance.
+	public static ClimberSubsystem instance() {
+		if(inst == null)
+			inst = new ClimberSubsystem();
+		return inst;		
+	}
+	private static ClimberSubsystem inst;	
+
+  	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
 		

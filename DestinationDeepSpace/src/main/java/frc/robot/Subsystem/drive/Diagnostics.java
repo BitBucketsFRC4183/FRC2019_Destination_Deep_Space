@@ -17,26 +17,28 @@ import edu.wpi.first.wpilibj.command.Command;
  * Add your docs here.
  */
 public class Diagnostics extends Command {
+    private final DriveSubsystem driveSubsystem = DriveSubsystem.instance();
+
     private int diagInitLoops;
 	
     public Diagnostics() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.driveSubsystem);
+    	requires(driveSubsystem);
     	diagInitLoops = 0;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.driveSubsystem.diagnosticsInit();
+    	driveSubsystem.diagnosticsInit();
     	System.out.println("Entering Drive Diagnostics");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	System.out.println("Executing Drive Diagnostics");
-    	if(diagInitLoops < Robot.driveSubsystem.DIAG_LOOPS_RUN) {
-    		Robot.driveSubsystem.diagnosticsExecute();
+    	if(diagInitLoops < driveSubsystem.DIAG_LOOPS_RUN) {
+    		driveSubsystem.diagnosticsExecute();
     		diagInitLoops++;
     	}
     }
@@ -44,9 +46,9 @@ public class Diagnostics extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
 
-    	if(diagInitLoops >= Robot.driveSubsystem.DIAG_LOOPS_RUN) {
+    	if(diagInitLoops >= driveSubsystem.DIAG_LOOPS_RUN) {
     		System.out.println("Checking Drive Diagnostics");
-    		Robot.driveSubsystem.diagnosticsCheck();
+    		driveSubsystem.diagnosticsCheck();
     		return CommandUtils.stateChange(this, new Idle());
     	}
         return false;
