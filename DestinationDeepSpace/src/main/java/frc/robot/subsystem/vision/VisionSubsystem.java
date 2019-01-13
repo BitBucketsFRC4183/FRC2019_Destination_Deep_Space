@@ -13,10 +13,18 @@ import frc.robot.subsystem.BitBucketSubsystem;
  * Add your docs here.
  */
 public class VisionSubsystem extends BitBucketSubsystem {
-  // Put methods for controlling this subsBitBucketSubsystemystem
-  // here. Call these from Commands.
+  	// Put methods for controlling this subsBitBucketSubsystemystem
+  	// here. Call these from Commands.
 
-  @Override
+	// Singleton method; use VisionSubsystem.instance() to get the VisionSubsystem instance.
+	public static VisionSubsystem instance() {
+		if(inst == null)
+			inst = new VisionSubsystem();
+		return inst;		
+	}
+	private static VisionSubsystem inst;	
+
+  	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
 		

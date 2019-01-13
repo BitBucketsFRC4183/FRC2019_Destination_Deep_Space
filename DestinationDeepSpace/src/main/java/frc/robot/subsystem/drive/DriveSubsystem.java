@@ -29,6 +29,14 @@ import frc.robot.utils.JoystickScale;//for sam <3
  */
 public class DriveSubsystem extends BitBucketSubsystem {
 
+	// Singleton method; use DriveSubsystem.instance() to get the DriveSubsystem instance.
+	public static DriveSubsystem instance() {
+		if(inst == null)
+			inst = new DriveSubsystem();
+		return inst;		
+	}
+	private static DriveSubsystem inst;	
+
 	private final OI oi = OI.instance();
 
   	// Put methods for controlling this subsystem

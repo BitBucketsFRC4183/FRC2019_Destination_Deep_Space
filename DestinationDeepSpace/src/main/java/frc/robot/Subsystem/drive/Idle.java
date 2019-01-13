@@ -14,7 +14,9 @@ import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Idle extends Command {
-  static double lastTestModeTime_sec = 0.0;
+	private final DriveSubsystem driveSubsystem = DriveSubsystem.instance();
+	
+	static double lastTestModeTime_sec = 0.0;
 	
 	// Toggle sign on each one
 	double moveDistance_inches = -2.0 * RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
@@ -23,7 +25,7 @@ public class Idle extends Command {
     public Idle() 
     {
         // Use requires() here to declare subsystem dependencies
-    	requires(Robot.driveSubsystem);
+    	requires(driveSubsystem);
     	setRunWhenDisabled(true);  // Idle state needs this!
     }
 
@@ -31,7 +33,7 @@ public class Idle extends Command {
     protected void initialize() 
     {
     	System.out.println(this.getClass().getName() + " DRIVE START" + " " + System.currentTimeMillis()/1000);
-    	Robot.driveSubsystem.disable();
+    	driveSubsystem.disable();
 
     }
 
@@ -58,7 +60,7 @@ public class Idle extends Command {
     		// b) running some tests back-to-back can make it hard to see what is happening
     		// A changeable default test period of 2 seconds provides a reasonable chance to see
     		// what is happening
-    		if (Robot.driveSubsystem.getDiagnosticsFlag())	// Diagnostics can only be run once per reset cycle
+    		if (driveSubsystem.getDiagnosticsFlag())	// Diagnostics can only be run once per reset cycle
     		{
     				// Don't run repeatedly because it could be harmful
     			return CommandUtils.stateChange(this, new Diagnostics());
