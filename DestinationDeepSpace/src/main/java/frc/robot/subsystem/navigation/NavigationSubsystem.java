@@ -13,9 +13,18 @@ import frc.robot.subsystem.BitBucketSubsystem;
  * Add your docs here.
  */
 public class NavigationSubsystem extends BitBucketSubsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-  @Override
+  	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
+	  
+	// Singleton method; use NavigationSubsystem.instance() to get the NavigationSubsystem instance.
+	public static NavigationSubsystem instance() {
+		if(inst == null)
+			inst = new NavigationSubsystem();
+		return inst;		
+	}
+	private static NavigationSubsystem inst;	
+
+  	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
 		

@@ -14,20 +14,20 @@ import frc.robot.Robot;
 import frc.robot.operatorinterface.OI;
 
 public class DriveLock extends Command {
-
   private final OI oi = OI.instance();
+  private final DriveSubsystem driveSubsystem = DriveSubsystem.instance();
 
   public DriveLock() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chaSssis)
-    requires(Robot.driveSubsystem);
+    requires(driveSubsystem);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
     System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);	
-    Robot.driveSubsystem.resetMotion();
+    driveSubsystem.resetMotion();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -35,11 +35,11 @@ public class DriveLock extends Command {
   protected void execute() {
     if(oi.sbtnShake.get())
     	{
-    		Robot.driveSubsystem.doLockDrive(.1*sineWave(10.0));	/// TODO: MAYBE need it, but interface should be in inches not ticks
+    		driveSubsystem.doLockDrive(.1*sineWave(10.0));	/// TODO: MAYBE need it, but interface should be in inches not ticks
     	}
     	else
     	{
-    		Robot.driveSubsystem.doLockDrive(0.0);
+    		driveSubsystem.doLockDrive(0.0);
     	}
   }
 

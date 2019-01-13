@@ -13,10 +13,18 @@ import frc.robot.subsystem.BitBucketSubsystem;
  * Add your docs here.
  */
 public class ScoringSubsystem extends BitBucketSubsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
+	  
+	// Singleton method; use ScoringSubsystem.instance() to get the ScoringSubsystem instance.
+	public static ScoringSubsystem instance() {
+		if(inst == null)
+			inst = new ScoringSubsystem();
+		return inst;		
+	}
+	private static ScoringSubsystem inst;	
 
-  @Override
+  	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
 		
