@@ -13,14 +13,14 @@ import frc.robot.utils.CommandUtils;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class AlignLock extends Command {
-
   private final OI oi = OI.instance();
+  private final DriveSubsystem driveSubsystem = DriveSubsystem.instance();
 
   public AlignLock() 
   {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.driveSubsystem);
+    requires(driveSubsystem);
 
   }
 
@@ -28,13 +28,13 @@ public class AlignLock extends Command {
   @Override
   protected void initialize() {
     System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
-    Robot.driveSubsystem.setAlignDrive(true);
+    driveSubsystem.setAlignDrive(true);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.driveSubsystem.doAlignDrive(oi.axisForward.get(), oi.axisTurn.get());
+    driveSubsystem.doAlignDrive(oi.axisForward.get(), oi.axisTurn.get());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -55,7 +55,7 @@ public class AlignLock extends Command {
   @Override
   protected void end() {
     System.out.println(this.getClass().getName() + " END" + " " + System.currentTimeMillis()/1000);
-        Robot.driveSubsystem.setAlignDrive(false);
+        driveSubsystem.setAlignDrive(false);
   }
 
   // Called when another command which requires one or more of the same
