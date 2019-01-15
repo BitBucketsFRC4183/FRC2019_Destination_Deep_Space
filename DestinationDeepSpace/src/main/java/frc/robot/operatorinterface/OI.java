@@ -153,6 +153,7 @@ public class OI {
 		default void setDisabledMode() {}
 		default void setTeleopMode() {}
 		default void setAutoMode() {}
+		default void setTestMode() {}
 	}
 	
 	
@@ -170,6 +171,11 @@ public class OI {
 	public void setAutoMode() {
 		for( Modal m : modals)
 			m.setAutoMode();		
+	}
+
+	public void setTestMode(){
+		for (Modal m : modals)
+			m.setTestMode();
 	}
 
 	

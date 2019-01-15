@@ -66,4 +66,9 @@ public class LightingSubsystem extends BitBucketSubsystem {
 		return false;
 	}
 
+	@Override
+	public void initialize() {
+
+	}
+
 }
