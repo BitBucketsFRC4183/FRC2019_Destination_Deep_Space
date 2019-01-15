@@ -66,4 +66,9 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		return false;
 	}
 
+	@Override
+	public void initialize() {
+
+	}
+
 }
