@@ -37,24 +37,25 @@ public class Robot extends TimedRobot {
 	public enum RunMode { DISABLED, AUTO, TELEOP, TEST };
 	public static RunMode runMode = RunMode.DISABLED;
   public static RunMode lastState = runMode;	
+
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // NOTE: We only really need to keep a reference to the singleton classes
+  // if we will be repeatedly accessing them (saves a small overhead).
+  // But keeping the reference declared here also makes it clear
+  // that we are using the subsystem in some way (although the package
+  // reference also shows that) 
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  private OI oi;
   
   // Primary Subsystems that make up the major robot functions
-  public static DriveSubsystem    driveSubsystem;
-  public static ClimberSubsystem  climberSubsystem;
-  public static ScoringSubsystem  scoringSubsystem;
-
-  public static OI oi;
+  private DriveSubsystem    driveSubsystem;
+  private ClimberSubsystem  climberSubsystem;
+  private ScoringSubsystem  scoringSubsystem;
 
   // Support Subsystem that supplement the major robot functions
-  public static NavigationSubsystem navigationSubsystem;
-  public static VisionSubsystem     visionSubsystem;
-  public static LightingSubsystem   lightingSubsystem;
-
-
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private NavigationSubsystem navigationSubsystem;
+  private VisionSubsystem     visionSubsystem;
+  private LightingSubsystem   lightingSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -62,20 +63,33 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    oi = OI.instance();
-    // Create the robot subsystems at initialization
+
     // Doing it here rather than in a constructor eliminates potential global dependencies
-    driveSubsystem = new DriveSubsystem();
-    climberSubsystem = new ClimberSubsystem();
-    scoringSubsystem = new ScoringSubsystem();
+    // The base classes for this Robot class have some housekeeping to do which can
+    // cause problems if the first reference to the various instances is during construction
+    // The simplest way to avoid the early "Robots Don't Quit" message at the start is
+    // to just make the first reference here.
 
-    navigationSubsystem = new NavigationSubsystem();
-    visionSubsystem = new VisionSubsystem();
-    lightingSubsystem = new LightingSubsystem();
+    oi = OI.instance();
 
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    // Reference the subsystems we need to initialize
+    driveSubsystem = DriveSubsystem.instance();
+    driveSubsystem.initialize();
+
+    climberSubsystem = ClimberSubsystem.instance();
+    climberSubsystem.initialize();
+
+    scoringSubsystem = ScoringSubsystem.instance();
+    scoringSubsystem.initialize();
+
+    navigationSubsystem = NavigationSubsystem.instance();
+    navigationSubsystem.initialize();
+
+    visionSubsystem = VisionSubsystem.instance();
+    visionSubsystem.initialize();
+
+    lightingSubsystem = LightingSubsystem.instance();
+    lightingSubsystem.initialize();
   }
 
   /**
@@ -176,9 +190,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
     oi.setAutoMode();
   }
 
@@ -191,15 +202,6 @@ public class Robot extends TimedRobot {
     // the actions here occur BEFORE the scheduled commands run; this means that
     // commands can be added during this execution cycle and will be acted upon
     // within the current cycle.
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
   }
 
   /**
@@ -230,6 +232,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testInit() {
+    oi.setTestMode();
   }  
   
   /**

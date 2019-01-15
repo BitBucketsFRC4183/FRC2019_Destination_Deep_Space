@@ -66,4 +66,9 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 		return false;
 	}
 
+	@Override
+	public void initialize() {
+
+	}
+
 }

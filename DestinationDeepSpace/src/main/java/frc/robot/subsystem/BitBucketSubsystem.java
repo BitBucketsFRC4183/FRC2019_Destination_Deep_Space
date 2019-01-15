@@ -22,6 +22,8 @@ public abstract class BitBucketSubsystem extends Subsystem {
 		
 	}
 
+	public abstract void initialize();		// Force all derived classes to have these interfaces
+
 	public abstract void diagnosticsInit();
 	
 	public abstract void diagnosticsExecute();
