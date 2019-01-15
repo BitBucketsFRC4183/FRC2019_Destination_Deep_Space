@@ -65,4 +65,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public void initialize() {
+	}
 }
