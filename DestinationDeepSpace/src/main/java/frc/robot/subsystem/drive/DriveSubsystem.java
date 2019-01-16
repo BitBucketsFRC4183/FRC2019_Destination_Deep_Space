@@ -33,9 +33,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	public static DriveSubsystem instance() {
 		if(inst == null)
 			inst = new DriveSubsystem();
-		return inst;		
+		return inst;
 	}
-	private static DriveSubsystem inst;	
+	private static DriveSubsystem inst;
 
 	private final OI oi = OI.instance();
 
