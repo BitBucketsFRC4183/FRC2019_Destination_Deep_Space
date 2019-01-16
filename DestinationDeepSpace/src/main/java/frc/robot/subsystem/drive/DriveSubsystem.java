@@ -84,7 +84,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	Idle initialCommand;
 
-  public DriveSubsystem()
+  private DriveSubsystem()
   {
     this.setName("DriveSubsystem");
     setName("DriveSubsystem");
