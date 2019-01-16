@@ -20,9 +20,9 @@ public class LightingSubsystem extends BitBucketSubsystem {
 	public static LightingSubsystem instance() {
 		if(inst == null)
 			inst = new LightingSubsystem();
-		return inst;		
+		return inst;
 	}
-	private static LightingSubsystem inst;	
+	private static LightingSubsystem inst;
 
   	@Override
 	public void diagnosticsInit() {

@@ -20,9 +20,9 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public static ClimberSubsystem instance() {
 		if(inst == null)
 			inst = new ClimberSubsystem();
-		return inst;		
+		return inst;
 	}
-	private static ClimberSubsystem inst;	
+	private static ClimberSubsystem inst;
 
   	@Override
 	public void diagnosticsInit() {
