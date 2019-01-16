@@ -9,21 +9,31 @@ package frc.robot.subsystem.scoring;
 
 import frc.robot.subsystem.BitBucketSubsystem;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 /**
  * Add your docs here.
  */
 public class ScoringSubsystem extends BitBucketSubsystem {
   	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
-	  
+	
 	// Singleton method; use ScoringSubsystem.instance() to get the ScoringSubsystem instance.
 	public static ScoringSubsystem instance() {
 		if(inst == null)
 			inst = new ScoringSubsystem();
-		return inst;		
+		return inst;
 	}
-	private static ScoringSubsystem inst;	
+	private static ScoringSubsystem inst;
 
+
+
+	// lowercase?
+	private final WPI_TalonSRX TOP_INTAKE_MOTOR = new WPI_TalonSRX(ScoringConstants.TOP_INTAKE_MOTOR_ID);
+	private final WPI_TalonSRX BOTTOM_INTAKE_MOTOR = new WPI_TalonSRX(ScoringConstants.TOP_INTAKE_MOTOR_ID);
+
+
+	
   	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
