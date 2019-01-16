@@ -10,7 +10,7 @@ package frc.robot.subsystem.drive;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -59,11 +59,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	private double yawSetPoint;
 		
-	private final TalonSRX leftFrontMotor;		// User follower mode
-	private final TalonSRX leftRearMotor;
+	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
+	private final WPI_TalonSRX leftRearMotor;
 
-	private final TalonSRX rightFrontMotor;		// Use follower mode
-	private final TalonSRX rightRearMotor;
+	private final WPI_TalonSRX rightFrontMotor;		// Use follower mode
+	private final WPI_TalonSRX rightRearMotor;
 	
 	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 	
@@ -77,12 +77,13 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		MOVE_TEST,
 		TURN_TEST,
 		PROFILE_TEST
-  }
-  private static SendableChooser<TestSubmodes> testModeChooser;
+  	}
+  	private static SendableChooser<TestSubmodes> testModeChooser;
 	
 	private static double testModePeriod_sec = 2.0;
 
-		
+	Idle initialCommand;
+
   public DriveSubsystem()
   {
     this.setName("DriveSubsystem");
@@ -90,34 +91,35 @@ public class DriveSubsystem extends BitBucketSubsystem {
               
     // Make joystick scale chooser and put it on the dashboard
     forwardJoystickScaleChooser = new SendableChooser<JoystickScale>();
-    forwardJoystickScaleChooser.addDefault( "Linear",    JoystickScale.LINEAR);
-    forwardJoystickScaleChooser.addObject(  "Square",    JoystickScale.SQUARE);
-    forwardJoystickScaleChooser.addObject(  "Cube",      JoystickScale.CUBE);
-    forwardJoystickScaleChooser.addObject(  "Sine",      JoystickScale.SINE);
+    forwardJoystickScaleChooser.setDefaultOption( "Linear",    JoystickScale.LINEAR);
+    forwardJoystickScaleChooser.addOption(  "Square",    JoystickScale.SQUARE);
+    forwardJoystickScaleChooser.addOption(  "Cube",      JoystickScale.CUBE);
+    forwardJoystickScaleChooser.addOption(  "Sine",      JoystickScale.SINE);
       
     SmartDashboard.putData( "Forward Joystick Scale", forwardJoystickScaleChooser);    	
 
     turnJoystickScaleChooser = new SendableChooser<JoystickScale>();
-    turnJoystickScaleChooser.addDefault(  "Square",    JoystickScale.SQUARE);
-    turnJoystickScaleChooser.addObject( "Linear",    JoystickScale.LINEAR);
-    turnJoystickScaleChooser.addObject(  "Cube",      JoystickScale.CUBE);
-    turnJoystickScaleChooser.addObject(  "Sine",      JoystickScale.SINE);
+    turnJoystickScaleChooser.setDefaultOption(  "Square",    JoystickScale.SQUARE);
+    turnJoystickScaleChooser.addOption( "Linear",    JoystickScale.LINEAR);
+    turnJoystickScaleChooser.addOption(  "Cube",      JoystickScale.CUBE);
+    turnJoystickScaleChooser.addOption(  "Sine",      JoystickScale.SINE);
        
     SmartDashboard.putData( "Turn Joystick Scale", turnJoystickScaleChooser);    	
-    
+	
+	// TODO: These may need to be removed
     testModeChooser = new SendableChooser<TestSubmodes>();
-    testModeChooser.addDefault("None", TestSubmodes.NONE);
-    testModeChooser.addObject("Diagnostics", TestSubmodes.DIAGNOSTICS);
-    testModeChooser.addObject("Move Test", TestSubmodes.MOVE_TEST);
-    testModeChooser.addObject("Turn Test", TestSubmodes.TURN_TEST);
-    testModeChooser.addObject("Profile Test", TestSubmodes.PROFILE_TEST);
+    testModeChooser.setDefaultOption("None", TestSubmodes.NONE);
+    testModeChooser.addOption("Diagnostics", TestSubmodes.DIAGNOSTICS);
+    testModeChooser.addOption("Move Test", TestSubmodes.MOVE_TEST);
+    testModeChooser.addOption("Turn Test", TestSubmodes.TURN_TEST);
+    testModeChooser.addOption("Profile Test", TestSubmodes.PROFILE_TEST);
     
     DIAG_LOOPS_RUN = (int) SmartDashboard.getNumber("DIAG_LOOPS_RUN", 10);
       
     testModePeriod_sec = SmartDashboard.getNumber("Test Mode Period (sec)", 2.0);
       
-    leftFrontMotor = new TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
-    leftRearMotor = new TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
+    leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
+    leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
     leftRearMotor.follow(leftFrontMotor);
     
       
@@ -214,8 +216,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
     // separate commands are sent to each motor in a group
     leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
     
-    rightFrontMotor  = new TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
-    rightRearMotor   = new TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
+    rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+    rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
     
     rightRearMotor.follow(rightFrontMotor);
     
@@ -448,7 +450,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	public void initialize() 
 	{
 		System.out.println("Setting default command Mike's way");
-		Idle initialCommand = new Idle();
+		initialCommand = new Idle();	// Only create it once
 		initialCommand.start();
 		
   }
@@ -515,7 +517,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);						
 	}
 	
-	private int getMotorNativeUnits(TalonSRX m) {
+	private int getMotorNativeUnits(WPI_TalonSRX m) {
 		return m.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
 	}
 	
@@ -527,7 +529,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		return getMotorNativeUnits(leftFrontMotor);
 	}
 	
-	private double getMotorEncoderUnits(TalonSRX m) {
+	private double getMotorEncoderUnits(WPI_TalonSRX m) {
 		return getMotorNativeUnits(m)/EDGES_PER_ENCODER_COUNT;
 	}
 	
@@ -539,7 +541,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		return getMotorEncoderUnits(leftFrontMotor);
 	}
 	
-	private ControlMode getMotorMode(TalonSRX m) {
+	private ControlMode getMotorMode(WPI_TalonSRX m) {
 		return m.getControlMode();
 	}
 	
@@ -584,7 +586,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	}
 	
 	// Set up a single motor for position control
-	private void resetMotion(TalonSRX m) 
+	private void resetMotion(WPI_TalonSRX m) 
 	{
 		// Stop as quickly as possible
 		m.set(ControlMode.PercentOutput, 0.0);
@@ -601,7 +603,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	}
 	
 	// Set a specific motor for a motion magic position
-	private void setPosition(TalonSRX m, double nativeTicks) {
+	private void setPosition(WPI_TalonSRX m, double nativeTicks) {
 		
 		m.set(ControlMode.MotionMagic, nativeTicks);
 	}
