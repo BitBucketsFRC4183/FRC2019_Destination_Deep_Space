@@ -20,9 +20,9 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	public static NavigationSubsystem instance() {
 		if(inst == null)
 			inst = new NavigationSubsystem();
-		return inst;		
+		return inst;
 	}
-	private static NavigationSubsystem inst;	
+	private static NavigationSubsystem inst;
 
   	@Override
 	public void diagnosticsInit() {
