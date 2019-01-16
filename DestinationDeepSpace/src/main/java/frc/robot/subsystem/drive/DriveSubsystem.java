@@ -312,10 +312,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
     
     // Create the motion profile driver
 
-          
+	// TODO: Move this setup to base class, remembering that the key must be unique
+	// may be able to do it through introspection      
     telemetryState = new SendableChooser<SubsystemTelemetryState>();
-    telemetryState.addDefault("Off", SubsystemTelemetryState.OFF);
-    telemetryState.addObject( "On",  SubsystemTelemetryState.ON);
+    telemetryState.setDefaultOption("Off", SubsystemTelemetryState.OFF);
+    telemetryState.addOption( "On",  SubsystemTelemetryState.ON);
     
     SmartDashboard.putData("DriveTelemetry", telemetryState);
   }
