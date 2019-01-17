@@ -3,6 +3,7 @@ package frc.robot.subsystem.drive;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.MotControllerJNI;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.hal.SPIJNI;
@@ -18,7 +19,12 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.lang.reflect.Constructor;
+
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.*;
 
 /**
@@ -28,12 +34,11 @@ import static org.powermock.api.mockito.PowerMockito.*;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({
-        MotControllerJNI.class,
         NetworkTablesJNI.class,
         HAL.class,
-        SPIJNI.class,
         DriverStation.class,
-        BitBucketsAHRS.class
+        BitBucketsAHRS.class,
+        DriveSubsystem.class
 })
 @SuppressStaticInitializationFor({
         "edu.wpi.first.networktables.NetworkTablesJNI",
@@ -52,36 +57,55 @@ public class DriveSubsystemTest {
     @Mock
     AHRS ahrs;
 
-    // These handles will be used later to verify that our motors are being called
-    // with the demand values we expect
-    long leftFrontMotorHandle = 1;
-    long leftRearMotorHandle = 2;
-    long rightFrontMotorHandle = 3;
-    long rightRearMotorHandle = 4;
+    @Mock
+    WPI_TalonSRX mockLeftFrontMotor;
+    @Mock
+    WPI_TalonSRX mockRightFrontMotor;
+    @Mock
+    WPI_TalonSRX mockLeftRearMotor;
+    @Mock
+    WPI_TalonSRX mockRightRearMotor;
 
     @Before
     public void beforeTest() throws Exception {
         // mock out all the static methods of these JNI classes
+        // They get called when we instantiate the DriveSubsystem class and mocking them
+        // makes their methods do nothing
         mockStatic(NetworkTablesJNI.class);
         mockStatic(HAL.class);
-        mockStatic(SPIJNI.class);
-        mockStatic(MotControllerJNI.class);
 
-        // when a motor controller is created, return a handle we can use later for verifying that our
-        // motors are being called. We have to do this weird MOTOR_ID bitwise or'd with some random stuff because
-        // that's how the JNI calls create. It's possible we could spy the WPI_TalonSRX class and intercept the
-        // create instead, but this works for now
-        mockStatic(MotControllerJNI.class);
-        when(MotControllerJNI.Create(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID | 0x02040000)).thenReturn(leftFrontMotorHandle);
-        when(MotControllerJNI.Create(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID | 0x02040000)).thenReturn(leftRearMotorHandle);
-        when(MotControllerJNI.Create(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID | 0x02040000)).thenReturn(rightFrontMotorHandle);
-        when(MotControllerJNI.Create(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID | 0x02040000)).thenReturn(rightRearMotorHandle);
+        // For each test, return mock drive train motors when the DriveSubsystem creates them
+        // This requires @PrepareForTest(DriveSubsystem.class)
+        whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockLeftFrontMotor);
+        whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockRightFrontMotor);
+        whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockRightRearMotor);
+        whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockLeftRearMotor);
 
+        // Mock the DriverStation class as well. We don't want it instantiated at all
         mockStatic(DriverStation.class);
         when(DriverStation.getInstance()).thenReturn(driverStation);
 
+        // mock the BitBucketsAHRS class because when we create an ahrs object
+        // buy calling BitBucketsAHRS.instance(), the ahrs object starts a thread
         mockStatic(BitBucketsAHRS.class);
         when(BitBucketsAHRS.instance()).thenReturn(ahrs);
+
+        // Because the DriveSubsystem is a singleton, only one instance ever gets created
+        // and our mock motors are only ever created for the first one. With unit tests, all mock
+        // objects are reset every test. This means we can't verify that we are calling our mocked
+        // motors the way we think we are after the first test (the mock is reset, the DriveSubystem instance
+        // will still point to the old mocked motor
+        //
+        // Because of this, we treat each test case like it is creating a brand new robot and DriveSubsystem
+        // per call. This requires us to modify the private constructor to make it public, and instantiate
+        // a new instance each test.
+        Constructor<DriveSubsystem> constructor = DriveSubsystem.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        // for this test, create a fresh DriveSubsystem object
+        DriveSubsystem instance = constructor.newInstance();
+        mockStatic(DriveSubsystem.class);
+        when(DriveSubsystem.instance()).thenReturn(instance);
     }
 
     /**
@@ -89,21 +113,15 @@ public class DriveSubsystemTest {
      * @throws Exception
      */
     @Test
-    public void testArcadeDriveNoMovement() throws Exception {
+    public void testArcadeDrive() throws Exception {
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
-
-        // Reset the mock on this JNI so we only need to verify the Set_4 calls
-        mockStatic(MotControllerJNI.class);
-
         // call arcade drive
         driveSubsystem.arcadeDrive(0, 0);
 
         // verify that each motor controller was called with the output we expected, in this case 0
         // in this case, only the front motors actually have their power output set
-        verifyStatic(MotControllerJNI.class);
-        MotControllerJNI.Set_4(eq(leftFrontMotorHandle), eq(ControlMode.PercentOutput.value), eq(0.0d), eq(0.0d), eq(DemandType.Neutral.value));
-        verifyStatic(MotControllerJNI.class);
-        MotControllerJNI.Set_4(eq(rightFrontMotorHandle), eq(ControlMode.PercentOutput.value), eq(0.0d), eq(0.0d), eq(DemandType.Neutral.value));
+        verify(mockLeftFrontMotor).set(eq(ControlMode.PercentOutput), eq(0.0));
+        verify(mockRightFrontMotor).set(eq(ControlMode.PercentOutput), eq(0.0));
     }
 
     /**
@@ -113,19 +131,13 @@ public class DriveSubsystemTest {
     @Test
     public void testArcadeDriveForward() throws Exception {
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
-
-        // Reset the mock on this JNI so we only need to verify the Set_4 calls
-        mockStatic(MotControllerJNI.class);
-
         // call arcade drive
         driveSubsystem.arcadeDrive(1, 0);
 
-        // verify that each motor controller was called with the output we expected, in this case 0
-        // in this case, only the front motors actually have their power output set
-        verifyStatic(MotControllerJNI.class);
-        MotControllerJNI.Set_4(eq(leftFrontMotorHandle), eq(ControlMode.PercentOutput.value), eq(1.0d), eq(0.0d), eq(DemandType.Neutral.value));
-        verifyStatic(MotControllerJNI.class);
-        MotControllerJNI.Set_4(eq(rightFrontMotorHandle), eq(ControlMode.PercentOutput.value), eq(1.0d), eq(0.0d), eq(DemandType.Neutral.value));
+        // verify that each motor controller was called with the output we expected, in this case 1
+        // on each motor
+        verify(mockLeftFrontMotor).set(eq(ControlMode.PercentOutput), eq(1.0));
+        verify(mockRightFrontMotor).set(eq(ControlMode.PercentOutput), eq(1.0));
     }
 
     /**
@@ -136,18 +148,12 @@ public class DriveSubsystemTest {
     @Test
     public void testArcadeDriveForwardAndRight() throws Exception {
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
-
-        // mock out the Set_4 native function on the motor
-        mockStatic(MotControllerJNI.class);
-
         // call arcade drive
         driveSubsystem.arcadeDrive(1, 1);
 
-        // verify that each motor controller was called with the output we expected, in this case 0
-        // in this case, only the front motors actually have their power output set
-        verifyStatic(MotControllerJNI.class);
-        MotControllerJNI.Set_4(eq(leftFrontMotorHandle), eq(ControlMode.PercentOutput.value), eq(1.5d), eq(0.0d), eq(DemandType.Neutral.value));
-        verifyStatic(MotControllerJNI.class);
-        MotControllerJNI.Set_4(eq(rightFrontMotorHandle), eq(ControlMode.PercentOutput.value), eq(.5d), eq(0.0d), eq(DemandType.Neutral.value));
+        // verify that each motor controller was called with the output we expected
+        // in this case, we go heavy on the left side, light on the right side
+        verify(mockLeftFrontMotor).set(eq(ControlMode.PercentOutput), eq(1.5));
+        verify(mockRightFrontMotor).set(eq(ControlMode.PercentOutput), eq(.5));
     }
 }
