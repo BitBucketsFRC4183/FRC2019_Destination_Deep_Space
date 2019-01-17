@@ -7,6 +7,9 @@
 
 package frc.robot.subsystem.navigation;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystem.BitBucketSubsystem;
 
 /**
@@ -23,6 +26,22 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 		return inst;
 	}
 	private static NavigationSubsystem inst;
+
+	private AHRS ahrs;
+
+	// TODO: provide an accessor that fetches the most current state (6-DOF)
+	// and returns it in a structure for reference; this allows consumer
+	// to fetch the best available state, at the same time the periodic
+	// loop can be keeping a limited history to allow image sensor data
+	// to be correlated to past position and angle data; this history
+	// would be interpolated if there is sufficient time synchronization
+	// between this Robot code and the image data.
+
+	@Override
+	public void initialize() {
+		ahrs = BitBucketsAHRS.instance();
+
+	}
 
   	@Override
 	public void diagnosticsInit() {
@@ -42,9 +61,14 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 		
 	}
 
+	protected void updateDashboard() {
+		SmartDashboard.putNumber( "Yaw Angle (deg)", ahrs.getYaw());
+		SmartDashboard.putNumber( "Yaw Rate (dps)", ahrs.getRate());
+	}
+
 	@Override
 	public void periodic() {
-		// TODO Auto-generated method stub
+		updateDashboard();
 		
 	}
 
@@ -64,11 +88,6 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	public boolean getDiagnosticsFlag() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public void initialize() {
-
 	}
 
 }
