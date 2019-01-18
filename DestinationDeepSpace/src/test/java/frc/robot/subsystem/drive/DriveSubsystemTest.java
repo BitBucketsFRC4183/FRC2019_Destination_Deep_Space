@@ -6,11 +6,14 @@ import com.ctre.phoenix.motorcontrol.can.MotControllerJNI;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.hal.SPIJNI;
 import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.RobotMap;
 import frc.robot.subsystem.navigation.BitBucketsAHRS;
+import frc.robot.utils.JoystickScale;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +41,8 @@ import static org.powermock.api.mockito.PowerMockito.*;
         HAL.class,
         DriverStation.class,
         BitBucketsAHRS.class,
-        DriveSubsystem.class
+        DriveSubsystem.class,
+        HALUtil.class,
 })
 @SuppressStaticInitializationFor({
         "edu.wpi.first.networktables.NetworkTablesJNI",
@@ -66,6 +70,9 @@ public class DriveSubsystemTest {
     @Mock
     WPI_TalonSRX mockRightRearMotor;
 
+    @Mock
+    SendableChooser mockDriveStyleChooser;
+
     @Before
     public void beforeTest() throws Exception {
         // mock out all the static methods of these JNI classes
@@ -73,6 +80,7 @@ public class DriveSubsystemTest {
         // makes their methods do nothing
         mockStatic(NetworkTablesJNI.class);
         mockStatic(HAL.class);
+        mockStatic(HALUtil.class);
 
         // For each test, return mock drive train motors when the DriveSubsystem creates them
         // This requires @PrepareForTest(DriveSubsystem.class)
@@ -80,6 +88,9 @@ public class DriveSubsystemTest {
         whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockRightFrontMotor);
         whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockRightRearMotor);
         whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockLeftRearMotor);
+
+        // Wire up our mock sendable chooser.
+        whenNew(SendableChooser.class).withNoArguments().thenReturn(mockDriveStyleChooser);
 
         // Mock the DriverStation class as well. We don't want it instantiated at all
         mockStatic(DriverStation.class);
@@ -114,6 +125,7 @@ public class DriveSubsystemTest {
      */
     @Test
     public void testArcadeDrive() throws Exception {
+        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade).thenReturn(JoystickScale.LINEAR).thenReturn(JoystickScale.LINEAR);
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
         driveSubsystem.drive(0, 0);
@@ -130,6 +142,7 @@ public class DriveSubsystemTest {
      */
     @Test
     public void testArcadeDriveForward() throws Exception {
+        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade).thenReturn(JoystickScale.LINEAR).thenReturn(JoystickScale.LINEAR);
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
         driveSubsystem.drive(1, 0);
@@ -147,6 +160,7 @@ public class DriveSubsystemTest {
      */
     @Test
     public void testArcadeDriveForwardAndRight() throws Exception {
+        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade).thenReturn(JoystickScale.LINEAR).thenReturn(JoystickScale.LINEAR);
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
         driveSubsystem.drive(1, 1);
