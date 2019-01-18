@@ -15,9 +15,4 @@ public class ScoringConstants {
 	public static final double BALL_LEVEL_R2     = 27.5;
     public static final double BALL_LEVEL_R3     = 27.5;
     
-
-
-    // TODO: actual IDs
-    public static final int TOP_INTAKE_MOTOR_ID = 0;
-    public static final int BOTTOM_INTAKE_MOTOR_ID = 0;
 }
