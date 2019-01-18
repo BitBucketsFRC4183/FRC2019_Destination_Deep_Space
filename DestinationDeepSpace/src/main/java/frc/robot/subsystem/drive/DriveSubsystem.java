@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -39,8 +40,41 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	private final OI oi = OI.instance();
 
+
+	// drive styles that driver can choose on the shuffleboard
+	public enum DriveStyle {
+		WPI_Arcade,
+		BB_Arcade,
+		Velocity
+		// add in curvature & velocity later
+	}
+
+
   	// Put methods for controlling this subsystem
-  	// here. Call these from Commands.
+	// here. Call these from Commands.
+
+	public void drive(double leftInput, double rightInput) {
+		switch (driveStyleChooser.getSelected()) {
+			case WPI_Arcade: {
+				drive.arcadeDrive(leftInput, rightInput);
+
+				break;
+			}
+
+			case BB_Arcade: {
+				arcadeDrive(leftInput, rightInput);
+
+				break;
+			}
+
+			case Velocity: {
+				velocityDrive(leftInput, rightInput);
+
+				break;
+			}
+		}
+	}
+
 
 	private final AHRS ahrs = BitBucketsAHRS.instance();
 
@@ -69,6 +103,14 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	private static SendableChooser<JoystickScale> forwardJoystickScaleChooser;
 	private static SendableChooser<JoystickScale> turnJoystickScaleChooser;
+
+	private static SendableChooser<DriveStyle> driveStyleChooser;
+
+
+
+	private DifferentialDrive drive;
+
+
 	
 	enum TestSubmodes
 	{
@@ -95,16 +137,27 @@ public class DriveSubsystem extends BitBucketSubsystem {
     forwardJoystickScaleChooser.addOption(  "Square",    JoystickScale.SQUARE);
     forwardJoystickScaleChooser.addOption(  "Cube",      JoystickScale.CUBE);
     forwardJoystickScaleChooser.addOption(  "Sine",      JoystickScale.SINE);
-      
-    SmartDashboard.putData( "Forward Joystick Scale", forwardJoystickScaleChooser);    	
+
+    SmartDashboard.putData( "Forward Joystick Scale", forwardJoystickScaleChooser);
 
     turnJoystickScaleChooser = new SendableChooser<JoystickScale>();
     turnJoystickScaleChooser.setDefaultOption(  "Square",    JoystickScale.SQUARE);
     turnJoystickScaleChooser.addOption( "Linear",    JoystickScale.LINEAR);
     turnJoystickScaleChooser.addOption(  "Cube",      JoystickScale.CUBE);
     turnJoystickScaleChooser.addOption(  "Sine",      JoystickScale.SINE);
-       
-    SmartDashboard.putData( "Turn Joystick Scale", turnJoystickScaleChooser);    	
+    
+	SmartDashboard.putData( "Turn Joystick Scale", turnJoystickScaleChooser);
+	
+
+	driveStyleChooser = new SendableChooser<DriveStyle>();
+	// TODO: do we add a default?
+	driveStyleChooser.addOption("WPI Arcade", DriveStyle.WPI_Arcade);
+	driveStyleChooser.addOption("Bit Buckets Arcade", DriveStyle.BB_Arcade);
+	driveStyleChooser.addOption("Velocity", DriveStyle.Velocity);
+
+	SmartDashboard.putData("Drive Style", driveStyleChooser);
+
+
 	
 	// TODO: These may need to be removed
     testModeChooser = new SendableChooser<TestSubmodes>();
@@ -391,6 +444,23 @@ public class DriveSubsystem extends BitBucketSubsystem {
 //			drive.arcadeDrive( fwdStick, turnStick + yawCorrect(), false);
 //		}
 	}
+
+
+
+	public void velocityDrive(double vel, double omega) {
+		// velocity mode <-- value in change in position per 100ms
+
+		double vL = vel + omega * DriveConstants.TRACK / 2;
+		double vR = vel - omega * DriveConstants.TRACK / 2;
+
+		// TODO: convert to usable values to send to motors later
+		//
+		// "
+		// Basically the encoder (quadrature in our case) measure angle; velocity is average angle over small delta-t
+		// Our encoders have a 2048 pulses per rev, to 8192 quad edged per rev
+		// " - Mike
+	}
+
 	public void doAutoTurn( double turn) {
 		arcadeDrive( 0.0, turn);				
 	}
@@ -453,6 +523,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		System.out.println("Setting default command Mike's way");
 		initialCommand = new Idle();	// Only create it once
 		initialCommand.start();
+
+
+
+		drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor); // others will follow
 		
   }
   
