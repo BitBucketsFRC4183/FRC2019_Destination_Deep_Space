@@ -53,22 +53,37 @@ public class DriveSubsystem extends BitBucketSubsystem {
   	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	public void drive(double leftInput, double rightInput) {
+	/**
+	 * drive - takes a speed and turn factor and passes to the selected drive algorithm
+	 * Context depends upon which algorithm is selected, but is generally [-1,1] domain
+	 * unless otherwise indicated.
+	 * 
+	 * Velocity drive selection requires inputs of feet/sec and deg/sec (TBD)
+	 */
+	public void drive(double speed, double turn) {
 		switch (driveStyleChooser.getSelected()) {
+			// Even though the enumeration should be correct
+			// it is a best practice to always explicitly set a default
+			// just in case the interface has a glitch and the wrong
+			// signal reaches here. The default can either fall throuhg
+			// or do something else, but now we made a choice
+			default:
 			case WPI_Arcade: {
-				drive.arcadeDrive(leftInput, rightInput);
+				// DO NOT let the diff drive square the inputs itself
+				// All scaling is external to this drive function
+				differentialDrive.arcadeDrive(speed, turn, false);
 
 				break;
 			}
 
 			case BB_Arcade: {
-				arcadeDrive(leftInput, rightInput);
+				arcadeDrive(speed, turn);
 
 				break;
 			}
 
 			case Velocity: {
-				velocityDrive(leftInput, rightInput);
+				velocityDrive(speed, turn);
 
 				break;
 			}
@@ -108,7 +123,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 
 
-	private DifferentialDrive drive;
+	private DifferentialDrive differentialDrive;
 
 
 	
@@ -361,7 +376,21 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
     // Now get the other modes set up
     setNeutral(NeutralMode.Brake);
-    
+	
+	// Now that we have the motor instances set up the differential drive
+	// as a 2-motor solution regardless of how manu actual motors we have
+	// We are taking advantage of the follower mode to minimize CAN traffic
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// NOTE: This only works on drives where all motors on a side drive the
+	// same wheels
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	differentialDrive = new DifferentialDrive(leftFrontMotor, rightFrontMotor); // others will follow
+
+	// Since we going to use the TalonSRX in this class, the inversion, if needed is
+	// going to be passed to controllers so positive commands on left and right both
+	// move the wheels in the same direction. This means we don't want the diff drive
+	// algorithm to also do the inversion
+	differentialDrive.setRightSideInverted(false);
     
     // Create the motion profile driver
 
@@ -403,7 +432,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	// +turnStick produces right turn (CW from above, -yaw angle)
     /// TODO: Consider re-designing this to reduce turn by up to 50% at full forward speed
-	public void arcadeDrive(double fwdStick, double turnStick) 
+	private void arcadeDrive(double fwdStick, double turnStick) 
 	{
 		
 		// Shape axis for human control
@@ -522,12 +551,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	{
 		System.out.println("Setting default command Mike's way");
 		initialCommand = new Idle();	// Only create it once
-		initialCommand.start();
-
-
-
-		drive = new DifferentialDrive(leftFrontMotor, rightFrontMotor); // others will follow
-		
+		initialCommand.start();		
   }
   
   

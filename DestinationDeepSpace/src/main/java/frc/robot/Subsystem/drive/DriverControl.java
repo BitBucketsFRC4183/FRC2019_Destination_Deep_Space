@@ -32,8 +32,7 @@ public class DriverControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() 
   {
-    driveSubsystem.arcadeDrive(oi.axisForward.get(), oi.axisTurn.get());
-
+    driveSubsystem.drive(oi.axisForward.get(), oi.axisTurn.get());
   }
 
   // Make this return true when this Command no longer needs to run execute()
