@@ -7,6 +7,7 @@
 
 package frc.robot.subsystem.scoring;
 
+import frc.robot.RobotMap;
 import frc.robot.subsystem.BitBucketSubsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -26,11 +27,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	}
 	private static ScoringSubsystem inst;
 
-
-
-	// TODO: lowercase?
-	private final WPI_TalonSRX TOP_INTAKE_MOTOR = new WPI_TalonSRX(ScoringConstants.TOP_INTAKE_MOTOR_ID);
-	private final WPI_TalonSRX BOTTOM_INTAKE_MOTOR = new WPI_TalonSRX(ScoringConstants.BOTTOM_INTAKE_MOTOR_ID);
+	private final WPI_TalonSRX TOP_INTAKE_MOTOR = new WPI_TalonSRX(RobotMap.TOP_INTAKE_MOTOR_ID);
+	private final WPI_TalonSRX BOTTOM_INTAKE_MOTOR = new WPI_TalonSRX(RobotMap.BOTTOM_INTAKE_MOTOR_ID);
 
 
 	

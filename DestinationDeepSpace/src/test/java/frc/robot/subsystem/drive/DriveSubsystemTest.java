@@ -72,6 +72,10 @@ public class DriveSubsystemTest {
 
     @Mock
     SendableChooser mockDriveStyleChooser;
+    @Mock
+    SendableChooser mockForwardJoystickScalerChooser;
+    @Mock
+    SendableChooser mockTurnJoystickScalerChooser;
 
     @Before
     public void beforeTest() throws Exception {
@@ -90,7 +94,10 @@ public class DriveSubsystemTest {
         whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockLeftRearMotor);
 
         // Wire up our mock sendable chooser.
-        whenNew(SendableChooser.class).withNoArguments().thenReturn(mockDriveStyleChooser);
+        whenNew(SendableChooser.class).withNoArguments()
+        .thenReturn(mockForwardJoystickScalerChooser)
+        .thenReturn(mockTurnJoystickScalerChooser)
+        .thenReturn(mockDriveStyleChooser);
 
         // Mock the DriverStation class as well. We don't want it instantiated at all
         mockStatic(DriverStation.class);
@@ -125,7 +132,10 @@ public class DriveSubsystemTest {
      */
     @Test
     public void testArcadeDrive() throws Exception {
-        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade).thenReturn(JoystickScale.LINEAR).thenReturn(JoystickScale.LINEAR);
+        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade);
+        when(mockForwardJoystickScalerChooser.getSelected()).thenReturn(JoystickScale.LINEAR);
+        when(mockTurnJoystickScalerChooser.getSelected()).thenReturn(JoystickScale.LINEAR);
+        
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
         driveSubsystem.drive(0, 0);
@@ -142,7 +152,10 @@ public class DriveSubsystemTest {
      */
     @Test
     public void testArcadeDriveForward() throws Exception {
-        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade).thenReturn(JoystickScale.LINEAR).thenReturn(JoystickScale.LINEAR);
+        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade);
+        when(mockForwardJoystickScalerChooser.getSelected()).thenReturn(JoystickScale.LINEAR);
+        when(mockTurnJoystickScalerChooser.getSelected()).thenReturn(JoystickScale.LINEAR);
+
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
         driveSubsystem.drive(1, 0);
@@ -160,7 +173,10 @@ public class DriveSubsystemTest {
      */
     @Test
     public void testArcadeDriveForwardAndRight() throws Exception {
-        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade).thenReturn(JoystickScale.LINEAR).thenReturn(JoystickScale.LINEAR);
+        when(mockDriveStyleChooser.getSelected()).thenReturn(DriveSubsystem.DriveStyle.BB_Arcade);
+        when(mockForwardJoystickScalerChooser.getSelected()).thenReturn(JoystickScale.LINEAR);
+        when(mockTurnJoystickScalerChooser.getSelected()).thenReturn(JoystickScale.LINEAR);
+
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
         driveSubsystem.drive(1, 1);

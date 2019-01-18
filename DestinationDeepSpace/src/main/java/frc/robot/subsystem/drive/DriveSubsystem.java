@@ -400,6 +400,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	 */
 	public void drive(double speed, double turn) {
 
+		/// TODO: Should these scaler be in the OI hidden under speed() and turn() calls??
+		speed = forwardJoystickScaleChooser.getSelected().rescale(speed);
+		turn  = turnJoystickScaleChooser.getSelected().rescale(turn);
+
 		DriveStyle style = driveStyleChooser.getSelected();
 
 		switch (style) {
