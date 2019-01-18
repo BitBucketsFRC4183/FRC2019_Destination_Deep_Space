@@ -1,11 +1,11 @@
 package frc.robot.utils;
 
-import frc.robot.Robot;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class CommandUtils {
 	
+	private static DriverStation ds = DriverStation.getInstance();
 	/**
 	 * In a Command, when performing a state transition,
 	 * call this function rather than doing nextCommand.start() directly.
@@ -25,7 +25,7 @@ public class CommandUtils {
 		// Teleop or Autonomous.
 		// (Mode Test is currently pretty useless). 
 		
-		if( Robot.runMode != Robot.RunMode.DISABLED) {
+		if( ! ds.isDisabled() ) {
 			
 			toState.start();
 			return true;
@@ -36,7 +36,7 @@ public class CommandUtils {
 	
 	public static boolean autoStateChange(Command fromState, Command toState) 
 	{
-		return (Robot.runMode == Robot.RunMode.AUTO)?true:stateChange(fromState, toState);
+		return (ds.isAutonomous())?true:stateChange(fromState, toState);
 		
 	}
 

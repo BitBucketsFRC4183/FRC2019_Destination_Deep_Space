@@ -2,6 +2,7 @@ plugins {
     id "java"
     id "idea"
     id "edu.wpi.first.GradleRIO" version "2019.1.1"
+    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.2.0" apply false
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -36,12 +37,27 @@ deploy {
 }
 
 // Set this to true to enable desktop support.
-def includeDesktopSupport = false
+def includeDesktopSupport = true
 
 // Maven central needed for JUnit
 repositories {
     mavenCentral()
 }
+
+/////////////////////////////////////////////////////
+// Snobot Sim
+
+apply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin
+
+configurations {
+    snobotSimCompile
+}
+
+// This isn't necessary, but running analysis on your code is a good idea. If you do it, the files should probably be in your project dir,
+// but since this is shared I have it in a more centralized location
+//apply from: "../styleguide/java_style.gradle"
+// End Snobot Sim
+/////////////////////////////////////////////////////
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
@@ -53,6 +69,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.powermock:powermock-module-junit4:2.0.0'
     testCompile 'org.powermock:powermock-api-mockito2:2.0.0'
+
+    snobotSimCompile snobotSimJava()
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
