@@ -14,14 +14,11 @@ import frc.robot.subsystem.navigation.NavigationSubsystem;
 import frc.robot.subsystem.scoring.ScoringSubsystem;
 import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.operatorinterface.OI;
-
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.kauailabs.navx.frc.AHRS;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -46,6 +43,8 @@ public class Robot extends TimedRobot {
   // reference also shows that) 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   private OI oi;
+
+  private DriverStation ds;
   
   // Primary Subsystems that make up the major robot functions
   private DriveSubsystem    driveSubsystem;
@@ -71,6 +70,8 @@ public class Robot extends TimedRobot {
     // to just make the first reference here.
 
     oi = OI.instance();
+
+    ds = DriverStation.getInstance();
 
     // Reference the subsystems we need to initialize
     driveSubsystem = DriveSubsystem.instance();
