@@ -32,21 +32,21 @@ public class DriverControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() 
   {
-    driveSubsystem.drive(oi.axisForward.get(), oi.axisTurn.get());
+    driveSubsystem.drive(oi.speed(), oi.turn());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   protected boolean isFinished() 
   {
-    if (oi.btnDriveLock.get() || oi.sbtnShake.get())
+    if (oi.driveLock())
     {
       return CommandUtils.stateChange(this, new DriveLock());
     }
-    else if(oi.btnAlignLock.get()) 
+    else if(oi.alignLock()) 
     {
       return CommandUtils.stateChange(this, new AlignLock());
     }
-    else if (oi.btn180.get())
+    else if (oi.quickTurn_deg() == 180.0)
     {
       return CommandUtils.stateChange(this, new TurnBy(180.0,5.0));
     } 

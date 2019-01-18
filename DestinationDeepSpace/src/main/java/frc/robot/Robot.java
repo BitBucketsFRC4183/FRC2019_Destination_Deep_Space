@@ -161,7 +161,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    oi.setDisabledMode();
   }
 
   /**
@@ -191,7 +190,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    oi.setAutoMode();
   }
 
   /**
@@ -212,7 +210,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    oi.setTeleopMode();
   }
 
   /**
@@ -233,7 +230,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testInit() {
-    oi.setTestMode();
   }  
   
   /**
