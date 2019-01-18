@@ -28,9 +28,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-	// lowercase?
+	// TODO: lowercase?
 	private final WPI_TalonSRX TOP_INTAKE_MOTOR = new WPI_TalonSRX(ScoringConstants.TOP_INTAKE_MOTOR_ID);
-	private final WPI_TalonSRX BOTTOM_INTAKE_MOTOR = new WPI_TalonSRX(ScoringConstants.TOP_INTAKE_MOTOR_ID);
+	private final WPI_TalonSRX BOTTOM_INTAKE_MOTOR = new WPI_TalonSRX(ScoringConstants.BOTTOM_INTAKE_MOTOR_ID);
 
 
 	
