@@ -116,7 +116,7 @@ public class DriveSubsystemTest {
     public void testArcadeDrive() throws Exception {
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
-        driveSubsystem.arcadeDrive(0, 0);
+        driveSubsystem.drive(0, 0);
 
         // verify that each motor controller was called with the output we expected, in this case 0
         // in this case, only the front motors actually have their power output set
@@ -132,7 +132,7 @@ public class DriveSubsystemTest {
     public void testArcadeDriveForward() throws Exception {
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
-        driveSubsystem.arcadeDrive(1, 0);
+        driveSubsystem.drive(1, 0);
 
         // verify that each motor controller was called with the output we expected, in this case 1
         // on each motor
@@ -149,7 +149,7 @@ public class DriveSubsystemTest {
     public void testArcadeDriveForwardAndRight() throws Exception {
         DriveSubsystem driveSubsystem = DriveSubsystem.instance();
         // call arcade drive
-        driveSubsystem.arcadeDrive(1, 1);
+        driveSubsystem.drive(1, 1);
 
         // verify that each motor controller was called with the output we expected
         // in this case, we go heavy on the left side, light on the right side
