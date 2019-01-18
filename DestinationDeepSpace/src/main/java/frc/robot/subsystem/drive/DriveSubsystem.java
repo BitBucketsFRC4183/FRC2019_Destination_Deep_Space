@@ -53,44 +53,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
   	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	/**
-	 * drive - takes a speed and turn factor and passes to the selected drive algorithm
-	 * Context depends upon which algorithm is selected, but is generally [-1,1] domain
-	 * unless otherwise indicated.
-	 * 
-	 * Velocity drive selection requires inputs of feet/sec and deg/sec (TBD)
-	 */
-	public void drive(double speed, double turn) {
-		switch (driveStyleChooser.getSelected()) {
-			// Even though the enumeration should be correct
-			// it is a best practice to always explicitly set a default
-			// just in case the interface has a glitch and the wrong
-			// signal reaches here. The default can either fall throuhg
-			// or do something else, but now we made a choice
-			default:
-			case WPI_Arcade: {
-				// DO NOT let the diff drive square the inputs itself
-				// All scaling is external to this drive function
-				differentialDrive.arcadeDrive(speed, turn, false);
-
-				break;
-			}
-
-			case BB_Arcade: {
-				arcadeDrive(speed, turn);
-
-				break;
-			}
-
-			case Velocity: {
-				velocityDrive(speed, turn);
-
-				break;
-			}
-		}
-	}
-
-
 	private final AHRS ahrs = BitBucketsAHRS.instance();
 
   	private final double INCH_PER_WHEEL_ROT = RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
@@ -123,7 +85,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 
 
-	private DifferentialDrive differentialDrive;
+	private static DifferentialDrive differentialDrive;
 
 
 	
@@ -165,8 +127,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 
 	driveStyleChooser = new SendableChooser<DriveStyle>();
-	// TODO: do we add a default?
-	driveStyleChooser.addOption("WPI Arcade", DriveStyle.WPI_Arcade);
+	driveStyleChooser.setDefaultOption("WPI Arcade", DriveStyle.WPI_Arcade);
 	driveStyleChooser.addOption("Bit Buckets Arcade", DriveStyle.BB_Arcade);
 	driveStyleChooser.addOption("Velocity", DriveStyle.Velocity);
 
@@ -430,6 +391,46 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		  return Math.signum(x) * (x*x);
   	}
 
+	/**
+	 * drive - takes a speed and turn factor and passes to the selected drive algorithm
+	 * Context depends upon which algorithm is selected, but is generally [-1,1] domain
+	 * unless otherwise indicated.
+	 * 
+	 * Velocity drive selection requires inputs of feet/sec and deg/sec (TBD)
+	 */
+	public void drive(double speed, double turn) {
+
+		DriveStyle style = driveStyleChooser.getSelected();
+
+		switch (style) {
+			// Even though the enumeration should be correct
+			// it is a best practice to always explicitly set a default
+			// just in case the interface has a glitch and the wrong
+			// signal reaches here. The default can either fall throuhg
+			// or do something else, but now we made a choice
+			default:
+			case WPI_Arcade: {
+				// DO NOT let the diff drive square the inputs itself
+				// All scaling is external to this drive function
+				differentialDrive.arcadeDrive(speed, turn, false);
+
+				break;
+			}
+
+			case BB_Arcade: {
+				arcadeDrive(speed, turn);
+
+				break;
+			}
+
+			case Velocity: {
+				velocityDrive(speed, turn);
+
+				break;
+			}
+		}
+	}
+
 	// +turnStick produces right turn (CW from above, -yaw angle)
     /// TODO: Consider re-designing this to reduce turn by up to 50% at full forward speed
 	private void arcadeDrive(double fwdStick, double turnStick) 
@@ -443,12 +444,12 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		fwdStick = forwardJoystickScaleChooser.getSelected().rescale(fwdStick);
 		turnStick = turnJoystickScaleChooser.getSelected().rescale(turnStick);
 		
-		if(oi.btnLowSensitiveDrive.get()) 
+		if(oi.lowSensitivity()) 
 		{
 			fwdStick *= LOW_SENS_GAIN;
 			turnStick *= LOW_SENS_GAIN;
 		}
-		if(oi.btnInvertAxis.get()) {
+		if(oi.invertDrive()) {
 			fwdStick *= -1.0;
 		}
 		double maxSteer = 1.0 - Math.abs(fwdStick) / 2.0;	// Reduce steering by up to 50%
@@ -502,10 +503,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	public void doAlignDrive(double fwdStick, double turnStick) {
 					
-		if(oi.btnLowSensitiveDrive.get())
+		if(oi.lowSensitivity())
 			fwdStick *= LOW_SENS_GAIN;
 		
-		if(oi.btnInvertAxis.get()) {
+		if(oi.invertDrive()) {
 			fwdStick *= -1.0;
 		}
 		
@@ -541,18 +542,17 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	@Override
 	protected void initDefaultCommand() 
 	{
-		// Moved to initialize so it does not automatically interfere
-		System.out.println("Setting default command normally");
+		// NOTE NOTE NOTE: Moved to initialize so it does not automatically interfere
 		// setDefaultCommand(new Idle());		
 		
 	}
 
 	public void initialize() 
-	{
-		System.out.println("Setting default command Mike's way");
+	{		
+		System.out.println("Setting default command Mike's way");	// Don't use default commands as they can catch you by surprise
 		initialCommand = new Idle();	// Only create it once
-		initialCommand.start();		
-  }
+		initialCommand.start();
+    }
   
   
 	@Override

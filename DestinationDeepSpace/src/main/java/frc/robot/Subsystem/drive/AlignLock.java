@@ -33,17 +33,17 @@ public class AlignLock extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    driveSubsystem.doAlignDrive(oi.axisForward.get(), oi.axisTurn.get());
+    driveSubsystem.doAlignDrive(oi.speed(), oi.turn());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if (oi.btnDriveLock.get() || oi.sbtnShake.get())
+    if (oi.driveLock())
     	{
     		return CommandUtils.stateChange(this, new DriveLock());
     	}
-    	else if( ! oi.btnAlignLock.get()) 
+    	else if( ! oi.alignLock()) 
     	{
     		return CommandUtils.stateChange(this, new DriverControl());
     	}

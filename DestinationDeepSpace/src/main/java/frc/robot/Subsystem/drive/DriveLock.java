@@ -32,26 +32,19 @@ public class DriveLock extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(oi.sbtnShake.get())
-    	{
-    		driveSubsystem.doLockDrive(.1*sineWave(10.0));	/// TODO: MAYBE need it, but interface should be in inches not ticks
-    	}
-    	else
-    	{
-    		driveSubsystem.doLockDrive(0.0);
-    	}
+      driveSubsystem.doLockDrive(0.0);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if( oi.btnDriveLock.get() || oi.sbtnShake.get())
+    if( oi.driveLock())
     {
       // Stay in state
       return false; 
     }
     
-    if (oi.btnAlignLock.get()) 
+    if (oi.alignLock()) 
     {
       return CommandUtils.stateChange(this, new AlignLock());
     }
