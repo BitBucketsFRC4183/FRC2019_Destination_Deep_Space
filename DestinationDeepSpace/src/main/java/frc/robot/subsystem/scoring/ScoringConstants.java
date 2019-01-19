@@ -30,6 +30,7 @@ public class ScoringConstants {
 
 
 
+	// TODO: this is VERY likely wrong
 	public static final int ARM_MOTOR_NATIVE_INCHES_PER_TICK = 8192;
 	public static final double ARM_MOTOR_RADIUS = 0;
 

@@ -68,8 +68,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
   
 	private final int EDGES_PER_ENCODER_COUNT = 4;	// Always for quadrature
 	
+	// they always be saying "yee haw" but never "yaw hee" :(
 	private double yawSetPoint;
-		
+	
 	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
 	private final WPI_TalonSRX leftRearMotor;
 
@@ -345,7 +346,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	// NOTE: This only works on drives where all motors on a side drive the
 	// same wheels
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	differentialDrive = new DifferentialDrive(leftFrontMotor, rightFrontMotor); // others will follow
+	differentialDrive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
 
 	// Since we going to use the TalonSRX in this class, the inversion, if needed is
 	// going to be passed to controllers so positive commands on left and right both
@@ -481,6 +482,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 
 
+	/**
+	 * @param vel   inches  / sec
+	 * @param omega radians / sec
+	 */
 	public void velocityDrive(double vel, double omega) {
 		// velocity mode <-- value in change in position per 100ms
 
@@ -493,6 +498,17 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// Basically the encoder (quadrature in our case) measure angle; velocity is average angle over small delta-t
 		// Our encoders have a 2048 pulses per rev, to 8192 quad edged per rev
 		// " - Mike
+
+		// per 100ms
+		vL *= 10;
+		vR *= 10;
+
+		vL /= DriveConstants.MOTOR_NATIVE_INCHES_PER_TICK;
+		vR /= DriveConstants.MOTOR_NATIVE_INCHES_PER_TICK;
+
+		
+		leftFrontMotor.set(ControlMode.Velocity, vL);
+		rightFrontMotor.set(ControlMode.Velocity, vR);
 	}
 
 	public void doAutoTurn( double turn) {

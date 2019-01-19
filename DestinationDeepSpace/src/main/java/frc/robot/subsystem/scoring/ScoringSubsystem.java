@@ -9,6 +9,9 @@ package frc.robot.subsystem.scoring;
 
 import frc.robot.RobotMap;
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.SubsystemUtilities.SubsystemTelemetryState;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -31,9 +34,11 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private final WPI_TalonSRX bottomRollerMotor = new WPI_TalonSRX(RobotMap.BOTTOM_INTAKE_MOTOR_ID);
 
 	// TODO: depending on the hardware, there may be (probably will be) more motors to rotate the scoring mechanism
-	private final WPI_TalonSRX rotationMotor = new WPI_TalonSRX(RobotMap.ROTATION_MOTOR_ID);
+	private final WPI_TalonSRX rotationMotor1 = new WPI_TalonSRX(RobotMap.ROTATION_MOTOR1_ID);
+	private final WPI_TalonSRX rotationMotor2 = new WPI_TalonSRX(RobotMap.ROTATION_MOTOR2_ID);
 	
 
+	private static SendableChooser<SubsystemTelemetryState> telemetryState;
 
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
@@ -42,13 +47,13 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	 * I drew this for a method I realized we didn't even need but decided to keep it, enjoy!
 	 * 
 	 * 
-	 *        \ * /
-	 *         \_/
- 	 *         //
-	 *        //
-	 *  _____//_____
-	 *  |          |
-	 * ==O========O==
+	 *        \   /            \   /                               \   /            \   /
+	 *         \_/              \_/               G O               \_/              \_/
+ 	 *          \\               \\                                 //               //
+	 *           \\               \\              BIT              //               //
+	 *       _____\\_____     _____\\_____                   _____//_____     _____//_____
+	 *       |          |     |          |      BUCKETS      |          |     |          |
+	 *      ==O========O==   ==O========O==                 ==O========O==   ==O========O==
 	 */
 
 
@@ -62,7 +67,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// moved distance = r * angle
 		double dist = 2 * Math.PI * ScoringConstants.ARM_MOTOR_RADIUS * angle / 360;
 
-		int currentTicks = rotationMotor.getSelectedSensorPosition(0);
 		int ticks = (int) (dist / ScoringConstants.ARM_MOTOR_NATIVE_INCHES_PER_TICK);
 
 		// if the arm is in the back of the robot
@@ -72,7 +76,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		}
 
 		// TODO: set up PID constants
-		rotationMotor.set(ControlMode.MotionMagic, ticks);
+		rotationMotor1.set(ControlMode.MotionMagic, ticks);
 	}
 
 
@@ -113,11 +117,35 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		 *    <--- \__/
 		 */
 		topRollerMotor.set(ControlMode.PercentOutput, pow);
-		bottomRollerMotor.set(ControlMode.PercentOutput, -pow);
+		// bottom will follow AND BE OPPOSITE
 	}
 
 
+
+	public void setAllMotorsZero() {
+		topRollerMotor.set(ControlMode.PercentOutput, 0);
+		rotationMotor1.set(ControlMode.PercentOutput, 0);
+	}
+
 	
+
+
+
+
+
+
+
+	public double getAngle() {
+		int ticks = rotationMotor1.getSelectedSensorPosition();
+		double dist = ticks * ScoringConstants.ARM_MOTOR_NATIVE_INCHES_PER_TICK;
+
+		return 360 * dist / (2 * Math.PI * ScoringConstants.ARM_MOTOR_RADIUS);
+	}
+
+
+
+
+
   	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
@@ -138,8 +166,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
-		// TODO Auto-generated method stub
-		
+		if (telemetryState.getSelected() == SubsystemTelemetryState.ON) {
+			SmartDashboard.putNumber("Scoring Arm Angle", getAngle());
+			SmartDashboard.putNumber("Scoring Arm Ticks", rotationMotor1.getSelectedSensorPosition());
+		}
 	}
 
 	@Override
@@ -162,7 +192,26 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void initialize() {
+		bottomRollerMotor.setInverted(true);
+		// should be opposite of the top one at all times
+		bottomRollerMotor.follow(topRollerMotor);
 
+		// set it to 0 at starting position (front of robot)
+		rotationMotor1.setSelectedSensorPosition(0);
+		// follow 1
+		rotationMotor2.follow(rotationMotor1);
+
+
+
+		setAllMotorsZero();
+
+
+
+		telemetryState = new SendableChooser<SubsystemTelemetryState>();
+		telemetryState.setDefaultOption("Off", SubsystemTelemetryState.OFF);
+		telemetryState.addOption( "On",  SubsystemTelemetryState.ON);
+
+		SmartDashboard.putData("Scoring Telemetry", telemetryState);
 	}
 
 }
