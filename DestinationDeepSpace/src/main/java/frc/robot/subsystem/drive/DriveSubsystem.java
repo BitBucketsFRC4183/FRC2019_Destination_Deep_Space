@@ -23,6 +23,7 @@ import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.subsystem.navigation.NavigationSubsystem;
 import frc.robot.utils.Deadzone;
 import frc.robot.utils.JoystickScale;//for sam <3
+import frc.robot.utils.TalonUtils;
 
 
 /**
@@ -148,8 +149,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
       
     testModePeriod_sec = SmartDashboard.getNumber("Test Mode Period (sec)", 2.0);
       
-    leftFrontMotor = new WPI_TalonSRX(MotorId.LEFT_DRIVE_MOTOR_FRONT_ID);
-    leftRearMotor = new WPI_TalonSRX(MotorId.LEFT_DRIVE_MOTOR_REAR_ID);
+    leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
+    leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
+    TalonUtils.initializeMotorDefaults(leftFrontMotor);
+    TalonUtils.initializeMotorDefaults(leftRearMotor);
+
     leftRearMotor.follow(leftFrontMotor);
     
       
@@ -186,24 +190,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
     leftRearMotor.configClosedloopRamp(RobotMap.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
                                              RobotMap.CONTROLLER_TIMEOUT_MS);
 
-    // Always configure peak and nominal outputs to be full scale and 0 respectively
-    // We will apply limits in other ways, as needed
-    leftFrontMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
-    leftRearMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+
     // Configure for closed loop control
     // Our drives use the "front" motor in a group for control; i.e., where the sensor is located
-    leftFrontMotor.configSelectedFeedbackSensor(RobotMap.DRIVE_MOTOR_FEEDBACK_DEVICE, 
-                                            RobotMap.PRIMARY_PID_LOOP, 
-                                            RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+	  TalonUtils.initializeQuadEncoderMotor(leftFrontMotor);
+
     // Set closed loop gains in slot0 - see documentation (2018 SRM Section 12.6)
     // The gains are determined empirically following the Software Reference Manual
     // Summary:
@@ -224,32 +215,24 @@ public class DriveSubsystem extends BitBucketSubsystem {
     //
     //  Put drive train on ground with weight and re-test to see if position is as commanded.
     //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.
-    leftFrontMotor.selectProfileSlot(0, RobotMap.PRIMARY_PID_LOOP);
-    leftFrontMotor.config_kF(0, RobotMap.driveMotorKf, RobotMap.CONTROLLER_TIMEOUT_MS);		/// TODO: Move constants to map/profile
-    leftFrontMotor.config_kP(0, RobotMap.driveMotorKp, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.config_kI(0, RobotMap.driveMotorKi, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.config_kD(0, RobotMap.driveMotorKd, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.config_IntegralZone(0, RobotMap.driveMotorIZone, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+    TalonUtils.initializeMotorFPID(leftFrontMotor, RobotMap.driveMotorKf, RobotMap.driveMotorKp, RobotMap.driveMotorKi, RobotMap.driveMotorKd, RobotMap.driveMotorIZone);
+
     /* set acceleration and vcruise velocity - see documentation */
     leftFrontMotor.configMotionCruiseVelocity(RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
                                           RobotMap.CONTROLLER_TIMEOUT_MS);
     leftFrontMotor.configMotionAcceleration(RobotMap.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
                                         RobotMap.CONTROLLER_TIMEOUT_MS);
     
-    
-    /* zero the sensor */
-    leftFrontMotor.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
-              
     // Use follower mode to minimize shearing commands that could occur if
     // separate commands are sent to each motor in a group
     leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
     
-    rightFrontMotor  = new WPI_TalonSRX(MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID);
-    rightRearMotor   = new WPI_TalonSRX(MotorId.RIGHT_DRIVE_MOTOR_REAR_ID);
-    
-    rightRearMotor.follow(rightFrontMotor);
+    rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
+    rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
+	TalonUtils.initializeMotorDefaults(rightFrontMotor);
+	TalonUtils.initializeMotorDefaults(rightRearMotor);
+
+	rightRearMotor.follow(rightFrontMotor);
     
     rightFrontMotor.setInverted(RobotMap.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
     rightRearMotor.setInverted(RobotMap.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
@@ -278,24 +261,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
     rightRearMotor.configClosedloopRamp(RobotMap.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
                                     RobotMap.CONTROLLER_TIMEOUT_MS);
 
-    // Always configure peak and nominal outputs to be full scale and 0 respectively
-    // We will apply limits in other ways, as needed	    	
-    rightFrontMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
-    rightRearMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
 
     // Configure for closed loop control
     // Our drives use the "front" motor in a group for control; i.e., where the sensor is located
-    leftFrontMotor.configSelectedFeedbackSensor(RobotMap.DRIVE_MOTOR_FEEDBACK_DEVICE, 
-                                            RobotMap.PRIMARY_PID_LOOP, 
-                                            RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+    TalonUtils.initializeQuadEncoderMotor(rightFrontMotor);
+
     // Set closed loop gains in slot0 - see documentation (2018 SRM Section 12.6)
     // The gains are determined empirically following the Software Reference Manual
     // Summary:
@@ -316,22 +286,15 @@ public class DriveSubsystem extends BitBucketSubsystem {
     //
     //  Put drive train on ground with weight and re-test to see if position is as commanded.
     //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.
-    rightFrontMotor.selectProfileSlot(0, RobotMap.PRIMARY_PID_LOOP);
-    rightFrontMotor.config_kF(0, RobotMap.driveMotorKf, RobotMap.CONTROLLER_TIMEOUT_MS);		/// TODO: Move constants to map/profile
-    rightFrontMotor.config_kP(0, RobotMap.driveMotorKp, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.config_kI(0, RobotMap.driveMotorKi, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.config_kD(0, RobotMap.driveMotorKd, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.config_IntegralZone(0, RobotMap.driveMotorIZone, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+    TalonUtils.initializeMotorFPID(rightFrontMotor, RobotMap.driveMotorKf, RobotMap.driveMotorKp, RobotMap.driveMotorKi, RobotMap.driveMotorKd, RobotMap.driveMotorIZone);
+
     /* set acceleration and vcruise velocity - see documentation */
     rightFrontMotor.configMotionCruiseVelocity(RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
                                            RobotMap.CONTROLLER_TIMEOUT_MS);
     rightFrontMotor.configMotionAcceleration(RobotMap.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
                                          RobotMap.CONTROLLER_TIMEOUT_MS);
   
-    /* zero the sensor */
-    rightFrontMotor.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+
     // Use follower mode to minimize shearing commands that could occur if
     // separate commands are sent to each motor in a group
     rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());
