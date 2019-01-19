@@ -13,77 +13,6 @@
           "5,0": {
             "size": [
               6,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/Drive Style",
-              "_title": "SmartDashboard/Drive Style"
-            }
-          },
-          "11,0": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/DriveTelemetry",
-              "_title": "SmartDashboard/DriveTelemetry"
-            }
-          },
-          "14,0": {
-            "size": [
-              4,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/Forward Joystick Scale",
-              "_title": "SmartDashboard/Forward Joystick Scale"
-            }
-          },
-          "18,0": {
-            "size": [
-              4,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/Turn Joystick Scale",
-              "_title": "SmartDashboard/Turn Joystick Scale"
-            }
-          },
-          "0,0": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Gyro",
-              "_title": "Gyro",
-              "Visuals/Major tick spacing": 45.0,
-              "Visuals/Starting angle": 180.0,
-              "Visuals/Show tick mark ring": true
-            }
-          },
-          "0,3": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Number Slider",
-              "_source0": "network_table:///SmartDashboard/Yaw Rate (dps)",
-              "_title": "SmartDashboard/Yaw Rate (dps)",
-              "Slider Settings/Min": -100.0,
-              "Slider Settings/Max": 100.0,
-              "Slider Settings/Block increment": 0.0625
-            }
-          },
-          "5,2": {
-            "size": [
-              6,
               4
             ],
             "content": {
@@ -94,15 +23,48 @@
               "Visuals/Show velocity vectors": true
             }
           },
-          "0,5": {
+          "11,1": {
             "size": [
-              5,
-              2
+              4,
+              1
             ],
             "content": {
-              "_type": "Basic FMS Info",
-              "_source0": "network_table:///FMSInfo",
-              "_title": "/FMSInfo"
+              "_type": "Split Button Chooser",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Joystick Scale",
+              "_title": "SmartDashboard/DriveSubsystem/Turn Joystick Scale"
+            }
+          },
+          "15,0": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Split Button Chooser",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Diagnostics",
+              "_title": "SmartDashboard/DriveSubsystem/Diagnostics"
+            }
+          },
+          "11,0": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Split Button Chooser",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Forward Joystick Scale",
+              "_title": "SmartDashboard/DriveSubsystem/Forward Joystick Scale"
+            }
+          },
+          "15,1": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Split Button Chooser",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Telemetry",
+              "_title": "SmartDashboard/DriveSubsystem/Telemetry"
             }
           }
         }

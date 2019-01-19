@@ -6,20 +6,55 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystem;
+
+import frc.robot.subsystem.SubsystemUtilities.DiagnosticsEnableState;
 import frc.robot.subsystem.SubsystemUtilities.DiagnosticsState;
+import frc.robot.subsystem.SubsystemUtilities.TelemetryEnableState;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
 public abstract class BitBucketSubsystem extends Subsystem {
 	
-	protected boolean runDiagnostics = false;
+	protected SendableChooser<TelemetryEnableState> telemetryEnableState;
+	protected SendableChooser<DiagnosticsEnableState> diagnosticsEnableState;
+
+	private boolean diagnosticsEnabled = false;
+	private boolean telemetryEnabled = false;
+
 	public DiagnosticsState lastKnownState = DiagnosticsState.UNKNOWN;
 	public int DIAG_LOOPS_RUN = 5;
 	
 	public BitBucketSubsystem() {
 		
+	}
+
+	protected void initializeBaseDashboard()
+	{
+		telemetryEnableState = new SendableChooser<TelemetryEnableState>();
+		telemetryEnableState.setDefaultOption("Off", TelemetryEnableState.OFF);
+		telemetryEnableState.addOption( "On",  TelemetryEnableState.ON);
+		
+		SmartDashboard.putData(getName() + "/Telemetry", telemetryEnableState);
+
+		diagnosticsEnableState = new SendableChooser<DiagnosticsEnableState>();
+		diagnosticsEnableState.setDefaultOption("Off", DiagnosticsEnableState.OFF);
+		diagnosticsEnableState.addOption( "On",  DiagnosticsEnableState.ON);
+		
+		SmartDashboard.putData(getName() + "/Diagnostics", diagnosticsEnableState);
+	}
+	
+	public boolean getTelemetryEnabled()
+	{
+		return (telemetryEnableState.getSelected() == TelemetryEnableState.ON);
+	}
+	
+	public boolean getDiagnosticsEnabled()
+	{
+		return (diagnosticsEnableState.getSelected() == DiagnosticsEnableState.ON);
 	}
 
 	public abstract void initialize();		// Force all derived classes to have these interfaces
@@ -29,10 +64,6 @@ public abstract class BitBucketSubsystem extends Subsystem {
 	public abstract void diagnosticsExecute();
 	
 	public abstract void diagnosticsCheck();
-	
-	public abstract void setDiagnosticsFlag(boolean enable);
-	
-	public abstract boolean getDiagnosticsFlag();
 	
 	@Override
     protected abstract void initDefaultCommand();

@@ -20,11 +20,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
-import frc.robot.subsystem.SubsystemUtilities.SubsystemTelemetryState;
-
 import frc.robot.subsystem.navigation.NavigationSubsystem;
 import frc.robot.utils.Deadzone;
 import frc.robot.utils.JoystickScale;//for sam <3
+import frc.robot.utils.TalonUtils;
 
 
 /**
@@ -77,9 +76,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	private final WPI_TalonSRX rightFrontMotor;		// Use follower mode
 	private final WPI_TalonSRX rightRearMotor;
-	
-	private static SendableChooser<SubsystemTelemetryState> telemetryState;
-	
+		
 	private static SendableChooser<JoystickScale> forwardJoystickScaleChooser;
 	private static SendableChooser<JoystickScale> turnJoystickScaleChooser;
 
@@ -107,7 +104,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
   private DriveSubsystem()
   {
-    this.setName("DriveSubsystem");
 	setName("DriveSubsystem");
 	
 	// Get the instance references
@@ -120,15 +116,15 @@ public class DriveSubsystem extends BitBucketSubsystem {
     forwardJoystickScaleChooser.addOption(  "Cube",      JoystickScale.CUBE);
     forwardJoystickScaleChooser.addOption(  "Sine",      JoystickScale.SINE);
 
-    SmartDashboard.putData( "Forward Joystick Scale", forwardJoystickScaleChooser);
+    SmartDashboard.putData( getName()+"/Forward Joystick Scale", forwardJoystickScaleChooser);
 
     turnJoystickScaleChooser = new SendableChooser<JoystickScale>();
-    turnJoystickScaleChooser.setDefaultOption(  "Square",    JoystickScale.SQUARE);
     turnJoystickScaleChooser.addOption( "Linear",    JoystickScale.LINEAR);
+    turnJoystickScaleChooser.setDefaultOption(  "Square",    JoystickScale.SQUARE);
     turnJoystickScaleChooser.addOption(  "Cube",      JoystickScale.CUBE);
     turnJoystickScaleChooser.addOption(  "Sine",      JoystickScale.SINE);
     
-	SmartDashboard.putData( "Turn Joystick Scale", turnJoystickScaleChooser);
+	SmartDashboard.putData( getName()+"/Turn Joystick Scale", turnJoystickScaleChooser);
 	
 
 	driveStyleChooser = new SendableChooser<DriveStyle>();
@@ -136,7 +132,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	driveStyleChooser.addOption("Bit Buckets Arcade", DriveStyle.BB_Arcade);
 	driveStyleChooser.addOption("Velocity", DriveStyle.Velocity);
 
-	SmartDashboard.putData("Drive Style", driveStyleChooser);
+	SmartDashboard.putData( getName()+"/Drive Style", driveStyleChooser);
 
 
 	
@@ -154,6 +150,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
       
     leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
     leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
+    TalonUtils.initializeMotorDefaults(leftFrontMotor);
+    TalonUtils.initializeMotorDefaults(leftRearMotor);
+
     leftRearMotor.follow(leftFrontMotor);
     
       
@@ -190,24 +189,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
     leftRearMotor.configClosedloopRamp(RobotMap.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
                                              RobotMap.CONTROLLER_TIMEOUT_MS);
 
-    // Always configure peak and nominal outputs to be full scale and 0 respectively
-    // We will apply limits in other ways, as needed
-    leftFrontMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
-    leftRearMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+
     // Configure for closed loop control
     // Our drives use the "front" motor in a group for control; i.e., where the sensor is located
-    leftFrontMotor.configSelectedFeedbackSensor(RobotMap.DRIVE_MOTOR_FEEDBACK_DEVICE, 
-                                            RobotMap.PRIMARY_PID_LOOP, 
-                                            RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+	  TalonUtils.initializeQuadEncoderMotor(leftFrontMotor);
+
     // Set closed loop gains in slot0 - see documentation (2018 SRM Section 12.6)
     // The gains are determined empirically following the Software Reference Manual
     // Summary:
@@ -228,32 +214,24 @@ public class DriveSubsystem extends BitBucketSubsystem {
     //
     //  Put drive train on ground with weight and re-test to see if position is as commanded.
     //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.
-    leftFrontMotor.selectProfileSlot(0, RobotMap.PRIMARY_PID_LOOP);
-    leftFrontMotor.config_kF(0, RobotMap.driveMotorKf, RobotMap.CONTROLLER_TIMEOUT_MS);		/// TODO: Move constants to map/profile
-    leftFrontMotor.config_kP(0, RobotMap.driveMotorKp, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.config_kI(0, RobotMap.driveMotorKi, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.config_kD(0, RobotMap.driveMotorKd, RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.config_IntegralZone(0, RobotMap.driveMotorIZone, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+    TalonUtils.initializeMotorFPID(leftFrontMotor, RobotMap.driveMotorKf, RobotMap.driveMotorKp, RobotMap.driveMotorKi, RobotMap.driveMotorKd, RobotMap.driveMotorIZone);
+
     /* set acceleration and vcruise velocity - see documentation */
     leftFrontMotor.configMotionCruiseVelocity(RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
                                           RobotMap.CONTROLLER_TIMEOUT_MS);
     leftFrontMotor.configMotionAcceleration(RobotMap.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
                                         RobotMap.CONTROLLER_TIMEOUT_MS);
     
-    
-    /* zero the sensor */
-    leftFrontMotor.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
-              
     // Use follower mode to minimize shearing commands that could occur if
     // separate commands are sent to each motor in a group
     leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
     
     rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
     rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
-    
-    rightRearMotor.follow(rightFrontMotor);
+	TalonUtils.initializeMotorDefaults(rightFrontMotor);
+	TalonUtils.initializeMotorDefaults(rightRearMotor);
+
+	rightRearMotor.follow(rightFrontMotor);
     
     rightFrontMotor.setInverted(RobotMap.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
     rightRearMotor.setInverted(RobotMap.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
@@ -282,24 +260,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
     rightRearMotor.configClosedloopRamp(RobotMap.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
                                     RobotMap.CONTROLLER_TIMEOUT_MS);
 
-    // Always configure peak and nominal outputs to be full scale and 0 respectively
-    // We will apply limits in other ways, as needed	    	
-    rightFrontMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
-    rightRearMotor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configNominalOutputForward(0, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configNominalOutputReverse(0, RobotMap.CONTROLLER_TIMEOUT_MS);
 
     // Configure for closed loop control
     // Our drives use the "front" motor in a group for control; i.e., where the sensor is located
-    leftFrontMotor.configSelectedFeedbackSensor(RobotMap.DRIVE_MOTOR_FEEDBACK_DEVICE, 
-                                            RobotMap.PRIMARY_PID_LOOP, 
-                                            RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+    TalonUtils.initializeQuadEncoderMotor(rightFrontMotor);
+
     // Set closed loop gains in slot0 - see documentation (2018 SRM Section 12.6)
     // The gains are determined empirically following the Software Reference Manual
     // Summary:
@@ -320,22 +285,15 @@ public class DriveSubsystem extends BitBucketSubsystem {
     //
     //  Put drive train on ground with weight and re-test to see if position is as commanded.
     //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.
-    rightFrontMotor.selectProfileSlot(0, RobotMap.PRIMARY_PID_LOOP);
-    rightFrontMotor.config_kF(0, RobotMap.driveMotorKf, RobotMap.CONTROLLER_TIMEOUT_MS);		/// TODO: Move constants to map/profile
-    rightFrontMotor.config_kP(0, RobotMap.driveMotorKp, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.config_kI(0, RobotMap.driveMotorKi, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.config_kD(0, RobotMap.driveMotorKd, RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.config_IntegralZone(0, RobotMap.driveMotorIZone, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+    TalonUtils.initializeMotorFPID(rightFrontMotor, RobotMap.driveMotorKf, RobotMap.driveMotorKp, RobotMap.driveMotorKi, RobotMap.driveMotorKd, RobotMap.driveMotorIZone);
+
     /* set acceleration and vcruise velocity - see documentation */
     rightFrontMotor.configMotionCruiseVelocity(RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
                                            RobotMap.CONTROLLER_TIMEOUT_MS);
     rightFrontMotor.configMotionAcceleration(RobotMap.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
                                          RobotMap.CONTROLLER_TIMEOUT_MS);
   
-    /* zero the sensor */
-    rightFrontMotor.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
-    
+
     // Use follower mode to minimize shearing commands that could occur if
     // separate commands are sent to each motor in a group
     rightRearMotor.set(ControlMode.Follower, rightFrontMotor.getDeviceID());
@@ -359,14 +317,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	differentialDrive.setRightSideInverted(false);
     
     // Create the motion profile driver
-
-	// TODO: Move this setup to base class, remembering that the key must be unique
-	// may be able to do it through introspection      
-    telemetryState = new SendableChooser<SubsystemTelemetryState>();
-    telemetryState.setDefaultOption("Off", SubsystemTelemetryState.OFF);
-    telemetryState.addOption( "On",  SubsystemTelemetryState.ON);
-    
-    SmartDashboard.putData("DriveTelemetry", telemetryState);
   }
   
 
@@ -534,7 +484,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			
 			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());
 			error = -ALIGN_LOOP_GAIN * -navigation.getYawRate_degPerSec();
-			SmartDashboard.putNumber("IMU_ERROR", error);
+			SmartDashboard.putNumber(getName()+"/IMU_ERROR", error);
 			arcadeDrive( fwdStick, error + yawCorrect());
 		}
 	}
@@ -558,6 +508,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	public void initialize() 
 	{		
+		initializeBaseDashboard();
+
 		System.out.println("Setting default command Mike's way");	// Don't use default commands as they can catch you by surprise
 		initialCommand = new Idle();	// Only create it once
 		initialCommand.start();
@@ -566,22 +518,13 @@ public class DriveSubsystem extends BitBucketSubsystem {
   
 	@Override
 	public void periodic() {
-		// TODO Auto-generated method stub
-		
-	}
-  
-  @Override
-	public void setDiagnosticsFlag(boolean enable) {
-		// TODO Auto-generated method stub
-		
-	}
+		if (getTelemetryEnabled())
+		{
 
-	@Override
-	public boolean getDiagnosticsFlag() {
-		// TODO Auto-generated method stub
-		return false;
+		}
+		
 	}
-	
+  	
 	public void disable() {
 		setAllMotorsZero();
 	}
@@ -738,7 +681,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	public void diagnosticsExecute() {
 
 		/* Init Diagnostics */
-		SmartDashboard.putBoolean("RunningDiag", true);
+		SmartDashboard.putBoolean(getName()+"/RunningDiag", true);
 		
 		rightFrontMotor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
 		rightRearMotor.set(ControlMode.PercentOutput, -RobotMap.MOTOR_TEST_PERCENT);
