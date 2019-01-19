@@ -24,6 +24,11 @@ public class LightingSubsystem extends BitBucketSubsystem {
 	}
 	private static LightingSubsystem inst;
 
+	private LightingSubsystem()
+	{
+		setName("LightingSubsystem");
+	}
+
   	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
@@ -44,7 +49,8 @@ public class LightingSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
-		// TODO Auto-generated method stub
+		
+		updateBaseDashboard();
 		
 	}
 
