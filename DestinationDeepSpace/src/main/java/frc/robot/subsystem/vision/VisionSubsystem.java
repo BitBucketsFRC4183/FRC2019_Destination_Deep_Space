@@ -22,7 +22,12 @@ public class VisionSubsystem extends BitBucketSubsystem {
 			inst = new VisionSubsystem();
 		return inst;		
 	}
-	private static VisionSubsystem inst;	
+	private static VisionSubsystem inst;
+	
+	private VisionSubsystem()
+	{
+		setName("VisionSubsystem");
+	}
 
   	@Override
 	public void diagnosticsInit() {
@@ -44,8 +49,9 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
-		// TODO Auto-generated method stub
-		
+
+
+		updateBaseDashboard();		
 	}
 
 	@Override
@@ -56,6 +62,8 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void initialize() {
+
+		initializeBaseDashboard();
 
 	}
 

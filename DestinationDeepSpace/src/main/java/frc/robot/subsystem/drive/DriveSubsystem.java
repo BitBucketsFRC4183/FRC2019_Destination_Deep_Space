@@ -16,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.robot.MotorId;
 import frc.robot.RobotMap;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
@@ -68,8 +68,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
   
 	private final int EDGES_PER_ENCODER_COUNT = 4;	// Always for quadrature
 	
+	// they always be saying "yee haw" but never "yaw hee" :(
 	private double yawSetPoint;
-		
+	
 	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
 	private final WPI_TalonSRX leftRearMotor;
 
@@ -147,8 +148,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
       
     testModePeriod_sec = SmartDashboard.getNumber("Test Mode Period (sec)", 2.0);
       
-    leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
-    leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
+    leftFrontMotor = new WPI_TalonSRX(MotorId.LEFT_DRIVE_MOTOR_FRONT_ID);
+    leftRearMotor = new WPI_TalonSRX(MotorId.LEFT_DRIVE_MOTOR_REAR_ID);
     leftRearMotor.follow(leftFrontMotor);
     
       
@@ -245,8 +246,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
     // separate commands are sent to each motor in a group
     leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
     
-    rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
-    rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
+    rightFrontMotor  = new WPI_TalonSRX(MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID);
+    rightRearMotor   = new WPI_TalonSRX(MotorId.RIGHT_DRIVE_MOTOR_REAR_ID);
     
     rightRearMotor.follow(rightFrontMotor);
     
@@ -345,7 +346,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	// NOTE: This only works on drives where all motors on a side drive the
 	// same wheels
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	differentialDrive = new DifferentialDrive(leftFrontMotor, rightFrontMotor); // others will follow
+	differentialDrive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
 
 	// Since we going to use the TalonSRX in this class, the inversion, if needed is
 	// going to be passed to controllers so positive commands on left and right both
@@ -402,7 +403,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			// Even though the enumeration should be correct
 			// it is a best practice to always explicitly set a default
 			// just in case the interface has a glitch and the wrong
-			// signal reaches here. The default can either fall throuhg
+			// signal reaches here. The default can either fall through
 			// or do something else, but now we made a choice
 			default:
 			case WPI_Arcade: {
@@ -473,18 +474,35 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 
 
+	/**
+	 * @param vel   inches  / sec
+	 * @param omega radians / sec
+	 */
 	public void velocityDrive(double vel, double omega) {
 		// velocity mode <-- value in change in position per 100ms
 
 		double vL = vel + omega * DriveConstants.TRACK / 2;
 		double vR = vel - omega * DriveConstants.TRACK / 2;
 
-		// TODO: convert to usable values to send to motors later
-		//
 		// "
 		// Basically the encoder (quadrature in our case) measure angle; velocity is average angle over small delta-t
 		// Our encoders have a 2048 pulses per rev, to 8192 quad edged per rev
 		// " - Mike
+
+		// convert to rev/sec
+		vL /= DriveConstants.WHEEL_CIRCUMFERENCE;
+		vR /= DriveConstants.WHEEL_CIRCUMFERENCE;
+
+		// convert to rev/100ms
+		vL *= 10;
+		vR *= 10;
+
+		// convert to native ticks/100ms
+		vL *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
+		vR *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
+
+		leftFrontMotor.set(ControlMode.Velocity, vL);
+		rightFrontMotor.set(ControlMode.Velocity, vR);
 	}
 
 	public void doAutoTurn( double turn) {
@@ -560,6 +578,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 		}
 		
+		updateBaseDashboard();
 	}
   	
 	public void disable() {
