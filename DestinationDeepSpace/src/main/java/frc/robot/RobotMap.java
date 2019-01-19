@@ -66,8 +66,8 @@ public class RobotMap {
 	public static final int BOTTOM_INTAKE_MOTOR_ID = 0;
 	public static final int ROTATION_MOTOR1_ID = 0;
 	public static final int ROTATION_MOTOR2_ID = 0;
-		
-    public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG = true;
+	
+	public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG = true;
    	public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG = false;
    		
    		// If positive controller command yields positive rotation and positive encoder speed
