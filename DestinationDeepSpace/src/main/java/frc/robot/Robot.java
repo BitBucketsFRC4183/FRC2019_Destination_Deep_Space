@@ -15,7 +15,6 @@ import frc.robot.subsystem.scoring.ScoringSubsystem;
 import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.operatorinterface.OI;
 import frc.robot.operatorinterface.PS4Constants;
-import frc.robot.subsystem.scoring.MoveArm; // TODO: remove this, its for testing
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -95,25 +94,6 @@ public class Robot extends TimedRobot {
 
     lightingSubsystem = LightingSubsystem.instance();
     lightingSubsystem.initialize();
-
-
-
-
-
-    // TEST CODE, REMOVE SOON
-    Joystick joystick = new Joystick(0);
-
-    JoystickButton circle = new JoystickButton(joystick, PS4Constants.CIRCLE.getValue());
-    circle.whenPressed(new MoveArm(0));
-
-    JoystickButton triangle = new JoystickButton(joystick, PS4Constants.TRIANGLE.getValue());
-    triangle.whenPressed(new MoveArm(90));
-
-    JoystickButton square = new JoystickButton(joystick, PS4Constants.SQUARE.getValue());
-    triangle.whenPressed(new MoveArm(180));
-
-    JoystickButton cross = new JoystickButton(joystick, PS4Constants.CROSS.getValue());
-    cross.whenPressed(new MoveArm(270));
   }
 
   /**
