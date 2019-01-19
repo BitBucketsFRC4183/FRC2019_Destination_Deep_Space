@@ -64,10 +64,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	 * is from the back of the robot
 	 */
 	public void directArmTo(double angle, boolean front) {
-		// moved distance = r * angle
-		double dist = 2 * Math.PI * ScoringConstants.ARM_MOTOR_RADIUS * angle / 360;
+		double rev = angle / 360;
 
-		int ticks = (int) (dist / ScoringConstants.ARM_MOTOR_NATIVE_INCHES_PER_TICK);
+		int ticks = (int) (rev * ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV);
 
 		// if the arm is in the back of the robot
 		if (front == false) {
@@ -137,9 +136,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	public double getAngle() {
 		int ticks = rotationMotor1.getSelectedSensorPosition();
-		double dist = ticks * ScoringConstants.ARM_MOTOR_NATIVE_INCHES_PER_TICK;
+		double rev = ticks / ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
 
-		return 360 * dist / (2 * Math.PI * ScoringConstants.ARM_MOTOR_RADIUS);
+		return 360 * rev;
 	}
 
 

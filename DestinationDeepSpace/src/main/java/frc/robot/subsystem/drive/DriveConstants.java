@@ -4,6 +4,7 @@ public class DriveConstants {
     // TODO: substitute in correct values once we get them
     public static final double TRACK = 1.0;
 
-    // TODO: this is VERY likely wrong
-    public static final int MOTOR_NATIVE_INCHES_PER_TICK = 8192;
+    public static final int MOTOR_NATIVE_TICKS_PER_REV = 8192;
+    public static final double WHEEL_RADIUS = 0;
+    public static final double WHEEL_CIRCUMFERENCE = 2 * Math.PI * WHEEL_RADIUS;
 }
