@@ -56,7 +56,7 @@ public class Idle extends Command {
     		// b) running some tests back-to-back can make it hard to see what is happening
     		// A changeable default test period of 2 seconds provides a reasonable chance to see
     		// what is happening
-    		if (driveSubsystem.getDiagnosticsFlag())	// Diagnostics can only be run once per reset cycle
+    		if (driveSubsystem.getDiagnosticsEnabled())	// Diagnostics can only be run once per reset cycle
     		{
     				// Don't run repeatedly because it could be harmful
     			return CommandUtils.stateChange(this, new Diagnostics());
