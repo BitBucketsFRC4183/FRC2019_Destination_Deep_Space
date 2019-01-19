@@ -34,5 +34,5 @@ public class ScoringConstants {
 	public static final double ARM_MOTOR_RADIUS = 0;
 
 	// if encoder reads a higher value, then the arm is in the back of the robot
-	public static final int ARM_MOTOR_SWITCH_TICK_THRESHOLD = (int) ((Math.PI / 2 * ARM_MOTOR_RADIUS) / ARM_MOTOR_NATIVE_TICKS_PER_REV);
+	public static final int ARM_MOTOR_SWITCH_TICK_THRESHOLD = ARM_MOTOR_NATIVE_TICKS_PER_REV / 2;
 }

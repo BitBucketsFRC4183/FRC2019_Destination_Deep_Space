@@ -411,7 +411,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			// Even though the enumeration should be correct
 			// it is a best practice to always explicitly set a default
 			// just in case the interface has a glitch and the wrong
-			// signal reaches here. The default can either fall throuhg
+			// signal reaches here. The default can either fall through
 			// or do something else, but now we made a choice
 			default:
 			case WPI_Arcade: {
