@@ -492,12 +492,25 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		double vL = vel + omega * DriveConstants.TRACK / 2;
 		double vR = vel - omega * DriveConstants.TRACK / 2;
 
-		// TODO: convert to usable values to send to motors later
-		//
 		// "
 		// Basically the encoder (quadrature in our case) measure angle; velocity is average angle over small delta-t
 		// Our encoders have a 2048 pulses per rev, to 8192 quad edged per rev
 		// " - Mike
+
+		// convert to rev/sec
+		vL /= DriveConstants.WHEEL_CIRCUMFERENCE;
+		vR /= DriveConstants.WHEEL_CIRCUMFERENCE;
+
+		// convert to rev/100ms
+		vL *= 10;
+		vR *= 10;
+
+		// convert to native ticks/100ms
+		vL *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
+		vR *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
+
+		leftFrontMotor.set(ControlMode.Velocity, vL);
+		rightFrontMotor.set(ControlMode.Velocity, vR);
 	}
 
 	public void doAutoTurn( double turn) {
