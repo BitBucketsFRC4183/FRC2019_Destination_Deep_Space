@@ -63,19 +63,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	}
 
 	@Override
-	public void setDiagnosticsFlag(boolean enable) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getDiagnosticsFlag() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void initialize() {
+		initializeBaseDashboard();
 
 	}
 

@@ -41,6 +41,7 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void initialize() {
+		initializeBaseDashboard();
 		ahrs = BitBucketsAHRS.instance();
 		periodCounter = 0;
 
@@ -80,18 +81,6 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void setDiagnosticsFlag(boolean enable) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getDiagnosticsFlag() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public double getYaw_deg() {
