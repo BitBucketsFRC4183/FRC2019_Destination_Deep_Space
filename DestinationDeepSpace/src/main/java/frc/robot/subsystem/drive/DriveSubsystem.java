@@ -20,8 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
-import frc.robot.subsystem.SubsystemUtilities.SubsystemTelemetryState;
-
 import frc.robot.subsystem.navigation.NavigationSubsystem;
 import frc.robot.utils.Deadzone;
 import frc.robot.utils.JoystickScale;//for sam <3
@@ -77,9 +75,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	private final WPI_TalonSRX rightFrontMotor;		// Use follower mode
 	private final WPI_TalonSRX rightRearMotor;
-	
-	private static SendableChooser<SubsystemTelemetryState> telemetryState;
-	
+		
 	private static SendableChooser<JoystickScale> forwardJoystickScaleChooser;
 	private static SendableChooser<JoystickScale> turnJoystickScaleChooser;
 
@@ -107,7 +103,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
   private DriveSubsystem()
   {
-    this.setName("DriveSubsystem");
 	setName("DriveSubsystem");
 	
 	// Get the instance references
@@ -120,15 +115,15 @@ public class DriveSubsystem extends BitBucketSubsystem {
     forwardJoystickScaleChooser.addOption(  "Cube",      JoystickScale.CUBE);
     forwardJoystickScaleChooser.addOption(  "Sine",      JoystickScale.SINE);
 
-    SmartDashboard.putData( "Forward Joystick Scale", forwardJoystickScaleChooser);
+    SmartDashboard.putData( getName()+"/Forward Joystick Scale", forwardJoystickScaleChooser);
 
     turnJoystickScaleChooser = new SendableChooser<JoystickScale>();
-    turnJoystickScaleChooser.setDefaultOption(  "Square",    JoystickScale.SQUARE);
     turnJoystickScaleChooser.addOption( "Linear",    JoystickScale.LINEAR);
+    turnJoystickScaleChooser.setDefaultOption(  "Square",    JoystickScale.SQUARE);
     turnJoystickScaleChooser.addOption(  "Cube",      JoystickScale.CUBE);
     turnJoystickScaleChooser.addOption(  "Sine",      JoystickScale.SINE);
     
-	SmartDashboard.putData( "Turn Joystick Scale", turnJoystickScaleChooser);
+	SmartDashboard.putData( getName()+"/Turn Joystick Scale", turnJoystickScaleChooser);
 	
 
 	driveStyleChooser = new SendableChooser<DriveStyle>();
@@ -136,7 +131,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	driveStyleChooser.addOption("Bit Buckets Arcade", DriveStyle.BB_Arcade);
 	driveStyleChooser.addOption("Velocity", DriveStyle.Velocity);
 
-	SmartDashboard.putData("Drive Style", driveStyleChooser);
+	SmartDashboard.putData( getName()+"/Drive Style", driveStyleChooser);
 
 
 	
@@ -359,14 +354,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	differentialDrive.setRightSideInverted(false);
     
     // Create the motion profile driver
-
-	// TODO: Move this setup to base class, remembering that the key must be unique
-	// may be able to do it through introspection      
-    telemetryState = new SendableChooser<SubsystemTelemetryState>();
-    telemetryState.setDefaultOption("Off", SubsystemTelemetryState.OFF);
-    telemetryState.addOption( "On",  SubsystemTelemetryState.ON);
-    
-    SmartDashboard.putData("DriveTelemetry", telemetryState);
   }
   
 
@@ -534,7 +521,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			
 			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());
 			error = -ALIGN_LOOP_GAIN * -navigation.getYawRate_degPerSec();
-			SmartDashboard.putNumber("IMU_ERROR", error);
+			SmartDashboard.putNumber(getName()+"/IMU_ERROR", error);
 			arcadeDrive( fwdStick, error + yawCorrect());
 		}
 	}
@@ -558,6 +545,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	public void initialize() 
 	{		
+		initializeBaseDashboard();
+
 		System.out.println("Setting default command Mike's way");	// Don't use default commands as they can catch you by surprise
 		initialCommand = new Idle();	// Only create it once
 		initialCommand.start();
@@ -566,22 +555,13 @@ public class DriveSubsystem extends BitBucketSubsystem {
   
 	@Override
 	public void periodic() {
-		// TODO Auto-generated method stub
-		
-	}
-  
-  @Override
-	public void setDiagnosticsFlag(boolean enable) {
-		// TODO Auto-generated method stub
-		
-	}
+		if (getTelemetryEnabled())
+		{
 
-	@Override
-	public boolean getDiagnosticsFlag() {
-		// TODO Auto-generated method stub
-		return false;
+		}
+		
 	}
-	
+  	
 	public void disable() {
 		setAllMotorsZero();
 	}
@@ -738,7 +718,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	public void diagnosticsExecute() {
 
 		/* Init Diagnostics */
-		SmartDashboard.putBoolean("RunningDiag", true);
+		SmartDashboard.putBoolean(getName()+"/RunningDiag", true);
 		
 		rightFrontMotor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
 		rightRearMotor.set(ControlMode.PercentOutput, -RobotMap.MOTOR_TEST_PERCENT);

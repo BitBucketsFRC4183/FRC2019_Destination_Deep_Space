@@ -23,18 +23,6 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		return inst;
 	}
 	private static ClimberSubsystem inst;
-
-  	@Override
-	public void diagnosticsInit() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void diagnosticsCheck() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	protected void initDefaultCommand() {
@@ -55,17 +43,22 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	}
 
 	@Override
-	public void setDiagnosticsFlag(boolean enable) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getDiagnosticsFlag() {
+	public boolean getDiagnosticsEnabled() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public void initialize() {
+		initializeBaseDashboard();
+	}
+
+	@Override
+	public void diagnosticsInit() {
+
+	}
+
+	@Override
+	public void diagnosticsCheck() {
+
 	}
 }
