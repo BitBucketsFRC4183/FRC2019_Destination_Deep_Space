@@ -64,6 +64,8 @@ public class RobotMap {
     // TODO: actual IDs ... MOVE ALL MOTOR IDS to a separate MotorId class
     public static final int TOP_INTAKE_MOTOR_ID = 0;
 	public static final int BOTTOM_INTAKE_MOTOR_ID = 0;
+	public static final int ROTATION_MOTOR1_ID = 0;
+	public static final int ROTATION_MOTOR2_ID = 0;
 		
     public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG = true;
    	public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG = false;
