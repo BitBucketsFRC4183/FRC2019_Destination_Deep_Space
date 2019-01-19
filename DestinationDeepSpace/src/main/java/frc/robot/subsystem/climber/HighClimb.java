@@ -8,11 +8,13 @@
 package frc.robot.subsystem.climber;
 
 import edu.wpi.first.wpilibj.command.Command;
+import ClimberSubsystem;
 
 public class HighClimb extends Command {
   public HighClimb() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    
   }
 
   // Called just before this Command runs the first time

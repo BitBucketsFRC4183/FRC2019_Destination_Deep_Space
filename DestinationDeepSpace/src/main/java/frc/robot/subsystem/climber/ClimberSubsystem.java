@@ -8,7 +8,7 @@
 package frc.robot.subsystem.climber;
 
 import frc.robot.subsystem.BitBucketSubsystem;
-
+import frc.robot.RobotMap;
 /**
  * Add your docs here.
  */
@@ -17,6 +17,16 @@ public class ClimberSubsystem extends BitBucketSubsystem {
   	// here. Call these from Commands.
 
 	// Singleton method; use ClimberSubsystem.instance() to get the ClimberSubsystem instance.
+	Servo highClimbServo;
+	WPI_TalonSRX highClimbMotor1;
+	WPI_TalonSRX highClimbMotor2;
+
+	public ClimberSubsystem() {
+		highClimbServo = new Servo(RobotMap.HIGH_CLIMB_SERVO);
+		highClimbMotor1 = new WPI_TalonSRX(RobotMap.HIGH_CLIMB_MOTOR_1);
+		highClimbMotor2 = new WPI_TalonSRX(RobotMap.HIGH_CLIMB_MOTOR_2);
+	}
+
 	public static ClimberSubsystem instance() {
 		if(inst == null)
 			inst = new ClimberSubsystem();

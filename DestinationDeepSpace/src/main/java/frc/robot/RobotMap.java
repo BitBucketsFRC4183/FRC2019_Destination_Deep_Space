@@ -42,7 +42,11 @@ public class RobotMap {
 		else 
 			return 0;
     }
-    
+	
+	public static final int HIGH_CLIMB_SERVO = 9090; // Placeholder values
+	public static final int HIGH_CLIMB_MOTOR_1 = 8989;
+	public static final int HIGH_CLIMB_MOTOR_2 = 7878;
+
     public static final int TELEOP_TOTAL_TIME = 135; // 2mins 15sec
 	
 	public static final int PRIMARY_PID_LOOP  = 0; // Constants to support new Talon interface types
