@@ -11,6 +11,7 @@ import edu.wpi.first.hal.SPIJNI;
 import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.MotorId;
 import frc.robot.RobotMap;
 import frc.robot.subsystem.navigation.BitBucketsAHRS;
 import frc.robot.utils.JoystickScale;
@@ -88,10 +89,10 @@ public class DriveSubsystemTest {
 
         // For each test, return mock drive train motors when the DriveSubsystem creates them
         // This requires @PrepareForTest(DriveSubsystem.class)
-        whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockLeftFrontMotor);
-        whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockRightFrontMotor);
-        whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockRightRearMotor);
-        whenNew(WPI_TalonSRX.class).withArguments(eq(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockLeftRearMotor);
+        whenNew(WPI_TalonSRX.class).withArguments(eq(MotorId.LEFT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockLeftFrontMotor);
+        whenNew(WPI_TalonSRX.class).withArguments(eq(MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockRightFrontMotor);
+        whenNew(WPI_TalonSRX.class).withArguments(eq(MotorId.RIGHT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockRightRearMotor);
+        whenNew(WPI_TalonSRX.class).withArguments(eq(MotorId.LEFT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockLeftRearMotor);
 
         // Wire up our mock sendable chooser.
         whenNew(SendableChooser.class).withNoArguments()
