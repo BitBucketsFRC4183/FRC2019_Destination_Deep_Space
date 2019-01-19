@@ -32,7 +32,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
-		// TODO Auto-generated method stub
+		updateBaseDashboard();
 		
 	}
 

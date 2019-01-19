@@ -19,14 +19,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public abstract class BitBucketSubsystem extends Subsystem {
 	
+	protected boolean initializedBase = false;
 	protected SendableChooser<TelemetryEnableState> telemetryEnableState;
 	protected SendableChooser<DiagnosticsEnableState> diagnosticsEnableState;
 
-	private boolean diagnosticsEnabled = false;
-	private boolean telemetryEnabled = false;
-
 	public DiagnosticsState lastKnownState = DiagnosticsState.UNKNOWN;
 	public int DIAG_LOOPS_RUN = 5;
+
+	protected int periodicCounter = 0;
 	
 	public BitBucketSubsystem() {
 		
@@ -45,6 +45,15 @@ public abstract class BitBucketSubsystem extends Subsystem {
 		diagnosticsEnableState.addOption( "On",  DiagnosticsEnableState.ON);
 		
 		SmartDashboard.putData(getName() + "/Diagnostics", diagnosticsEnableState);
+
+		initializedBase = true;
+		SmartDashboard.putBoolean(getName() + "/InitializedBase", initializedBase);
+	}
+
+	/** updateBaseDashboard - call from derived class periodic function */
+	protected void updateBaseDashboard()
+	{
+		SmartDashboard.putNumber(getName() + "/PeriodicCounter", periodicCounter++);
 	}
 	
 	public boolean getTelemetryEnabled()

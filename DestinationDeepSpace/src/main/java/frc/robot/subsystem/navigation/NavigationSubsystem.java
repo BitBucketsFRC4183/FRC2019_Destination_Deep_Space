@@ -27,7 +27,10 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	}
 	private static NavigationSubsystem inst;
 
-	private int periodCounter;
+	private NavigationSubsystem()
+	{
+		setName("NavigationSubsystem");
+	}
 
 	private AHRS ahrs;
 
@@ -43,8 +46,6 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	public void initialize() {
 		initializeBaseDashboard();
 		ahrs = BitBucketsAHRS.instance();
-		periodCounter = 0;
-
 	}
 
   	@Override
@@ -66,14 +67,14 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	}
 
 	protected void updateDashboard() {
-		SmartDashboard.putNumber( "PeriodCounter", periodCounter++);
-		SmartDashboard.putNumber( "Yaw Angle (deg)", getYaw_deg());
-		SmartDashboard.putNumber( "Yaw Rate (dps)", getYawRate_degPerSec());
+		SmartDashboard.putNumber( getName() + "/Yaw Angle (deg)", getYaw_deg());
+		SmartDashboard.putNumber( getName() + "/Yaw Rate (dps)", getYawRate_degPerSec());
 	}
 
 	@Override
 	public void periodic() {
 		updateDashboard();
+		updateBaseDashboard();
 		
 	}
 
