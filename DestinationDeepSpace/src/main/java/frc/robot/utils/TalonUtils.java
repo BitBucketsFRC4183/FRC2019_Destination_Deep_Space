@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.RobotMap;
 
 public class TalonUtils {
+
+    public static int MAX_STATUS_FRAME_PERIOD = 160;
     /**
      * initializeMotor - set all of the motor configuration states to a known value
      * This is important when we are not sure if the motor is in a factory state
@@ -62,11 +64,11 @@ public class TalonUtils {
 
         // Reinforce factor default deadband and minimum output
         motor.configNeutralDeadband(0.04, RobotMap.CONTROLLER_TIMEOUT_MS);
-        // motor.configNominalOutputForward(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-        // motor.configNominalOutputReverse(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.configNominalOutputForward(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.configNominalOutputReverse(0.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 
-        // motor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
-        // motor.configPeakOutputReverse(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.configPeakOutputForward(1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.configPeakOutputReverse(-1.0, RobotMap.CONTROLLER_TIMEOUT_MS);
 
         // Feedback sources, start with no local and no remote sensors
         // NOTE: Remote sensors can be things like the Pigeon IMU
@@ -109,11 +111,11 @@ public class TalonUtils {
         // To improve CAN bus utilization consider setting the unused one to even lower rates (longer periods)
         motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General,        10, RobotMap.CONTROLLER_TIMEOUT_MS);
         motor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0,      20, RobotMap.CONTROLLER_TIMEOUT_MS);
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature,    160, RobotMap.CONTROLLER_TIMEOUT_MS);
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat,   160, RobotMap.CONTROLLER_TIMEOUT_MS);
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth,    160, RobotMap.CONTROLLER_TIMEOUT_MS);
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic,  160, RobotMap.CONTROLLER_TIMEOUT_MS);
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0,   160, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, MAX_STATUS_FRAME_PERIOD, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, MAX_STATUS_FRAME_PERIOD, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, MAX_STATUS_FRAME_PERIOD, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, MAX_STATUS_FRAME_PERIOD, RobotMap.CONTROLLER_TIMEOUT_MS);
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, MAX_STATUS_FRAME_PERIOD, RobotMap.CONTROLLER_TIMEOUT_MS);
 
         // motor.selectDemandType(false);   // Future feature
 
@@ -130,16 +132,16 @@ public class TalonUtils {
         // motor.selectProfileSlot(0, 0);
 
     }
-    public static void initializeMotorFPID(WPI_TalonSRX motor, double kF, double kP, double kI, double kD){
+    public static void initializeMotorFPID(WPI_TalonSRX motor, double kF, double kP, double kI, double kD, int iZone){
         /**
          * The following T O D O is done.
          * T O D O: Actually write this function.
          */
 
         int slotIdx = 0;
-        initializeMotorFPID(motor, kF, kP, kI, kD, slotIdx);
+        initializeMotorFPID(motor, kF, kP, kI, kD, iZone, slotIdx);
     }
-    public static void initializeMotorFPID(WPI_TalonSRX motor, double kF, double kP, double kI, double kD, int slotIdx){
+    public static void initializeMotorFPID(WPI_TalonSRX motor, double kF, double kP, double kI, double kD, int iZone, int slotIdx){
         /**
          * The following T O D O is done.
          * T O D O: Actually write this function too.
@@ -147,10 +149,16 @@ public class TalonUtils {
 
         int timeout = RobotMap.CONTROLLER_TIMEOUT_MS;
 
+        motor.selectProfileSlot(slotIdx, RobotMap.PRIMARY_PID_LOOP);
         motor.config_kF(slotIdx, kF, timeout);
         motor.config_kP(slotIdx, kP, timeout);
         motor.config_kI(slotIdx, kI, timeout);
         motor.config_kD(slotIdx, kD, timeout);
+        motor.config_IntegralZone(slotIdx, iZone, RobotMap.CONTROLLER_TIMEOUT_MS);
+    }
+
+    public static void initializeQuadEncoderMotor(WPI_TalonSRX motor) {
+        initializeQuadEncoderMotor(motor, MAX_STATUS_FRAME_PERIOD);
     }
 
     /**
