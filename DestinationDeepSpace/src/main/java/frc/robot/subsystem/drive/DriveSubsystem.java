@@ -70,8 +70,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
   
 	private final int EDGES_PER_ENCODER_COUNT = 4;	// Always for quadrature
 	
+	// they always be saying "yee haw" but never "yaw hee" :(
 	private double yawSetPoint;
-		
+	
 	private final WPI_TalonSRX leftFrontMotor;		// User follower mode
 	private final WPI_TalonSRX leftRearMotor;
 
@@ -350,7 +351,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	// NOTE: This only works on drives where all motors on a side drive the
 	// same wheels
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	differentialDrive = new DifferentialDrive(leftFrontMotor, rightFrontMotor); // others will follow
+	differentialDrive = new DifferentialDrive(leftFrontMotor, rightFrontMotor);
 
 	// Since we going to use the TalonSRX in this class, the inversion, if needed is
 	// going to be passed to controllers so positive commands on left and right both
@@ -415,7 +416,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			// Even though the enumeration should be correct
 			// it is a best practice to always explicitly set a default
 			// just in case the interface has a glitch and the wrong
-			// signal reaches here. The default can either fall throuhg
+			// signal reaches here. The default can either fall through
 			// or do something else, but now we made a choice
 			default:
 			case WPI_Arcade: {
@@ -486,6 +487,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 
 
+	/**
+	 * @param vel   inches  / sec
+	 * @param omega radians / sec
+	 */
 	public void velocityDrive(double vel, double omega) {
 		// velocity mode <-- value in change in position per 100ms
 
