@@ -11,19 +11,21 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
+
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
+
 import frc.robot.RobotMap;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.subsystem.SubsystemUtilities.SubsystemTelemetryState;
-import frc.robot.subsystem.navigation.BitBucketsAHRS;
+
+import frc.robot.subsystem.navigation.NavigationSubsystem;
 import frc.robot.utils.Deadzone;
 import frc.robot.utils.JoystickScale;//for sam <3
+
 
 /**
  * Add your docs here.
@@ -53,7 +55,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
   	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	private final AHRS ahrs = BitBucketsAHRS.instance();
+	private final NavigationSubsystem navigation;
 
   	private final double INCH_PER_WHEEL_ROT = RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
 	
@@ -106,7 +108,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
   private DriveSubsystem()
   {
     this.setName("DriveSubsystem");
-    setName("DriveSubsystem");
+	setName("DriveSubsystem");
+	
+	// Get the instance references
+	navigation = NavigationSubsystem.instance();
               
     // Make joystick scale chooser and put it on the dashboard
     forwardJoystickScaleChooser = new SendableChooser<JoystickScale>();
@@ -501,7 +506,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	public void setAlignDrive(boolean start) {
 		if(start) {
-			yawSetPoint = ahrs.getYaw();
+			yawSetPoint = navigation.getYaw_deg();
 		} 
 	}
 	
@@ -527,8 +532,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			// so + stick should lower the setpoint. 
 			yawSetPoint += -0.3 * turnStick;
 			
-			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - ahrs.getYaw());
-			error = -ALIGN_LOOP_GAIN * -ahrs.getRate();
+			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());
+			error = -ALIGN_LOOP_GAIN * -navigation.getYawRate_degPerSec();
 			SmartDashboard.putNumber("IMU_ERROR", error);
 			arcadeDrive( fwdStick, error + yawCorrect());
 		}
@@ -539,7 +544,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		if( fwd == 0.0)
 			setAllMotorsZero();
 		else {
-			double error = ALIGN_LOOP_GAIN * (yawSetPoint - ahrs.getYaw());				
+			double error = ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());				
 			arcadeDrive( fwd, error + yawCorrect());				
 		}			
 	}
