@@ -499,14 +499,19 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// Our encoders have a 2048 pulses per rev, to 8192 quad edged per rev
 		// " - Mike
 
-		// per 100ms
+		// convert to rev/sec
+		vL /= DriveConstants.WHEEL_CIRCUMFERENCE;
+		vR /= DriveConstants.WHEEL_CIRCUMFERENCE;
+
+		// convert to rev/100ms
 		vL *= 10;
 		vR *= 10;
 
-		vL /= DriveConstants.MOTOR_NATIVE_INCHES_PER_TICK;
-		vR /= DriveConstants.MOTOR_NATIVE_INCHES_PER_TICK;
+		// convert to native ticks/100ms
+		vL *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
+		vR *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
 
-		
+
 		leftFrontMotor.set(ControlMode.Velocity, vL);
 		rightFrontMotor.set(ControlMode.Velocity, vR);
 	}
