@@ -20,9 +20,9 @@ public class LightingControl
 	public enum LightingObjects
 	{
 		// Currently planning on lighting on these controls
-		DRIVE_SUBSYSTEM(0),
-		SCORING_SUBSYSTEM(1),
-		VISION_SUBSYSTEM(2),
+		VISION_SUBSYSTEM(0),
+		DRIVE_SUBSYSTEM(1),
+		SCORING_SUBSYSTEM(2),
 		CLIMB_SUBSYSTEM(3);
 		// RESERVED 4 - 9
 		
@@ -136,8 +136,12 @@ public class LightingControl
 			setOff(lightingObject);
 		}
 	}
-	
+
 	public void set(LightingObjects lightingObject, String function, String color, int nspace, int period_msec)
+	{
+		set(lightingObject, function, color, nspace, period_msec, prefBrightness);
+	}	
+	public void set(LightingObjects lightingObject, String function, String color, int nspace, int period_msec, int brightness)
 	{
 		if (serialPort != null)
 		{
@@ -148,7 +152,7 @@ public class LightingControl
 											   function,
 											   color,
 											   nspace,
-											   prefBrightness,
+											   brightness,
 											   period_msec);
 				
 				//SmartDashboard.putString("LightingControl/Status", command);

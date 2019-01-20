@@ -8,6 +8,7 @@
 package frc.robot.subsystem.lighting;
 
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.lighting.LightingControl.LightingObjects;
 
 /**
  * Add your docs here.
@@ -66,6 +67,8 @@ public class LightingSubsystem extends BitBucketSubsystem {
 		initializeBaseDashboard();
 
 		lightingControl = new LightingControl();
+
+		lightingControl.setAllSleeping();
 
 	}
 
