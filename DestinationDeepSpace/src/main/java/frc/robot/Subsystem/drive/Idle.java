@@ -8,9 +8,9 @@ package frc.robot.subsystem.drive;
 /*----------------------------------------------------------------------------*/
 
 import frc.robot.utils.CommandUtils;
-import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.subsystem.drive.DriveConstants;
 
 public class Idle extends Command {
 	private final DriveSubsystem driveSubsystem = DriveSubsystem.instance();
@@ -18,7 +18,7 @@ public class Idle extends Command {
 	static double lastTestModeTime_sec = 0.0;
 	
 	// Toggle sign on each one
-	double moveDistance_inches = -2.0 * RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
+	double moveDistance_inches = -2.0 * DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
 	double turnAngle_deg = -45.0;
 
 	private DriverStation ds = DriverStation.getInstance();
