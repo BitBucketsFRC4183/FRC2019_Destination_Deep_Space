@@ -10,6 +10,8 @@ package frc.robot.subsystem.scoring;
 import frc.robot.MotorId;
 import frc.robot.RobotMap;
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.utils.TalonUtils;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -28,20 +30,57 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	}
 	private static ScoringSubsystem inst;
 
+
+	private final WPI_TalonSRX topRollerMotor;
+	private final WPI_TalonSRX bottomRollerMotor;
+
+	private final WPI_TalonSRX rotationMotor1;
+	private final WPI_TalonSRX rotationMotor2;
+
+
+
 	private ScoringSubsystem()
 	{
 		setName("ScoringSubsystem");
+
+
+
+		topRollerMotor = new WPI_TalonSRX(MotorId.TOP_INTAKE_MOTOR_ID);
+		bottomRollerMotor = new WPI_TalonSRX(MotorId.BOTTOM_INTAKE_MOTOR_ID);
+
+		bottomRollerMotor.setInverted(true);
+		bottomRollerMotor.follow(topRollerMotor);
+
+
+
+		rotationMotor1 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR1_ID);
+		rotationMotor2 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR2_ID);
+
+		// set it to 0 at starting position (front of robot)
+		rotationMotor1.setSelectedSensorPosition(0);
+		rotationMotor2.follow(rotationMotor1);
+
+
+
+		TalonUtils.initializeMotorDefaults(topRollerMotor);
+		TalonUtils.initializeMotorDefaults(bottomRollerMotor);
+
+		TalonUtils.initializeMotorDefaults(rotationMotor1);
+		TalonUtils.initializeMotorDefaults(rotationMotor2);
+
+
+
+		// TODO: TEMPORARY VALUES + also not the best place to put them in the first place
+		TalonUtils.initializeMotorFPID        (rotationMotor1, 0, 0, 0, 0);
+		TalonUtils.initializeQuadEncoderMotor (rotationMotor1, 1);
+
+		TalonUtils.initializeMotorFPID        (rotationMotor2, 0, 0, 0, 0);
+		TalonUtils.initializeQuadEncoderMotor (rotationMotor2, 1);
+
+
+
+		setAllMotorsZero();
 	}
-
-
-	private final WPI_TalonSRX topRollerMotor = new WPI_TalonSRX(MotorId.TOP_INTAKE_MOTOR_ID);
-	private final WPI_TalonSRX bottomRollerMotor = new WPI_TalonSRX(MotorId.BOTTOM_INTAKE_MOTOR_ID);
-
-	// TODO: depending on the hardware, there may be (probably will be) more motors to rotate the scoring mechanism
-	private final WPI_TalonSRX rotationMotor1 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR1_ID);
-	private final WPI_TalonSRX rotationMotor2 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR2_ID);
-	
-	private static SendableChooser<TestWheelPositions> testWheelChooser;
 
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
@@ -173,26 +212,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			SmartDashboard.putNumber(getName() + "/Arm Ticks", rotationMotor1.getSelectedSensorPosition());
 		}
 
-		// TODO: Guard with getDianosticsEnabled AND make inputs from Dashboard rather
-		switch (testWheelChooser.getSelected()) {
-			default: {}
-			case DEG_0: {
-				directArmTo(0, true);
-				break;
-			}
-			case DEG_90: {
-				directArmTo(90, true);
-				break;
-			}
-			case DEG_180: {
-				directArmTo(180, true);
-				break;
-			}
-			case DEG_270: {
-				directArmTo(270, true);
-				break;
-			}
-		}
+		
+		double angle = SmartDashboard.getNumber(getName() + "/Test Angle", 0);
+		directArmTo(angle, true);
 
 		updateBaseDashboard();
 	}
@@ -206,26 +228,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	@Override
 	public void initialize() {
 		initializeBaseDashboard();
-		bottomRollerMotor.setInverted(true);
-		// should be opposite of the top one at all times
-		bottomRollerMotor.follow(topRollerMotor);
-
-		// set it to 0 at starting position (front of robot)
-		rotationMotor1.setSelectedSensorPosition(0);
-		// follow 1
-		rotationMotor2.follow(rotationMotor1);
 
 
 
-		setAllMotorsZero();
-
-		testWheelChooser = new SendableChooser<TestWheelPositions>();
-		testWheelChooser.setDefaultOption("0 deg", TestWheelPositions.DEG_0);
-		testWheelChooser.addOption("90 deg",       TestWheelPositions.DEG_90);
-		testWheelChooser.addOption("180 deg",      TestWheelPositions.DEG_180);
-		testWheelChooser.addOption("270 deg",      TestWheelPositions.DEG_270);
-
-		SmartDashboard.putData(getName()+"/Test Wheel Chooser",testWheelChooser);
+		SmartDashboard.putNumber(getName() + "/Test Angle", 0);
 	}
 
 }
