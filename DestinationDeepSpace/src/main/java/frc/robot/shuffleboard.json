@@ -359,6 +359,17 @@
               "_source0": "network_table:///SmartDashboard/LightingSubsystem/PeriodicCounter",
               "_title": "/SmartDashboard/LightingSubsystem/PeriodicCounter"
             }
+          },
+          "5,0": {
+            "size": [
+              7,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/LightingControl/Status",
+              "_title": "SmartDashboard/LightingControl/Status"
+            }
           }
         }
       }
