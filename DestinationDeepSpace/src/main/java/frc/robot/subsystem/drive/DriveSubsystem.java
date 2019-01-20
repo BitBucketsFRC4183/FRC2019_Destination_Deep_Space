@@ -149,8 +149,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
       
     testModePeriod_sec = SmartDashboard.getNumber("Test Mode Period (sec)", 2.0);
       
-    leftFrontMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_FRONT_ID);
-    leftRearMotor = new WPI_TalonSRX(RobotMap.LEFT_DRIVE_MOTOR_REAR_ID);
+    leftFrontMotor = new WPI_TalonSRX(MotorId.LEFT_DRIVE_MOTOR_FRONT_ID);
+    leftRearMotor = new WPI_TalonSRX(MotorId.LEFT_DRIVE_MOTOR_REAR_ID);
     TalonUtils.initializeMotorDefaults(leftFrontMotor);
     TalonUtils.initializeMotorDefaults(leftRearMotor);
 
@@ -227,8 +227,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
     // separate commands are sent to each motor in a group
     leftRearMotor.set(ControlMode.Follower, leftFrontMotor.getDeviceID());
     
-    rightFrontMotor  = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_FRONT_ID);
-    rightRearMotor   = new WPI_TalonSRX(RobotMap.RIGHT_DRIVE_MOTOR_REAR_ID);
+    rightFrontMotor  = new WPI_TalonSRX(MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID);
+    rightRearMotor   = new WPI_TalonSRX(MotorId.RIGHT_DRIVE_MOTOR_REAR_ID);
 	TalonUtils.initializeMotorDefaults(rightFrontMotor);
 	TalonUtils.initializeMotorDefaults(rightRearMotor);
 
@@ -552,9 +552,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	private void setAllMotorsZero() 
 	{
 		leftFrontMotor.set(ControlMode.PercentOutput, 0.0);
-		leftRearMotor.set(ControlMode.PercentOutput, 0.0);
+		//leftRearMotor.set(ControlMode.PercentOutput, 0.0);
 		rightFrontMotor.set(ControlMode.PercentOutput, 0.0);
-		rightRearMotor.set(ControlMode.PercentOutput, 0.0);			
+		//rightRearMotor.set(ControlMode.PercentOutput, 0.0);			
 	}
 	/// TODO: This is redundant with other similar functions
 	public void doLockDrive(double value) 
