@@ -502,8 +502,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		vR /= DriveConstants.WHEEL_CIRCUMFERENCE;
 
 		// convert to rev/100ms
-		vL *= 10;
-		vR *= 10;
+		vL /= 10;
+		vR /= 10;
 
 		// convert to native ticks/100ms
 		vL *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
