@@ -12,7 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,6 +41,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	private final OI oi = OI.instance();
 
+	private final DriverStation ds = DriverStation.getInstance();
 
 	// drive styles that driver can choose on the shuffleboard
 	public enum DriveStyle {
@@ -360,35 +361,79 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		speed = forwardJoystickScaleChooser.getSelected().rescale(speed);
 		turn  = turnJoystickScaleChooser.getSelected().rescale(turn);
 
-		DriveStyle style = driveStyleChooser.getSelected();
+		if (ds.isTest())
+		{
+			testDrive();
+		}
+		else
+		{
+			DriveStyle style = driveStyleChooser.getSelected();
 
-		switch (style) {
-			// Even though the enumeration should be correct
-			// it is a best practice to always explicitly set a default
-			// just in case the interface has a glitch and the wrong
-			// signal reaches here. The default can either fall through
-			// or do something else, but now we made a choice
-			default:
-			case WPI_Arcade: {
-				// DO NOT let the diff drive square the inputs itself
-				// All scaling is external to this drive function
-				differentialDrive.arcadeDrive(speed, turn, false);
+			switch (style) {
+				// Even though the enumeration should be correct
+				// it is a best practice to always explicitly set a default
+				// just in case the interface has a glitch and the wrong
+				// signal reaches here. The default can either fall through
+				// or do something else, but now we made a choice
+				default:
+				case WPI_Arcade: {
+					// DO NOT let the diff drive square the inputs itself
+					// All scaling is external to this drive function
+					differentialDrive.arcadeDrive(speed, turn, false);
 
-				break;
-			}
+					break;
+				}
 
-			case BB_Arcade: {
-				arcadeDrive(speed, turn);
+				case BB_Arcade: {
+					arcadeDrive(speed, turn);
 
-				break;
-			}
+					break;
+				}
 
-			case Velocity: {
-				velocityDrive(speed, turn);
+				case Velocity: {
+					velocityDrive(speed, turn);
 
-				break;
+					break;
+				}
 			}
 		}
+	}
+
+	/**
+	 * testDrive - special test features for tuning and testing
+	 * the drive train.
+	 * 
+	 * Include dashboard input/output for helping with FPID tuning
+	 * by allowing trigger and control of 
+	 * 		forward/reverse speed sample for Kf = (%v * 1023)/tp100
+	 * 			Where
+	 * 				%v is percent of full power (ideally 100%)
+	 * 				tp100 is ticks per 100 ms
+	 *      identification of initial cruise speed (85% of max)
+	 * 			Cs = 0.85 * tp100
+	 * 		invocation of motion magic mode and command some rotations, R (e.g., 10)
+	 * 		Make note of the error in ticks (terr)
+	 * 		Compute initial Kp
+	 * 			Kp = (0.1 * 1023)/terr
+	 * 		Command another +/- R rotations
+	 * 			Test for oscillation or manually test for backdrive
+	 * 			Keep doubling Kp until oscillations start and then back off a little
+	 * 			Make note of overshoot
+	 * 		Estimate initial Kd
+	 * 			Kd = 10 * Kp
+	 * 		Command another +/- R rotations
+	 * 			Test for oscilation and overshoot
+	 * 			Test for steady state error (sserr)
+	 * 			Set I-Zone to define when Ki is needed
+	 * 				Iz = sserr * 2.5
+	 * 			Estimate Ki
+	 * 				Ki = 0.001
+	 * 			Keep doubling Ki until sserr gets sufficiently close to zero
+	 * 				Stop and back off if oscillations appear
+	 * 		
+	 */
+	private void testDrive() {
+
 	}
 
 	// +turnStick produces right turn (CW from above, -yaw angle)
@@ -551,11 +596,13 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	// Might need to change from .set(value) to .set(mode, value)
 	private void setAllMotorsZero() 
 	{
+		leftRearMotor.follow(leftFrontMotor);
 		leftFrontMotor.set(ControlMode.PercentOutput, 0.0);
-		//leftRearMotor.set(ControlMode.PercentOutput, 0.0);
+
+		rightRearMotor.follow(rightFrontMotor);
 		rightFrontMotor.set(ControlMode.PercentOutput, 0.0);
-		//rightRearMotor.set(ControlMode.PercentOutput, 0.0);			
 	}
+	
 	/// TODO: This is redundant with other similar functions
 	public void doLockDrive(double value) 
 	{
