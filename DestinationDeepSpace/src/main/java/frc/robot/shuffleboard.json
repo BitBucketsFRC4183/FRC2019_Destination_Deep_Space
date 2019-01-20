@@ -86,7 +86,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/PeriodicCounter",
-              "_title": "SmartDashboard/DriveSubsystem/PeriodicCounter"
+              "_title": "/SmartDashboard/DriveSubsystem/PeriodicCounter"
             }
           }
         }
@@ -123,7 +123,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/NavigationSubsystem/PeriodicCounter",
-              "_title": "SmartDashboard/NavigationSubsystem/PeriodicCounter"
+              "_title": "/SmartDashboard/NavigationSubsystem/PeriodicCounter"
             }
           },
           "5,4": {
@@ -183,7 +183,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/PeriodicCounter",
-              "_title": "SmartDashboard/ScoringSubsystem/PeriodicCounter"
+              "_title": "/SmartDashboard/ScoringSubsystem/PeriodicCounter"
             }
           },
           "16,0": {
@@ -194,7 +194,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Angle",
-              "_title": "SmartDashboard/ScoringSubsystem/Arm Angle"
+              "_title": "/SmartDashboard/ScoringSubsystem/Arm Angle"
             }
           },
           "16,1": {
@@ -205,7 +205,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Ticks",
-              "_title": "SmartDashboard/ScoringSubsystem/Arm Ticks"
+              "_title": "/SmartDashboard/ScoringSubsystem/Arm Ticks"
             }
           },
           "11,0": {
@@ -275,7 +275,7 @@
               "_title": "SmartDashboard/ClimberSubsystem/Telemetry"
             }
           },
-          "6,1": {
+          "6,2": {
             "size": [
               3,
               1
@@ -294,7 +294,46 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberSubsystem/PeriodicCounter",
-              "_title": "SmartDashboard/ClimberSubsystem/PeriodicCounter"
+              "_title": "/SmartDashboard/ClimberSubsystem/PeriodicCounter"
+            }
+          },
+          "10,1": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/ServoTestAngle(deg)",
+              "_title": "SmartDashboard/ClimberSubsystem/ServoTestAngle(deg)",
+              "Slider Settings/Min": -90.0,
+              "Slider Settings/Max": 90.0,
+              "Slider Settings/Block increment": 1.0
+            }
+          },
+          "10,3": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Number Slider",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/CurrentServoAngle(deg)",
+              "_title": "SmartDashboard/ClimberSubsystem/CurrentServoAngle(deg)",
+              "Slider Settings/Min": -90.0,
+              "Slider Settings/Max": 90.0,
+              "Slider Settings/Block increment": 1.0
+            }
+          },
+          "6,5": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/TelemetryEnabled",
+              "_title": "SmartDashboard/ClimberSubsystem/TelemetryEnabled"
             }
           }
         }
@@ -318,7 +357,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/LightingSubsystem/PeriodicCounter",
-              "_title": "SmartDashboard/LightingSubsystem/PeriodicCounter"
+              "_title": "/SmartDashboard/LightingSubsystem/PeriodicCounter"
             }
           }
         }
@@ -326,9 +365,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 0.0,
-    "width": 1920.0,
-    "height": 999.0
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1936.0,
+    "height": 1015.0
   }
 }

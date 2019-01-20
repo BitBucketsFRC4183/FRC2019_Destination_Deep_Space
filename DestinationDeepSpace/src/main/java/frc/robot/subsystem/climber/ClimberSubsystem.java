@@ -8,7 +8,14 @@
 package frc.robot.subsystem.climber;
 
 import frc.robot.subsystem.BitBucketSubsystem;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.MotorId;
 import frc.robot.RobotMap;
+import frc.robot.ServoId;
 /**
  * Add your docs here.
  */
@@ -21,10 +28,11 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	WPI_TalonSRX highClimbMotor1;
 	WPI_TalonSRX highClimbMotor2;
 
-	public ClimberSubsystem() {
-		highClimbServo = new Servo(RobotMap.HIGH_CLIMB_SERVO);
-		highClimbMotor1 = new WPI_TalonSRX(RobotMap.HIGH_CLIMB_MOTOR_1);
-		highClimbMotor2 = new WPI_TalonSRX(RobotMap.HIGH_CLIMB_MOTOR_2);
+	private ClimberSubsystem() {
+		setName("ClimberSubsystem");
+		highClimbServo = new Servo(ServoId.HIGH_CLIMB_SERVO_ID);
+		highClimbMotor1 = new WPI_TalonSRX(MotorId.HIGH_CLIMB_MOTOR_1_ID);
+		highClimbMotor2 = new WPI_TalonSRX(MotorId.HIGH_CLIMB_MOTOR_2_ID);
 	}
 
 	public static ClimberSubsystem instance() {
@@ -34,6 +42,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	}
 	private static ClimberSubsystem inst;
 	
+
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
@@ -43,6 +52,16 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	@Override
 	public void periodic() {
 		updateBaseDashboard();
+
+		if (getTelemetryEnabled())
+		{
+		}
+		if (getDiagnosticsEnabled())
+		{
+			double angle = SmartDashboard.getNumber(getName()+"/ServoTestAngle(deg)", 0.0);
+			highClimbServo.setAngle(angle);
+		}
+		SmartDashboard.putNumber(getName()+"/CurrentServoAngle(deg)",highClimbServo.getAngle());
 		
 	}
 
@@ -52,14 +71,15 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		
 	}
 
-	@Override
-	public boolean getDiagnosticsEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public void initialize() {
 		initializeBaseDashboard();
+
+		initializeDashboard();
+	}
+
+	void initializeDashboard()
+	{
+		SmartDashboard.putNumber(getName()+"/ServoTestAngle(deg)", 0.0);
 	}
 
 	@Override

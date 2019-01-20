@@ -83,8 +83,8 @@ public class Robot extends TimedRobot {
     climberSubsystem = ClimberSubsystem.instance();
     climberSubsystem.initialize();
 
-    //scoringSubsystem = ScoringSubsystem.instance();
-    //scoringSubsystem.initialize();
+    scoringSubsystem = ScoringSubsystem.instance();
+    scoringSubsystem.initialize();
 
     navigationSubsystem = NavigationSubsystem.instance();
     navigationSubsystem.initialize();

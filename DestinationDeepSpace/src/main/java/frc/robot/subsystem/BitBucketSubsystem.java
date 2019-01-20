@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public abstract class BitBucketSubsystem extends Subsystem {
 	
 	protected boolean initializedBase = false;
+	protected boolean telemetryEnabled = false;
 	protected SendableChooser<TelemetryEnableState> telemetryEnableState;
 	protected SendableChooser<DiagnosticsEnableState> diagnosticsEnableState;
 
@@ -40,6 +41,8 @@ public abstract class BitBucketSubsystem extends Subsystem {
 		
 		SmartDashboard.putData(getName() + "/Telemetry", telemetryEnableState);
 
+		SmartDashboard.putBoolean(getName()+"/TelemetryEnabled", telemetryEnabled);
+
 		diagnosticsEnableState = new SendableChooser<DiagnosticsEnableState>();
 		diagnosticsEnableState.setDefaultOption("Off", DiagnosticsEnableState.OFF);
 		diagnosticsEnableState.addOption( "On",  DiagnosticsEnableState.ON);
@@ -58,7 +61,8 @@ public abstract class BitBucketSubsystem extends Subsystem {
 	
 	public boolean getTelemetryEnabled()
 	{
-		return (telemetryEnableState.getSelected() == TelemetryEnableState.ON);
+		return SmartDashboard.getBoolean(getName() + "/TelemetryEnabled", false);
+		//return (telemetryEnableState.getSelected() == TelemetryEnableState.ON);
 	}
 	
 	public boolean getDiagnosticsEnabled()
