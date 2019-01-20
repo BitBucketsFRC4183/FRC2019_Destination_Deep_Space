@@ -42,6 +42,7 @@ def includeDesktopSupport = true
 // Maven central needed for JUnit
 repositories {
     mavenCentral()
+    maven {url "https://mvnrepository.com/artifact/org.scream3r/jssc"}
 }
 
 /////////////////////////////////////////////////////
@@ -64,6 +65,7 @@ configurations {
 dependencies {
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
+    compile group: 'org.scream3r', name: 'jssc', version: '2.8.0'
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     testCompile 'junit:junit:4.12'

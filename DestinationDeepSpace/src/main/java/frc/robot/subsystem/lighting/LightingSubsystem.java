@@ -28,6 +28,7 @@ public class LightingSubsystem extends BitBucketSubsystem {
 	{
 		setName("LightingSubsystem");
 	}
+	private LightingControl lightingControl;
 
   	@Override
 	public void diagnosticsInit() {
@@ -63,6 +64,8 @@ public class LightingSubsystem extends BitBucketSubsystem {
 	@Override
 	public void initialize() {
 		initializeBaseDashboard();
+
+		lightingControl = new LightingControl();
 
 	}
 
