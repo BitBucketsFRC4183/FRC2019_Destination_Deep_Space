@@ -16,26 +16,7 @@ public class LightingControl
 	public static final int MAX_BRIGHTNESS = 255;	// NOT EYE SAFE AT CLOSE RANGE, BUT MAY BE NEEDED FOR FIELD
 	
 	private static int prefBrightness = SAFE_BRIGHTNESS;
-	
-	public enum LightingObjects
-	{
-		// Currently planning on lighting on these controls
-		VISION_SUBSYSTEM(0),
-		DRIVE_SUBSYSTEM(1),
-		SCORING_SUBSYSTEM(2),
-		CLIMB_SUBSYSTEM(3);
-		// RESERVED 4 - 9
 		
-		private int value;
-		
-		LightingObjects(int value)
-		{
-			this.value = value;
-		}
-		
-		public int getValue() { return value; }
-	};
-	
 	private SerialPort serialPort;
 
 //	String format is simple: 'NFCnbbbpppp'
@@ -100,19 +81,17 @@ public class LightingControl
 		{
 			SmartDashboard.putString("LightingControl/Status", "No BucketLights board found!");
 			return;
-		}
-		
-		setAllSleeping();
+		}		
 	}
 	
-	public void setOff(LightingObjects lightingObject)
+	public void setOff(int lightingObject)
 	{
 		if (serialPort != null)
 		{
 			try
 			{
 				String command = String.format(FORMAT,
-											   lightingObject.getValue(),
+											   lightingObject,
 											   FUNCTION_OFF,
 											   COLOR_BLACK,
 											   0,
@@ -129,26 +108,19 @@ public class LightingControl
 		}		
 	}	
 
-	public void setAllOff()
-	{
-		for (LightingObjects lightingObject: LightingObjects.values())
-		{
-			setOff(lightingObject);
-		}
-	}
 
-	public void set(LightingObjects lightingObject, String function, String color, int nspace, int period_msec)
+	public void set(int lightingObject, String function, String color, int nspace, int period_msec)
 	{
 		set(lightingObject, function, color, nspace, period_msec, prefBrightness);
 	}	
-	public void set(LightingObjects lightingObject, String function, String color, int nspace, int period_msec, int brightness)
+	public void set(int lightingObject, String function, String color, int nspace, int period_msec, int brightness)
 	{
 		if (serialPort != null)
 		{
 			try
 			{
 				String command = String.format(FORMAT,
-											   lightingObject.getValue(),
+											   lightingObject,
 											   function,
 											   color,
 											   nspace,
@@ -165,19 +137,7 @@ public class LightingControl
 		}		
 	}	
 	
-	public void setAll(String function, String color, int nspace, int period_msec)
-	{
-		for (LightingObjects lightingObject: LightingObjects.values())
-		{
-			set(lightingObject,
-			    function,
-			    color,
-			    nspace,
-			    period_msec);
-		}
-	}
-
-	public void setSleeping(LightingObjects lightingObject)
+	public void setSleeping(int lightingObject)
 	{
 		set(lightingObject,
 		    FUNCTION_SNORE,
@@ -186,28 +146,5 @@ public class LightingControl
 		    0);	// period_msec - don't care
 		
 	}
-	public void setAllSleeping()
-	{
-		setAll(FUNCTION_SNORE,
-			   COLOR_VIOLET,
-			   0,	// nspace - don't care
-			   0);	// period_msec - don't care
-	}
 
-	public void setAllSparkles(int period_msec)
-	{
-		setAll(FUNCTION_SPARKLES,
-			   COLOR_BLACK,			// don't care, sparkles are random
-			   0,	            	// nspace - don't care
-			   period_msec);		// period_msec - nice
-	}
-	public void setAllSparkles()	// Default period
-	{
-		setAll(FUNCTION_SPARKLES,
-			   COLOR_BLACK,		// don't care, sparkles are random
-			   0,     			// nspace - don't care
-			   100) ; 			// period_msec - nice default
-	}
-	
-		
 }
