@@ -11,4 +11,23 @@ package frc.robot.subsystem.lighting;
  * Add your docs here.
  */
 public class LightingConstants {
+    
+    public enum LightingObjects
+	{
+		// Currently planning on lighting on these controls
+		VISION_SUBSYSTEM(0),
+		DRIVE_SUBSYSTEM(1),
+		SCORING_SUBSYSTEM(2),
+		CLIMB_SUBSYSTEM(3);
+		// RESERVED 4 - 9
+		
+		private int value;
+		
+		LightingObjects(int value)
+		{
+			this.value = value;
+		}
+		
+		public int getValue() { return value; }
+	};	
 }

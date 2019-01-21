@@ -67,7 +67,15 @@ public class LightingControl
 	
 	private static final String FORMAT = "%d%s%s%d%03d%04d\r";
 	
-	public LightingControl() 
+	// Singleton method; use LightingControl.instance() to get the LightingControl instance.
+	public static LightingControl instance() {
+		if(inst == null)
+			inst = new LightingControl();
+		return inst;
+	}
+	private static LightingControl inst;
+
+	private LightingControl() 
 	{
 		
 		SmartDashboard.putString("LightingControl/Status",  "Starting BucketLights");
