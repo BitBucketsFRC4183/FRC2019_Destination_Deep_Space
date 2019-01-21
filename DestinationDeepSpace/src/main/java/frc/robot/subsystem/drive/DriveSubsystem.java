@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.MotorId;
-import frc.robot.RobotMap;
+import frc.robot.subsystem.drive.DriveConstants;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.subsystem.navigation.NavigationSubsystem;
@@ -57,7 +57,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	private final NavigationSubsystem navigation;
 
-  	private final double INCH_PER_WHEEL_ROT = RobotMap.WHEEL_CIRCUMFERENCE_INCHES;
+  	private final double INCH_PER_WHEEL_ROT = DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
 	
 
 	// Can adjust these to help the robot drive straight with zero turn stick.
@@ -162,34 +162,34 @@ public class DriveSubsystem extends BitBucketSubsystem {
     /// TODO: Create setupSlaveMotor function
     /// Each function should take a list of argument constants for inversion, sense, sensor type, deadbands, etc
     
-    leftFrontMotor.setInverted(RobotMap.LEFT_DRIVE_MOTOR_INVERSION_FLAG);
-    leftRearMotor.setInverted(RobotMap.LEFT_DRIVE_MOTOR_INVERSION_FLAG);
+    leftFrontMotor.setInverted(DriveConstants.LEFT_DRIVE_MOTOR_INVERSION_FLAG);
+    leftRearMotor.setInverted(DriveConstants.LEFT_DRIVE_MOTOR_INVERSION_FLAG);
       
-    leftFrontMotor.setSensorPhase(RobotMap.LEFT_DRIVE_MOTOR_SENSOR_PHASE);
+    leftFrontMotor.setSensorPhase(DriveConstants.LEFT_DRIVE_MOTOR_SENSOR_PHASE);
       
     // Set relevant frame periods to be at least as fast as periodic rate
     // NOTE: This increases load on CAN bus, so pay attention as more motor
     // controllers are added to the system
     leftFrontMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 
-                                    RobotMap.HIGH_STATUS_FRAME_PERIOD_MS, 
-                                    RobotMap.CONTROLLER_TIMEOUT_MS);
+                                    DriveConstants.HIGH_STATUS_FRAME_PERIOD_MS, 
+                                    DriveConstants.CONTROLLER_TIMEOUT_MS);
     leftFrontMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 
-                                    RobotMap.HIGH_STATUS_FRAME_PERIOD_MS, 
-                                    RobotMap.CONTROLLER_TIMEOUT_MS);
+                                    DriveConstants.HIGH_STATUS_FRAME_PERIOD_MS, 
+                                    DriveConstants.CONTROLLER_TIMEOUT_MS);
     
-    leftFrontMotor.configNeutralDeadband(RobotMap.LEFT_DRIVE_MOTOR_NEUTRAL_DEADBAND,
-                                      RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configNeutralDeadband(RobotMap.LEFT_DRIVE_MOTOR_NEUTRAL_DEADBAND, 
-                                    RobotMap.CONTROLLER_TIMEOUT_MS);
+    leftFrontMotor.configNeutralDeadband(DriveConstants.LEFT_DRIVE_MOTOR_NEUTRAL_DEADBAND,
+                                      DriveConstants.CONTROLLER_TIMEOUT_MS);
+    leftRearMotor.configNeutralDeadband(DriveConstants.LEFT_DRIVE_MOTOR_NEUTRAL_DEADBAND, 
+                                    DriveConstants.CONTROLLER_TIMEOUT_MS);
     
-    leftFrontMotor.configOpenloopRamp(RobotMap.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
-                                  RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configOpenloopRamp(RobotMap.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
-                                           RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.configClosedloopRamp(RobotMap.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
-                                              RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftRearMotor.configClosedloopRamp(RobotMap.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
-                                             RobotMap.CONTROLLER_TIMEOUT_MS);
+    leftFrontMotor.configOpenloopRamp(DriveConstants.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
+                                  DriveConstants.CONTROLLER_TIMEOUT_MS);
+    leftRearMotor.configOpenloopRamp(DriveConstants.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
+                                           DriveConstants.CONTROLLER_TIMEOUT_MS);
+    leftFrontMotor.configClosedloopRamp(DriveConstants.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
+                                              DriveConstants.CONTROLLER_TIMEOUT_MS);
+    leftRearMotor.configClosedloopRamp(DriveConstants.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
+                                             DriveConstants.CONTROLLER_TIMEOUT_MS);
 
 
     // Configure for closed loop control
@@ -216,13 +216,13 @@ public class DriveSubsystem extends BitBucketSubsystem {
     //
     //  Put drive train on ground with weight and re-test to see if position is as commanded.
     //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.
-    TalonUtils.initializeMotorFPID(leftFrontMotor, RobotMap.driveMotorKf, RobotMap.driveMotorKp, RobotMap.driveMotorKi, RobotMap.driveMotorKd, RobotMap.driveMotorIZone);
+    TalonUtils.initializeMotorFPID(leftFrontMotor, DriveConstants.driveMotorKf, DriveConstants.driveMotorKp, DriveConstants.driveMotorKi, DriveConstants.driveMotorKd, DriveConstants.driveMotorIZone);
 
     /* set acceleration and vcruise velocity - see documentation */
-    leftFrontMotor.configMotionCruiseVelocity(RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
-                                          RobotMap.CONTROLLER_TIMEOUT_MS);
-    leftFrontMotor.configMotionAcceleration(RobotMap.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
-                                        RobotMap.CONTROLLER_TIMEOUT_MS);
+    leftFrontMotor.configMotionCruiseVelocity(DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
+                                          DriveConstants.CONTROLLER_TIMEOUT_MS);
+    leftFrontMotor.configMotionAcceleration(DriveConstants.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
+                                        DriveConstants.CONTROLLER_TIMEOUT_MS);
     
     // Use follower mode to minimize shearing commands that could occur if
     // separate commands are sent to each motor in a group
@@ -235,32 +235,32 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	rightRearMotor.follow(rightFrontMotor);
     
-    rightFrontMotor.setInverted(RobotMap.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
-    rightRearMotor.setInverted(RobotMap.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
+    rightFrontMotor.setInverted(DriveConstants.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
+    rightRearMotor.setInverted(DriveConstants.RIGHT_DRIVE_MOTOR_INVERSION_FLAG);
 
-    rightFrontMotor.setSensorPhase(RobotMap.RIGHT_DRIVE_MOTOR_SENSOR_PHASE);
+    rightFrontMotor.setSensorPhase(DriveConstants.RIGHT_DRIVE_MOTOR_SENSOR_PHASE);
 
     rightFrontMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 
-                                              RobotMap.HIGH_STATUS_FRAME_PERIOD_MS, 
-                                              RobotMap.CONTROLLER_TIMEOUT_MS);
+                                              DriveConstants.HIGH_STATUS_FRAME_PERIOD_MS, 
+                                              DriveConstants.CONTROLLER_TIMEOUT_MS);
     rightFrontMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 
-                                              RobotMap.HIGH_STATUS_FRAME_PERIOD_MS, 
-                                              RobotMap.CONTROLLER_TIMEOUT_MS);
+                                              DriveConstants.HIGH_STATUS_FRAME_PERIOD_MS, 
+                                              DriveConstants.CONTROLLER_TIMEOUT_MS);
     
-    rightFrontMotor.configNeutralDeadband(RobotMap.RIGHT_DRIVE_MOTOR_NEUTRAL_DEADBAND, 
-                                      RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configNeutralDeadband(RobotMap.RIGHT_DRIVE_MOTOR_NEUTRAL_DEADBAND, 
-                                      RobotMap.CONTROLLER_TIMEOUT_MS);
+    rightFrontMotor.configNeutralDeadband(DriveConstants.RIGHT_DRIVE_MOTOR_NEUTRAL_DEADBAND, 
+                                      DriveConstants.CONTROLLER_TIMEOUT_MS);
+    rightRearMotor.configNeutralDeadband(DriveConstants.RIGHT_DRIVE_MOTOR_NEUTRAL_DEADBAND, 
+                                      DriveConstants.CONTROLLER_TIMEOUT_MS);
   
-    rightFrontMotor.configOpenloopRamp(RobotMap.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
-                          RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configOpenloopRamp(RobotMap.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
-                      RobotMap.CONTROLLER_TIMEOUT_MS);
+    rightFrontMotor.configOpenloopRamp(DriveConstants.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
+                          DriveConstants.CONTROLLER_TIMEOUT_MS);
+    rightRearMotor.configOpenloopRamp(DriveConstants.DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC, 
+                      DriveConstants.CONTROLLER_TIMEOUT_MS);
     
-    rightFrontMotor.configClosedloopRamp(RobotMap.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
-                                      RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightRearMotor.configClosedloopRamp(RobotMap.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
-                                    RobotMap.CONTROLLER_TIMEOUT_MS);
+    rightFrontMotor.configClosedloopRamp(DriveConstants.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
+                                      DriveConstants.CONTROLLER_TIMEOUT_MS);
+    rightRearMotor.configClosedloopRamp(DriveConstants.DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC, 
+                                    DriveConstants.CONTROLLER_TIMEOUT_MS);
 
 
     // Configure for closed loop control
@@ -287,13 +287,13 @@ public class DriveSubsystem extends BitBucketSubsystem {
     //
     //  Put drive train on ground with weight and re-test to see if position is as commanded.
     //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.
-    TalonUtils.initializeMotorFPID(rightFrontMotor, RobotMap.driveMotorKf, RobotMap.driveMotorKp, RobotMap.driveMotorKi, RobotMap.driveMotorKd, RobotMap.driveMotorIZone);
+    TalonUtils.initializeMotorFPID(rightFrontMotor, DriveConstants.driveMotorKf, DriveConstants.driveMotorKp, DriveConstants.driveMotorKi, DriveConstants.driveMotorKd, DriveConstants.driveMotorIZone);
 
     /* set acceleration and vcruise velocity - see documentation */
-    rightFrontMotor.configMotionCruiseVelocity(RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
-                                           RobotMap.CONTROLLER_TIMEOUT_MS);
-    rightFrontMotor.configMotionAcceleration(RobotMap.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
-                                         RobotMap.CONTROLLER_TIMEOUT_MS);
+    rightFrontMotor.configMotionCruiseVelocity(DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
+                                           DriveConstants.CONTROLLER_TIMEOUT_MS);
+    rightFrontMotor.configMotionAcceleration(DriveConstants.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
+                                         DriveConstants.CONTROLLER_TIMEOUT_MS);
   
 
     // Use follower mode to minimize shearing commands that could occur if
@@ -336,10 +336,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
     /// selector that can be different per axis
     public void setMotionVelocity(double fraction_full_speed) 
     {
-    	leftFrontMotor.configMotionCruiseVelocity((int)(fraction_full_speed * RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
-					                                    RobotMap.CONTROLLER_TIMEOUT_MS);
-    	rightFrontMotor.configMotionCruiseVelocity((int)(fraction_full_speed * RobotMap.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
-    													RobotMap.CONTROLLER_TIMEOUT_MS);
+    	leftFrontMotor.configMotionCruiseVelocity((int)(fraction_full_speed * DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
+					                                    DriveConstants.CONTROLLER_TIMEOUT_MS);
+    	rightFrontMotor.configMotionCruiseVelocity((int)(fraction_full_speed * DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
+    													DriveConstants.CONTROLLER_TIMEOUT_MS);
     }
 
     private double shapeAxis( double x) 
@@ -498,16 +498,16 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// " - Mike
 
 		// convert to rev/sec
-		vL /= DriveConstants.WHEEL_CIRCUMFERENCE;
-		vR /= DriveConstants.WHEEL_CIRCUMFERENCE;
+		vL /= DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
+		vR /= DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
 
 		// convert to rev/100ms
 		vL /= 10;
 		vR /= 10;
 
 		// convert to native ticks/100ms
-		vL *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
-		vR *= DriveConstants.MOTOR_NATIVE_TICKS_PER_REV;
+		vL *= DriveConstants.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
+		vR *= DriveConstants.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
 
 		leftFrontMotor.set(ControlMode.Velocity, vL);
 		rightFrontMotor.set(ControlMode.Velocity, vR);
@@ -631,11 +631,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	public double getRightPosition_inch() {
 		// Right motor encoder reads -position when going forward!
 		// TODO: This is wrong! Need new constants
-		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);						
+		return -INCH_PER_WHEEL_ROT * rightFrontMotor.getSelectedSensorPosition(DriveConstants.PRIMARY_PID_LOOP);						
 	}
 	
 	private int getMotorNativeUnits(WPI_TalonSRX m) {
-		return m.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP);
+		return m.getSelectedSensorPosition(DriveConstants.PRIMARY_PID_LOOP);
 	}
 	
 	public int getRightNativeUnits() {
@@ -679,12 +679,12 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	}
 	
 	public double inchesToNativeTicks(double inches) {
-		return (double)RobotMap.DRIVE_MOTOR_NATIVE_TICKS_PER_REV * (inches / RobotMap.WHEEL_CIRCUMFERENCE_INCHES);
+		return (double)DriveConstants.DRIVE_MOTOR_NATIVE_TICKS_PER_REV * (inches / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES);
 	}
 
 	public double getFwdVelocity_ips() {
 		// Right side motor reads -velocity when going forward!
-		double fwdSpeedRpm = (leftFrontMotor.getSelectedSensorVelocity(RobotMap.PRIMARY_PID_LOOP) - rightFrontMotor.getSelectedSensorVelocity(RobotMap.PRIMARY_PID_LOOP))/2.0;
+		double fwdSpeedRpm = (leftFrontMotor.getSelectedSensorVelocity(DriveConstants.PRIMARY_PID_LOOP) - rightFrontMotor.getSelectedSensorVelocity(DriveConstants.PRIMARY_PID_LOOP))/2.0;
 		return (INCH_PER_WHEEL_ROT / 60.0) * fwdSpeedRpm;
 	}
 	public double getFwdCurrent() {
@@ -709,7 +709,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		m.set(ControlMode.PercentOutput, 0.0);
 		
 		// Clear the encoder to start a motion relative to "here"
-		m.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_LOOP, RobotMap.CONTROLLER_TIMEOUT_MS);
+		m.setSelectedSensorPosition(0, DriveConstants.PRIMARY_PID_LOOP, DriveConstants.CONTROLLER_TIMEOUT_MS);
 	}
 	
 	// Set up the entire drive system for position control
@@ -749,10 +749,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		/* Init Diagnostics */
 		SmartDashboard.putBoolean(getName()+"/RunningDiag", true);
 		
-		rightFrontMotor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
-		rightRearMotor.set(ControlMode.PercentOutput, -RobotMap.MOTOR_TEST_PERCENT);
-		leftFrontMotor.set(ControlMode.PercentOutput, -RobotMap.MOTOR_TEST_PERCENT);
-		leftRearMotor.set(ControlMode.PercentOutput, RobotMap.MOTOR_TEST_PERCENT);
+		rightFrontMotor.set(ControlMode.PercentOutput, DriveConstants.MOTOR_TEST_PERCENT);
+		rightRearMotor.set(ControlMode.PercentOutput, -DriveConstants.MOTOR_TEST_PERCENT);
+		leftFrontMotor.set(ControlMode.PercentOutput, -DriveConstants.MOTOR_TEST_PERCENT);
+		leftRearMotor.set(ControlMode.PercentOutput, DriveConstants.MOTOR_TEST_PERCENT);
 	}
 	
 	@Override
@@ -765,16 +765,16 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	public boolean isMoveComplete(double distance_inches)	// At timeout should be used with this
 	{
 		int ticks = (int)inchesToNativeTicks(distance_inches);
-		int errorL = (int) Math.abs(ticks - leftFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
-		int errorR = (int) Math.abs(ticks - rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP));
-		return (errorL  < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS) &&
-			   (errorR < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS);
+		int errorL = (int) Math.abs(ticks - leftFrontMotor.getSelectedSensorPosition(DriveConstants.PRIMARY_PID_LOOP));
+		int errorR = (int) Math.abs(ticks - rightFrontMotor.getSelectedSensorPosition(DriveConstants.PRIMARY_PID_LOOP));
+		return (errorL  < DriveConstants.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS) &&
+			   (errorR < DriveConstants.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS);
 	}
 
 	public void turn_degrees(double angle_degrees)
 	{
 		// Use motion magic to run both sides in opposite directions
-		double targetPos_ticks = (angle_degrees * RobotMap.WHEEL_ROTATION_PER_FRAME_DEGREES) * RobotMap.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
+		double targetPos_ticks = (angle_degrees * DriveConstants.WHEEL_ROTATION_PER_FRAME_DEGREES) * DriveConstants.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
 		
 		// Assuming rotation is right hand rule about nadir (i.e., down vector is Z because X is out front and Y is out right side)
 		// then Right Motor back and Left Motor forward is rotate to right (which is a positive rotation)
@@ -790,11 +790,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// In this case if the wheels are 6.25 and track is 24.25 and tolerance is 0.125 inches on move
 		// then the equivalent angle is about 0.6 degrees of frame rotation.
 		
-		double targetPos_ticks = (angle_degrees * RobotMap.WHEEL_ROTATION_PER_FRAME_DEGREES) * RobotMap.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
-		int errorL = (int) Math.abs(targetPos_ticks - (leftFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)));
-		int errorR = (int) Math.abs(-targetPos_ticks - (rightFrontMotor.getSelectedSensorPosition(RobotMap.PRIMARY_PID_LOOP)));
-		return (errorL  < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION) &&
-			   (errorR < RobotMap.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION);
+		double targetPos_ticks = (angle_degrees * DriveConstants.WHEEL_ROTATION_PER_FRAME_DEGREES) * DriveConstants.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
+		int errorL = (int) Math.abs(targetPos_ticks - (leftFrontMotor.getSelectedSensorPosition(DriveConstants.PRIMARY_PID_LOOP)));
+		int errorR = (int) Math.abs(-targetPos_ticks - (rightFrontMotor.getSelectedSensorPosition(DriveConstants.PRIMARY_PID_LOOP)));
+		return (errorL  < DriveConstants.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION) &&
+			   (errorR < DriveConstants.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION);
 		
   }
 }
