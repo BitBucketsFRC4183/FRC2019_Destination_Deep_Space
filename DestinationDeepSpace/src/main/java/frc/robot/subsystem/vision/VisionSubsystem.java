@@ -8,6 +8,9 @@
 package frc.robot.subsystem.vision;
 
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.lighting.LightingControl;
+import frc.robot.subsystem.lighting.LightingSubsystem;
+import frc.robot.subsystem.lighting.LightingConstants.LightingObjects;
 
 /**
  * Add your docs here.
@@ -28,6 +31,8 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	{
 		setName("VisionSubsystem");
 	}
+
+	private LightingSubsystem lightingSubsystem = LightingSubsystem.instance();
 
   	@Override
 	public void diagnosticsInit() {
@@ -65,6 +70,13 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 		initializeBaseDashboard();
 
+		// TODO: Temporary place to enable lighting for vision
+		// May place in simple illuminator on/off function with a brightness argument
+		lightingSubsystem.set(LightingObjects.VISION_SUBSYSTEM,
+							  LightingControl.FUNCTION_ON,
+							  LightingControl.COLOR_GREEN,
+							  0,
+							  50);
 	}
 
 }

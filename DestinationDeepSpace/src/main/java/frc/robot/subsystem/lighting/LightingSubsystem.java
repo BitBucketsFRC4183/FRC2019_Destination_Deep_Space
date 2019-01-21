@@ -8,6 +8,7 @@
 package frc.robot.subsystem.lighting;
 
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.lighting.LightingConstants.LightingObjects;
 
 /**
  * Add your docs here.
@@ -23,33 +24,36 @@ public class LightingSubsystem extends BitBucketSubsystem {
 		return inst;
 	}
 	private static LightingSubsystem inst;
+	private LightingControl lightingControl = LightingControl.instance();
 
 	private LightingSubsystem()
 	{
 		setName("LightingSubsystem");
 	}
 
-	public enum LightingObjects
-	{
-		// Currently planning on lighting on these controls
-		VISION_SUBSYSTEM(0),
-		DRIVE_SUBSYSTEM(1),
-		SCORING_SUBSYSTEM(2),
-		CLIMB_SUBSYSTEM(3);
-		// RESERVED 4 - 9
-		
-		private int value;
-		
-		LightingObjects(int value)
-		{
-			this.value = value;
-		}
-		
-		public int getValue() { return value; }
-	};	
-	
-	private LightingControl lightingControl;
 
+	/** set - pass through to underlying lighting control
+	 *  Converts enumeration of available lighting objects to their respective ordinal values
+	 *  Provides future opportunity for this subsystem to intervene and/or report state to Dashboard
+	 *  for testing of the lighting subsystem itself.
+	*/
+	public void set(LightingObjects lightingObject, String function, String color, int nspace, int period_msec)
+	{
+		lightingControl.set(lightingObject.getValue(), function, color, nspace, period_msec);
+	}	
+	public void set(LightingObjects lightingObject, String function, String color, int nspace, int period_msec, int brightness)
+	{
+		lightingControl.set(lightingObject.getValue(), function, color, nspace, period_msec, brightness);
+	}
+
+	/** setAll functions - convenience in terms of subsystem layout
+	 * 
+	 * 		AllOff
+	 * 		AllSleeping	- 3 second violet pulse
+	 * 		AllSparkles - random twinkling at specified period (Default = 100 msec)
+	 * 		AllCaution  - 1 Hz amber blink
+	 * 		AllFail     - 1 Hz red blink
+	 */
 	public void setAllOff()
 	{
 		for (LightingObjects lightingObject: LightingObjects.values())
@@ -89,6 +93,20 @@ public class LightingSubsystem extends BitBucketSubsystem {
 			   0,     			// nspace - don't care
 			   100) ; 			// period_msec - nice default
 	}
+	public void seAllWarning()
+	{
+		setAll(LightingControl.FUNCTION_BLINK,
+		       LightingControl.COLOR_ORANGE,
+			   0,     			// nspace - don't care
+			   500) ; 			// period_msec - nice default
+	}
+	public void setAllFail()
+	{
+		setAll(LightingControl.FUNCTION_BLINK,
+		       LightingControl.COLOR_RED,
+			   0,     			// nspace - don't care
+			   500) ; 			// period_msec - nice default
+	}
 
 
   	@Override
@@ -125,8 +143,6 @@ public class LightingSubsystem extends BitBucketSubsystem {
 	@Override
 	public void initialize() {
 		initializeBaseDashboard();
-
-		lightingControl = new LightingControl();
 
 		setAllSleeping();
 
