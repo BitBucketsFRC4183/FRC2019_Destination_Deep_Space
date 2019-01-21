@@ -11,7 +11,13 @@ package frc.robot.subsystem.lighting;
  * Add your docs here.
  */
 public class LightingConstants {
-    
+	
+	// Current baud rate of the BucketLights board
+	public static int BAUDRATE = 38400;
+
+	// Maximum time to search for lighting board before giving up
+	public static long POLLING_TIMEOUT_MSEC = 20000; // 20 seconds
+	
     public enum LightingObjects
 	{
 		// Currently planning on lighting on these controls
