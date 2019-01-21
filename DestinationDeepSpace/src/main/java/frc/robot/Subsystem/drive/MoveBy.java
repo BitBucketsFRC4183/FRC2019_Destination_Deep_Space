@@ -8,15 +8,16 @@
 package frc.robot.subsystem.drive;
 
 import frc.robot.utils.CommandUtils;
+import frc.robot.subsystem.drive.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveBy extends Command {
-	private final DriveSubsystem driveSubsystem = DriveSubsystem.instance();
-
-  	private double timeout_sec;
+public class MoveBy extends Command
+{
+    private double timeout_sec;
 	private double distance_inches;
 	private double percent_velocity;
+	private final DriveSubsystem driveSubsystem=DriveSubsystem.instance();
 	
     public MoveBy(double inches, double aTimeout_sec) 
     {
@@ -41,7 +42,7 @@ public class MoveBy extends Command {
     {
     	System.out.println(this.getClass().getName() + " Start" + " " + System.currentTimeMillis()/1000);
     	driveSubsystem.resetMotion();
-		  driveSubsystem.setMotionVelocity(percent_velocity);
+		driveSubsystem.setMotionVelocity(percent_velocity);
 
     }
 
