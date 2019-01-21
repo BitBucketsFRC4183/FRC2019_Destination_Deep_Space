@@ -31,8 +31,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private static ScoringSubsystem inst;
 
 
-	private final WPI_TalonSRX topRollerMotor;
-	private final WPI_TalonSRX bottomRollerMotor;
+	private final WPI_TalonSRX rollerMotor;
 
 	private final WPI_TalonSRX rotationMotor1;
 	private final WPI_TalonSRX rotationMotor2;
@@ -45,11 +44,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-		topRollerMotor = new WPI_TalonSRX(MotorId.TOP_INTAKE_MOTOR_ID);
-		bottomRollerMotor = new WPI_TalonSRX(MotorId.BOTTOM_INTAKE_MOTOR_ID);
-
-		bottomRollerMotor.setInverted(true);
-		bottomRollerMotor.follow(topRollerMotor);
+		rollerMotor = new WPI_TalonSRX(MotorId.INTAKE_MOTOR_ID);
 
 
 
@@ -62,8 +57,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-		TalonUtils.initializeMotorDefaults(topRollerMotor);
-		TalonUtils.initializeMotorDefaults(bottomRollerMotor);
+		TalonUtils.initializeMotorDefaults(rollerMotor);
 
 		TalonUtils.initializeMotorDefaults(rotationMotor1);
 		TalonUtils.initializeMotorDefaults(rotationMotor2);
@@ -157,14 +151,13 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		 *         /  \
 		 *    <--- \__/
 		 */
-		topRollerMotor.set(ControlMode.PercentOutput, pow);
-		// bottom will follow AND BE OPPOSITE
+		rollerMotor.set(ControlMode.PercentOutput, pow);
 	}
 
 
 
 	public void setAllMotorsZero() {
-		topRollerMotor.set(ControlMode.PercentOutput, 0);
+		rollerMotor.set(ControlMode.PercentOutput, 0);
 		rotationMotor1.set(ControlMode.PercentOutput, 0);
 	}
 
