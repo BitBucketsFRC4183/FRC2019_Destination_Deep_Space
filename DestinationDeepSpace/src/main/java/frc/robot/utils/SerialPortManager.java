@@ -23,45 +23,47 @@ public class SerialPortManager {
 		
 		String[] portNames = SerialPortList.getPortNames();
 
-		System.out.print("Port list:");
-		for(String portName : portNames)
-			System.out.print(" " + portName);
-		System.out.println();		
-		
-		for( String portName : portNames) {
+		if (portNames.length >= 1)
+		{
+			System.out.print("Port list:");
+			for(String portName : portNames)
+				System.out.print(" " + portName);
+			System.out.println();		
 			
-			try {
+			for( String portName : portNames) {
 				
-				System.out.println("Trying port:" + portName);
-				SerialPort port = new SerialPort(portName);
-				port.openPort();
-
-				port.setParams(baudRate,
-						SerialPort.DATABITS_8, 
-						SerialPort.STOPBITS_1, 
-						SerialPort.PARITY_NONE);
-				
-
-				String inBuff = "", inStr;				
-				long tQuit = System.currentTimeMillis() + msecs;
-				while( System.currentTimeMillis() < tQuit) {
+				try {
 					
-					// Get input & append to inBuff
-					if( (inStr = port.readString()) != null) {
-						inBuff += inStr;
+					System.out.println("Trying port:" + portName);
+					SerialPort port = new SerialPort(portName);
+					port.openPort();
+
+					port.setParams(baudRate,
+							SerialPort.DATABITS_8, 
+							SerialPort.STOPBITS_1, 
+							SerialPort.PARITY_NONE);
+					
+
+					String inBuff = "", inStr;				
+					long tQuit = System.currentTimeMillis() + msecs;
+					while( System.currentTimeMillis() < tQuit) {
+						
+						// Get input & append to inBuff
+						if( (inStr = port.readString()) != null) {
+							inBuff += inStr;
+						}
+						
+						if( tester.test(inBuff) ) {
+							System.out.format( "Success on port %s\n", portName);
+							return port;
+						}
 					}
 					
-					if( tester.test(inBuff) ) {
-						System.out.format( "Success on port %s\n", portName);
-						return port;
-					}
+					port.closePort();				
 				}
-				
-				port.closePort();				
+				catch( SerialPortException ex) {}			
 			}
-			catch( SerialPortException ex) {}			
-		}
-		
+		}		
 		// Not found
 		return null;
 	}

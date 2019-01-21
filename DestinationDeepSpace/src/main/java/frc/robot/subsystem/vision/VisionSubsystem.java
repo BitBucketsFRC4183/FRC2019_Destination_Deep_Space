@@ -70,13 +70,26 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 		initializeBaseDashboard();
 
-		// TODO: Temporary place to enable lighting for vision
-		// May place in simple illuminator on/off function with a brightness argument
+		// Turn on illuminator with a default brightness
+		setIlluminatorOn(VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
+	}
+
+	protected void setIlluminatorOff()
+	{
+		lightingSubsystem.set(LightingObjects.VISION_SUBSYSTEM,
+							  LightingControl.FUNCTION_OFF,
+							  LightingControl.COLOR_BLACK,
+							  0,
+							  0);		
+	}
+
+	protected void setIlluminatorOn(int brightness)
+	{
 		lightingSubsystem.set(LightingObjects.VISION_SUBSYSTEM,
 							  LightingControl.FUNCTION_ON,
 							  LightingControl.COLOR_GREEN,
 							  0,
-							  50);
+							  brightness);		
 	}
 
 }

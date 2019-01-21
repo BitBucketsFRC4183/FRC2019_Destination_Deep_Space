@@ -8,7 +8,7 @@ import jssc.SerialPort;
 import jssc.SerialPortException;
 
 
-public class LightingControl 
+public class LightingControl extends Thread
 {
 	public static final int MIN_BRIGHTNESS = 2;
 	public static final int SAFE_BRIGHTNESS = 32;
@@ -66,6 +66,8 @@ public class LightingControl
 	public static final String COLOR_VIOLET = "V";
 	
 	private static final String FORMAT = "%d%s%s%d%03d%04d\r";
+
+	private static int connectionAttempts = 0;
 	
 	// Singleton method; use LightingControl.instance() to get the LightingControl instance.
 	public static LightingControl instance() {
@@ -75,21 +77,47 @@ public class LightingControl
 	}
 	private static LightingControl inst;
 
+	/**
+	 * run - thread function to poll the serial port until we find the Lighting board
+	 * Allows the search to run in the background with minimal interference to the
+	 * other robot system startups. The polling will continue until 
+	 */
+	public void run()
+	{
+		long startTime_ms = System.currentTimeMillis();
+
+		while ((serialPort == null) && 
+		       ((System.currentTimeMillis() - startTime_ms) <= LightingConstants.POLLING_TIMEOUT_MSEC))
+		{
+			SmartDashboard.putNumber("LightingControl/ConnectionAttempts", connectionAttempts++);
+			serialPort = SerialPortManager.findPort( 
+					(input) -> input.contains("BucketLights"), 
+					LightingConstants.BAUDRATE);
+		
+			if( serialPort == null)
+			{
+				SmartDashboard.putString("LightingControl/Status", "No BucketLights board found!");
+				try {
+					sleep(500, 0);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		if (serialPort == null)
+		{
+			SmartDashboard.putString("LightingControl/Status", "No BucketLights board found! (Gave up)");
+		}		
+	}
 	private LightingControl() 
 	{
-		
 		SmartDashboard.putString("LightingControl/Status",  "Starting BucketLights");
 	
-		// Had to get at least one Lambda expression in the code somewhere! -tjw
-		serialPort = SerialPortManager.findPort( 
-				(input) -> input.contains("BucketLights"), 
-				SerialPort.BAUDRATE_38400);
-		
-		if( serialPort == null)
-		{
-			SmartDashboard.putString("LightingControl/Status", "No BucketLights board found!");
-			return;
-		}		
+		// Start the background polling that will find the serial port
+		// This prevents the construction and initialization sequences from
+		// delaying anything else in the system as we search for the lighting board
+		start();
 	}
 	
 	public void setOff(int lightingObject)
