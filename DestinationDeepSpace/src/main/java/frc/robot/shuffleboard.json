@@ -368,7 +368,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/LightingControl/Status",
-              "_title": "SmartDashboard/LightingControl/Status"
+              "_title": "/SmartDashboard/LightingControl/Status"
             }
           }
         }
@@ -376,9 +376,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
-    "width": 1936.0,
-    "height": 1015.0
+    "x": -7.0,
+    "y": 2.0,
+    "width": 1932.0,
+    "height": 1004.0
   }
 }
