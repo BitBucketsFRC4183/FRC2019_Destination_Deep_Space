@@ -7,11 +7,10 @@
 
 package frc.robot.subsystem;
 
-import frc.robot.subsystem.SubsystemUtilities.DiagnosticsEnableState;
 import frc.robot.subsystem.SubsystemUtilities.DiagnosticsState;
-import frc.robot.subsystem.SubsystemUtilities.TelemetryEnableState;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -20,14 +19,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public abstract class BitBucketSubsystem extends Subsystem {
 	
 	protected boolean initializedBase = false;
-	protected boolean telemetryEnabled = false;
-	protected SendableChooser<TelemetryEnableState> telemetryEnableState;
-	protected SendableChooser<DiagnosticsEnableState> diagnosticsEnableState;
+
+	// We require that extended telementry and diagnostics enabling
+	// reuturn to "OFF" at each reset. Because SendableChoosers remember
+	// their state in the NetworkTable (somewhere) we need to use
+	// boolean types for simple, resettable switches.
+	protected boolean telemetryEnabled = false;		// Really an "extended" telemetry set (more bandwidth)
+	protected boolean diagnosticsEnabled = false;
 
 	public DiagnosticsState lastKnownState = DiagnosticsState.UNKNOWN;
 	public int DIAG_LOOPS_RUN = 5;
 
 	protected int periodicCounter = 0;
+
+	protected static DriverStation ds = DriverStation.getInstance(); // Convenience
 	
 	public BitBucketSubsystem() {
 		
@@ -35,19 +40,8 @@ public abstract class BitBucketSubsystem extends Subsystem {
 
 	protected void initializeBaseDashboard()
 	{
-		telemetryEnableState = new SendableChooser<TelemetryEnableState>();
-		telemetryEnableState.setDefaultOption("Off", TelemetryEnableState.OFF);
-		telemetryEnableState.addOption( "On",  TelemetryEnableState.ON);
-		
-		SmartDashboard.putData(getName() + "/Telemetry", telemetryEnableState);
-
 		SmartDashboard.putBoolean(getName()+"/TelemetryEnabled", telemetryEnabled);
-
-		diagnosticsEnableState = new SendableChooser<DiagnosticsEnableState>();
-		diagnosticsEnableState.setDefaultOption("Off", DiagnosticsEnableState.OFF);
-		diagnosticsEnableState.addOption( "On",  DiagnosticsEnableState.ON);
-		
-		SmartDashboard.putData(getName() + "/Diagnostics", diagnosticsEnableState);
+		SmartDashboard.putBoolean(getName()+"/DiagnosticsEnabled", diagnosticsEnabled);
 
 		initializedBase = true;
 		SmartDashboard.putBoolean(getName() + "/InitializedBase", initializedBase);
@@ -58,16 +52,30 @@ public abstract class BitBucketSubsystem extends Subsystem {
 	{
 		SmartDashboard.putNumber(getName() + "/PeriodicCounter", periodicCounter++);
 	}
-	
+
+	/**
+	 * getTelementryEnabled - returns the current dashboard state
+	 * NOTE: "Extended" Telemetry can be enabled any time at the expense of
+	 * network bandwidth
+	 */
 	public boolean getTelemetryEnabled()
 	{
-		return SmartDashboard.getBoolean(getName() + "/TelemetryEnabled", false);
-		//return (telemetryEnableState.getSelected() == TelemetryEnableState.ON);
+		telemetryEnabled = SmartDashboard.getBoolean(getName() + "/TelemetryEnabled", false);
+		return telemetryEnabled;
 	}
-	
+	/**
+	 * getDiagnosticsEnabled - returns the current dashboard state
+	 * NOTE: Diagnostics can only be enabled when the DriverStation is in test mode
+	 */
 	public boolean getDiagnosticsEnabled()
 	{
-		return (diagnosticsEnableState.getSelected() == DiagnosticsEnableState.ON);
+		diagnosticsEnabled = SmartDashboard.getBoolean(getName() + "/DiagnosticsEnabled", false);
+		if (! ds.isTest())
+		{
+			diagnosticsEnabled = false;
+			SmartDashboard.putBoolean(getName() + "/DiagnosticsEnabled", diagnosticsEnabled);
+		}
+		return diagnosticsEnabled;
 	}
 
 	public abstract void initialize();		// Force all derived classes to have these interfaces

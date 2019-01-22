@@ -129,8 +129,15 @@ public class LightingSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
-		
 		updateBaseDashboard();
+		if (getTelemetryEnabled())
+		{
+			
+		}
+		if (getDiagnosticsEnabled())
+		{
+			
+		}
 		
 	}
 
