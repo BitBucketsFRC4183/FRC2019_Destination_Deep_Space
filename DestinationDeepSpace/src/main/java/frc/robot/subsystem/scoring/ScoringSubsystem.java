@@ -8,11 +8,9 @@
 package frc.robot.subsystem.scoring;
 
 import frc.robot.MotorId;
-import frc.robot.RobotMap;
 import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.utils.TalonUtils;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -200,16 +198,16 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
+		updateBaseDashboard();
 		if (getTelemetryEnabled()) {
 			SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle());
 			SmartDashboard.putNumber(getName() + "/Arm Ticks", rotationMotor1.getSelectedSensorPosition());
 		}
-
-		
-		double angle = SmartDashboard.getNumber(getName() + "/Test Angle", 0);
-		directArmTo(angle, true);
-
-		updateBaseDashboard();
+		if (getDiagnosticsEnabled())
+		{
+			double angle = SmartDashboard.getNumber(getName() + "/Test Angle", 0);
+			directArmTo(angle, true);
+		}
 	}
 
 	@Override

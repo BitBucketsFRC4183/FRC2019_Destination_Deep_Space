@@ -41,8 +41,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	private final OI oi = OI.instance();
 
-	private final DriverStation ds = DriverStation.getInstance();
-
 	// drive styles that driver can choose on the shuffleboard
 	public enum DriveStyle {
 		WPI_Arcade,
@@ -581,12 +579,16 @@ public class DriveSubsystem extends BitBucketSubsystem {
   
 	@Override
 	public void periodic() {
+		updateBaseDashboard();
 		if (getTelemetryEnabled())
 		{
 
 		}
+		if (getDiagnosticsEnabled())
+		{
+
+		}
 		
-		updateBaseDashboard();
 	}
   	
 	public void disable() {

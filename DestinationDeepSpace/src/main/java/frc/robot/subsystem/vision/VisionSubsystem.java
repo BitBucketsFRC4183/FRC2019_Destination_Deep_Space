@@ -54,9 +54,15 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
-
-
-		updateBaseDashboard();		
+		updateBaseDashboard();	
+		if (getTelemetryEnabled())
+		{
+			
+		}
+		if (getDiagnosticsEnabled())
+		{
+			
+		}			
 	}
 
 	@Override

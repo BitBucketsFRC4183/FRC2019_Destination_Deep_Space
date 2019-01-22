@@ -34,17 +34,6 @@
               "_title": "SmartDashboard/DriveSubsystem/Turn Joystick Scale"
             }
           },
-          "15,0": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Diagnostics",
-              "_title": "SmartDashboard/DriveSubsystem/Diagnostics"
-            }
-          },
           "11,0": {
             "size": [
               4,
@@ -54,17 +43,6 @@
               "_type": "Split Button Chooser",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Forward Joystick Scale",
               "_title": "SmartDashboard/DriveSubsystem/Forward Joystick Scale"
-            }
-          },
-          "15,1": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Telemetry",
-              "_title": "SmartDashboard/DriveSubsystem/Telemetry"
             }
           },
           "5,4": {
@@ -87,6 +65,28 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/PeriodicCounter",
               "_title": "/SmartDashboard/DriveSubsystem/PeriodicCounter"
+            }
+          },
+          "21,1": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/TelemetryEnabled",
+              "_title": "SmartDashboard/DriveSubsystem/TelemetryEnabled"
+            }
+          },
+          "21,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DiagnosticsEnabled",
+              "_title": "SmartDashboard/DriveSubsystem/DiagnosticsEnabled"
             }
           }
         }
@@ -139,6 +139,28 @@
               "Slider Settings/Max": 360.0,
               "Slider Settings/Block increment": 0.0625
             }
+          },
+          "21,1": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/TelemetryEnabled",
+              "_title": "SmartDashboard/NavigationSubsystem/TelemetryEnabled"
+            }
+          },
+          "21,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/DiagnosticsEnabled",
+              "_title": "SmartDashboard/NavigationSubsystem/DiagnosticsEnabled"
+            }
           }
         }
       }
@@ -153,28 +175,6 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "8,1": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Diagnostics",
-              "_title": "SmartDashboard/ScoringSubsystem/Diagnostics"
-            }
-          },
-          "8,0": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Telemetry",
-              "_title": "SmartDashboard/ScoringSubsystem/Telemetry"
-            }
-          },
           "22,0": {
             "size": [
               1,
@@ -208,15 +208,26 @@
               "_title": "/SmartDashboard/ScoringSubsystem/Arm Ticks"
             }
           },
-          "11,0": {
+          "21,1": {
             "size": [
-              5,
-              1
+              2,
+              2
             ],
             "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Test Wheel Chooser",
-              "_title": "SmartDashboard/ScoringSubsystem/Test Wheel Chooser"
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/TelemetryEnabled",
+              "_title": "SmartDashboard/ScoringSubsystem/TelemetryEnabled"
+            }
+          },
+          "21,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/DiagnosticsEnabled",
+              "_title": "SmartDashboard/ScoringSubsystem/DiagnosticsEnabled"
             }
           }
         }
@@ -234,8 +245,8 @@
         "tiles": {
           "5,0": {
             "size": [
-              17,
-              10
+              11,
+              7
             ],
             "content": {
               "_type": "Camera Stream",
@@ -249,6 +260,39 @@
               "fps": -1,
               "imageWidth": -1,
               "imageHeight": -1
+            }
+          },
+          "22,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/VisionSubsystem/PeriodicCounter",
+              "_title": "SmartDashboard/VisionSubsystem/PeriodicCounter"
+            }
+          },
+          "21,1": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/VisionSubsystem/TelemetryEnabled",
+              "_title": "SmartDashboard/VisionSubsystem/TelemetryEnabled"
+            }
+          },
+          "21,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/VisionSubsystem/DiagnosticsEnabled",
+              "_title": "SmartDashboard/VisionSubsystem/DiagnosticsEnabled"
             }
           }
         }
@@ -264,28 +308,6 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "6,0": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/Telemetry",
-              "_title": "SmartDashboard/ClimberSubsystem/Telemetry"
-            }
-          },
-          "6,2": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Split Button Chooser",
-              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/Diagnostics",
-              "_title": "SmartDashboard/ClimberSubsystem/Diagnostics"
-            }
-          },
           "22,0": {
             "size": [
               1,
@@ -325,7 +347,18 @@
               "Slider Settings/Block increment": 1.0
             }
           },
-          "6,5": {
+          "21,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/DiagnosticsEnabled",
+              "_title": "SmartDashboard/ClimberSubsystem/DiagnosticsEnabled"
+            }
+          },
+          "21,1": {
             "size": [
               2,
               2
@@ -380,6 +413,28 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/LightingControl/ConnectionAttempts",
               "_title": "SmartDashboard/LightingControl/ConnectionAttempts"
+            }
+          },
+          "21,1": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/LightingSubsystem/TelemetryEnabled",
+              "_title": "SmartDashboard/LightingSubsystem/TelemetryEnabled"
+            }
+          },
+          "21,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/LightingSubsystem/DiagnosticsEnabled",
+              "_title": "SmartDashboard/LightingSubsystem/DiagnosticsEnabled"
             }
           }
         }

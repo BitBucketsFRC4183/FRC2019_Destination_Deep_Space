@@ -11,16 +11,6 @@ package frc.robot.subsystem;
  * Add your docs here.
  */
 public class SubsystemUtilities {
-    public enum TelemetryEnableState 
-	{
-		OFF,
-		ON
-	}
-    public enum DiagnosticsEnableState 
-	{
-		OFF,
-		ON
-	}	
 	public enum DiagnosticsScope 
 	{
 		BASIC,

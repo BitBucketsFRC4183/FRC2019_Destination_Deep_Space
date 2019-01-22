@@ -14,7 +14,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.MotorId;
-import frc.robot.RobotMap;
 import frc.robot.ServoId;
 /**
  * Add your docs here.
