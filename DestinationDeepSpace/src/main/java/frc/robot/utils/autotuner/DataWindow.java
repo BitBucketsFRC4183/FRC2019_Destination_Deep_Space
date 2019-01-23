@@ -9,8 +9,9 @@ public class DataWindow {
     private boolean filled = false;
     private int sum = 0;
 
-    private int min = -1;
-    private int max = 0;
+    private boolean setExtremum = false;
+    private int min;
+    private int max;
 
 
 
@@ -25,8 +26,8 @@ public class DataWindow {
         next = 0;
         filled = false;
         sum = 0;
-        min = -1;
-        max = 0;
+
+        setExtremum = false;
 
         for (int i = 0; i < data.length; i++) {
             data[i] = 0;
@@ -36,8 +37,11 @@ public class DataWindow {
 
 
     public void add(int n) {
-        if (min == -1) {
+        if (setExtremum == false) {
             min = n;
+            max = n;
+
+            setExtremum = true;
         }
 
         // 2 7 3 4 5

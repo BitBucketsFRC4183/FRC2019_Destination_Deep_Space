@@ -10,7 +10,7 @@ package frc.robot.subsystem.scoring;
 import frc.robot.MotorId;
 import frc.robot.RobotMap;
 import frc.robot.subsystem.BitBucketSubsystem;
-import frc.robot.utils.TalonUtils;
+import frc.robot.utils.talonutils.TalonUtils;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
