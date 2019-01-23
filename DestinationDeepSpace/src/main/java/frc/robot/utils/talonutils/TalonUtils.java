@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.utils.talonutils;
 
 import com.ctre.phoenix.motorcontrol.ControlFrame;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;

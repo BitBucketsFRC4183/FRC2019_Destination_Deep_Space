@@ -15,6 +15,7 @@ import frc.robot.subsystem.scoring.ScoringSubsystem;
 import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.operatorinterface.OI;
 import frc.robot.operatorinterface.PS4Constants;
+import frc.robot.utils.autotuner.AutoTuner;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -154,6 +155,8 @@ public class Robot extends TimedRobot {
     //    dashboards                          |----|
 
     Scheduler.getInstance().run();
+
+    AutoTuner.update();
   }
 
   /**

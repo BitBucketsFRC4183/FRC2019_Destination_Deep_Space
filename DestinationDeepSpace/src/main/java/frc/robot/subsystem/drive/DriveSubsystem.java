@@ -23,7 +23,7 @@ import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.subsystem.navigation.NavigationSubsystem;
 import frc.robot.utils.Deadzone;
 import frc.robot.utils.JoystickScale;//for sam <3
-import frc.robot.utils.TalonUtils;
+import frc.robot.utils.talonutils.TalonUtils;
 
 
 /**
