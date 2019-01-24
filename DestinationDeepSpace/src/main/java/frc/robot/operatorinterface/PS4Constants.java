@@ -8,8 +8,8 @@ public enum PS4Constants {
 	LEFT_STICK_Y(1),
 	RIGHT_STICK_X(2),
 	RIGHT_STICK_Y(5),
-	L2_AXIS(3),
-	R2_AXIS(4),
+	LEFT_TRIGGER(3),
+	RIGHT_TRIGGER(4),
 	
 	// Buttons
 	SQUARE   (1), 
