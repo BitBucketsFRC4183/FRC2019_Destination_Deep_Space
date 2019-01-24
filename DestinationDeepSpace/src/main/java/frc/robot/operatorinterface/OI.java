@@ -13,7 +13,10 @@ public class OI {
 		return inst;		
 	}
 	private static OI inst;	
-	private OI() {}
+	private OI() {
+	}
+
+	private static JoystickConstants joystickConstants = JoystickConstants.xbox();
 
 	private final static int DRIVER_JOYSTICK_ID = 0;
 	private final static int OPERATOR_JOYSTICK_ID = 1;
@@ -24,8 +27,8 @@ public class OI {
 	//****************************
 	// AXIS DEFINITIONS
 	//****************************
-    private final static int DRIVE_SPEED_AXIS            = PS4Constants.LEFT_STICK_Y.getValue();
-    private final static int DRIVE_TURN_AXIS             = PS4Constants.RIGHT_STICK_X.getValue();
+    private final static int DRIVE_SPEED_AXIS            = joystickConstants.getLeftStickY();
+    private final static int DRIVE_TURN_AXIS             = joystickConstants.getRightStickX();
 
 	/** 
 	 * speed - returns a speed command from driver joystick in the normal range [-1,1]
@@ -76,10 +79,10 @@ public class OI {
 	//****************************
 	// BUTTON DEFINITIONS
 	//****************************
-	private final static int DRIVE_LOW_SENSITIVE_BUTTON  = PS4Constants.R1.getValue();
-	private final static int DRIVE_INVERT_BUTTON         = PS4Constants.R2.getValue();
-	private final static int DRIVE_ALIGN_LOCK_BUTTON     = PS4Constants.L1.getValue();
-	private final static int DRIVE_LOCK_BUTTON     		 = PS4Constants.L2.getValue();
+	private final static int DRIVE_LOW_SENSITIVE_BUTTON  = joystickConstants.getR1();
+	private final static int DRIVE_INVERT_BUTTON         = joystickConstants.getR2();
+	private final static int DRIVE_ALIGN_LOCK_BUTTON     = joystickConstants.getL1();
+	private final static int DRIVE_LOCK_BUTTON     		 = joystickConstants.getL2();
 
 	private final static int ARM_CLIMBER                 = PS4Constants.PS4.getValue();
 	private final static int CLIMB                       = PS4Constants.L_STICK.getValue();
