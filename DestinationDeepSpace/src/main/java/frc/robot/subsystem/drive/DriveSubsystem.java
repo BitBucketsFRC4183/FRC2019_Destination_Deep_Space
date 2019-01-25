@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -452,9 +451,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			fwdStick *= LOW_SENS_GAIN;
 			turnStick *= LOW_SENS_GAIN;
 		}
-		if(oi.invertDrive()) {
-			fwdStick *= -1.0;
-		}
+
 		double maxSteer = 1.0 - Math.abs(fwdStick) / 2.0;	// Reduce steering by up to 50%
 		double steer = maxSteer * turnStick;
 		
@@ -525,10 +522,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 					
 		if(oi.lowSensitivity())
 			fwdStick *= LOW_SENS_GAIN;
-		
-		if(oi.invertDrive()) {
-			fwdStick *= -1.0;
-		}
 		
 		fwdStick = shapeAxis(fwdStick);
 		turnStick = shapeAxis(turnStick);
