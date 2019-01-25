@@ -182,6 +182,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
 		
+		ScoringDiagnostics.init();
 	}
 
 	@Override
@@ -213,7 +214,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	@Override
 	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub
-		
+
+		ScoringDiagnostics.periodic();
 	}
 
 	@Override
