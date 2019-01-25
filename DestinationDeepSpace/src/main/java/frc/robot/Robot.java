@@ -16,6 +16,7 @@ import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.operatorinterface.OI;
 import frc.robot.operatorinterface.PS4Constants;
 import frc.robot.utils.autotuner.AutoTuner;
+import frc.robot.utils.talonutils.MotorTestModes;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -95,6 +96,10 @@ public class Robot extends TimedRobot {
 
     lightingSubsystem = LightingSubsystem.instance();
     lightingSubsystem.initialize();
+
+
+
+    MotorTestModes.init();
   }
 
   /**
@@ -156,7 +161,9 @@ public class Robot extends TimedRobot {
 
     Scheduler.getInstance().run();
 
-    AutoTuner.update();
+
+    
+    MotorTestModes.periodic();
   }
 
   /**
