@@ -1,5 +1,6 @@
 package frc.robot.utils.autotuner;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -35,6 +36,7 @@ public class AutoTuner {
     }
 
     private static SendableChooser<Step> stepSelector;
+    private static boolean repeat = false;
 
 
 
@@ -62,34 +64,74 @@ public class AutoTuner {
 
     /** Next iteration in tuning process */
     public static void periodic() {
-        step = stepSelector.getSelected();
+        Step selected = stepSelector.getSelected();
 
+        // if the user switched from one step to the other, first go through None
+        if (selected != Step.None && selected != step) {
+            changeStep(Step.None);
+
+            return;
+        }
+
+        // maybe find a better way to organize this?
         switch (step) {
             default: {}
             case None: {
+                if (!repeat) {
+                    noneInit();
+                }
+
                 break;
             }
             case Kf: {
-                kfTune1();
+                if (!repeat) {
+                    kfTuneInit();
+                } else {
+                    kfTunePeriodic();
+                }
+
                 break;
             }
             case Cruise: {
-                cruiseTune1();
+                if (!repeat) {
+                    cruiseTuneInit();
+                } else {
+                    cruiseTunePeriodic();
+                }
+
                 break;
             }
             case Kp: {
-                kpTune1();
+                if (!repeat) {
+                    cruiseTuneInit();
+                } else {
+                    cruiseTunePeriodic();
+                }
+                
                 break;
             }
             case Kd: {
-                kdTune1();
+                if (!repeat) {
+                    kdTuneInit();
+                } else {
+                    kdTunePeriodic();
+                }
+                
                 break;
             }
             case Ki: {
-                kiTune1();
+                if (!repeat) {
+                    kiTuneInit();
+                } else {
+                    kiTunePeriodic();
+                }
+                
                 break;
             }
         }
+
+        // do the periodic for each step now that the inits have been done
+        repeat = true;
     }
 
     
@@ -177,6 +219,10 @@ public class AutoTuner {
     private static void changeStep(Step s) {
         step = s;
 
+        if (s == Step.None) {
+            repeat = false; // once the step is changed, make sure init is called
+        }
+
         SmartDashboard.putString(TunerConstants.PROCESS_KEY, s.toString());
         SmartDashboard.putString(TunerConstants.QUESTION_KEY, s.getInstructions());
     }
@@ -185,13 +231,19 @@ public class AutoTuner {
 
 
     
-    private static void kfTune() {
+    private static void noneInit() {
+        motor.set(ControlMode.PercentOutput, 0);
+    }
+
+
+
+    private static void kfTuneInit() {
         kf = new KfStep(TunerConstants.DATA_WINDOW_SIZE, motor);
 
         changeStep(Step.Kf);
     }
 
-    private static void kfTune1() {
+    private static void kfTunePeriodic() {
         boolean done = kf.update();
         // put the power output to the Dashboard to make sure its also stable
         SmartDashboard.putNumber(TunerConstants.POWER_DATA_KEY, motor.getMotorOutputPercent());
@@ -205,7 +257,7 @@ public class AutoTuner {
 
 
 
-    private static void cruiseTune() {
+    private static void cruiseTuneInit() {
         cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100(), TunerConstants.TARGET);
 
         setCruise(cruise.getSpeed());
@@ -213,7 +265,7 @@ public class AutoTuner {
         changeStep(Step.Cruise);
     }
 
-    private static void cruiseTune1() {
+    private static void cruiseTunePeriodic() {
         boolean done = cruise.update();
 
         if (done) {
@@ -223,7 +275,7 @@ public class AutoTuner {
 
 
 
-    private static void kpTune() {
+    private static void kpTuneInit() {
         kp = new KpStep(TunerConstants.DATA_WINDOW_SIZE, motor, cruise.getTickError(), TunerConstants.TARGET);
 
         setKp(kp.getValue());
@@ -231,7 +283,7 @@ public class AutoTuner {
         changeStep(Step.Kp);
     }
 
-    private static void kpTune1() {
+    private static void kpTunePeriodic() {
         boolean done = kp.update();
 
         if (done) {
@@ -243,7 +295,7 @@ public class AutoTuner {
 
 
 
-    private static void kdTune() {
+    private static void kdTuneInit() {
         kd = new KdStep(TunerConstants.DATA_WINDOW_SIZE, motor, kp.getValue(), TunerConstants.TARGET);
 
         setKd(kd.getValue());
@@ -251,7 +303,7 @@ public class AutoTuner {
         changeStep(Step.Kd);
     }
 
-    private static void kdTune1() {
+    private static void kdTunePeriodic() {
         boolean done = kd.update();
 
         if (done) {
@@ -261,7 +313,7 @@ public class AutoTuner {
 
 
 
-    private static void kiTune() {
+    private static void kiTuneInit() {
         ki = new KiStep(TunerConstants.DATA_WINDOW_SIZE, motor, kd.getSteadyStateError(), TunerConstants.TARGET);
 
         setIZone(ki.getIntegralZone());
@@ -270,7 +322,7 @@ public class AutoTuner {
         step = Step.Ki;
     }
 
-    private static void kiTune1() {
+    private static void kiTunePeriodic() {
         boolean done = ki.update(); // initial ki value
 
         if (done) {

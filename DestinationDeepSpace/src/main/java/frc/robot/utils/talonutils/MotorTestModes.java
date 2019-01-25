@@ -11,10 +11,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class MotorTestModes {
-    private static final boolean isTest = DriverStation.getInstance().isTest();
-
-
-
     public static enum TestMode { Manual, AutoTune }
 
 
@@ -30,11 +26,8 @@ public class MotorTestModes {
 
 
 
+    // called from Robot.testInit
     public static void init() {
-        if (!isTest) {
-            return;
-        }
-
         modeChooser.setDefaultOption("Manual", TestMode.Manual);
         modeChooser.addOption("Auto Tuner", TestMode.AutoTune);
 
@@ -45,6 +38,7 @@ public class MotorTestModes {
 
 
 
+    // called from Robot.testPeriodic
     public static void periodic() {
         // get the selected motor ID
         int motorID = (int) SmartDashboard.getNumber("Motor ID", 0);
