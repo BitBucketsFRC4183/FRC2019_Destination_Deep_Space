@@ -3,6 +3,7 @@ package frc.robot.utils.autotuner;
 public class TunerConstants {
 	public static final String PROCESS_KEY     = "AutoTuner/Current process";
 	public static final String DATA_KEY        = "AutoTuner/Data";
+	public static final String POWER_DATA_KEY  = "AutoTuner/Power output";
     public static final String STABLE_KEY      = "AutoTuner/Stable";
 	public static final String OSCILLATING_KEY = "AutoTuner/Oscillating";
 	public static final String QUESTION_KEY    = "AutoTuner/What to do";

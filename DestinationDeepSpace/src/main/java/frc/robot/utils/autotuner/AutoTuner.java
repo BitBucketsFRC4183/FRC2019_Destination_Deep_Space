@@ -1,12 +1,12 @@
 package frc.robot.utils.autotuner;
 
-import java.util.ArrayList;
-
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import frc.robot.utils.autotuner.steps.KfStep;
 import frc.robot.utils.autotuner.steps.CruiseStep;
@@ -18,7 +18,7 @@ import frc.robot.utils.autotuner.steps.KdStep;
 public class AutoTuner {
     private static enum Step {
         None (""),
-        Kf ("Tell if the velocity data is stable"),
+        Kf ("Tell if the velocity and power output datas are stable"),
         Cruise ("Tell if the position data is stable"),
         Kp ("Tell if the position data is stable and oscillating"),
         Kd ("Tell if the position data is stable"),
@@ -34,6 +34,8 @@ public class AutoTuner {
         }
     }
 
+    private static SendableChooser<Step> stepSelector;
+
 
 
     private static Step step = Step.None;
@@ -41,8 +43,27 @@ public class AutoTuner {
 
 
 
+    public static void init() {
+        stepSelector = new SendableChooser<Step>();
+
+        stepSelector.setDefaultOption("", Step.None);
+        stepSelector.addOption("Tune kF", Step.Kf);
+        stepSelector.addOption("Tune Cruise", Step.Cruise);
+        stepSelector.addOption("Tune kP", Step.Kp);
+        stepSelector.addOption("Tune kD", Step.Kd);
+        stepSelector.addOption("Tune kI", Step.Ki);
+
+
+        
+        SmartDashboard.putData("AutoTuner step", stepSelector);
+    }
+    
+
+
     /** Next iteration in tuning process */
-    public static void update() {
+    public static void periodic() {
+        step = stepSelector.getSelected();
+
         switch (step) {
             default: {}
             case None: {
@@ -153,10 +174,6 @@ public class AutoTuner {
 
 
 
-    private static void putInstructions(String str) {
-        SmartDashboard.putString(TunerConstants.QUESTION_KEY, str);
-    }
-
     private static void changeStep(Step s) {
         step = s;
 
@@ -176,6 +193,8 @@ public class AutoTuner {
 
     private static void kfTune1() {
         boolean done = kf.update();
+        // put the power output to the Dashboard to make sure its also stable
+        SmartDashboard.putNumber(TunerConstants.POWER_DATA_KEY, motor.getMotorOutputPercent());
 
         if (done) {
             changeStep(Step.None);
@@ -263,8 +282,6 @@ public class AutoTuner {
 
 
 
-    // TODO: test for test mode, etc...
-    // TODO: add more comments
     // TODO: written explanation of how it works
     // TODO: run some tests
     // TODO: write report to file
