@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.MotorId;
 import frc.robot.ServoId;
+import frc.robot.operatorinterface.OI;
 /**
  * Add your docs here.
  */
@@ -30,6 +31,8 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	final int ARMED = 1;
 	final int CLIMB = 2;
 	int state = IDLE;
+
+	private final OI oi = OI.instance();
 
 	private ClimberSubsystem() {
 		setName("ClimberSubsystem");
@@ -58,19 +61,19 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public void periodic() {
 		switch (state) {
 			case IDLE:{
-				if (armClimber()){
+				if (oi.armClimber()){
 					state = ARMED;
 				}
 			}
 				break;
 			case ARMED:{
-				if (climb()){
+				if (oi.climb()){
 					state = CLIMB;
 				}
 			}
 				break;
 			case CLIMB: {
-				highClimb();
+				// TODO: highClimb();
 			}	
 				break;
 			default:{

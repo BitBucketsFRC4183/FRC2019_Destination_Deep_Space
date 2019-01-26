@@ -116,17 +116,17 @@ public class OI {
 		return driverControl.getRawButton(DRIVE_LOCK_BUTTON);
 	}
 
-    public static boolean testMoveBy() /// TODO: Temporary, use dashboard instead
+    public boolean testMoveBy() /// TODO: Temporary, use dashboard instead
     {
         return driverControl.getRawButton(TEST_MOVE_BY_BUTTON);
 	}	
 	
-    public static boolean armClimber()
+    public boolean armClimber()
     {
         return driverControl.getRawButton(ARM_CLIMBER) && operatorControl.getRawButton(ARM_CLIMBER);
 	}	
 	
-    public static boolean climb()
+    public boolean climb()
     {
         return operatorControl.getRawButton(CLIMB);
     }	
