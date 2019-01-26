@@ -63,10 +63,16 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 		// TODO: TEMPORARY VALUES + also not the best place to put them in the first place
-		TalonUtils.initializeMotorFPID        (rotationMotor1, 0, 0, 0, 0, 0);
+		double kf = 0.05115;
+		double kp = 0.005683*2*2*2*2*2*2*1.5;
+		double ki = 0.001;
+		double kd = 10 * kp;
+		int izone = 200;
+
+		TalonUtils.initializeMotorFPID        (rotationMotor1, kf, kp, ki, kd, izone);
 		TalonUtils.initializeQuadEncoderMotor (rotationMotor1, 1);
 
-		TalonUtils.initializeMotorFPID        (rotationMotor2, 0, 0, 0, 0, 0);
+		TalonUtils.initializeMotorFPID        (rotationMotor2, kf, kp, ki, kd, izone);
 		TalonUtils.initializeQuadEncoderMotor (rotationMotor2, 1);
 
 
