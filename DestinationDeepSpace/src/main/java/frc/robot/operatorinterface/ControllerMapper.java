@@ -1,8 +1,8 @@
 package frc.robot.operatorinterface;
 
-public class JoystickConstants {
-    private static JoystickConstants xboxInstance;
-    private static JoystickConstants ps4Instance;
+public class ControllerMapper {
+    private static ControllerMapper xboxInstance;
+    private static ControllerMapper ps4Instance;
 
     private int leftStickX;
     private int leftStickY;
@@ -24,10 +24,11 @@ public class JoystickConstants {
     private int lStickButton;
     private int rStickButton;
 
+    private int brandButton;
 
-    public static JoystickConstants xbox() {
+    public static ControllerMapper xbox() {
         if (xboxInstance == null) {
-            xboxInstance = new JoystickConstants();
+            xboxInstance = new ControllerMapper();
             xboxInstance.leftStickX = XboxConstants.LEFT_STICK_X.getValue();
             xboxInstance.leftStickY = XboxConstants.LEFT_STICK_Y.getValue();
             xboxInstance.leftTrigger = XboxConstants.LEFT_TRIGGER.getValue();
@@ -48,15 +49,15 @@ public class JoystickConstants {
 
             xboxInstance.lStickButton = XboxConstants.L_STICK.getValue();
             xboxInstance.rStickButton = XboxConstants.R_STICK.getValue();
-
+            xboxInstance.brandButton = XboxConstants.XBOX_BUTTON.getValue();
         }
         return xboxInstance;
 
     }
 
-    public static JoystickConstants ps4() {
+    public static ControllerMapper ps4() {
         if (ps4Instance == null) {
-            ps4Instance = new JoystickConstants();
+            ps4Instance = new ControllerMapper();
             ps4Instance.leftStickX = PS4Constants.LEFT_STICK_X.getValue();
             ps4Instance.leftStickY = PS4Constants.LEFT_STICK_Y.getValue();
             ps4Instance.leftTrigger = PS4Constants.LEFT_TRIGGER.getValue();
@@ -76,10 +77,10 @@ public class JoystickConstants {
 
             ps4Instance.lStickButton = PS4Constants.L_STICK.getValue();
             ps4Instance.rStickButton = PS4Constants.R_STICK.getValue();
+            ps4Instance.brandButton = PS4Constants.PS4.getValue();
 
         }
         return ps4Instance;
-
     }
 
     public int getLeftStickX() {
@@ -138,11 +139,16 @@ public class JoystickConstants {
         return r2;
     }
 
-    public int getlStickButton() {
+    public int getLStickButton() {
         return lStickButton;
     }
 
-    public int getrStickButton() {
+    public int getRStickButton() {
         return rStickButton;
     }
+
+    public int getBrandButton() {
+        return brandButton;
+    }
+
 }
