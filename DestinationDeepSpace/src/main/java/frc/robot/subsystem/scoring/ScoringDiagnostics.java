@@ -10,19 +10,14 @@ public class ScoringDiagnostics {
     private static ScoringSubsystem scoringSubsystem = ScoringSubsystem.instance();
 
     public static void init() {
-        modeChooser = new SendableChooser<ScoringDiagnosticMode>();
-
-        modeChooser.setDefaultOption("None", ScoringDiagnosticMode.NONE);
-        modeChooser.addOption("Angle", ScoringDiagnosticMode.ANGLE);
-
-        SmartDashboard.putData("Scoring Subsystem Diagnostic Mode", modeChooser);
+        SmartDashboard.putNumber("ScoringSubsystem/Diagnostics/Angle", 0);
     }
 
 
 
     public static void periodic() {
-        ScoringDiagnosticMode mode = modeChooser.getSelected();
-
-        scoringSubsystem.directArmTo(30, true);
+        double angle = SmartDashboard.getNumber("ScoringSubsystem/Diagnostics/Angle", 0);
+        
+        scoringSubsystem.directArmTo(angle, true);
     }
 }
