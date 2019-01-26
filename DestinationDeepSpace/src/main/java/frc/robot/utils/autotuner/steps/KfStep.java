@@ -2,17 +2,31 @@ package frc.robot.utils.autotuner.steps;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import frc.robot.utils.autotuner.TunerConstants;
+import frc.robot.utils.autotuner.DataWindow;
+
 public class KfStep extends TuningStep {
     private int tp100;
+
+    private DataWindow powerWindow;
 
 
 
     public KfStep(int windowSize, WPI_TalonSRX motor) {
         super(windowSize, motor);
 
+        powerWindow = new DataWindow(windowSize);
     }
+    
 
     
+    public void putPower(WPI_TalonSRX motor) {
+        SmartDashboard.putNumber(TunerConstants.POWER_DATA_KEY, motor.getMotorOutputPercent());
+    }
+
+
 
     public boolean update() {
         // get + and - velocities

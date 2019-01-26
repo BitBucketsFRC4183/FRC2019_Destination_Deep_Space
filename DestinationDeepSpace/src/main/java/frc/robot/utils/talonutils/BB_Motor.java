@@ -18,7 +18,6 @@ public class BB_Motor extends WPI_TalonSRX {
 
     private boolean hasEncoder = false;
     private int encoderTicksPerRev = 8192; // unless otherwise specified
-    private FeedbackDevice feedbackDevice = FeedbackDevice.QuadEncoder; // unless otherwise specified
     private boolean sensorPhase = false;
     private int statusFramePeriod = 0; // 0 --> not set yet, assume default set by TalonUtils
     private boolean inverted = false;
@@ -86,10 +85,6 @@ public class BB_Motor extends WPI_TalonSRX {
         encoderTicksPerRev = val;
     }
 
-    public void setFeedbackDevice(FeedbackDevice device) {
-        feedbackDevice = device;
-    }
-
     public void invert() {
         inverted = true;
     }
@@ -99,6 +94,14 @@ public class BB_Motor extends WPI_TalonSRX {
     }
 
     public void finalizeEncoder() {
-
+        this.setSensorPhase(sensorPhase);
+        this.setInverted(inverted);
+        
+        // initialize quad encoders
+        if (statusFramePeriod != 0) {
+            TalonUtils.initializeQuadEncoderMotor(this, statusFramePeriod);
+        } else {
+            TalonUtils.initializeQuadEncoderMotor(this);
+        }
     }
 }
