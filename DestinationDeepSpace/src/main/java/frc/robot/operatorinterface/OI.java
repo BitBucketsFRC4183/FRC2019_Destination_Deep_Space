@@ -48,8 +48,8 @@ public class OI {
 		// "down", right hand coordinate rules dictate that positive rotations are to
 		// the right (i.e. vectors R x P = Y and N x E = D)
         return -driverControl.getRawAxis(DRIVE_TURN_AXIS);
-	}
-	/** 
+    }
+	/**
 	 * quickTurn_deg - returns a desired turn of +/-45, +/-90, +/-135 or 180 degrees
 	 * This can be used in a main drive loop to initiate a command that induces
 	 * a rapid closed loop turn when speed is below some threshold. It is recommended
