@@ -81,6 +81,9 @@ public class OI {
 	private final static int DRIVE_ALIGN_LOCK_BUTTON     = PS4Constants.L1.getValue();
 	private final static int DRIVE_LOCK_BUTTON     		 = PS4Constants.L2.getValue();
 
+	private final static int ARM_CLIMBER                 = PS4Constants.PS4.getValue();
+	private final static int CLIMB                       = PS4Constants.L_STICK.getValue();
+
 	private final static int TEST_MOVE_BY_BUTTON         = PS4Constants.TRIANGLE.getValue(); /// TODO: Temp, use dashboard instead
 
 	public boolean lowSensitivity()
@@ -116,6 +119,16 @@ public class OI {
     public static boolean testMoveBy() /// TODO: Temporary, use dashboard instead
     {
         return driverControl.getRawButton(TEST_MOVE_BY_BUTTON);
+	}	
+	
+    public static boolean armClimber()
+    {
+        return driverControl.getRawButton(ARM_CLIMBER) && operatorControl.getRawButton(ARM_CLIMBER);
+	}	
+	
+    public static boolean climb()
+    {
+        return operatorControl.getRawButton(CLIMB);
     }	
 	
 }

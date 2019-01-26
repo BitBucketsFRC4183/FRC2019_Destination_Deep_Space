@@ -26,6 +26,10 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	Servo highClimbServo;
 	WPI_TalonSRX highClimbMotor1;
 	WPI_TalonSRX highClimbMotor2;
+	final int IDLE = 0;
+	final int ARMED = 1;
+	final int CLIMB = 2;
+	int state = IDLE;
 
 	private ClimberSubsystem() {
 		setName("ClimberSubsystem");
@@ -48,8 +52,33 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		
 	}
 
+	
+
 	@Override
 	public void periodic() {
+		switch (state) {
+			case IDLE:{
+				if (armClimber()){
+					state = ARMED;
+				}
+			}
+				break;
+			case ARMED:{
+				if (climb()){
+					state = CLIMB;
+				}
+			}
+				break;
+			case CLIMB: {
+				highClimb();
+			}	
+				break;
+			default:{
+
+			}
+				break;
+		}
+
 		updateBaseDashboard();
 
 		if (getTelemetryEnabled())
@@ -66,7 +95,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void diagnosticsExecute() {
-		// TODO Auto-generated method stub
+		// TODO: Auto-generated method stub
 		
 	}
 
