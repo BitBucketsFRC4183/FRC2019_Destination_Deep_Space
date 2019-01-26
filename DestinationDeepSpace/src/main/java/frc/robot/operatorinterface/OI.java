@@ -4,6 +4,7 @@ package frc.robot.operatorinterface;
 // import java.util.Set;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystem.drive.DriveConstants;
 
 public class OI {
 	// Singleton method; use OI.instance() to get the OI instance.
@@ -44,7 +45,7 @@ public class OI {
 		// RPY or NED reference frame where Y (yaw) or D (down) are both positive
 		// "down", right hand coordinate rules dictate that positive rotations are to
 		// the right (i.e. vectors R x P = Y and N x E = D)
-        return -driverControl.getRawAxis(DRIVE_TURN_AXIS);
+        return DriveConstants.TURN_SIGN*driverControl.getRawAxis(DRIVE_TURN_AXIS);
 	}
 	/** 
 	 * quickTurn_deg - returns a desired turn of +/-45, +/-90, +/-135 or 180 degrees
