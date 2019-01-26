@@ -572,14 +572,48 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	{		
 		initializeBaseDashboard();
 
-		System.out.println("Setting default command Mike's way");	// Don't use default commands as they can catch you by surprise
-		initialCommand = new Idle();	// Only create it once
-		initialCommand.start();
+		// System.out.println("Setting default command Mike's way");	// Don't use default commands as they can catch you by surprise
+		// initialCommand = new Idle();	// Only create it once
+		// initialCommand.start();
     }
   
   
 	@Override
 	public void periodic() {
+		// Even though a disabled state should shut things down, we want to be clear that
+		// the drive subsystem is explicitly disabled if this function is called while
+		// a disabled is detected; this protects us from changes in the upper-level design
+		// that we have little control of.
+		if (ds.isDisabled())
+		{
+			disable();
+		}
+		else if (ds.isOperatorControl()) // TODO: and ! AutoAssist
+		{
+			// Precedence as follows
+			//	DriveLock
+			//	AlignLock
+			//	Drive
+			// TODO: Figure out how to respond to quick turn request, continuing until complete or canceled
+			// Could be a command but commands seem overly complicated for some of this
+			if (oi.driveLock())
+			{
+				doLockDrive(0.0);
+			}
+			else if (oi.alignLock())
+			{
+				doAlignDrive(oi.speed(), 0.0);
+			}
+			else
+			{
+				drive(oi.speed(), oi.turn());
+			}
+		}
+		else if (! ds.isTest()) // or AutoAssist
+		{
+			// TBD
+		}
+
 		updateBaseDashboard();
 		if (getTelemetryEnabled())
 		{
