@@ -108,6 +108,10 @@ public class LightingControl extends Thread
 		if (serialPort == null)
 		{
 			SmartDashboard.putString("LightingControl/Status", "No BucketLights board found! (Gave up)");
+		}
+		else
+		{
+			SmartDashboard.putString("LightingControl/Status", "BucketLights RUNNING!");
 		}		
 	}
 	private LightingControl() 
@@ -163,12 +167,12 @@ public class LightingControl extends Thread
 											   brightness,
 											   period_msec);
 				
-				//SmartDashboard.putString("LightingControl/Status", command);
+				SmartDashboard.putString("LightingControl/Status", command);
 				serialPort.writeString(command);
 			}
 			catch (SerialPortException e) 
 			{
-				// pass
+				SmartDashboard.putString("LightingControl/Status", "Exception!");
 			}
 		}		
 	}	
