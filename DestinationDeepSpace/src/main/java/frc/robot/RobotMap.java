@@ -61,6 +61,7 @@ public class RobotMap {
     * 								========== AUTONOMOUS CONSTANTS ==========
     * 								==========================================
     */
+    public static final boolean IS_EVIL = false;
     public static final double DRIVESTRAIGHT_MIN_DRIVE = 0;
     public static final double TURNBY_MIN_DRIVE = 0;
 
