@@ -20,8 +20,9 @@ public class OI {
 	private final static int DRIVER_JOYSTICK_ID = 0;
 	private final static int OPERATOR_JOYSTICK_ID = 1;
 
-    private final static Joystick driverControl = new Joystick(DRIVER_JOYSTICK_ID);
-    private final static Joystick operatorControl = new Joystick(OPERATOR_JOYSTICK_ID);
+	// TODO: Make a get/set function instead of setting to public
+    public final static Joystick driverControl = new Joystick(DRIVER_JOYSTICK_ID);
+    public final static Joystick operatorControl = new Joystick(OPERATOR_JOYSTICK_ID);
 
 	//****************************
 	// AXIS DEFINITIONS
@@ -83,9 +84,11 @@ public class OI {
 	private final static int DRIVE_ALIGN_LOCK_BUTTON     = PS4Constants.L1.getValue();
 	private final static int DRIVE_LOCK_BUTTON     		 = PS4Constants.L2.getValue();
 
-	private final static int ARM_CLIMBER                 = PS4Constants.PS4.getValue();
-	private final static int HIGH_CLIMB                   = PS4Constants.L_STICK.getValue();
-	private final static int LOW_CLIMB                   = PS4Constants.L_STICK.getValue();
+	// How do you like me now, Sam?
+	// TODO: Make a get/set function instead of setting it to public
+	 public final static int  ARM_CLIMBER                    = PS4Constants.PS4.getValue();
+   private   final static             int HIGH_CLIMB           = PS4Constants.L_STICK.getValue();
+	private final     static int LOW_CLIMB                 = PS4Constants.L_STICK.getValue();
 
 	private final static int TEST_MOVE_BY_BUTTON         = PS4Constants.TRIANGLE.getValue(); /// TODO: Temp, use dashboard instead
 
@@ -129,12 +132,12 @@ public class OI {
         return driverControl.getRawButton(ARM_CLIMBER) && operatorControl.getRawButton(ARM_CLIMBER);
 	}	
 	
-    public boolean highClimbInit()
+    public boolean highClimb()
     {
         return operatorControl.getRawButton(HIGH_CLIMB);
 	}	
 	
-    public boolean lowClimbInit()
+    public boolean lowClimb()
     {
         return operatorControl.getRawButton(LOW_CLIMB);
     }	
