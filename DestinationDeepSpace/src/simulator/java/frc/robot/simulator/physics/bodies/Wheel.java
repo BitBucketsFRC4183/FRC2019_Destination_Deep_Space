@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import frc.robot.simulator.physics.MathConstants;
+
 /**
  * Created by julienvillegas on 31/01/2017.
  */
@@ -15,13 +17,11 @@ public class Wheel extends Image {
     private Body body;
     private World world;
 
-    public static final float INCHES_TO_METERS = 0.0254f;
-
     public Wheel(World world, float x, float y){
         super(new Texture("assets/pneumatic_wheels_alpha.png"));
         this.world = world;
         setPosition(x, y);
-        setSize(6 * INCHES_TO_METERS, 6 * INCHES_TO_METERS);
+        setSize(6f * MathConstants.INCHES_TO_METERS, 6f * MathConstants.INCHES_TO_METERS);
         setOrigin(getWidth() / 2, getHeight() / 2);
 
         BodyDef bodyDef = new BodyDef();
