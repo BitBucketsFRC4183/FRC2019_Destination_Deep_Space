@@ -102,19 +102,6 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "5,1": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Gyro",
-              "_title": "Gyro",
-              "Visuals/Major tick spacing": 45.0,
-              "Visuals/Starting angle": 180.0,
-              "Visuals/Show tick mark ring": true
-            }
-          },
           "22,0": {
             "size": [
               1,
