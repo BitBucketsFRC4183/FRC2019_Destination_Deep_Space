@@ -4,6 +4,7 @@ package frc.robot.operatorinterface;
 // import java.util.Set;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
 import frc.robot.subsystem.drive.DriveConstants;
 
 public class OI {
@@ -83,7 +84,8 @@ public class OI {
 	private final static int DRIVE_LOCK_BUTTON     		 = PS4Constants.L2.getValue();
 
 	private final static int ARM_CLIMBER                 = PS4Constants.PS4.getValue();
-	private final static int CLIMB                       = PS4Constants.L_STICK.getValue();
+	private final static int HIGH_CLIMB                   = PS4Constants.L_STICK.getValue();
+	private final static int LOW_CLIMB                   = PS4Constants.L_STICK.getValue();
 
 	private final static int TEST_MOVE_BY_BUTTON         = PS4Constants.TRIANGLE.getValue(); /// TODO: Temp, use dashboard instead
 
@@ -127,9 +129,14 @@ public class OI {
         return driverControl.getRawButton(ARM_CLIMBER) && operatorControl.getRawButton(ARM_CLIMBER);
 	}	
 	
-    public boolean climb()
+    public boolean highClimbInit()
     {
-        return operatorControl.getRawButton(CLIMB);
+        return operatorControl.getRawButton(HIGH_CLIMB);
+	}	
+	
+    public boolean lowClimbInit()
+    {
+        return operatorControl.getRawButton(LOW_CLIMB);
     }	
 	
 }
