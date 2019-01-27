@@ -21,7 +21,7 @@ sourceSets {
 // Add a new configuration for the simulator (and native3rdPartyDeps, for an osx jinput bug with snobotsim)
 configurations {
     native3rdPartyDeps
-    simulatorExtensionsCompile.extendsFrom(native3rdPartyDeps)
+    simulatorExtensionsCompile.extendsFrom(testCompile)
 }
 
 dependencies {
@@ -29,10 +29,12 @@ dependencies {
     native3rdPartyDeps "net.java.jinput:jinput:2.0.7"
 
     // add in deps for wpi
+    simulatorExtensionsCompile snobotSimJava()
     simulatorExtensionsCompile wpi.deps.wpilib()
     simulatorExtensionsCompile wpi.deps.vendor.java()
     simulatorExtensionsCompile wpi.deps.vendor.jni(wpi.platforms.desktop)
     simulatorExtensionsCompile group: 'org.scream3r', name: 'jssc', version: '2.8.0'
+    simulatorExtensionsCompile sourceSets.main.output
 
     // add in snobotsim deps. This allows us to both override the snobotsim version, and 
     // it also makes these deps available to the IDE
@@ -58,7 +60,8 @@ dependencies {
     testCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
-    simulatorExtensionsCompile sourceSets.main.output
+    testCompile snobotSimJava()
+    // testCompile sourceSets.simulatorExtensions.output
 
 }
 
