@@ -15,7 +15,10 @@ public class OI {
 		return inst;		
 	}
 	private static OI inst;	
-	private OI() {}
+	private OI() {
+	}
+
+	private static ControllerMapper controllerMapper = ControllerMapper.ps4();
 
 	private final static int DRIVER_JOYSTICK_ID = 0;
 	private final static int OPERATOR_JOYSTICK_ID = 1;
@@ -27,10 +30,10 @@ public class OI {
 	//****************************
 	// AXIS DEFINITIONS
 	//****************************
-    private final static int DRIVE_SPEED_AXIS            = PS4Constants.LEFT_STICK_Y.getValue();
-    private final static int DRIVE_TURN_AXIS             = PS4Constants.RIGHT_STICK_X.getValue();
+    private final static int DRIVE_SPEED_AXIS            = controllerMapper.getLeftStickY();
+    private final static int DRIVE_TURN_AXIS             = controllerMapper.getRightStickX();
 
-	/** 
+	/**
 	 * speed - returns a speed command from driver joystick in the normal range [-1,1]
 	 * except when the invertDrive button is indicated, which causes the range to be [1,-1]
 	 */
@@ -49,7 +52,7 @@ public class OI {
 		// the right (i.e. vectors R x P = Y and N x E = D)
         return DriveConstants.TURN_SIGN*driverControl.getRawAxis(DRIVE_TURN_AXIS);
 	}
-	/** 
+	/**
 	 * quickTurn_deg - returns a desired turn of +/-45, +/-90, +/-135 or 180 degrees
 	 * This can be used in a main drive loop to initiate a command that induces
 	 * a rapid closed loop turn when speed is below some threshold. It is recommended
@@ -79,18 +82,18 @@ public class OI {
 	//****************************
 	// BUTTON DEFINITIONS
 	//****************************
-	private final static int DRIVE_LOW_SENSITIVE_BUTTON  = PS4Constants.R1.getValue();
-	private final static int DRIVE_INVERT_BUTTON         = PS4Constants.R2.getValue();
-	private final static int DRIVE_ALIGN_LOCK_BUTTON     = PS4Constants.L1.getValue();
-	private final static int DRIVE_LOCK_BUTTON     		 = PS4Constants.L2.getValue();
+	private final static int DRIVE_LOW_SENSITIVE_BUTTON  = controllerMapper.getR1();
+	private final static int DRIVE_INVERT_BUTTON         = controllerMapper.getR2();
+	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getL1();
+	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getL2();
 
 	// How do you like me now, Sam?
 	// TODO: Make a get/set function instead of setting it to public
-	 public final static int  ARM_CLIMBER                    = PS4Constants.PS4.getValue();
-   private   final static             int HIGH_CLIMB           = PS4Constants.L_STICK.getValue();
-	private final     static int LOW_CLIMB                 = PS4Constants.L_STICK.getValue();
+	public  final static int ARM_CLIMBER                 = controllerMapper.getBrandButton();
+	private final static int HIGH_CLIMB                  = controllerMapper.getLStickButton();
+  private final static int LOW_CLIMB                   = controllerMapper.getLStickButton();
 
-	private final static int TEST_MOVE_BY_BUTTON         = PS4Constants.TRIANGLE.getValue(); /// TODO: Temp, use dashboard instead
+	private final static int TEST_MOVE_BY_BUTTON         = controllerMapper.getTriangle(); /// TODO: Temp, use dashboard instead
 
 	public boolean lowSensitivity()
 	{
