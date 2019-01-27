@@ -8,11 +8,17 @@
 package frc.robot.subsystem.climber;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.operatorinterface.OI;
 
 public class Idle extends Command {
+
+  private final OI oi = OI.instance();
+
+  private final ClimberSubsystem climberSubsystem = ClimberSubsystem.instance();
   public Idle() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    requires(climberSubsystem);
   }
 
   // Called just before this Command runs the first time
@@ -28,6 +34,10 @@ public class Idle extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    //thePressingButtonThing();
+    if (oi.armClimber()){
+    
+    }
     return false;
   }
 
@@ -41,4 +51,9 @@ public class Idle extends Command {
   @Override
   protected void interrupted() {
   }
+
+  public boolean armClimber()
+  {
+    return oi.driverControl.getRawButton(oi.ARM_CLIMBER) && oi.operatorControl.getRawButton(oi.ARM_CLIMBER);
+  }	
 }
