@@ -163,8 +163,5 @@ bin/
 .iws
 .IDEA
 .shelf/
-<<<<<<< HEAD
 out/
-=======
-out/
->>>>>>> master
+build/
