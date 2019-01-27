@@ -36,27 +36,27 @@ dependencies {
 
     // add in snobotsim deps. This allows us to both override the snobotsim version, and 
     // it also makes these deps available to the IDE
-    simulatorExtensionsCompile "com.snobot.simulator:snobot_sim_gui:${snobotSimOverrideVersion}"
-    simulatorExtensionsCompile "com.snobot.simulator:snobot_sim_java:${snobotSimOverrideVersion}"
-    simulatorExtensionsCompile "com.snobot.simulator:snobot_sim_utilities:${snobotSimOverrideVersion}"
-    simulatorExtensionsCompile "com.snobot.simulator:adx_family:${snobotSimOverrideVersion}"
-    simulatorExtensionsCompile "com.snobot.simulator:navx_simulator:${snobotSimOverrideVersion}"
-    simulatorExtensionsCompile "com.snobot.simulator:ctre_sim_override:${snobotSim.snobotSimCtreVersion}"
-    simulatorExtensionsCompile "jfree:jfreechart:${snobotSim.jfreechart}"
-    simulatorExtensionsCompile "org.apache.logging.log4j:log4j-core:${snobotSim.log4j}"
-    simulatorExtensionsCompile "org.yaml:snakeyaml:${snobotSim.snakeyaml}"
-    simulatorExtensionsCompile "com.miglayout:miglayout-swing:${snobotSim.miglayout}"
-    simulatorExtensionsCompile "net.java.jinput:jinput:${snobotSim.jinput}"
-    simulatorExtensionsCompile 'org.apache.commons:commons-lang3:3.0'
+    testCompile "com.snobot.simulator:snobot_sim_gui:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:snobot_sim_java:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:snobot_sim_utilities:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:adx_family:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:navx_simulator:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:ctre_sim_override:${snobotSim.snobotSimCtreVersion}"
+    testCompile "jfree:jfreechart:${snobotSim.jfreechart}"
+    testCompile "org.apache.logging.log4j:log4j-core:${snobotSim.log4j}"
+    testCompile "org.yaml:snakeyaml:${snobotSim.snakeyaml}"
+    testCompile "com.miglayout:miglayout-swing:${snobotSim.miglayout}"
+    testCompile "net.java.jinput:jinput:${snobotSim.jinput}"
+    testCompile 'org.apache.commons:commons-lang3:3.0'
 
     // Add in some libgdx stuff for physics and rendering
-    simulatorExtensionsCompile "org.slf4j:slf4j-simple:1.7.25"
-    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    testCompile "org.slf4j:slf4j-simple:1.7.25"
+    testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    testCompile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+    testCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
     simulatorExtensionsCompile sourceSets.main.output
 
