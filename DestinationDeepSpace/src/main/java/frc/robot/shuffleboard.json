@@ -113,22 +113,6 @@
               "_title": "/SmartDashboard/NavigationSubsystem/PeriodicCounter"
             }
           },
-          "5,4": {
-            "size": [
-              5,
-              2
-            ],
-            "content": {
-              "_type": "Number Bar",
-              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
-              "_title": "SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
-              "Range/Min": -1.0,
-              "Range/Max": 1.0,
-              "Range/Center": 0.0,
-              "Visuals/Num tick marks": 5.0,
-              "Visuals/Show text": true
-            }
-          },
           "21,1": {
             "size": [
               2,
@@ -162,6 +146,19 @@
               "_title": "SmartDashboard/NavigationSubsystem/Yaw Angle (deg)",
               "Graph/Visible time": 30.0,
               "Visible data/SmartDashboard/NavigationSubsystem/Yaw Angle (deg)": true
+            }
+          },
+          "5,4": {
+            "size": [
+              5,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
+              "_title": "SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/NavigationSubsystem/Yaw Rate (dps)": true
             }
           }
         }
