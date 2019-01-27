@@ -26,6 +26,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		return inst;		
 	}
 	private static VisionSubsystem inst;
+	private boolean illuminatorOn = false;
 	
 	private VisionSubsystem()
 	{
@@ -54,6 +55,20 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
+		if (ds.isOperatorControl())
+		{
+			if (!illuminatorOn)
+			{
+				setIlluminatorOn(VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
+				illuminatorOn = true;
+			}
+		}
+		else
+		{
+			illuminatorOn = false;
+			setIlluminatorOff();
+		}
+		setIlluminatorOn(255); //VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS*2);
 		updateBaseDashboard();	
 		if (getTelemetryEnabled())
 		{
@@ -94,6 +109,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		lightingSubsystem.set(LightingObjects.VISION_SUBSYSTEM,
 							  LightingControl.FUNCTION_ON,
 							  LightingControl.COLOR_GREEN,
+							  0,
 							  0,
 							  brightness);		
 	}
