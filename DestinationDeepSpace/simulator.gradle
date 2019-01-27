@@ -21,7 +21,7 @@ sourceSets {
 // Add a new configuration for the simulator (and native3rdPartyDeps, for an osx jinput bug with snobotsim)
 configurations {
     native3rdPartyDeps
-    simulatorExtensionsCompile.extendsFrom(testCompile)
+    simulatorExtensionsCompile.extendsFrom(native3rdPartyDeps)
 }
 
 dependencies {
@@ -29,39 +29,36 @@ dependencies {
     native3rdPartyDeps "net.java.jinput:jinput:2.0.7"
 
     // add in deps for wpi
-    simulatorExtensionsCompile snobotSimJava()
     simulatorExtensionsCompile wpi.deps.wpilib()
     simulatorExtensionsCompile wpi.deps.vendor.java()
     simulatorExtensionsCompile wpi.deps.vendor.jni(wpi.platforms.desktop)
     simulatorExtensionsCompile group: 'org.scream3r', name: 'jssc', version: '2.8.0'
-    simulatorExtensionsCompile sourceSets.main.output
 
     // add in snobotsim deps. This allows us to both override the snobotsim version, and 
     // it also makes these deps available to the IDE
-    testCompile "com.snobot.simulator:snobot_sim_gui:${snobotSimOverrideVersion}"
-    testCompile "com.snobot.simulator:snobot_sim_java:${snobotSimOverrideVersion}"
-    testCompile "com.snobot.simulator:snobot_sim_utilities:${snobotSimOverrideVersion}"
-    testCompile "com.snobot.simulator:adx_family:${snobotSimOverrideVersion}"
-    testCompile "com.snobot.simulator:navx_simulator:${snobotSimOverrideVersion}"
-    testCompile "com.snobot.simulator:ctre_sim_override:${snobotSim.snobotSimCtreVersion}"
-    testCompile "jfree:jfreechart:${snobotSim.jfreechart}"
-    testCompile "org.apache.logging.log4j:log4j-core:${snobotSim.log4j}"
-    testCompile "org.yaml:snakeyaml:${snobotSim.snakeyaml}"
-    testCompile "com.miglayout:miglayout-swing:${snobotSim.miglayout}"
-    testCompile "net.java.jinput:jinput:${snobotSim.jinput}"
-    testCompile 'org.apache.commons:commons-lang3:3.0'
+    simulatorExtensionsCompile "com.snobot.simulator:snobot_sim_gui:${snobotSimOverrideVersion}"
+    simulatorExtensionsCompile "com.snobot.simulator:snobot_sim_java:${snobotSimOverrideVersion}"
+    simulatorExtensionsCompile "com.snobot.simulator:snobot_sim_utilities:${snobotSimOverrideVersion}"
+    simulatorExtensionsCompile "com.snobot.simulator:adx_family:${snobotSimOverrideVersion}"
+    simulatorExtensionsCompile "com.snobot.simulator:navx_simulator:${snobotSimOverrideVersion}"
+    simulatorExtensionsCompile "com.snobot.simulator:ctre_sim_override:${snobotSim.snobotSimCtreVersion}"
+    simulatorExtensionsCompile "jfree:jfreechart:${snobotSim.jfreechart}"
+    simulatorExtensionsCompile "org.apache.logging.log4j:log4j-core:${snobotSim.log4j}"
+    simulatorExtensionsCompile "org.yaml:snakeyaml:${snobotSim.snakeyaml}"
+    simulatorExtensionsCompile "com.miglayout:miglayout-swing:${snobotSim.miglayout}"
+    simulatorExtensionsCompile "net.java.jinput:jinput:${snobotSim.jinput}"
+    simulatorExtensionsCompile 'org.apache.commons:commons-lang3:3.0'
 
     // Add in some libgdx stuff for physics and rendering
-    testCompile "org.slf4j:slf4j-simple:1.7.25"
-    testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-    testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    testCompile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-    testCompile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-    testCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    simulatorExtensionsCompile "org.slf4j:slf4j-simple:1.7.25"
+    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    simulatorExtensionsCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
-    testCompile snobotSimJava()
-    // testCompile sourceSets.simulatorExtensions.output
+    simulatorExtensionsCompile sourceSets.main.output
 
 }
 
