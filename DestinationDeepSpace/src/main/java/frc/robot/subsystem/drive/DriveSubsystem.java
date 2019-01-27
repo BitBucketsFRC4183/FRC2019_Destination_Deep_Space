@@ -834,4 +834,20 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			   (errorR < DriveConstants.DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION);
 		
   }
+
+	public WPI_TalonSRX getLeftFrontMotor() {
+		return leftFrontMotor;
+	}
+
+	public WPI_TalonSRX getLeftRearMotor() {
+		return leftRearMotor;
+	}
+
+	public WPI_TalonSRX getRightFrontMotor() {
+		return rightFrontMotor;
+	}
+
+	public WPI_TalonSRX getRightRearMotor() {
+		return rightRearMotor;
+	}
 }
