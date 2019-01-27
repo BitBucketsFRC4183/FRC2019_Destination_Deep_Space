@@ -8,6 +8,7 @@
 package frc.robot.subsystem.scoring;
 
 import frc.robot.MotorId;
+import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.utils.talonutils.TalonUtils;
 
@@ -134,7 +135,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		directArmTo(angle, front);
 	}
 
-
+	public void manualArmOperate() {
+		rotationMotor1.set(ControlMode.PercentOutput, OI.instance().manualArmRotate());
+	}
 
 	/**
 	 * + pow --> spit out
@@ -215,6 +218,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			double angle = SmartDashboard.getNumber(getName() + "/Test Angle", 0);
 			directArmTo(angle, true);
 		}
+
+		// TODO: don't check this in
+		manualArmOperate();
 	}
 
 	@Override
@@ -231,6 +237,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 		SmartDashboard.putNumber(getName() + "/Test Angle", 0);
+	}
+
+	public WPI_TalonSRX getRotationMotor1() { 
+		return rotationMotor1;
 	}
 
 }

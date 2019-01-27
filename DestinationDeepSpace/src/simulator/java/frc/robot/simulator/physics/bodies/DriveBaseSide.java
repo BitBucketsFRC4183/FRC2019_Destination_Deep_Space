@@ -1,11 +1,16 @@
 package frc.robot.simulator.physics.bodies;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.physics.box2d.joints.WeldJoint;
+import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+import frc.robot.simulator.physics.MathConstants;
 
 /**
  * Created by julienvillegas on 31/01/2017.
@@ -17,15 +22,20 @@ public class DriveBaseSide extends Image {
     private World world;
     private Wheel frontWheel;
     private Wheel rearWheel;
+    private Arm arm;
     RevoluteJoint frontWheelJoint;
     RevoluteJoint rearWheelJoint;
+    RevoluteJoint armJoint;
+    WeldJoint mountJoint;
+    Mount mount;
 
 
     public DriveBaseSide(World world, float x, float y){
+        super(new Texture("assets/Generic_Texture.png"));
         this.world = world;
 
         // make it 1m x .1m
-        setSize(1, .1f);
+        setSize(27f*MathConstants.INCHES_TO_METERS, 4f*MathConstants.INCHES_TO_METERS);
         setOrigin(getWidth() / 2, getHeight() / 2);
 
         BodyDef bodyDef = new BodyDef();
@@ -45,7 +55,7 @@ public class DriveBaseSide extends Image {
         // If you are wondering, density and area are used to calculate over all mass
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 100f;
+        fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution= 0f;
         Fixture fixture = body.createFixture(fixtureDef);
@@ -54,6 +64,9 @@ public class DriveBaseSide extends Image {
         shape.dispose();
 
         addWheels();
+        addMount();
+        addArm();
+
 
         // move it to the x/y
         setTransform(x, y, 0);
@@ -84,12 +97,39 @@ public class DriveBaseSide extends Image {
         frontWheelJoint = (RevoluteJoint) world.createJoint(frontWheelJointDef);
 
     }
+    public void addMount() {
+        mount = new Mount(world, 0, getHeight()/2f);
+        WeldJointDef mountJointDef = new WeldJointDef();
+        mountJointDef.bodyA = mount.getBody();
+        mountJointDef.bodyB = this.getBody();
+        mountJointDef.localAnchorA.set(0, mount.getHeight()/-2);
+        mountJointDef.localAnchorB.set(0, getHeight()/2);
+        mountJointDef.collideConnected = false;
+        mountJoint = (WeldJoint) world.createJoint(mountJointDef);
 
+    }
+    public void addArm() {
+        arm = new Arm(world, getWidth()/3 + getWidth(), getY());
+
+        RevoluteJointDef armJointDef = new RevoluteJointDef();
+        armJointDef.bodyA = arm.getBody();
+        armJointDef.bodyB = mount.getBody();
+        armJointDef.localAnchorA.set(0, -arm.getHeight()/2);
+        armJointDef.localAnchorB.set(0, mount.getHeight()/2);
+        armJointDef.collideConnected = false;
+        armJointDef.enableMotor = true;
+        armJointDef.maxMotorTorque = 100;
+        armJoint = (RevoluteJoint) world.createJoint(armJointDef);
+
+    }
+    
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         frontWheel.draw(batch, parentAlpha);
         rearWheel.draw(batch, parentAlpha);
+        mount.draw(batch,parentAlpha);
+        arm.draw(batch,parentAlpha);
     }
 
     @Override
@@ -100,6 +140,8 @@ public class DriveBaseSide extends Image {
 
         this.frontWheel.act(delta);
         this.rearWheel.act(delta);
+        this.mount.act(delta);
+        this.arm.act(delta);
     }
 
     public void setFrontMotorSpeed(float motorSpeed) {
@@ -120,4 +162,8 @@ public class DriveBaseSide extends Image {
         this.getBody().setTransform(x, y, 0);
 
     }
+
+	public void setArmRotationSpeed(float motorSpeed) {
+        armJoint.setMotorSpeed(motorSpeed);
+	}
 }

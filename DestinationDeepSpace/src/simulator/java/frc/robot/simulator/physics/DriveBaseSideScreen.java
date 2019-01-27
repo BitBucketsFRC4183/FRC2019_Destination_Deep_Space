@@ -11,7 +11,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import frc.robot.Robot;
 import frc.robot.simulator.physics.bodies.DriveBaseSide;
+import frc.robot.simulator.physics.bodies.Flooer;
 import frc.robot.subsystem.drive.DriveSubsystem;
+import frc.robot.subsystem.scoring.ScoringSubsystem;
 
 /**
  * A simple screen displaying the drive base in a side view
@@ -28,19 +30,25 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
     private OrthographicCamera camera;
 
     // no gravity, let stuff float
-    private Vector2 gravity = new Vector2(0, 0);
+
+    // Ignore the previous statement.
+    float g = 10;
+    float grav = -g;
+
+
+    private Vector2 gravity = new Vector2(0, grav);
 
     public DriveBaseSideScreen(PhysicsSimulation physicsSimulation, Robot robot) {
         this.physicsSimulation = physicsSimulation;
         this.robot = robot;
 
         // make our camera a 5x5 meter space
-        float worldWidth = 5;
-        float worldHeight = 5;
+        float camWidth = 5;
+        float camHeight = 5;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, worldWidth, worldHeight * ((float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth()));
+        camera.setToOrtho(false, camWidth, camHeight * ((float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth()));
         camera.update();
-        Viewport viewport = new FitViewport(worldWidth, worldHeight * ((float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth()), camera);
+        Viewport viewport = new FitViewport(camWidth, camHeight * ((float)Gdx.graphics.getHeight() / Gdx.graphics.getWidth()), camera);
 
         stage = new Stage(viewport);
         debugRenderer = new Box2DDebugRenderer();
@@ -50,14 +58,16 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
 
         // create a couple actors
         driveBaseLeftSide = new DriveBaseSide(world, 2f, 2f);
-        driveBaseRightSide = new DriveBaseSide(world, 4f, 2f);
+        Flooer flooer = new Flooer(world);
+        // driveBaseRightSide = new DriveBaseSide(world, 4f, 2f);
         stage.addActor(driveBaseLeftSide);
-        stage.addActor(driveBaseRightSide);
+        stage.addActor(flooer);
+        // stage.addActor(driveBaseRightSide);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0.7f, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // wheels move at 20000 ticks / 100ms
@@ -71,8 +81,10 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
         driveBaseLeftSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftFrontMotor().getMotorOutputPercent()));
         driveBaseLeftSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftRearMotor().getMotorOutputPercent()));
 
-        driveBaseRightSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getRightFrontMotor().getMotorOutputPercent()));
-        driveBaseRightSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getRightRearMotor().getMotorOutputPercent()));
+        driveBaseLeftSide.setArmRotationSpeed((float) (ScoringSubsystem.instance().getRotationMotor1().getMotorOutputPercent()));
+
+        // driveBaseRightSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getRightFrontMotor().getMotorOutputPercent()));
+        // driveBaseRightSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getRightRearMotor().getMotorOutputPercent()));
 
         camera.update();
 

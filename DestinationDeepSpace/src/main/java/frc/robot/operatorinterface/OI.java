@@ -16,7 +16,8 @@ public class OI {
 	private OI() {
 	}
 
-	private static ControllerMapper controllerMapper = ControllerMapper.ps4();
+	// private static ControllerMapper controllerMapper = ControllerMapper.ps4();
+	private static ControllerMapper controllerMapper = ControllerMapper.xbox();
 
 	private final static int DRIVER_JOYSTICK_ID = 0;
 	private final static int OPERATOR_JOYSTICK_ID = 1;
@@ -48,7 +49,16 @@ public class OI {
 		// "down", right hand coordinate rules dictate that positive rotations are to
 		// the right (i.e. vectors R x P = Y and N x E = D)
         return -driverControl.getRawAxis(DRIVE_TURN_AXIS);
-    }
+	}
+	
+	/**
+	 * Temporary function to manually operate the scoring arm with the driver controller
+	 * @return
+	 */
+	public double manualArmRotate() {
+		return driverControl.getRawAxis(controllerMapper.getRightStickY());
+	}
+
 	/**
 	 * quickTurn_deg - returns a desired turn of +/-45, +/-90, +/-135 or 180 degrees
 	 * This can be used in a main drive loop to initiate a command that induces
