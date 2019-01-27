@@ -24,9 +24,14 @@ public class ClimberSubsystem extends BitBucketSubsystem {
   	// here. Call these from Commands.
 
 	// Singleton method; use ClimberSubsystem.instance() to get the ClimberSubsystem instance.
-	Servo highClimbServo;
-	WPI_TalonSRX highClimbMotor1;
-	WPI_TalonSRX highClimbMotor2;
+	Servo climbServo;
+	WPI_TalonSRX climbMotor1;
+	WPI_TalonSRX climbMotor2;
+	// TODO: Set proper values for angles and motors
+	double highClimbAngle = 40;
+	double highClimbSpeed = 0.25;
+
+	double lowClimbAngle = 10;
 	public enum eState {
 	IDLE,
 	ARMED,
@@ -39,9 +44,9 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	private ClimberSubsystem() {
 		setName("ClimberSubsystem");
-		highClimbServo = new Servo(ServoId.HIGH_CLIMB_SERVO_ID);
-		highClimbMotor1 = new WPI_TalonSRX(MotorId.HIGH_CLIMB_MOTOR_1_ID);
-		highClimbMotor2 = new WPI_TalonSRX(MotorId.HIGH_CLIMB_MOTOR_2_ID);
+		climbServo = new Servo(ServoId.CLIMB_SERVO_ID);
+		climbMotor1 = new WPI_TalonSRX(MotorId.CLIMB_MOTOR_1_ID);
+		climbMotor2 = new WPI_TalonSRX(MotorId.CLIMB_MOTOR_2_ID);
 	}
 
 	public static ClimberSubsystem instance() {
@@ -64,26 +69,26 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public void periodic() {
 		switch (state) {
 			case IDLE:{
-				if (Idle.armClimber()){
+				if (oi.armClimber()){
 					state = eState.ARMED;
 				}
 			}
 				break;
 			case ARMED:{
-				if (oi.highClimbInit()){
+				if (oi.highClimb()){
 					state = eState.HIGH_CLIMB;
 				}
-				else if (oi.lowClimbInit()){
+				else if (oi.lowClimb()){
 					state = eState.LOW_CLIMB;
 				}
 			}
 				break;
 			case HIGH_CLIMB: {
-				oi.highClimb();
+				highClimb();
 			}	
 				break;
 			case LOW_CLIMB: {
-				oi.lowClimb();
+				lowClimb();
 				}	
 					break;
 			default:{
@@ -100,9 +105,9 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		if (getDiagnosticsEnabled())
 		{
 			double angle = SmartDashboard.getNumber(getName()+"/ServoTestAngle(deg)", 0.0);
-			highClimbServo.setAngle(angle);
+			climbServo.setAngle(angle);
 		}
-		SmartDashboard.putNumber(getName()+"/CurrentServoAngle(deg)",highClimbServo.getAngle());
+		SmartDashboard.putNumber(getName()+"/CurrentServoAngle(deg)",climbServo.getAngle());
 		
 	}
 
@@ -131,5 +136,19 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	@Override
 	public void diagnosticsCheck() {
 
+	}
+
+	private int highClimb() {
+		int err = 0;
+		climbServo.setAngle(highClimbAngle);
+		climbMotor1.set(highClimbSpeed);
+		climbMotor2.set(highClimbSpeed);
+		return (err);
+	}
+
+	private int lowClimb() {
+		int err = 0;
+		climbServo.setAngle(lowClimbAngle);
+		return (err);
 	}
 }
