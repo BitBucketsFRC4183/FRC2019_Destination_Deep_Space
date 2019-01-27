@@ -11,24 +11,24 @@
       "cwd": "${workspaceFolder}",
       "console": "internalConsole",
       "stopOnEntry": false,
-      "mainClass": "com.snobot.simulator.Simulator", //"com.snobot.simulator.Main",
+      "mainClass": "frc.robot.simulator.SimulatorMain",
       "args": "",
-      "vmArgs": "-Djava.library.path=build/native_libs",
+      "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/",
       "env": {
-        "DYLD_LIBRARY_PATH": "build/native_libs"
+        "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
       }
-    },  
+    },
     {
       "type": "wpilib",
       "name": "WPILib Desktop Debug",
       "request": "launch",
-      "desktop": true,
+      "desktop": true
     },
     {
       "type": "wpilib",
       "name": "WPILib roboRIO Debug",
       "request": "launch",
-      "desktop": false,
+      "desktop": false
     }
   ]
 }
