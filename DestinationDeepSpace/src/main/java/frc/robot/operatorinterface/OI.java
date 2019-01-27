@@ -91,20 +91,20 @@ public class OI {
 	// TODO: Make a get/set function instead of setting it to public
 	public  final static int ARM_CLIMBER                 = controllerMapper.getBrandButton();
 	private final static int HIGH_CLIMB                  = controllerMapper.getLStickButton();
-  private final static int LOW_CLIMB                   = controllerMapper.getLStickButton();
+	private final static int LOW_CLIMB                   = controllerMapper.getLStickButton();
 
 	private final static int TEST_MOVE_BY_BUTTON         = controllerMapper.getTriangle(); /// TODO: Temp, use dashboard instead
 
 
 
 	// TODO: configure correct IDs
-	private final static int SCORING_HATCH_PANEL_GROUND = PS4Constants.CIRCLE.getValue();
-	private final static int SCORING_HATCH_PANEL_C = PS4Constants.TRIANGLE.getValue();
-	private final static int SCORING_HATCH_PANEL_R1 = PS4Constants.SQUARE.getValue();
-	private final static int SCORING_BALL_GROUND = PS4Constants.CROSS.getValue();
-	private final static int SCORING_BALL_C = PS4Constants.L1.getValue();
-	private final static int SCORING_BALL_LS = PS4Constants.R1.getValue();
-	private final static int SCORING_BALL_R1 = PS4Constants.L2.getValue();
+	private final static int SCORING_HATCH_PANEL_GROUND = controllerMapper.getCircle();
+	private final static int SCORING_HATCH_PANEL_C 		= controllerMapper.getTriangle();
+	private final static int SCORING_HATCH_PANEL_R1 	= controllerMapper.getSquare();
+	private final static int SCORING_BALL_GROUND 		= controllerMapper.getCross();
+	private final static int SCORING_BALL_C 			= controllerMapper.getL1();
+	private final static int SCORING_BALL_LS 			= controllerMapper.getR1();
+	private final static int SCORING_BALL_R1 			= controllerMapper.getL2();
 
 
 

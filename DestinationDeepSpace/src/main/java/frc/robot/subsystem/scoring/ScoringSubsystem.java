@@ -9,7 +9,6 @@ package frc.robot.subsystem.scoring;
 
 import frc.robot.MotorId;
 import frc.robot.operatorinterface.OI;
-import frc.robot.operatorinterface.PS4Constants;
 import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.subsystem.drive.DriveSubsystem;
 import frc.robot.utils.talonutils.TalonUtils;
