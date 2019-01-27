@@ -39,14 +39,24 @@ public class BB_Motor extends WPI_TalonSRX {
 
 
     // PIDF + IZone
+    public void setKp(double val, int idx) {
+        kp[idx] = val;
+    }
+
     public void setKp(double val) {
-        kp[0] = val;
+        setKp(val, 0);
+    }
+
+
+    public void setKi(double val, int idx) {
+        ki[idx] = val;
     }
 
     public void setKi(double val) {
-        ki[0] = val;
+        setKi(val, 0);
     }
 
+    
     public void setKd(double val) {
         kd[0] = val;
     }
@@ -68,7 +78,9 @@ public class BB_Motor extends WPI_TalonSRX {
     }
 
     public void finalizePID() {
-        TalonUtils.initializeMotorFPID(this, kf[0], kp[0], ki[0], kd[0], iZone[0]);
+        for (int idx = 0; idx < 3; idx++) {
+            TalonUtils.initializeMotorFPID(this, kf[idx], kp[idx], ki[idx], kd[idx], iZone[idx]);
+        }
 
         doesPID = true;
     }

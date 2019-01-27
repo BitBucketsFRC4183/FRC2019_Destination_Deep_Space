@@ -95,6 +95,19 @@ public class OI {
 
 	private final static int TEST_MOVE_BY_BUTTON         = controllerMapper.getTriangle(); /// TODO: Temp, use dashboard instead
 
+
+
+	// TODO: configure correct IDs
+	private final static int SCORING_HATCH_PANEL_GROUND = PS4Constants.CIRCLE.getValue();
+	private final static int SCORING_HATCH_PANEL_C = PS4Constants.TRIANGLE.getValue();
+	private final static int SCORING_HATCH_PANEL_R1 = PS4Constants.SQUARE.getValue();
+	private final static int SCORING_BALL_GROUND = PS4Constants.CROSS.getValue();
+	private final static int SCORING_BALL_C = PS4Constants.L1.getValue();
+	private final static int SCORING_BALL_LS = PS4Constants.R1.getValue();
+	private final static int SCORING_BALL_R1 = PS4Constants.L2.getValue();
+
+
+
 	public boolean lowSensitivity()
 	{
 		return driverControl.getRawButton(DRIVE_LOW_SENSITIVE_BUTTON);
@@ -125,26 +138,53 @@ public class OI {
 		return driverControl.getRawButton(DRIVE_LOCK_BUTTON);
 	}
 
-    public boolean testMoveBy() /// TODO: Temporary, use dashboard instead
-    {
-        return driverControl.getRawButton(TEST_MOVE_BY_BUTTON);
+  public boolean testMoveBy() /// TODO: Temporary, use dashboard instead
+  {
+      return driverControl.getRawButton(TEST_MOVE_BY_BUTTON);
 	}	
 	
-    public boolean armClimber()
-    {
-        return driverControl.getRawButton(ARM_CLIMBER) && operatorControl.getRawButton(ARM_CLIMBER);
+  public boolean armClimber()
+  {
+      return driverControl.getRawButton(ARM_CLIMBER) && operatorControl.getRawButton(ARM_CLIMBER);
 	}	
 	
-    public boolean highClimb()
-    {
-        return operatorControl.getRawButton(HIGH_CLIMB);
+  public boolean highClimb()
+  {
+      return operatorControl.getRawButton(HIGH_CLIMB);
 	}	
 	
-    public boolean lowClimb()
-    {
-        return operatorControl.getRawButton(LOW_CLIMB);
-    }	
-	
+   public boolean lowClimb()
+  {
+      return operatorControl.getRawButton(LOW_CLIMB);
+  }	
+
+  public boolean hpGround() {
+		return operatorControl.getRawButton(SCORING_HATCH_PANEL_GROUND);
+	}
+
+	public boolean hpCargo() {
+		return operatorControl.getRawButton(SCORING_HATCH_PANEL_C);
+	}
+
+	public boolean hpRocket1() {
+		return operatorControl.getRawButton(SCORING_HATCH_PANEL_R1);
+	}
+
+	public boolean bGround() {
+		return operatorControl.getRawButton(SCORING_BALL_GROUND);
+	}
+
+	public boolean bCargo() {
+		return operatorControl.getRawButton(SCORING_BALL_C);
+	}
+
+	public boolean bLoadingStation() {
+		return operatorControl.getRawButton(SCORING_BALL_LS);
+	}
+
+	public boolean bRocket1() {
+		return operatorControl.getRawButton(SCORING_BALL_R1);
+	}
 }
 
 
