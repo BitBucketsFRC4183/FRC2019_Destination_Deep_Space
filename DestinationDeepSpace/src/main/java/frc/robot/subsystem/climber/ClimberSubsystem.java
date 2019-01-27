@@ -27,10 +27,12 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	Servo highClimbServo;
 	WPI_TalonSRX highClimbMotor1;
 	WPI_TalonSRX highClimbMotor2;
-	final int IDLE = 0;
-	final int ARMED = 1;
-	final int CLIMB = 2;
-	int state = IDLE;
+	public enum eState = {
+	IDLE,
+	ARMED,
+	CLIMB;
+	}
+	int state = eState.IDLE;
 
 	private final OI oi = OI.instance();
 
@@ -60,20 +62,20 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	@Override
 	public void periodic() {
 		switch (state) {
-			case IDLE:{
-				if (oi.armClimber()){
-					state = ARMED;
+			case eState.IDLE:{
+				if (armClimber()){
+					state = eState.ARMED;
 				}
 			}
 				break;
-			case ARMED:{
-				if (oi.climb()){
-					state = CLIMB;
+			case eState.ARMED:{
+				if (climb()){
+					state = eState.CLIMB;
 				}
 			}
 				break;
-			case CLIMB: {
-				// TODO: highClimb();
+			case eState.CLIMB: {
+				highClimb();
 			}	
 				break;
 			default:{
