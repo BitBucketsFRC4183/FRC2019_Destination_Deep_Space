@@ -8,7 +8,10 @@
 package frc.robot.subsystem.scoring;
 
 import frc.robot.MotorId;
+import frc.robot.operatorinterface.OI;
+import frc.robot.operatorinterface.PS4Constants;
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.drive.DriveSubsystem;
 import frc.robot.utils.talonutils.TalonUtils;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +23,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
  * Add your docs here.
  */
 public class ScoringSubsystem extends BitBucketSubsystem {
+	private final OI oi = OI.instance();
+
 	// Singleton method; use ScoringSubsystem.instance() to get the ScoringSubsystem instance.
 	public static ScoringSubsystem instance() {
 		if(inst == null)
@@ -33,6 +38,14 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	private final WPI_TalonSRX rotationMotor1;
 	private final WPI_TalonSRX rotationMotor2;
+
+
+
+	// is the robot moving forward?
+	private boolean lastForward = true;
+	private boolean forward = true;
+	// how long has the robot been going in the direction its been going for?
+	private int forwardIterations = 0;
 
 
 
@@ -114,7 +127,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			ticks = 2 * ScoringConstants.ARM_MOTOR_SWITCH_TICK_THRESHOLD - ticks;
 		}
 
-		// TODO: set up PID constants
 		rotationMotor1.set(ControlMode.MotionMagic, ticks);
 	}
 
@@ -215,6 +227,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			double angle = SmartDashboard.getNumber(getName() + "/Test Angle", 0);
 			directArmTo(angle, true);
 		}
+
+
+
+		rotateScoringArm();
 	}
 
 	@Override
@@ -233,4 +249,51 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		SmartDashboard.putNumber(getName() + "/Test Angle", 0);
 	}
 
+
+
+
+
+	private void rotateScoringArm() {
+		// TODO: go to lowest selected arm level, we may want some ButtonMadness-esque implementation in the future, probably
+		ScoringConstants.ScoringLevel level = ScoringConstants.ScoringLevel.HP_GROUND;
+
+		if (oi.bLoadingStation()) { level = ScoringConstants.ScoringLevel.BALL_LOADING_STATION; }
+		if (oi.bCargo()) { level = ScoringConstants.ScoringLevel.BALL_CARGO; }
+		if (oi.bRocket1()) { level = ScoringConstants.ScoringLevel.BALL_ROCKET_1; }
+		if (oi.hpCargo()) { level = ScoringConstants.ScoringLevel.HP_CARGO; }
+		if (oi.hpRocket1()) { level = ScoringConstants.ScoringLevel.HP_ROCKET_1; }
+		if (oi.bGround()) { level = ScoringConstants.ScoringLevel.BALL_GROUND; }
+		if (oi.hpGround()) { level = ScoringConstants.ScoringLevel.HP_GROUND; }
+
+		// get current applied to motors to get direction
+		double current = DriveSubsystem.instance().getFwdCurrent();
+		boolean direction;
+
+		// if robot not moving, keep arm where it is
+		if (current == 0) {
+			direction = lastForward;
+		// if it is moving, set the direction
+		} else {
+			direction = (current > 0);
+		}
+
+		if (direction == lastForward) {
+			forwardIterations++;
+		// if the direction changed, reset number of iterations where it was constant
+		} else {
+			forwardIterations = 0;
+
+			lastForward = direction;
+		}
+
+
+		// if enough time has past, change scoring arm direction (if necessary)
+		if (forwardIterations >= ScoringConstants.ITERATIONS_BEFORE_SCORING_ROTATION) {
+			forward = lastForward;
+		}
+
+		
+		
+		goToLevel(level, forward);
+	}
 }
