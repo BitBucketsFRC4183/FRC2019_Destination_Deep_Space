@@ -16,6 +16,7 @@ import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.operatorinterface.OI;
 import frc.robot.operatorinterface.PS4Constants;
 import frc.robot.utils.autotuner.AutoTuner;
+import frc.robot.utils.talonutils.MotorTestModes;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -155,8 +156,6 @@ public class Robot extends TimedRobot {
     //    dashboards                          |----|
 
     Scheduler.getInstance().run();
-
-    AutoTuner.update();
   }
 
   /**
@@ -216,6 +215,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
+    MotorTestModes.init();
   }
 
   /**
@@ -227,6 +227,8 @@ public class Robot extends TimedRobot {
     // the actions here occur BEFORE the scheduled commands run; this means that
     // commands can be added during this execution cycle and will be acted upon
     // within the current cycle.
+
+    MotorTestModes.periodic();
   }
 
   /**
@@ -236,6 +238,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testInit() {
+    scoringSubsystem.diagnosticsInit();
   }  
   
   /**
@@ -243,6 +246,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    scoringSubsystem.diagnosticsExecute();
     // NOTE: because this code executes before robotPeriodic in each iteration
     // the actions here occur BEFORE the scheduled commands run; this means that
     // commands can be added during this execution cycle and will be acted upon
