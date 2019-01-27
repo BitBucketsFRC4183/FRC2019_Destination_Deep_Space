@@ -45,7 +45,7 @@ public class DriveBaseSide extends Image {
         // If you are wondering, density and area are used to calculate over all mass
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 100f;
+        fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution= 0f;
         Fixture fixture = body.createFixture(fixtureDef);
