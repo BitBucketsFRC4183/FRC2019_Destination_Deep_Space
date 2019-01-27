@@ -87,4 +87,6 @@ public class DriveConstants {
     public static int    driveMotorIZone = 0; 
 
     public static final double MOTOR_TEST_PERCENT = 0.5;
+
+	public static final double TURN_SIGN = 1.0; // For Junior
 }

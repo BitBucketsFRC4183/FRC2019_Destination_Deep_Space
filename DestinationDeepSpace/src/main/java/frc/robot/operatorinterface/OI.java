@@ -4,6 +4,8 @@ package frc.robot.operatorinterface;
 // import java.util.Set;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import frc.robot.subsystem.drive.DriveConstants;
 
 public class OI {
 	// Singleton method; use OI.instance() to get the OI instance.
@@ -21,8 +23,9 @@ public class OI {
 	private final static int DRIVER_JOYSTICK_ID = 0;
 	private final static int OPERATOR_JOYSTICK_ID = 1;
 
-    private final static Joystick driverControl = new Joystick(DRIVER_JOYSTICK_ID);
-    private final static Joystick operatorControl = new Joystick(OPERATOR_JOYSTICK_ID);
+	// TODO: Make a get/set function instead of setting to public
+    public final static Joystick driverControl = new Joystick(DRIVER_JOYSTICK_ID);
+    public final static Joystick operatorControl = new Joystick(OPERATOR_JOYSTICK_ID);
 
 	//****************************
 	// AXIS DEFINITIONS
@@ -47,8 +50,8 @@ public class OI {
 		// RPY or NED reference frame where Y (yaw) or D (down) are both positive
 		// "down", right hand coordinate rules dictate that positive rotations are to
 		// the right (i.e. vectors R x P = Y and N x E = D)
-        return -driverControl.getRawAxis(DRIVE_TURN_AXIS);
-    }
+        return DriveConstants.TURN_SIGN*driverControl.getRawAxis(DRIVE_TURN_AXIS);
+	}
 	/**
 	 * quickTurn_deg - returns a desired turn of +/-45, +/-90, +/-135 or 180 degrees
 	 * This can be used in a main drive loop to initiate a command that induces
@@ -84,8 +87,11 @@ public class OI {
 	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getL1();
 	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getL2();
 
-	private final static int ARM_CLIMBER                 = controllerMapper.getBrandButton();
-	private final static int CLIMB                       = controllerMapper.getLStickButton();
+	// How do you like me now, Sam?
+	// TODO: Make a get/set function instead of setting it to public
+	public  final static int ARM_CLIMBER                 = controllerMapper.getBrandButton();
+	private final static int HIGH_CLIMB                  = controllerMapper.getLStickButton();
+  private final static int LOW_CLIMB                   = controllerMapper.getLStickButton();
 
 	private final static int TEST_MOVE_BY_BUTTON         = controllerMapper.getTriangle(); /// TODO: Temp, use dashboard instead
 
@@ -129,9 +135,14 @@ public class OI {
         return driverControl.getRawButton(ARM_CLIMBER) && operatorControl.getRawButton(ARM_CLIMBER);
 	}	
 	
-    public boolean climb()
+    public boolean highClimb()
     {
-        return operatorControl.getRawButton(CLIMB);
+        return operatorControl.getRawButton(HIGH_CLIMB);
+	}	
+	
+    public boolean lowClimb()
+    {
+        return operatorControl.getRawButton(LOW_CLIMB);
     }	
 	
 }
