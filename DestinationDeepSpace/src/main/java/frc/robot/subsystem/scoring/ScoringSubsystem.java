@@ -127,6 +127,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			ticks = 2 * ScoringConstants.ARM_MOTOR_SWITCH_TICK_THRESHOLD - ticks;
 		}
 
+		System.out.println("Direct arm to " + ticks);
 		rotationMotor1.set(ControlMode.MotionMagic, ticks);
 	}
 
@@ -187,7 +188,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	public double getAngle() {
 		int ticks = rotationMotor1.getSelectedSensorPosition();
-		double rev = ticks / ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
+		double rev = (ticks + 0.0) / ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
 
 		return 360 * rev;
 	}
@@ -237,7 +238,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	public void diagnosticsExecute() {
 		// TODO Auto-generated method stub
 
-		ScoringDiagnostics.periodic();
+		//ScoringDiagnostics.periodic();
 	}
 
 	@Override
@@ -255,15 +256,13 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	private void rotateScoringArm() {
 		// TODO: go to lowest selected arm level, we may want some ButtonMadness-esque implementation in the future, probably
-		ScoringConstants.ScoringLevel level = ScoringConstants.ScoringLevel.HP_GROUND;
+		ScoringConstants.ScoringLevel level = ScoringConstants.ScoringLevel.GROUND;
 
 		if (oi.bLoadingStation()) { level = ScoringConstants.ScoringLevel.BALL_LOADING_STATION; }
-		if (oi.bCargo()) { level = ScoringConstants.ScoringLevel.BALL_CARGO; }
-		if (oi.bRocket1()) { level = ScoringConstants.ScoringLevel.BALL_ROCKET_1; }
-		if (oi.hpCargo()) { level = ScoringConstants.ScoringLevel.HP_CARGO; }
-		if (oi.hpRocket1()) { level = ScoringConstants.ScoringLevel.HP_ROCKET_1; }
-		if (oi.bGround()) { level = ScoringConstants.ScoringLevel.BALL_GROUND; }
-		if (oi.hpGround()) { level = ScoringConstants.ScoringLevel.HP_GROUND; }
+		if (oi.bCargo())          { level = ScoringConstants.ScoringLevel.BALL_CARGO;           }
+		if (oi.bRocket1())        { level = ScoringConstants.ScoringLevel.BALL_ROCKET_1;        }
+		if (oi.hp())              { level = ScoringConstants.ScoringLevel.HP;                   }
+		if (oi.ground())          { level = ScoringConstants.ScoringLevel.GROUND;               }
 
 		// get current applied to motors to get direction
 		double current = DriveSubsystem.instance().getFwdCurrent();
@@ -292,7 +291,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			forward = lastForward;
 		}
 
-		
+
 		
 		goToLevel(level, forward);
 	}

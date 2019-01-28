@@ -98,10 +98,8 @@ public class OI {
 
 
 	// TODO: configure correct IDs
-	private final static int SCORING_HATCH_PANEL_GROUND = PS4Constants.CIRCLE.getValue();
-	private final static int SCORING_HATCH_PANEL_C = PS4Constants.TRIANGLE.getValue();
-	private final static int SCORING_HATCH_PANEL_R1 = PS4Constants.SQUARE.getValue();
-	private final static int SCORING_BALL_GROUND = PS4Constants.CROSS.getValue();
+	private final static int SCORING_GROUND = PS4Constants.SQUARE.getValue();
+	private final static int SCORING_HATCH_PANEL = PS4Constants.CIRCLE.getValue();
 	private final static int SCORING_BALL_C = PS4Constants.L1.getValue();
 	private final static int SCORING_BALL_LS = PS4Constants.R1.getValue();
 	private final static int SCORING_BALL_R1 = PS4Constants.L2.getValue();
@@ -158,20 +156,12 @@ public class OI {
       return operatorControl.getRawButton(LOW_CLIMB);
   }	
 
-  public boolean hpGround() {
-		return operatorControl.getRawButton(SCORING_HATCH_PANEL_GROUND);
-	}
 
-	public boolean hpCargo() {
-		return operatorControl.getRawButton(SCORING_HATCH_PANEL_C);
+	public boolean hp() {
+		return operatorControl.getRawButton(SCORING_HATCH_PANEL);
 	}
-
-	public boolean hpRocket1() {
-		return operatorControl.getRawButton(SCORING_HATCH_PANEL_R1);
-	}
-
-	public boolean bGround() {
-		return operatorControl.getRawButton(SCORING_BALL_GROUND);
+	public boolean ground() {
+		return operatorControl.getRawButton(SCORING_GROUND);
 	}
 
 	public boolean bCargo() {

@@ -215,7 +215,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
-    MotorTestModes.init();
   }
 
   /**
@@ -227,8 +226,6 @@ public class Robot extends TimedRobot {
     // the actions here occur BEFORE the scheduled commands run; this means that
     // commands can be added during this execution cycle and will be acted upon
     // within the current cycle.
-
-    MotorTestModes.periodic();
   }
 
   /**
@@ -239,6 +236,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     scoringSubsystem.diagnosticsInit();
+    MotorTestModes.init();
   }  
   
   /**
@@ -247,6 +245,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     scoringSubsystem.diagnosticsExecute();
+    MotorTestModes.periodic();
     // NOTE: because this code executes before robotPeriodic in each iteration
     // the actions here occur BEFORE the scheduled commands run; this means that
     // commands can be added during this execution cycle and will be acted upon

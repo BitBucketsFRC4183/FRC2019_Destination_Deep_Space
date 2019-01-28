@@ -14,7 +14,7 @@ import frc.robot.utils.autotuner.TunerConstants;
 public abstract class TuningStep {
     protected double value; // current value of tuning constant
 
-    protected boolean finishedPos; // has it finished collecting all positive data values?
+    protected boolean finishedPos = false; // has it finished collecting all positive data values?
     protected DataWindow pos; // positive data values
     protected DataWindow neg; // negative data values
 
@@ -72,8 +72,9 @@ public abstract class TuningStep {
 
 
     /** Put some data on the Dashboard */
-    private static void put(int val) {
+    private void put(int val) {
         SmartDashboard.putNumber(TunerConstants.DATA_KEY, val);
+        SmartDashboard.putNumber(TunerConstants.POWER_DATA_KEY, MOTOR.getMotorOutputPercent());
     }
 
 
