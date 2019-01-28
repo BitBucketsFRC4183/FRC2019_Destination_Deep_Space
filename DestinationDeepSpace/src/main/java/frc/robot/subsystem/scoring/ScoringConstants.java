@@ -2,11 +2,10 @@ package frc.robot.subsystem.scoring;
 
 public class ScoringConstants {
 	public enum ScoringLevel {
-		HP_GROUND            (0),       // hatch panel ground pickup
-		HP_CARGO             (19.0),    // cargo scoring
-		HP_ROCKET_1          (19.0),    // rocket 1 scoring
+		GROUND            (0),       // hatch panel ground pickup
+		
+		HP             (19.0),    // cargo scoring
 
-		BALL_GROUND          (0.0),     // ball group pickup
 		BALL_CARGO           (31.5),    // cargo scoring
 		BALL_LOADING_STATION (37.0),    // loading station pickup
 		BALL_ROCKET_1        (27.5);    // rocket 1 scoring
