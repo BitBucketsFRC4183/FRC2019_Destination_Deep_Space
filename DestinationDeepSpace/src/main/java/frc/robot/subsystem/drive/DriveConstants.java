@@ -12,6 +12,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
  * Add your docs here.
  */
 public class DriveConstants {
+    public static final double JOYSTICK_DEADBAND = 0.2;
+    
     // Set velocity follower type to false when independent gear boxes are being used
     // Set to true of all wheels on one side are physically linked
     public static final boolean VELOCITY_FOLLOWER_ENABLED = false; 

@@ -463,9 +463,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 		// Rescale to the desired shape
 		/// TODO: Add deadband to rescale
-		speed = forwardJoystickScaleChooser.getSelected().rescale(speed);
+		speed = forwardJoystickScaleChooser.getSelected().rescale(speed, DriveConstants.JOYSTICK_DEADBAND);
 		SmartDashboard.putNumber(getName()+"/Speed Factor",speed);
-		turn = turnJoystickScaleChooser.getSelected().rescale(turn);
+		turn = turnJoystickScaleChooser.getSelected().rescale(turn, DriveConstants.JOYSTICK_DEADBAND);
 		SmartDashboard.putNumber(getName()+"/Turn Factor",turn);
 
 		if(oi.lowSensitivity()) 
@@ -621,6 +621,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		}		
 
 	}
+
 	public void velocityDrivex(double vel, double omega) {
 		// velocity mode <-- value in change in position per 100ms
 
