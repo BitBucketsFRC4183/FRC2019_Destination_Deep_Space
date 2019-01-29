@@ -17,6 +17,9 @@ public enum JoystickScale
    // Some utility functions to make later code more readable
    // All of these function preserve sign of input
    
+   /**Rescale without a deadband
+    * 
+    */
    public double rescale(double x)
    {
       switch (this)
@@ -37,7 +40,37 @@ public enum JoystickScale
       
       return x;
    }
-   
+
+   /** rescale with a deadband 
+    * 
+   */
+   public static double map(double x, double inMin, double inMax, double outMin, double outMax)
+   {
+      return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+   }  
+   public double rescale(double x, double deadband)
+   {
+      // Apply deadband first, remaping slope as needed to prevent jackrabbit changes
+      deadband = Math.abs(deadband);
+      if (Math.abs(x) >=deadband)
+      {
+         // Above deadband.
+         // Re-zero at deadband
+         if (x < 0)
+         {
+            x = map(x, -1.0, -deadband, -1.0, 0);
+         }
+         else
+         {
+            x = map(x, deadband, 1.0, 0, 1.0);
+         }
+      }
+      else
+      {
+         x = 0;
+      }
+      return x;
+   }
    public double square(double x)
    {
       return Math.abs(x)*x;
