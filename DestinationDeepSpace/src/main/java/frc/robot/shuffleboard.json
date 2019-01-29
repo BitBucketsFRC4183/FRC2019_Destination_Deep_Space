@@ -88,6 +88,32 @@
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/DiagnosticsEnabled",
               "_title": "SmartDashboard/DriveSubsystem/DiagnosticsEnabled"
             }
+          },
+          "11,3": {
+            "size": [
+              9,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed Factor",
+              "_title": "SmartDashboard/DriveSubsystem/Speed Factor",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
+            }
+          },
+          "11,6": {
+            "size": [
+              9,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Factor",
+              "_title": "SmartDashboard/DriveSubsystem/Turn Factor",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
+            }
           }
         }
       }
