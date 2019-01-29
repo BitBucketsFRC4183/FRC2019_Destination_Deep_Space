@@ -8,7 +8,7 @@
 package frc.robot.subsystem.drive;
 
 import edu.wpi.first.wpilibj.command.Command;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.CommandUtils;
 import frc.robot.operatorinterface.OI;
 
@@ -41,22 +41,32 @@ public class DriverControl extends Command {
     /// TODO: If the drive speed or turn is "too high" then ignore these
     /// button pushed.
 
-    /// TODO: If more than one button is pressed, ignore them
-    if (oi.driveLock())
+    // If more than one button is pressed just pretend that none are pressed
+    boolean lock = oi.driveLock();
+    boolean align = oi.alignLock();
+    boolean turn180 = (oi.quickTurn_deg() == 180.0);
+    SmartDashboard.putBoolean("lock",lock);
+    SmartDashboard.putBoolean("align",align);
+    SmartDashboard.putBoolean("turn180",turn180);
+    if ( (lock ^ align ^ turn180))
     {
-      return CommandUtils.stateChange(this, new DriveLock());
-    }
-    else if(oi.alignLock()) 
-    {
-      return CommandUtils.stateChange(this, new AlignLock());
-    }
-    else if (oi.quickTurn_deg() == 180.0)
-    {
-      return CommandUtils.stateChange(this, new TurnBy(180.0,5.0));
-    } 
-    
+        if (lock)
+        {
+          return CommandUtils.stateChange(this, new DriveLock());
+        }
+        if(align) 
+        {
+          return CommandUtils.stateChange(this, new AlignLock());
+        }
+        if (turn180)
+        {
+          return CommandUtils.stateChange(this, new TurnBy(180.0,5.0));
+        } 
+      }
+
       return false;
   }
+
 
   // Called once after isFinished returns true
   protected void end() 
