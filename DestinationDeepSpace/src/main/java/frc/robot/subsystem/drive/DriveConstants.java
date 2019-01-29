@@ -12,10 +12,20 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
  * Add your docs here.
  */
 public class DriveConstants {
+    // Set velocity follower type to false when independent gear boxes are being used
+    // Set to true of all wheels on one side are physically linked
+    public static final boolean VELOCITY_FOLLOWER_ENABLED = false; 
+
+    public static final double MAX_SPEED_IPS = 144.0;
+    public static final double MAX_TURN_DPS  = 360.0;
+    public static final double MAX_TURN_RADPS = Math.toRadians(MAX_TURN_DPS);
+
     //TODO: substitute in correct values once we get them
     public static final double WHEEL_TRACK_INCHES = 18.25;
     public static final double WHEEL_DIAMETER_INCHES = 4.0;
     public static final double WHEEL_CIRCUMFERENCE_INCHES = Math.PI*WHEEL_DIAMETER_INCHES;
+    public static final double TRACK_TO_CIRCUMFERENCE_RATIO = WHEEL_TRACK_INCHES / WHEEL_DIAMETER_INCHES;
+    public static final double WHEEL_ROTATION_PER_FRAME_DEGREES = TRACK_TO_CIRCUMFERENCE_RATIO / 360.0;
 
     // Identify what type of feedback device we will use on this drive base
     // Assume that all feedback devices are the same type on all axels that
@@ -78,8 +88,6 @@ public class DriveConstants {
     public static final double DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC   = 0.250;	// Second from neutral to full (easy on the gears)
     public static final double DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC = 0.0;	    // No ramp rate on closed loop (use Motion Magic)
 
-    public static final double TRACK_TO_CIRCUMFERENCE_RATIO = WHEEL_TRACK_INCHES / WHEEL_DIAMETER_INCHES;
-    public static final double WHEEL_ROTATION_PER_FRAME_DEGREES = TRACK_TO_CIRCUMFERENCE_RATIO / 360.0;
     public static final double DRIVE_MOTOR_NATIVE_TICKS_PER_FRAME_DEGREES = DRIVE_MOTOR_NATIVE_TICKS_PER_REV * WHEEL_ROTATION_PER_FRAME_DEGREES;
     public static final double DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS = 9926.8;	// per 100 ms, average of 10 samples
     public static final double MAXIMUM_MOTION_ERROR_INCHES = 0.125;	// Convert into native ticks later

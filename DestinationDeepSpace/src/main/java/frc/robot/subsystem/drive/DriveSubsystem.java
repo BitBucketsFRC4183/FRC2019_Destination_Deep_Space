@@ -118,6 +118,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	// Keep track of when followers are need or being used
 	private boolean usingFollowers = true;
+	private boolean velocityMode = false;
 
   	private DriveSubsystem()
   	{
@@ -431,16 +432,25 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		}
 	}
 
-	void selectVelocityMode()
+	void selectVelocityMode(boolean needVelocityMode)
 	{
-		leftFrontMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
-										DriveConstants.PRIMARY_PID_LOOP);
-		leftRearMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
-										DriveConstants.PRIMARY_PID_LOOP);
-		rightFrontMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
-										DriveConstants.PRIMARY_PID_LOOP);
-		rightRearMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
-										DriveConstants.PRIMARY_PID_LOOP);										
+		if (needVelocityMode && ! velocityMode)
+		{
+			leftFrontMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
+											DriveConstants.PRIMARY_PID_LOOP);
+			leftRearMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
+											DriveConstants.PRIMARY_PID_LOOP);
+			rightFrontMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
+											DriveConstants.PRIMARY_PID_LOOP);
+			rightRearMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
+											DriveConstants.PRIMARY_PID_LOOP);
+
+			velocityMode = true;
+		}
+		else
+		{
+			velocityMode = false;
+		}									
 	}
 	/**
 	 * drive - takes a speed and turn factor and passes to the selected drive algorithm
@@ -483,22 +493,19 @@ public class DriveSubsystem extends BitBucketSubsystem {
 					// DO NOT let the diff drive square the inputs itself
 					// All scaling is external to this drive function
 					selectFollowerState(true);
+					selectVelocityMode(false);
 					differentialDrive.arcadeDrive(speed, turn, false);
 
 					break;
 				}
 
 				case BB_Arcade: {
-					selectFollowerState(true);
 					arcadeDrive(speed, turn);
 
 					break;
 				}
 
 				case Velocity: {
-					selectFollowerState(false);
-					selectVelocityMode();
-					leftFrontMotor.set(ControlMode.Velocity, DriveConstants.ipsToTicksP100(12.5*3));
 					velocityDrive(speed, turn);
 
 					break;
@@ -548,6 +555,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
     /// TODO: Consider re-designing this to reduce turn by up to 50% at full forward speed
 	private void arcadeDrive(double speed, double turn) 
 	{
+		// The following functions on do something if the state needs to be changed
+		selectFollowerState(true);
+		selectVelocityMode(false);
+
 		double maxSteer = 1.0 - Math.abs(speed) / 2.0;	// Reduce steering by up to 50%
 		double steer = maxSteer * turn;
 		
@@ -556,12 +567,61 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	}
 
 
-
+	public static double map(double x, double inMin, double inMax, double outMin, double outMax)
+	{
+	   return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+	}
 	/**
 	 * @param vel   inches  / sec
 	 * @param omega radians / sec
 	 */
-	public void velocityDrive(double vel, double omega) {
+	public void velocityDrive(double speed, double turn)
+	{
+		// The following functions only do something if the state needs
+		// to be changed.
+		selectFollowerState(DriveConstants.VELOCITY_FOLLOWER_ENABLED);
+		selectVelocityMode(true);
+
+		// Scale the input to physical units (with implied limits)
+		double speed_ips = map(speed,
+								 -1.0,
+								  1.0,
+								 -DriveConstants.MAX_SPEED_IPS,
+								 DriveConstants.MAX_SPEED_IPS);
+		double turn_radps   = map(turn,
+								 -1.0,
+								  1.0,
+								 -DriveConstants.MAX_TURN_RADPS,
+								 DriveConstants.MAX_TURN_RADPS);
+		SmartDashboard.putNumber(getName()+"/Speed (ips)", speed_ips);
+		SmartDashboard.putNumber(getName()+"/Turn (dps)", Math.toDegrees(turn_radps));
+
+		double diffSpeed_ips = turn_radps * DriveConstants.WHEEL_TRACK_INCHES / 2.0;
+
+
+		// TODO: Insert lateral acceleration limits
+		// Limit speed more if needed, leave turn rate
+
+		int speed_tickP100 = DriveConstants.ipsToTicksP100(speed_ips);
+		int diffSpeed_tickP100 = DriveConstants.ipsToTicksP100(diffSpeed_ips);
+
+		int leftSpeed_tickP100 = speed_tickP100 + diffSpeed_tickP100;
+		int rightSpeed_tickP100 = speed_tickP100 - diffSpeed_tickP100;
+
+		SmartDashboard.putNumber(getName() + "/leftSpeed (tps)",leftSpeed_tickP100);
+		SmartDashboard.putNumber(getName() + "/rightSpeed (tps)",rightSpeed_tickP100);
+
+		leftFrontMotor.set(ControlMode.Velocity, leftSpeed_tickP100);
+		rightFrontMotor.set(ControlMode.Velocity, rightSpeed_tickP100);		
+
+		if ( ! usingFollowers)
+		{
+			leftRearMotor.set(ControlMode.Velocity, leftSpeed_tickP100);
+			rightRearMotor.set(ControlMode.Velocity, rightSpeed_tickP100);
+		}		
+
+	}
+	public void velocityDrivex(double vel, double omega) {
 		// velocity mode <-- value in change in position per 100ms
 
 		double vL = vel + omega * DriveConstants.WHEEL_TRACK_INCHES / 2;
