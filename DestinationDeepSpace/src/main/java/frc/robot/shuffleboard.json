@@ -125,6 +125,50 @@
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/CurrentCommand",
               "_title": "/SmartDashboard/DriveSubsystem/CurrentCommand"
             }
+          },
+          "6,6": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn (dps)",
+              "_title": "/SmartDashboard/DriveSubsystem/Turn (dps)"
+            }
+          },
+          "6,7": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed (ips)",
+              "_title": "/SmartDashboard/DriveSubsystem/Speed (ips)"
+            }
+          },
+          "6,8": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/leftSpeed (tps)",
+              "_title": "/SmartDashboard/DriveSubsystem/leftSpeed (tps)"
+            }
+          },
+          "6,9": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/rightSpeed (tps)",
+              "_title": "/SmartDashboard/DriveSubsystem/rightSpeed (tps)"
+            }
           }
         }
       }
@@ -478,9 +522,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.0,
+    "x": 268.0,
     "y": 2.0,
-    "width": 1932.0,
+    "width": 1657.0,
     "height": 1004.0
   }
 }
