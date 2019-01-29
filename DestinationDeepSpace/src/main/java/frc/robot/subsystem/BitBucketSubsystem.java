@@ -51,6 +51,7 @@ public abstract class BitBucketSubsystem extends Subsystem {
 	protected void updateBaseDashboard()
 	{
 		SmartDashboard.putNumber(getName() + "/PeriodicCounter", periodicCounter++);
+		SmartDashboard.putString(getName() + "/CurrentCommand",getCurrentCommandName());
 	}
 
 	/**

@@ -114,6 +114,17 @@
               "Graph/Visible time": 30.0,
               "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
             }
+          },
+          "19,0": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/CurrentCommand",
+              "_title": "/SmartDashboard/DriveSubsystem/CurrentCommand"
+            }
           }
         }
       }
