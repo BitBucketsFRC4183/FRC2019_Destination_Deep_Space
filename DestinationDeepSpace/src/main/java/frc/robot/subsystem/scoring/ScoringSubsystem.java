@@ -265,7 +265,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		if (oi.hpGround()) { level = ScoringConstants.ScoringLevel.HP_GROUND; }
 
 		// get current applied to motors to get direction
-		double current = DriveSubsystem.instance().getFwdCurrent();
+		double current = DriveSubsystem.instance().getAverageCurrent_amps();
 		boolean direction;
 
 		// if robot not moving, keep arm where it is
