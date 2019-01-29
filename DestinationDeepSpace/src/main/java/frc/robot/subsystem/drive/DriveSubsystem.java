@@ -669,8 +669,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		if (getDiagnosticsEnabled())
 		{
 
-		}
-		
+		}		
 	}
   	
 	public void disable() {
