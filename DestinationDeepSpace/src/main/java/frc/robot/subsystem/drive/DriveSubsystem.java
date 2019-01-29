@@ -572,8 +572,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	   return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}
 	/**
-	 * @param vel   inches  / sec
-	 * @param omega radians / sec
+	 * velocityDrive converts inputs to physical unit limits and
+	 * drives the motors using a velocity control closed-loop profile
 	 */
 	public void velocityDrive(double speed, double turn)
 	{
