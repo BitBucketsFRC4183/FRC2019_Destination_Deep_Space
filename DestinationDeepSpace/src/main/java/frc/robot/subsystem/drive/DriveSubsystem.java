@@ -119,6 +119,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	// Keep track of when followers are need or being used
 	private boolean usingFollowers = true;
 	private boolean velocityMode = false;
+	private boolean motionMode   = false;
 
   	private DriveSubsystem()
   	{
@@ -436,6 +437,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	{
 		if (needVelocityMode && ! velocityMode)
 		{
+			selectFollowerState(DriveConstants.CLOSED_LOOP_FOLLOWER);
+			selectMotionMode(false);
+
 			leftFrontMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
 											DriveConstants.PRIMARY_PID_LOOP);
 			leftRearMotor.selectProfileSlot(DriveConstants.PID_VELOCITY_SLOT, 
@@ -450,7 +454,31 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		else
 		{
 			velocityMode = false;
-		}									
+		}					
+	}
+
+	void selectMotionMode(boolean needMotionMode)
+	{
+		if (needMotionMode && ! motionMode)
+		{
+			selectFollowerState(DriveConstants.CLOSED_LOOP_FOLLOWER);
+			selectVelocityMode(false);
+
+			leftFrontMotor.selectProfileSlot(DriveConstants.PID_MOTION_MAGIC_SLOT, 
+											DriveConstants.PRIMARY_PID_LOOP);
+			leftRearMotor.selectProfileSlot(DriveConstants.PID_MOTION_MAGIC_SLOT, 
+											DriveConstants.PRIMARY_PID_LOOP);
+			rightFrontMotor.selectProfileSlot(DriveConstants.PID_MOTION_MAGIC_SLOT, 
+											DriveConstants.PRIMARY_PID_LOOP);
+			rightRearMotor.selectProfileSlot(DriveConstants.PID_MOTION_MAGIC_SLOT, 
+											DriveConstants.PRIMARY_PID_LOOP);
+
+			motionMode = true;
+		}
+		else
+		{
+			motionMode = false;
+		}
 	}
 	/**
 	 * drive - takes a speed and turn factor and passes to the selected drive algorithm
@@ -494,6 +522,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 					// All scaling is external to this drive function
 					selectFollowerState(true);
 					selectVelocityMode(false);
+					selectMotionMode(false);
 					differentialDrive.arcadeDrive(speed, turn, false);
 
 					break;
@@ -558,6 +587,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// The following functions on do something if the state needs to be changed
 		selectFollowerState(true);
 		selectVelocityMode(false);
+		selectMotionMode(false);
 
 		double maxSteer = 1.0 - Math.abs(speed) / 2.0;	// Reduce steering by up to 50%
 		double steer = maxSteer * turn;
@@ -579,7 +609,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	{
 		// The following functions only do something if the state needs
 		// to be changed.
-		selectFollowerState(DriveConstants.VELOCITY_FOLLOWER_ENABLED);
 		selectVelocityMode(true);
 
 		// Scale the input to physical units (with implied limits)
@@ -593,14 +622,21 @@ public class DriveSubsystem extends BitBucketSubsystem {
 								  1.0,
 								 -DriveConstants.MAX_TURN_RADPS,
 								 DriveConstants.MAX_TURN_RADPS);
-		SmartDashboard.putNumber(getName()+"/Speed (ips)", speed_ips);
-		SmartDashboard.putNumber(getName()+"/Turn (dps)", Math.toDegrees(turn_radps));
+		SmartDashboard.putNumber(getName()+"/Commanded Speed (ips)", speed_ips);
+		SmartDashboard.putNumber(getName()+"/Commanded Turn (dps)", Math.toDegrees(turn_radps));
 
 		double diffSpeed_ips = turn_radps * DriveConstants.WHEEL_TRACK_INCHES / 2.0;
 
+		// Compute, report, and limit lateral acceleration
+		if (Math.abs(turn_radps * speed_ips) > DriveConstants.MAX_LAT_ACCELERATION_IPSPS)
+		{
+			speed_ips = Math.signum(speed_ips)*DriveConstants.MAX_LAT_ACCELERATION_IPSPS/Math.abs(turn_radps);
+		}
+		double latAccel_gs = turn_radps * speed_ips / 12.0 / DriveConstants.STANDARD_G_FTPSPS;
+		SmartDashboard.putNumber(getName()+"/Lat Accel (g)", latAccel_gs );
+		SmartDashboard.putNumber(getName()+"/Acheived Speed (ips)", speed_ips);
+		SmartDashboard.putNumber(getName()+"/Acheived Turn (dps)", Math.toDegrees(turn_radps));
 
-		// TODO: Insert lateral acceleration limits
-		// Limit speed more if needed, leave turn rate
 
 		int speed_tickP100 = DriveConstants.ipsToTicksP100(speed_ips);
 		int diffSpeed_tickP100 = DriveConstants.ipsToTicksP100(diffSpeed_ips);
@@ -620,33 +656,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			rightRearMotor.set(ControlMode.Velocity, rightSpeed_tickP100);
 		}		
 
-	}
-
-	public void velocityDrivex(double vel, double omega) {
-		// velocity mode <-- value in change in position per 100ms
-
-		double vL = vel + omega * DriveConstants.WHEEL_TRACK_INCHES / 2;
-		double vR = vel - omega * DriveConstants.WHEEL_TRACK_INCHES / 2;
-
-		// "
-		// Basically the encoder (quadrature in our case) measure angle; velocity is average angle over small delta-t
-		// Our encoders have a 2048 pulses per rev, to 8192 quad edged per rev
-		// " - Mike
-
-		// convert to rev/sec
-		vL /= DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
-		vR /= DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
-
-		// convert to rev/100ms
-		vL /= 10;
-		vR /= 10;
-
-		// convert to native ticks/100ms
-		vL *= DriveConstants.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
-		vR *= DriveConstants.DRIVE_MOTOR_NATIVE_TICKS_PER_REV;
-
-		leftFrontMotor.set(ControlMode.Velocity, vL);
-		rightFrontMotor.set(ControlMode.Velocity, vR);
 	}
 
 	public void doAutoTurn( double turn) {
@@ -750,6 +759,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	/// TODO: This is redundant with other similar functions
 	public void doLockDrive(double value) 
 	{
+		selectMotionMode(true);
+		
 		leftFrontMotor.set(ControlMode.MotionMagic, value);
 		rightFrontMotor.set(ControlMode.MotionMagic, value);			
 	}
@@ -768,9 +779,12 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		rightRearMotor.setNeutralMode(neutralMode);
 		
 	}
+
+	/// TODO: This function makes no sense, need to decide if we should
+	/// just scrap it
 	private double yawCorrect() {
-		return YAW_CORRECT_VELOCITY * getFwdVelocity_ips() 
-				+ YAW_CORRECT_ACCEL * getFwdCurrent();
+		return YAW_CORRECT_VELOCITY * getVelocity_ips() 
+				+ YAW_CORRECT_ACCEL * getAverageCurrent_amps();
 	}
 	public double getRightPosition_inch() {
 		// Right motor encoder reads -position when going forward!
@@ -823,28 +837,37 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		return getMotorMode(rightRearMotor);
 	}
 	
+	/// TODO: Move to DriveConstants and rename
 	public double inchesToNativeTicks(double inches) {
 		return (double)DriveConstants.DRIVE_MOTOR_NATIVE_TICKS_PER_REV * (inches / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES);
 	}
 
-	public double getFwdVelocity_ips() {
-		// Right side motor reads -velocity when going forward!
-		double fwdSpeedRpm = (leftFrontMotor.getSelectedSensorVelocity(DriveConstants.PRIMARY_PID_LOOP) - rightFrontMotor.getSelectedSensorVelocity(DriveConstants.PRIMARY_PID_LOOP))/2.0;
-		return (DriveConstants.WHEEL_CIRCUMFERENCE_INCHES / 60.0) * fwdSpeedRpm;
+	public double getVelocity_ips() {
+		// Average left and right side to find centerline velocity
+		// NOTE: We assume that both left and right motors are configured to provide
+		// proper sensor phase and output polarity so their data can simply be
+		// added together
+
+		int velocity_tp100 = (leftFrontMotor.getSelectedSensorVelocity(DriveConstants.PRIMARY_PID_LOOP) + 
+		                      rightFrontMotor.getSelectedSensorVelocity(DriveConstants.PRIMARY_PID_LOOP))/2;
+		return DriveConstants.ticksP100ToIps(velocity_tp100);
 	}
-	public double getFwdCurrent() {
-		// OutputCurrent always positive so apply sign of drive voltage to get real answer.
-		// Also, right side has -drive when going forward!
-		double leftFront = leftFrontMotor.getOutputCurrent() * Math.signum( leftFrontMotor.getMotorOutputVoltage());
-		double leftRear = leftRearMotor.getOutputCurrent() * Math.signum( leftRearMotor.getMotorOutputVoltage());
-		double rightFront = -rightFrontMotor.getOutputCurrent() * Math.signum( rightFrontMotor.getMotorOutputVoltage());
-		double rightRear = -rightRearMotor.getOutputCurrent() * Math.signum( rightRearMotor.getMotorOutputVoltage());
-		return (leftFront + leftRear + rightFront + rightRear)/4.0;
+	public double getTurnRate_dps()
+	{
+		int differentialVelocity_tp100 = leftFrontMotor.getSelectedSensorVelocity(DriveConstants.PRIMARY_PID_LOOP) -
+										 rightFrontMotor.getSelectedSensorVelocity(DriveConstants.PRIMARY_PID_LOOP);
+		return Math.toDegrees(DriveConstants.ticksP100ToIps(differentialVelocity_tp100) / DriveConstants.WHEEL_TRACK_INCHES);
 	}
-	
-	public double getPosition_inch() {
-		// TODO Auto-generated method stub
-		return 0;
+
+	public double getTotalCurrent_amps() {
+		return 	Math.abs(leftFrontMotor.getOutputCurrent()) +
+				Math.abs(leftRearMotor.getOutputCurrent()) +
+				Math.abs(rightFrontMotor.getOutputCurrent()) +
+				Math.abs(rightRearMotor.getOutputCurrent());
+
+	}
+	public double getAverageCurrent_amps() {
+		return getTotalCurrent_amps() / 4.0;
 	}
 	
 	// Set up a single motor for position control

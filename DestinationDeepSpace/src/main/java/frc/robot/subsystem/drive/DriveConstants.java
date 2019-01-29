@@ -13,14 +13,18 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
  */
 public class DriveConstants {
     public static final double JOYSTICK_DEADBAND = 0.2;
-    
+
     // Set velocity follower type to false when independent gear boxes are being used
     // Set to true of all wheels on one side are physically linked
-    public static final boolean VELOCITY_FOLLOWER_ENABLED = false; 
+    public static final boolean CLOSED_LOOP_FOLLOWER = false;
 
     public static final double MAX_SPEED_IPS = 144.0;
     public static final double MAX_TURN_DPS  = 360.0;
     public static final double MAX_TURN_RADPS = Math.toRadians(MAX_TURN_DPS);
+    public static final double STANDARD_G_FTPSPS = 32.1740;
+    public static final double MAX_LAT_ACCELERATION_IPSPS = STANDARD_G_FTPSPS * 12.0;
+    public static final double LOCK_DEADBAND_IPS = 12.0;  // ignore button command changes above this speed
+    public static final double ALIGN_DEADBAND_DPS = 45.0; // ignore button command changes above this turn rate
 
     //TODO: substitute in correct values once we get them
     public static final double WHEEL_TRACK_INCHES = 18.25;

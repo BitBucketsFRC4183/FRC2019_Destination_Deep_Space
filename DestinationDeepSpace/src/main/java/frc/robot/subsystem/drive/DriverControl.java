@@ -50,21 +50,36 @@ public class DriverControl extends Command {
     SmartDashboard.putBoolean("turn180",turn180);
     if ( (lock ^ align ^ turn180))
     {
+      // Ignore drive locking and rapid turn if we are moving forward
+      // in a "significant" way
+      if(driveSubsystem.getVelocity_ips() < DriveConstants.LOCK_DEADBAND_IPS)
+      {
         if (lock)
         {
           return CommandUtils.stateChange(this, new DriveLock());
         }
+
+        // The speed may be low, but if we are already turning above
+        // some threshold, just ignore the command since the driver
+        // is touching the stick
+        if (turn180 && (driveSubsystem.getTurnRate_dps() < DriveConstants.ALIGN_DEADBAND_DPS))
+        {
+          return CommandUtils.stateChange(this, new TurnBy(180.0,5.0));
+        }
+      }
+      
+      // The align lock (drive straight) should not be engaged if we are
+      // turning rapidly
+      if (driveSubsystem.getTurnRate_dps() < DriveConstants.ALIGN_DEADBAND_DPS)
+      {
         if(align) 
         {
           return CommandUtils.stateChange(this, new AlignLock());
         }
-        if (turn180)
-        {
-          return CommandUtils.stateChange(this, new TurnBy(180.0,5.0));
-        } 
       }
+    }
 
-      return false;
+    return false;
   }
 
 
