@@ -38,6 +38,10 @@ public class DriverControl extends Command {
   // Make this return true when this Command no longer needs to run execute()
   protected boolean isFinished() 
   {
+    /// TODO: If the drive speed or turn is "too high" then ignore these
+    /// button pushed.
+
+    /// TODO: If more than one button is pressed, ignore them
     if (oi.driveLock())
     {
       return CommandUtils.stateChange(this, new DriveLock());
