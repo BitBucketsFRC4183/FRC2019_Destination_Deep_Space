@@ -42,10 +42,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 	// is the robot moving forward?
-	private boolean lastForward = true;
-	private boolean forward = true;
-	// how long has the robot been going in the direction its been going for?
-	private int forwardIterations = 0;
+	private boolean lastFront = true;
 
 
 
@@ -133,11 +130,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-	// TODO: in the future, we will want to move the arm so it is parallel (not antiparallel)
-	// to the robot's velocity. This should involve testing to see if the robot has been going
-	// in the direction its going in for a long enough period of time (if it changes its velocity
-	// back and forth, changing the arm position may tip the robot)
-	// tl;dr - find "front" yourself
 	public void goToLevel(ScoringConstants.ScoringLevel level, boolean front) {
 		double height = level.getHeight();
 
@@ -200,8 +192,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
   	@Override
 	public void diagnosticsInit() {
 		// TODO Auto-generated method stub
-		
-		ScoringDiagnostics.init();
 	}
 
 	@Override
