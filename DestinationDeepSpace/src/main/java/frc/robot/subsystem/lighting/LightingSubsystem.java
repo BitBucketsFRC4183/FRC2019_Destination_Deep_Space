@@ -34,6 +34,10 @@ public class LightingSubsystem extends BitBucketSubsystem {
 	private String[] lastCommands = new String[LightingObjects.values().length];
 
 
+	public boolean isReady()
+	{
+		return lightingControl.isReady();
+	}
 	/** set - pass through to underlying lighting control
 	 *  Converts enumeration of available lighting objects to their respective ordinal values
 	 *  Provides future opportunity for this subsystem to intervene and/or report state to Dashboard

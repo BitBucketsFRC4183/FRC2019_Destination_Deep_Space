@@ -159,6 +159,11 @@ public class LightingControl extends Thread
 							period_msec);
 	}
 
+	public boolean isReady()
+	{
+		return (serialPort != null);
+	}
+
 	public String set(int lightingObject, String function, String color, int nspace, int period_msec)
 	{
 		return set(lightingObject, function, color, nspace, period_msec, prefBrightness);
