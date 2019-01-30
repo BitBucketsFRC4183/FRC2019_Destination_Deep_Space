@@ -31,7 +31,13 @@ public class LightingSubsystem extends BitBucketSubsystem {
 		setName("LightingSubsystem");
 	}
 
+	private String[] lastCommands = new String[LightingObjects.values().length];
 
+
+	public boolean isReady()
+	{
+		return lightingControl.isReady();
+	}
 	/** set - pass through to underlying lighting control
 	 *  Converts enumeration of available lighting objects to their respective ordinal values
 	 *  Provides future opportunity for this subsystem to intervene and/or report state to Dashboard
@@ -39,11 +45,11 @@ public class LightingSubsystem extends BitBucketSubsystem {
 	*/
 	public void set(LightingObjects lightingObject, String function, String color, int nspace, int period_msec)
 	{
-		lightingControl.set(lightingObject.getValue(), function, color, nspace, period_msec);
+		lastCommands[lightingObject.getValue()] = lightingControl.set(lightingObject.getValue(), function, color, nspace, period_msec);
 	}	
 	public void set(LightingObjects lightingObject, String function, String color, int nspace, int period_msec, int brightness)
 	{
-		lightingControl.set(lightingObject.getValue(), function, color, nspace, period_msec, brightness);
+		lastCommands[lightingObject.getValue()] = lightingControl.set(lightingObject.getValue(), function, color, nspace, period_msec, brightness);
 	}
 
 	/** setAll functions - convenience in terms of subsystem layout

@@ -17,27 +17,40 @@ public class CommandUtils {
 	 * 
 	 * @param next  The Command that represents the next state
 	 */
-	public static boolean stateChange( Command fromState, Command toState) {
+	public static boolean stateChange(Command toState) {
 		
-		// When Robot Disabled, only Idle states run
-		// (because Idle's are the subsystem's default states).
+		// When Robot Disabled, only Idle states run.
+		// Idles are the subsystems' default states that we normally
+		// force manually; we avoid using the WPI default command
+		// handling because it has this habit of starting when we
+		// forget an opqaue transition inside the WPI context.
+		//
 		// Only allow transition out of Idle when in either
-		// Teleop or Autonomous.
-		// (Mode Test is currently pretty useless). 
-		
-		if( ! ds.isDisabled() ) {
-			
+		// Teleop or Autonomous or Test (if we decide to process
+		// commands in test mode)
+		if (ds.isAutonomous() || ds.isTest())
+		{
+			// In auto or test, just return at completion
+			// but don't transition automatically
+			// In auto modes we will transition using a CommandGroup
+			// or as directed by more sophisticated logic of
+			// an AutonomousSubsystem
+			return true;
+		}
+		else if( ! ds.isDisabled() ) 
+		{
+			// In teleop we enforce some automatic
+			// transitions to maintain ordered states
+			// when operator inputs could be harmful due
+			// to mashing of controls or other states
+			// that are not observable by the operator
 			toState.start();
 			return true;
 		}
 		else
+		{
 			return false;
-	}
-	
-	public static boolean autoStateChange(Command fromState, Command toState) 
-	{
-		return (ds.isAutonomous())?true:stateChange(fromState, toState);
-		
+		}
 	}
 
 }

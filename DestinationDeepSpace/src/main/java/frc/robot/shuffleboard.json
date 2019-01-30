@@ -115,7 +115,7 @@
               "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
             }
           },
-          "19,0": {
+          "15,0": {
             "size": [
               3,
               1
@@ -124,6 +124,61 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/CurrentCommand",
               "_title": "/SmartDashboard/DriveSubsystem/CurrentCommand"
+            }
+          },
+          "8,8": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Lat Accel (g)",
+              "_title": "/SmartDashboard/DriveSubsystem/Lat Accel (g)"
+            }
+          },
+          "5,6": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Commanded Speed (ips)",
+              "_title": "/SmartDashboard/DriveSubsystem/Commanded Speed (ips)"
+            }
+          },
+          "5,7": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Commanded Turn (dps)",
+              "_title": "/SmartDashboard/DriveSubsystem/Commanded Turn (dps)"
+            }
+          },
+          "8,6": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Acheived Speed (ips)",
+              "_title": "/SmartDashboard/DriveSubsystem/Acheived Speed (ips)"
+            }
+          },
+          "8,7": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Acheived Turn (dps)",
+              "_title": "/SmartDashboard/DriveSubsystem/Acheived Turn (dps)"
             }
           }
         }
@@ -478,9 +533,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.0,
-    "y": 2.0,
-    "width": 1932.0,
-    "height": 1004.0
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1936.0,
+    "height": 1015.0
   }
 }
