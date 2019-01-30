@@ -63,7 +63,7 @@ public class MoveBy extends Command
     	if (timeout || driveSubsystem.isMoveComplete(distance_inches)) 
     	{
     		driveSubsystem.setMotionVelocity(1.0);
-    		return CommandUtils.autoStateChange(this, new Idle());
+    		return CommandUtils.stateChange(new Idle());
     	}
     	
     	return false;
