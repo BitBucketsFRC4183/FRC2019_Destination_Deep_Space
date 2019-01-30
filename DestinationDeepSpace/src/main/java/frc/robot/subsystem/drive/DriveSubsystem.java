@@ -633,7 +633,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			speed_ips = Math.signum(speed_ips)*DriveConstants.MAX_LAT_ACCELERATION_IPSPS/Math.abs(turn_radps);
 		}
 		double latAccel_gs = turn_radps * speed_ips / 12.0 / DriveConstants.STANDARD_G_FTPSPS;
+		double turnRadius_inches = speed_ips / turn_radps;
 		SmartDashboard.putNumber(getName()+"/Lat Accel (g)", latAccel_gs );
+		SmartDashboard.putNumber(getName()+"/Turn Radius (inches)",turnRadius_inches);
 		SmartDashboard.putNumber(getName()+"/Acheived Speed (ips)", speed_ips);
 		SmartDashboard.putNumber(getName()+"/Acheived Turn (dps)", Math.toDegrees(turn_radps));
 
