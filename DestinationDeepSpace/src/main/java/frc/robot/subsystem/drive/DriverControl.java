@@ -38,17 +38,18 @@ public class DriverControl extends Command {
   // Make this return true when this Command no longer needs to run execute()
   protected boolean isFinished() 
   {
-    /// TODO: If the drive speed or turn is "too high" then ignore these
-    /// button pushed.
-
-    // If more than one button is pressed just pretend that none are pressed
+    // If more than one button is pressed resolve the conflict
     boolean lock = oi.driveLock();
     boolean align = oi.alignLock();
     boolean turn180 = (oi.quickTurn_deg() == 180.0);
-    SmartDashboard.putBoolean("lock",lock);
-    SmartDashboard.putBoolean("align",align);
-    SmartDashboard.putBoolean("turn180",turn180);
-    if ( (lock ^ align ^ turn180))
+
+    // If we are no longer requesting this command then
+    // we can determine if an explicit next command is being
+    // made. If it looks like the user is pressing multiple
+    // buttons for a next command then we just want to return
+    // to driver control until they can make up their mind
+
+    if ( ((lock || align) ^ turn180) && (lock ^ (align || turn180)))
     {
       // Ignore drive locking and rapid turn if we are moving forward
       // in a "significant" way
@@ -56,7 +57,7 @@ public class DriverControl extends Command {
       {
         if (lock)
         {
-          return CommandUtils.stateChange(this, new DriveLock());
+          return CommandUtils.stateChange(new DriveLock());
         }
 
         // The speed may be low, but if we are already turning above
@@ -64,7 +65,7 @@ public class DriverControl extends Command {
         // is touching the stick
         if (turn180 && (driveSubsystem.getTurnRate_dps() < DriveConstants.ALIGN_DEADBAND_DPS))
         {
-          return CommandUtils.stateChange(this, new TurnBy(180.0,5.0));
+          return CommandUtils.stateChange(new TurnBy(180.0,5.0));
         }
       }
       
@@ -74,7 +75,7 @@ public class DriverControl extends Command {
       {
         if(align) 
         {
-          return CommandUtils.stateChange(this, new AlignLock());
+          return CommandUtils.stateChange(new AlignLock());
         }
       }
     }

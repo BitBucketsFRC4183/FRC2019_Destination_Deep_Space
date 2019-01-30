@@ -39,15 +39,33 @@ public class AlignLock extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    if (oi.driveLock())
-    	{
-    		return CommandUtils.stateChange(this, new DriveLock());
-    	}
-    	else if( ! oi.alignLock()) 
-    	{
-    		return CommandUtils.stateChange(this, new DriverControl());
-    	}
-    return false;
+
+    // If more than one button is pressed resolve the conflict
+    boolean lock = oi.driveLock();
+    boolean align = oi.alignLock();
+    boolean turn180 = (oi.quickTurn_deg() == 180.0);
+
+    // If we are no longer requesting this command then
+    // we can determine if an explicit next command is being
+    // made. If it looks like the user is pressing multiple
+    // buttons for a next command then we just want to return
+    // to driver control until they can make up their mind
+    if (!align)
+    {
+      if (lock && !turn180) 
+      {
+        return CommandUtils.stateChange(new DriveLock());
+      }
+      else if (turn180 && !lock)
+      {
+        return CommandUtils.stateChange(new TurnBy(180.0,5.0));
+      }
+      else
+      {
+          return CommandUtils.stateChange(new DriverControl());
+      }
+    }
+    return false;    
   }
 
   // Called once after isFinished returns true
