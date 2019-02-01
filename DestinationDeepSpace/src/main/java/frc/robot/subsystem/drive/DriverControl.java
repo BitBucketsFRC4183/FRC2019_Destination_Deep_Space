@@ -8,7 +8,7 @@
 package frc.robot.subsystem.drive;
 
 import edu.wpi.first.wpilibj.command.Command;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.CommandUtils;
 import frc.robot.operatorinterface.OI;
 
@@ -38,21 +38,51 @@ public class DriverControl extends Command {
   // Make this return true when this Command no longer needs to run execute()
   protected boolean isFinished() 
   {
-    if (oi.driveLock())
+    // If more than one button is pressed resolve the conflict
+    boolean lock = oi.driveLock();
+    boolean align = oi.alignLock();
+    boolean turn180 = (oi.quickTurn_deg() == 180.0);
+
+    // If we are no longer requesting this command then
+    // we can determine if an explicit next command is being
+    // made. If it looks like the user is pressing multiple
+    // buttons for a next command then we just want to return
+    // to driver control until they can make up their mind
+
+    if ( ((lock || align) ^ turn180) && (lock ^ (align || turn180)))
     {
-      return CommandUtils.stateChange(this, new DriveLock());
+      // Ignore drive locking and rapid turn if we are moving forward
+      // in a "significant" way
+      if(driveSubsystem.getVelocity_ips() < DriveConstants.LOCK_DEADBAND_IPS)
+      {
+        if (lock)
+        {
+          return CommandUtils.stateChange(new DriveLock());
+        }
+
+        // The speed may be low, but if we are already turning above
+        // some threshold, just ignore the command since the driver
+        // is touching the stick
+        if (turn180 && (driveSubsystem.getTurnRate_dps() < DriveConstants.ALIGN_DEADBAND_DPS))
+        {
+          return CommandUtils.stateChange(new TurnBy(180.0,5.0));
+        }
+      }
+      
+      // The align lock (drive straight) should not be engaged if we are
+      // turning rapidly
+      if (driveSubsystem.getTurnRate_dps() < DriveConstants.ALIGN_DEADBAND_DPS)
+      {
+        if(align) 
+        {
+          return CommandUtils.stateChange(new AlignLock());
+        }
+      }
     }
-    else if(oi.alignLock()) 
-    {
-      return CommandUtils.stateChange(this, new AlignLock());
-    }
-    else if (oi.quickTurn_deg() == 180.0)
-    {
-      return CommandUtils.stateChange(this, new TurnBy(180.0,5.0));
-    } 
-    
-      return false;
+
+    return false;
   }
+
 
   // Called once after isFinished returns true
   protected void end() 

@@ -108,6 +108,10 @@ public class LightingControl extends Thread
 		if (serialPort == null)
 		{
 			SmartDashboard.putString("LightingControl/Status", "No BucketLights board found! (Gave up)");
+		}
+		else
+		{
+			SmartDashboard.putString("LightingControl/Status", "BucketLights RUNNING!");
 		}		
 	}
 	private LightingControl() 
@@ -144,33 +148,44 @@ public class LightingControl extends Thread
 		}		
 	}	
 
+	public String computeCommand(int lightingObject, String function, String color, int nspace, int period_msec, int brightness)
+	{
+		return String.format(FORMAT,
+							lightingObject,
+							function,
+							color,
+							nspace,
+							brightness,
+							period_msec);
+	}
 
-	public void set(int lightingObject, String function, String color, int nspace, int period_msec)
+	public boolean isReady()
 	{
-		set(lightingObject, function, color, nspace, period_msec, prefBrightness);
+		return (serialPort != null);
+	}
+
+	public String set(int lightingObject, String function, String color, int nspace, int period_msec)
+	{
+		return set(lightingObject, function, color, nspace, period_msec, prefBrightness);
 	}	
-	public void set(int lightingObject, String function, String color, int nspace, int period_msec, int brightness)
+	public String set(int lightingObject, String function, String color, int nspace, int period_msec, int brightness)
 	{
+		String command = "";
 		if (serialPort != null)
 		{
 			try
 			{
-				String command = String.format(FORMAT,
-											   lightingObject,
-											   function,
-											   color,
-											   nspace,
-											   brightness,
-											   period_msec);
-				
-				//SmartDashboard.putString("LightingControl/Status", command);
+				command = computeCommand(lightingObject, function, color, nspace, period_msec, brightness);				
+				SmartDashboard.putString("LightingControl/Status", command);
 				serialPort.writeString(command);
 			}
 			catch (SerialPortException e) 
 			{
-				// pass
+				SmartDashboard.putString("LightingControl/Status", "Exception!");
 			}
-		}		
+		}
+		
+		return command;
 	}	
 	
 	public void setSleeping(int lightingObject)

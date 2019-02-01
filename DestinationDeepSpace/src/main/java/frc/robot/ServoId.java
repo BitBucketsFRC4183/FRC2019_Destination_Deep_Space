@@ -11,6 +11,6 @@ package frc.robot;
  * Add your docs here.
  */
 public class ServoId {
-    public static final int HIGH_CLIMB_SERVO_ID = 0;
+    public static final int CLIMB_SERVO_ID = 0;
 
 }

@@ -59,7 +59,7 @@ public class Idle extends Command {
     		if (driveSubsystem.getDiagnosticsEnabled())	// Diagnostics can only be run once per reset cycle
     		{
     				// Don't run repeatedly because it could be harmful
-    			return CommandUtils.stateChange(this, new Diagnostics());
+    			return CommandUtils.stateChange(new Diagnostics());
     		}
 		}
 
@@ -69,7 +69,7 @@ public class Idle extends Command {
 	  
 		if( ! ds.isAutonomous() && !ds.isDisabled()) 
 		{
-			return CommandUtils.stateChange(this, new DriverControl());
+			return CommandUtils.stateChange(new DriverControl());
 		}
 
 		return false;
