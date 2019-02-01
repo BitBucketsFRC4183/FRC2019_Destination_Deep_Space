@@ -27,8 +27,8 @@ public class Mount extends Image {
         FixtureDef mountFixtureDef = new FixtureDef();
         mountBodyDef.type = BodyType.DynamicBody;
         PolygonShape baseShape=new PolygonShape();
-        baseShape.setAsBox(4f*MathConstants.INCHES_TO_METERS/2, 15f*MathConstants.INCHES_TO_METERS/2);
-        setSize(4f * MathConstants.INCHES_TO_METERS,15f * MathConstants.INCHES_TO_METERS);
+        baseShape.setAsBox(2f*MathConstants.INCHES_TO_METERS/2, 15f*MathConstants.INCHES_TO_METERS/2);
+        setSize(2f * MathConstants.INCHES_TO_METERS,15f * MathConstants.INCHES_TO_METERS);
         setOrigin(getWidth() / 2, getHeight() / 2);
         mountFixtureDef.friction = 1f;
         mountFixtureDef.restitution = 0;

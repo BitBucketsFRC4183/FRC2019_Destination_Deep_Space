@@ -3,6 +3,7 @@ package frc.robot.simulator.physics.bodies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
@@ -115,7 +116,7 @@ public class DriveBaseSide extends Image {
         armJointDef.bodyA = arm.getBody();
         armJointDef.bodyB = mount.getBody();
         armJointDef.localAnchorA.set(0, -arm.getHeight()/2);
-        armJointDef.localAnchorB.set(0, mount.getHeight()/2);
+        armJointDef.localAnchorB.set(-arm.getWidth()/2, mount.getHeight()/2);
         armJointDef.collideConnected = false;
         armJointDef.enableMotor = true;
         armJointDef.maxMotorTorque = 100;

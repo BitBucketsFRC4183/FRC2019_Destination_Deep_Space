@@ -28,7 +28,28 @@ public class Arm extends Image {
         FixtureDef armFixtureDef = new FixtureDef();
         armBodyDef.type = BodyType.DynamicBody;
         PolygonShape baseShape=new PolygonShape();
-        baseShape.setAsBox(2f*MathConstants.INCHES_TO_METERS/2, 12f*MathConstants.INCHES_TO_METERS/2);
+        float halfWidth = 2f*MathConstants.INCHES_TO_METERS/2;
+        float halfHeight = 12f*MathConstants.INCHES_TO_METERS/2;
+//        baseShape.setAsBox(halfWidth, halfHeight);
+        /* Build a box with vertices, hw and hh are halfWidth, halfHeight
+
+        (-hw,hh)  *-------* (hw,hh)
+                  |       |
+                  |       |
+                  |       |
+                  |       |
+                  |       |
+                  |       |
+                  |       |
+        (-hw,-hh) *-------* (hw,-hh)
+
+         */
+        baseShape.set(new float[] {
+                -halfWidth, -halfHeight,
+                halfWidth, -halfHeight,
+                halfWidth, halfHeight,
+                -halfWidth, halfHeight
+        });
         setSize(2f * MathConstants.INCHES_TO_METERS,12f * MathConstants.INCHES_TO_METERS);
         setOrigin(getWidth() / 2, getHeight() / 2);
         armFixtureDef.friction = 1f;
