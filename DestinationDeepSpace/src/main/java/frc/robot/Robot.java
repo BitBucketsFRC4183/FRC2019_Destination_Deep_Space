@@ -197,6 +197,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     driveSubsystem.startIdle();
+    scoringSubsystem.startIdle();
+
   }
 
   /**
@@ -218,6 +220,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     driveSubsystem.startIdle();
+    scoringSubsystem.startIdle();
 
     MotorTestModes.init();
   }
