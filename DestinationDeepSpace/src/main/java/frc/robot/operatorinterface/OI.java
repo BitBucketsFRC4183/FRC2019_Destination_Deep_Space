@@ -98,13 +98,12 @@ public class OI {
 
 
 	// TODO: configure correct IDs
-	private final static int SCORING_HATCH_PANEL_GROUND = controllerMapper.getCircle();
-	private final static int SCORING_HATCH_PANEL_C 		= controllerMapper.getTriangle();
-	private final static int SCORING_HATCH_PANEL_R1 	= controllerMapper.getSquare();
-	private final static int SCORING_BALL_GROUND 		= controllerMapper.getCross();
-	private final static int SCORING_BALL_C 			= controllerMapper.getL1();
-	private final static int SCORING_BALL_LS 			= controllerMapper.getR1();
-	private final static int SCORING_BALL_R1 			= controllerMapper.getL2();
+	private final static int SCORING_HATCH_PANEL = controllerMapper.getCircle();
+	private final static int SCORING_GROUND      = controllerMapper.getCross();
+	private final static int SCORING_BALL_C      = controllerMapper.getL1();
+	private final static int SCORING_BALL_LS     = controllerMapper.getR1();
+	private final static int SCORING_BALL_R1     = controllerMapper.getL2();
+	private final static int SWITCH_ORIENTATION  = controllerMapper.getSquare();
 
 
 
@@ -176,6 +175,10 @@ public class OI {
 
 	public boolean bRocket1() {
 		return operatorControl.getRawButton(SCORING_BALL_R1);
+	}
+
+	public boolean switchOrientation() {
+		return operatorControl.getRawButton(SWITCH_ORIENTATION);
 	}
 }
 

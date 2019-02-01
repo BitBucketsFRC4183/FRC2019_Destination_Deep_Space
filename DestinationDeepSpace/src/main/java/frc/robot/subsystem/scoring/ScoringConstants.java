@@ -2,9 +2,9 @@ package frc.robot.subsystem.scoring;
 
 public class ScoringConstants {
 	public enum ScoringLevel {
-		GROUND            (0),       // hatch panel ground pickup
+		GROUND               (0),       // hatch panel ground pickup
 		
-		HP             (19.0),    // cargo scoring
+		HP                   (19.0),    // cargo scoring
 
 		BALL_CARGO           (31.5),    // cargo scoring
 		BALL_LOADING_STATION (37.0),    // loading station pickup
@@ -13,12 +13,16 @@ public class ScoringConstants {
 
 
 		private final double HEIGHT;
+		private final double ANGLE;
+
 		ScoringLevel(double height) {
 			HEIGHT = height;
+			// tip of arm is given by (height off floor) + (length) * sin(angle)
+			ANGLE = Math.asin((height - ARM_AXIS_HEIGHT_OFF_FLOOR) / ARM_LENGTH);
 		}
 
-		public double getHeight() {
-			return HEIGHT;
+		public double getAngle() {
+			return ANGLE;
 		}
 	}
 
@@ -34,11 +38,8 @@ public class ScoringConstants {
 	// if encoder reads a higher value, then the arm is in the back of the robot
 	public static final int ARM_MOTOR_SWITCH_TICK_THRESHOLD = ARM_MOTOR_NATIVE_TICKS_PER_REV / 2;
 
+	
 
-
-	// drive has to be going in the same direction for at least 1 second before
-	// scoring arm rotates with it
-	public static final double SECONDS_BEFORE_SCORING_ROTATION = 1.0;
-	// TODO: 20Hz driver station?
-	public static final int ITERATIONS_BEFORE_SCORING_ROTATION = (int) (SECONDS_BEFORE_SCORING_ROTATION * 20);
+	// TODO: actual value
+	public static int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 5;
 }
