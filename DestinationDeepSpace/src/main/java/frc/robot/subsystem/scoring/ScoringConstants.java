@@ -12,33 +12,32 @@ public class ScoringConstants {
 
 
 
-		private final double HEIGHT;
-		private final double ANGLE;
+		private final double HEIGHT_INCH;
+		private final double ANGLE_DEG;
 
-		ScoringLevel(double height) {
-			HEIGHT = height;
+		ScoringLevel(double height_inch) {
+			HEIGHT_INCH = height_inch;
 			// tip of arm is given by (height off floor) + (length) * sin(angle)
-			ANGLE = Math.asin((height - ARM_AXIS_HEIGHT_OFF_FLOOR) / ARM_LENGTH);
+			ANGLE_DEG = Math.toDegrees(Math.asin((height_inch - ARM_AXIS_HEIGHT_OFF_FLOOR_INCH) / ARM_LENGTH_INCH));
 		}
 
-		public double getAngle() {
-			return ANGLE;
+		public double getAngle_deg() {
+			return ANGLE_DEG;
 		}
 	}
 
 
-	public static final double ARM_LENGTH = 0;
-	public static final double ARM_AXIS_HEIGHT_OFF_FLOOR = 0;
+	public static final double ARM_LENGTH_INCH = 0;
+	public static final double ARM_AXIS_HEIGHT_OFF_FLOOR_INCH = 0;
 
 
 
 	public static final int ARM_MOTOR_NATIVE_TICKS_PER_REV = 8192;
-	public static final double ARM_MOTOR_RADIUS = 0;
 
 	// if encoder reads a higher value, then the arm is in the back of the robot
-	public static final int ARM_MOTOR_SWITCH_TICK_THRESHOLD = ARM_MOTOR_NATIVE_TICKS_PER_REV / 2;
+	public static final int ARM_MOTOR_SWITCH_THRESHOLD_TICKS = ARM_MOTOR_NATIVE_TICKS_PER_REV / 2;
 
-	
+
 
 	// TODO: actual value
 	public static int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 5;
