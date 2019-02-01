@@ -32,8 +32,8 @@ public class MotorTestModes {
         modeChooser.addOption("Auto Tuner", TestMode.AutoTune);
 
 
-        SmartDashboard.putData("Test Mode", modeChooser);
-        SmartDashboard.putNumber("Motor ID", 0);
+        SmartDashboard.putData("TestMode/mode", modeChooser);
+        SmartDashboard.putNumber("TestMode/Motor ID", 0);
     }
 
 
@@ -41,7 +41,7 @@ public class MotorTestModes {
     // called from Robot.testPeriodic
     public static void periodic() {
         // get the selected motor ID
-        int motorID = (int) SmartDashboard.getNumber("Motor ID", 0);
+        int motorID = (int) SmartDashboard.getNumber("TestMode/Motor ID", 0);
 
         if (motorID == 0) {
             return;
@@ -66,12 +66,14 @@ public class MotorTestModes {
                 lastTestMode = mode;
 
                 // reset % voltage input to 0
-                SmartDashboard.putNumber("% voltage", 0);
+                SmartDashboard.putNumber("TestMode/% voltage", 0);
             } else {
                 // read % voltage input and send it to motor
-                double v = SmartDashboard.getNumber("% voltage", 0);
+                double v = SmartDashboard.getNumber("TestMode/% voltage", 0);
 
                 lastMotor.set(ControlMode.PercentOutput, v);
+
+                SmartDashboard.putNumber("AutoTuner/Power output", lastMotor.getMotorOutputVoltage());
             }
         } else {
             if (mode != lastTestMode) {
