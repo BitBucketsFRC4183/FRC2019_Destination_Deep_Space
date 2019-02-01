@@ -3,6 +3,7 @@ package frc.robot.simulator.physics.bodies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -44,11 +45,11 @@ public class Arm extends Image {
         (-hw,-hh) *-------* (hw,-hh)
 
          */
-        baseShape.set(new float[] {
-                -halfWidth, -halfHeight,
-                halfWidth, -halfHeight,
-                halfWidth, halfHeight,
-                -halfWidth, halfHeight
+        baseShape.set(new Vector2[] {
+                new Vector2(-halfWidth, -halfHeight),
+                new Vector2(halfWidth, -halfHeight),
+                new Vector2(halfWidth, halfHeight),
+                new Vector2(-halfWidth, halfHeight)
         });
         setSize(2f * MathConstants.INCHES_TO_METERS,12f * MathConstants.INCHES_TO_METERS);
         setOrigin(getWidth() / 2, getHeight() / 2);
