@@ -50,7 +50,7 @@ public class TurnBy extends Command {
     	
     	if (timeout || driveSubsystem.isTurnComplete(angle_deg)) 
     	{
-    		return CommandUtils.autoStateChange(this, new Idle());
+    		return CommandUtils.stateChange(new Idle());
     		
     	}
     	return false;

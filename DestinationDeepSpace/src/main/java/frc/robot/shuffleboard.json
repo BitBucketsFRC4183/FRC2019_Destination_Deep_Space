@@ -88,6 +88,98 @@
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/DiagnosticsEnabled",
               "_title": "SmartDashboard/DriveSubsystem/DiagnosticsEnabled"
             }
+          },
+          "11,3": {
+            "size": [
+              9,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed Factor",
+              "_title": "SmartDashboard/DriveSubsystem/Speed Factor",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
+            }
+          },
+          "11,6": {
+            "size": [
+              9,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Factor",
+              "_title": "SmartDashboard/DriveSubsystem/Turn Factor",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
+            }
+          },
+          "15,0": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/CurrentCommand",
+              "_title": "/SmartDashboard/DriveSubsystem/CurrentCommand"
+            }
+          },
+          "8,8": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Lat Accel (g)",
+              "_title": "/SmartDashboard/DriveSubsystem/Lat Accel (g)"
+            }
+          },
+          "5,6": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Commanded Speed (ips)",
+              "_title": "/SmartDashboard/DriveSubsystem/Commanded Speed (ips)"
+            }
+          },
+          "5,7": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Commanded Turn (dps)",
+              "_title": "/SmartDashboard/DriveSubsystem/Commanded Turn (dps)"
+            }
+          },
+          "8,6": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Acheived Speed (ips)",
+              "_title": "/SmartDashboard/DriveSubsystem/Acheived Speed (ips)"
+            }
+          },
+          "8,7": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Acheived Turn (dps)",
+              "_title": "/SmartDashboard/DriveSubsystem/Acheived Turn (dps)"
+            }
           }
         }
       }
@@ -102,19 +194,6 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "5,1": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Gyro",
-              "_title": "Gyro",
-              "Visuals/Major tick spacing": 45.0,
-              "Visuals/Starting angle": 180.0,
-              "Visuals/Show tick mark ring": true
-            }
-          },
           "22,0": {
             "size": [
               1,
@@ -124,20 +203,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/NavigationSubsystem/PeriodicCounter",
               "_title": "/SmartDashboard/NavigationSubsystem/PeriodicCounter"
-            }
-          },
-          "5,4": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Number Slider",
-              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
-              "_title": "SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
-              "Slider Settings/Min": -360.0,
-              "Slider Settings/Max": 360.0,
-              "Slider Settings/Block increment": 0.0625
             }
           },
           "21,1": {
@@ -160,6 +225,32 @@
               "_type": "Toggle Switch",
               "_source0": "network_table:///SmartDashboard/NavigationSubsystem/DiagnosticsEnabled",
               "_title": "SmartDashboard/NavigationSubsystem/DiagnosticsEnabled"
+            }
+          },
+          "5,1": {
+            "size": [
+              5,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Angle (deg)",
+              "_title": "SmartDashboard/NavigationSubsystem/Yaw Angle (deg)",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/NavigationSubsystem/Yaw Angle (deg)": true
+            }
+          },
+          "5,4": {
+            "size": [
+              5,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
+              "_title": "SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/NavigationSubsystem/Yaw Rate (dps)": true
             }
           }
         }
@@ -442,9 +533,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.0,
-    "y": 2.0,
-    "width": 1932.0,
-    "height": 1004.0
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1936.0,
+    "height": 1015.0
   }
 }

@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
     //    Updates the Shuffleboard
     //
     //  Scheduler.getInstance().run(), below
-    //    Exits when Robot is Disabled
+    //    Exits when Scheduler is Disabled (but this normally only happens when LiveWindow cycles enable/disble)
     //    Queries Buttons in reverse index order to ensure that Button #0 is highest priority
     //    Executes each Subsystem.periodic() function
     //    Executes each Command scheduled by all previous actions
@@ -166,6 +166,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    driveSubsystem.startIdle();
   }
 
   /**
@@ -195,6 +196,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    driveSubsystem.startIdle();
   }
 
   /**
@@ -215,6 +217,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopInit() {
+    driveSubsystem.startIdle();
+
     MotorTestModes.init();
   }
 
@@ -238,6 +242,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testInit() {
+    // !!!!!! DON'T START THE SS IDLE COMMANDS HERE !!!!
+
     scoringSubsystem.diagnosticsInit();
   }  
   
