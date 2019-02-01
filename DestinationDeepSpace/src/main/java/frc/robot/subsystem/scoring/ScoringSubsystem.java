@@ -233,8 +233,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		rotateScoringArm();
 
-		// TODO: don't check this in
-		manualArmOperate();
+		// This is just for testing, leave commented out.
+//		manualArmOperate();
 	}
 
 	@Override
