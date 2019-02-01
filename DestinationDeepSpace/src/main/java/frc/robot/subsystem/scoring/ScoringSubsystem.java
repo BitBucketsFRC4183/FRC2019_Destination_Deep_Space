@@ -32,7 +32,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private static ScoringSubsystem inst;
 
 
-	private ScoringIdle initialCommand;
+	private Idle initialCommand;
 
 
 	private final WPI_TalonSRX rollerMotor;
@@ -122,7 +122,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// if the arm is in the back of the robot
 		if (front == false) {
 			// switch the ticks so that the arm will go to intended position on the back too
-			ticks = 2 * ScoringConstants.ARM_MOTOR_SWITCH_TICK_THRESHOLD - ticks;
+			ticks = 2 * ScoringConstants.ARM_MOTOR_SWITCH_THRESHOLD_TICKS - ticks;
 		}
 
 		rotationMotor1.set(ControlMode.MotionMagic, ticks);
@@ -131,7 +131,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 	public void goToLevel(ScoringConstants.ScoringLevel level) {
-		double angle = level.getAngle();
+		double angle = level.getAngle_deg();
 
 		directArmTo(angle);
 	}
@@ -200,24 +200,29 @@ public class ScoringSubsystem extends BitBucketSubsystem {
         boolean bLoadingStation = oi.bLoadingStation();
 		boolean bRocket1 = oi.bRocket1();
 		
-		// if only one level is selected, return it
-		if (hp ^ ground ^ bCargo ^ bLoadingStation ^ bRocket1) {
-			ScoringConstants.ScoringLevel level = null;
+		ScoringConstants.ScoringLevel level = null;
 
-            if (hp) {
-            	level = ScoringConstants.ScoringLevel.HP;
-            } else if (ground) {
-            	level = ScoringConstants.ScoringLevel.GROUND;
-            } else if (bCargo) {
-            	level = ScoringConstants.ScoringLevel.BALL_CARGO;
-            } else if (bRocket1) {
-    			level = ScoringConstants.ScoringLevel.BALL_ROCKET_1;
-			}
-			
-			return level;
-		} else {
-			return null;
+		if (hp) {
+			level = ScoringConstants.ScoringLevel.HP;
 		}
+		if (ground) {
+			if (level == null) { level = ScoringConstants.ScoringLevel.GROUND; }
+			else { return null; }
+		}
+		if (bCargo) {
+			if (level == null) { level = ScoringConstants.ScoringLevel.BALL_CARGO; }
+			else { return null; }
+		}
+		if (bLoadingStation) {
+			if (level == null) { level = ScoringConstants.ScoringLevel.BALL_LOADING_STATION; }
+			else { return null; }
+		}
+		if (bRocket1) {
+			if (level == null) { level = ScoringConstants.ScoringLevel.BALL_ROCKET_1; }
+			else { return null; }
+		}
+
+		return level;
 	}
 
 	public int getArmLevelTickError() {
@@ -249,7 +254,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// Don't use default commands as they can catch you by surprise
 		System.out.println("Starting " + getName() + " Idle...");
 		if (initialCommand == null) {
-			initialCommand = new ScoringIdle(); // Only create it once
+			initialCommand = new Idle(); // Only create it once
 		}
 		initialCommand.start();
 	}
