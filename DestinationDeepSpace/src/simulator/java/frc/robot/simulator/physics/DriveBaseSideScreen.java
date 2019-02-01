@@ -3,6 +3,7 @@ package frc.robot.simulator.physics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -28,6 +29,7 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
     private DriveBaseSide driveBaseRightSide;
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
+    private MotorStatsText motorStatsText;
 
     // no gravity, let stuff float
 
@@ -57,12 +59,13 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
         world = new World(gravity, true);
 
         // create a couple actors
-        driveBaseLeftSide = new DriveBaseSide(world, 2f, 2f);
+        driveBaseLeftSide = new DriveBaseSide(world, 2f, .6f);
         Flooer flooer = new Flooer(world);
-        // driveBaseRightSide = new DriveBaseSide(world, 4f, 2f);
+        motorStatsText = new MotorStatsText(camWidth / 2, camHeight/2);
+
         stage.addActor(driveBaseLeftSide);
         stage.addActor(flooer);
-        // stage.addActor(driveBaseRightSide);
+        stage.addActor(motorStatsText);
     }
 
     @Override
@@ -80,12 +83,7 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
 
         driveBaseLeftSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftFrontMotor().getMotorOutputPercent()));
         driveBaseLeftSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftRearMotor().getMotorOutputPercent()));
-
         driveBaseLeftSide.setArmRotationSpeed((float) (ScoringSubsystem.instance().getRotationMotor1().getMotorOutputPercent()));
-
-        // driveBaseRightSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getRightFrontMotor().getMotorOutputPercent()));
-        // driveBaseRightSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getRightRearMotor().getMotorOutputPercent()));
-
         camera.update();
 
         stage.act();
