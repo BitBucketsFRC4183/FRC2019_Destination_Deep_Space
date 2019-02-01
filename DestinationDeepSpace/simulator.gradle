@@ -1,0 +1,91 @@
+import org.gradle.internal.os.OperatingSystem
+
+ext {
+    gdxVersion = '1.9.5'
+    snobotSimOverrideVersion = "${snobotSim.snobotSimVersion}" //'2019-0.0.1-4183'
+}
+
+// If you have your own simulator code, you must tell GradleRio that you want that code compiled.
+// The recommended way to do it is to create a new source set, just for this, and jar it up later
+sourceSets {
+    simulatorExtensions {
+        java {
+            srcDirs += ["src/simulator/java"]
+        }
+        resources {
+            srcDirs += ["src/simulator/resources"]
+        }
+    }
+}
+
+// Add a new configuration for the simulator (and native3rdPartyDeps, for an osx jinput bug with snobotsim)
+configurations {
+    native3rdPartyDeps
+    simulatorExtensionsCompile.extendsFrom(testCompile)
+}
+
+dependencies {
+
+    native3rdPartyDeps "net.java.jinput:jinput:2.0.7"
+
+    // add in deps for wpi
+    simulatorExtensionsCompile snobotSimJava()
+    simulatorExtensionsCompile wpi.deps.wpilib()
+    simulatorExtensionsCompile wpi.deps.vendor.java()
+    simulatorExtensionsCompile wpi.deps.vendor.jni(wpi.platforms.desktop)
+    simulatorExtensionsCompile group: 'org.scream3r', name: 'jssc', version: '2.8.0'
+    simulatorExtensionsCompile sourceSets.main.output
+
+    // add in snobotsim deps. This allows us to both override the snobotsim version, and 
+    // it also makes these deps available to the IDE
+    testCompile "com.snobot.simulator:snobot_sim_gui:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:snobot_sim_java:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:snobot_sim_utilities:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:adx_family:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:navx_simulator:${snobotSimOverrideVersion}"
+    testCompile "com.snobot.simulator:ctre_sim_override:${snobotSim.snobotSimCtreVersion}"
+    testCompile "jfree:jfreechart:${snobotSim.jfreechart}"
+    testCompile "org.apache.logging.log4j:log4j-core:${snobotSim.log4j}"
+    testCompile "org.yaml:snakeyaml:${snobotSim.snakeyaml}"
+    testCompile "com.miglayout:miglayout-swing:${snobotSim.miglayout}"
+    testCompile "net.java.jinput:jinput:${snobotSim.jinput}"
+    testCompile 'org.apache.commons:commons-lang3:3.0'
+
+    // Add in some libgdx stuff for physics and rendering
+    testCompile "org.slf4j:slf4j-simple:1.7.25"
+    testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    testCompile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+    testCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
+    testCompile snobotSimJava()
+    // testCompile sourceSets.simulatorExtensions.output
+
+}
+
+// You need to jar up the files in order for SnobotSim to know about your special classes. The task name has to be exactly this
+task simulatorExtensionJar(type: Jar) {
+    baseName = "SnobotSimExtensions"
+    from sourceSets.simulatorExtensions.output
+}
+
+// This is a mac fix for the jinput library. It's *.jnilib, which snobot doesn't include by default
+task unzipNativeLibraries(type: Copy) {
+
+    configurations.native3rdPartyDeps.each {
+        from zipTree(it)
+        into "build/tmp/snobotSimJava"
+        include "**/*.jnilib"
+    }
+
+    includeEmptyDirs = false
+}
+
+if (OperatingSystem.current().isMacOsX()) {
+    simulatorExtensionJar.dependsOn(unzipNativeLibraries)
+}
+
+// This helps the plugin work easier... Whenever you build your jar, build your extension too (if it is out of date)
+jar.dependsOn simulatorExtensionJar

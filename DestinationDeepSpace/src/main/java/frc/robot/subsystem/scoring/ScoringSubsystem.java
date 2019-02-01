@@ -136,7 +136,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		directArmTo(angle);
 	}
 
-
+	public void manualArmOperate() {
+		rotationMotor1.set(ControlMode.PercentOutput, OI.instance().manualArmRotate());
+	}
 
 	/**
 	 * + pow --> spit out
