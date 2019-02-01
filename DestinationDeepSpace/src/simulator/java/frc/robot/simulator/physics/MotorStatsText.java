@@ -19,7 +19,8 @@ public class MotorStatsText extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        font.draw(batch, "Arm Motor Output: " + ScoringSubsystem.instance().getRotationMotor1().getMotorOutputPercent() * 100.0f, getX(), getY());
+        /// TODO: Fix for position control
+        /// font.draw(batch, "Arm Motor Output: " + ScoringSubsystem.instance().getRotationMotor1().getMotorOutputPercent() * 100.0f, getX(), getY());
     }
 
 }
