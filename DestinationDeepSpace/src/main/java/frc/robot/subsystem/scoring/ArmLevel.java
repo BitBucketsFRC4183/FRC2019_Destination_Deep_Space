@@ -49,8 +49,13 @@ public class ArmLevel extends Command {
 
         // get selected level on joystick
         ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
+
+        if (level == ScoringConstants.ScoringLevel.INVALID) {
+            return false;
+        }
+
         // if one level button is pressed that does not correspond to this level
-        boolean differentLevel = (level != null && level != LEVEL);
+        boolean differentLevel = (level != ScoringConstants.ScoringLevel.NONE && level != LEVEL);
         
 
         // if trying to change the level and orientation, then don't allow it

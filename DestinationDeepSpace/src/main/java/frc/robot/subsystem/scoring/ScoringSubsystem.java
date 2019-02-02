@@ -202,29 +202,39 @@ public class ScoringSubsystem extends BitBucketSubsystem {
         boolean bLoadingStation = oi.bLoadingStation();
 		boolean bRocket1 = oi.bRocket1();
 		
-		ScoringConstants.ScoringLevel level = null;
+		ScoringConstants.ScoringLevel level = ScoringConstants.ScoringLevel.NONE;
 
 		if (hp) {
 			level = ScoringConstants.ScoringLevel.HP;
 		}
 		if (ground) {
 			if (level == null) { level = ScoringConstants.ScoringLevel.GROUND; }
-			else { return null; }
+			else { return ScoringConstants.ScoringLevel.INVALID; }
 		}
 		if (bCargo) {
 			if (level == null) { level = ScoringConstants.ScoringLevel.BALL_CARGO; }
-			else { return null; }
+			else { return ScoringConstants.ScoringLevel.INVALID; }
 		}
 		if (bLoadingStation) {
 			if (level == null) { level = ScoringConstants.ScoringLevel.BALL_LOADING_STATION; }
-			else { return null; }
+			else { return ScoringConstants.ScoringLevel.INVALID; }
 		}
 		if (bRocket1) {
 			if (level == null) { level = ScoringConstants.ScoringLevel.BALL_ROCKET_1; }
-			else { return null; }
+			else { return ScoringConstants.ScoringLevel.INVALID; }
 		}
 
 		return level;
+	}
+
+	public boolean getAnyLevelSelected() {
+		boolean hp = oi.hp();
+        boolean ground = oi.ground();
+        boolean bCargo = oi.bCargo();
+        boolean bLoadingStation = oi.bLoadingStation();
+		boolean bRocket1 = oi.bRocket1();
+
+		return hp || ground || bCargo || bLoadingStation || bRocket1;
 	}
 
 	public int getArmLevelTickError() {
