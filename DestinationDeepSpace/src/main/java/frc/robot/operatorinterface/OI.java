@@ -18,8 +18,8 @@ public class OI {
 	private OI() {
 	}
 
-	// private static ControllerMapper controllerMapper = ControllerMapper.ps4();
-	private static ControllerMapper controllerMapper = ControllerMapper.xbox();
+	private static ControllerMapper controllerMapper = ControllerMapper.ps4();
+	//private static ControllerMapper controllerMapper = ControllerMapper.xbox();
 
 	private final static int DRIVER_JOYSTICK_ID = 0;
 	private final static int OPERATOR_JOYSTICK_ID = 1;
