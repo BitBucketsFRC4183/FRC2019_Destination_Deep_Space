@@ -64,7 +64,6 @@ public class OI {
 	 */
 	public double manualArmRotate() {
 		return driverControl.getRawAxis(controllerMapper.getRightStickY());
-		// return 0;
 	}
 
 	/**

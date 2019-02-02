@@ -13,8 +13,14 @@
       "stopOnEntry": false,
       "mainClass": "frc.robot.simulator.SimulatorMain",
       "args": "",
-      "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/ -Dxbox",
+      "windows": {
+        "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/;build/tmp/jniExtractDir/ -Dxbox",
+      },
+      "osx": {
+        "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/ -Dxbox",
+      },
       "env": {
+        // mac only, windows doesn't care about this env var
         "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
       },
       "preLaunchTask": "extractSnobotSimJavaJNI"
@@ -28,8 +34,14 @@
       "stopOnEntry": false,
       "mainClass": "com.snobot.simulator.Main",
       "args": "",
-      "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/ -Dxbox",
+      "windows": {
+        "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/;build/tmp/jniExtractDir/ -Dxbox",
+      },
+      "osx": {
+        "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/ -Dxbox",
+      },
       "env": {
+        // mac only, windows doesn't care about this env var
         "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
       },
       "preLaunchTask": "extractSnobotSimJavaJNI"
