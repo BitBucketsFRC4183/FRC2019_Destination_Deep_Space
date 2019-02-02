@@ -2,6 +2,9 @@ package frc.robot.subsystem.scoring;
 
 public class ScoringConstants {
 	public enum ScoringLevel {
+		INVALID              (0),
+		NONE                 (0),
+
 		GROUND               (0),       // hatch panel ground pickup
 		
 		HP                   (19.0),    // cargo scoring

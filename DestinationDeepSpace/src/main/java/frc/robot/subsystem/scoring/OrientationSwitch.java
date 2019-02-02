@@ -62,8 +62,12 @@ public class OrientationSwitch extends Command {
         // get selected level on joystick
         ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
 
+        if (level == ScoringConstants.ScoringLevel.INVALID) {
+            return false;
+        }
+
         // if some level is selected, go to it
-        if (level != null) {
+        if (level != ScoringConstants.ScoringLevel.NONE) {
             return CommandUtils.stateChange(new ArmLevel(level));
         }
 

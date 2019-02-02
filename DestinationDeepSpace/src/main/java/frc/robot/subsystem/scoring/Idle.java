@@ -23,13 +23,17 @@ public class Idle extends Command {
     @Override
     protected boolean isFinished() {
         ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
+
+        if (level == ScoringConstants.ScoringLevel.INVALID) {
+            return false;
+        }
         
         boolean switchOrientation = oi.switchOrientation();
 
-        if ((level != null) ^ switchOrientation) {
+        if ((level != ScoringConstants.ScoringLevel.NONE) ^ switchOrientation) {
             Command nextState = null;
             
-            if (level != null) {
+            if (level != ScoringConstants.ScoringLevel.NONE) {
                 nextState = new ArmLevel(level);
             } else {
                 nextState = new OrientationSwitch();
