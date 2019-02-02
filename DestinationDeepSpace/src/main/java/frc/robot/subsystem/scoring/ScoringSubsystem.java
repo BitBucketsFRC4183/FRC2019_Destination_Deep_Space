@@ -231,21 +231,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	public int getArmLevelTickError() {
 		return rotationMotor1.getClosedLoopError();
 	}
-
-
-
-
-
-  	@Override
-	public void diagnosticsInit() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void diagnosticsCheck() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	protected void initDefaultCommand() {
@@ -264,36 +249,41 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
+		clearDiagnosticsEnabled();
 		updateBaseDashboard();
 		if (getTelemetryEnabled()) {
 			SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle());
 			SmartDashboard.putNumber(getName() + "/Arm Ticks", rotationMotor1.getSelectedSensorPosition());
 		}
+		// commands will handle dealing with arm manipulation
+	}
+
+	@Override
+	public void diagnosticsInitialize() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void diagnosticsPeriodic() {
+		updateBaseDashboard();
 		if (getDiagnosticsEnabled())
 		{
 			double angle = SmartDashboard.getNumber(getName() + "/Test Angle", 0);
 			directArmTo(angle);
 		}
 
-		// don't call this unless we are in test
-		// manualArmOperate();
-
-
 		// commands will handle dealing with arm manipulation
 	}
 
 	@Override
-	public void diagnosticsExecute() {
+	public void diagnosticsCheck() {
 		// TODO Auto-generated method stub
-
-		//ScoringDiagnostics.periodic();
+		
 	}
 
 	@Override
 	public void initialize() {
 		initializeBaseDashboard();
-
-
 
 		SmartDashboard.putNumber(getName() + "/Test Angle", 0);
 	}

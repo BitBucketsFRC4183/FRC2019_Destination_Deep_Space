@@ -67,6 +67,9 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
+		clearDiagnosticsEnabled();
+		updateBaseDashboard();
+
 		switch (state) {
 			case IDLE:{
 				if (oi.armClimber()){
@@ -97,24 +100,27 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 				break;
 		}
 
-		updateBaseDashboard();
-
 		if (getTelemetryEnabled())
 		{
 		}
+		updateDashboard();
+		
+	}
+
+	@Override
+	public void diagnosticsPeriodic() {
+		updateBaseDashboard();
 		if (getDiagnosticsEnabled())
 		{
 			double angle = SmartDashboard.getNumber(getName()+"/ServoTestAngle(deg)", 0.0);
 			climbServo.setAngle(angle);
 		}
-		SmartDashboard.putNumber(getName()+"/CurrentServoAngle(deg)",climbServo.getAngle());
-		
+		updateDashboard();
 	}
 
-	@Override
-	public void diagnosticsExecute() {
-		// TODO: Auto-generated method stub
-		
+	public void updateDashboard()
+	{
+		SmartDashboard.putNumber(getName()+"/CurrentServoAngle(deg)",climbServo.getAngle());
 	}
 
 	public void initialize() {
@@ -129,7 +135,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	}
 
 	@Override
-	public void diagnosticsInit() {
+	public void diagnosticsInitialize() {
 
 	}
 
