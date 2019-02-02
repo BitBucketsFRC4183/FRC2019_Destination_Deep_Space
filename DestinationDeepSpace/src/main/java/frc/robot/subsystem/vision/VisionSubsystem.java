@@ -43,18 +43,6 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 	private LightingSubsystem lightingSubsystem = LightingSubsystem.instance();
 
-  	@Override
-	public void diagnosticsInit() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void diagnosticsCheck() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
@@ -63,6 +51,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
+		clearDiagnosticsEnabled();		
 		if (ds.isDisabled())
 		{
 			setIlluminatorSnore();
@@ -81,14 +70,27 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		{
 			
 		}
-		if (getDiagnosticsEnabled())
-		{
-			
-		}			
 	}
 
 	@Override
-	public void diagnosticsExecute() {
+	public void diagnosticsInitialize() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void diagnosticsPeriodic() {
+		updateBaseDashboard();
+		if (getDiagnosticsEnabled())
+		{
+
+			/// TODO: Add controls for illuminator on/off and camera controls here
+		}
+
+
+	}
+
+	@Override
+	public void diagnosticsCheck() {
 		// TODO Auto-generated method stub
 		
 	}

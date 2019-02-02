@@ -221,8 +221,6 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     driveSubsystem.startIdle();
     scoringSubsystem.startIdle();
-
-    MotorTestModes.init();
   }
 
   /**
@@ -245,7 +243,13 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // !!!!!! DON'T START THE SS IDLE COMMANDS HERE !!!!
 
-    scoringSubsystem.diagnosticsInit();
+    driveSubsystem.diagnosticsInitialize();
+    climberSubsystem.diagnosticsInitialize();
+    scoringSubsystem.diagnosticsInitialize();
+    navigationSubsystem.diagnosticsInitialize();
+    visionSubsystem.diagnosticsInitialize();
+    lightingSubsystem.diagnosticsInitialize();    
+
     MotorTestModes.init();
   }  
   
@@ -254,8 +258,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    scoringSubsystem.diagnosticsExecute();
+    
+    driveSubsystem.diagnosticsPeriodic();
+    climberSubsystem.diagnosticsPeriodic();
+    scoringSubsystem.diagnosticsPeriodic();
+    navigationSubsystem.diagnosticsPeriodic();
+    visionSubsystem.diagnosticsPeriodic();
+    lightingSubsystem.diagnosticsPeriodic();    
+
     MotorTestModes.periodic();
+
     // NOTE: because this code executes before robotPeriodic in each iteration
     // the actions here occur BEFORE the scheduled commands run; this means that
     // commands can be added during this execution cycle and will be acted upon

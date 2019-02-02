@@ -78,12 +78,17 @@ public abstract class BitBucketSubsystem extends Subsystem {
 		}
 		return diagnosticsEnabled;
 	}
+	public void clearDiagnosticsEnabled()
+	{
+		diagnosticsEnabled = false;
+		SmartDashboard.putBoolean(getName() + "/DiagnosticsEnabled", diagnosticsEnabled);
+	}
 
 	public abstract void initialize();		// Force all derived classes to have these interfaces
 
-	public abstract void diagnosticsInit();
+	public abstract void diagnosticsInitialize();
 	
-	public abstract void diagnosticsExecute();
+	public abstract void diagnosticsPeriodic();
 	
 	public abstract void diagnosticsCheck();
 	
