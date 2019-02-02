@@ -65,8 +65,8 @@ public class OI {
 	 * @return
 	 */
 	public double manualArmRotate() {
-//		return driverControl.getRawAxis(controllerMapper.getRightStickY());
-		return 0;
+		return driverControl.getRawAxis(controllerMapper.getRightStickY());
+		// return 0;
 	}
 
 	/**

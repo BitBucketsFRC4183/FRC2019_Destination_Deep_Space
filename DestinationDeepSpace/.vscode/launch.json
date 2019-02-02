@@ -17,7 +17,7 @@
       "env": {
         "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
       },
-      // "preLaunchTask": "extractSnobotSimJavaJNI"
+      "preLaunchTask": "extractSnobotSimJavaJNI"
     },
     {
       "type": "java",
@@ -32,7 +32,7 @@
       "env": {
         "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
       },
-      // "preLaunchTask": "extractSnobotSimJavaJNI"
+      "preLaunchTask": "extractSnobotSimJavaJNI"
     },
     {
       "type": "wpilib",
