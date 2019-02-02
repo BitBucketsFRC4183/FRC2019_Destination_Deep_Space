@@ -13,11 +13,11 @@
       "stopOnEntry": false,
       "mainClass": "frc.robot.simulator.SimulatorMain",
       "args": "",
-      "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/",
+      "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/ -Dxbox",
       "env": {
         "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
       },
-      "preLaunchTask": "extractSnobotSimJavaJNI"
+      // "preLaunchTask": "extractSnobotSimJavaJNI"
     },
     {
       "type": "java",
@@ -28,11 +28,11 @@
       "stopOnEntry": false,
       "mainClass": "com.snobot.simulator.Main",
       "args": "",
-      "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/",
+      "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/ -Dxbox",
       "env": {
         "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
       },
-      "preLaunchTask": "extractSnobotSimJavaJNI"
+      // "preLaunchTask": "extractSnobotSimJavaJNI"
     },
     {
       "type": "wpilib",

@@ -1,13 +1,14 @@
 package frc.robot.operatorinterface;
 
-// import java.util.HashSet;
-// import java.util.Set;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import frc.robot.subsystem.drive.DriveConstants;
 
 public class OI {
+
+	// private static ControllerMapper controllerMapper = ControllerMapper.ps4();
+	private static ControllerMapper controllerMapper;
+
 	// Singleton method; use OI.instance() to get the OI instance.
 	public static OI instance() {
 		if(inst == null)
@@ -18,8 +19,14 @@ public class OI {
 	private OI() {
 	}
 
-	// private static ControllerMapper controllerMapper = ControllerMapper.ps4();
-	private static ControllerMapper controllerMapper = ControllerMapper.xbox();
+	// Only use the xbox joystick if we explicitly request it.
+	static {
+		if (System.getProperty("xbox", null) != null) {
+			controllerMapper = ControllerMapper.xbox();
+		} else {
+			controllerMapper = ControllerMapper.ps4();
+		}
+	}
 
 	private final static int DRIVER_JOYSTICK_ID = 0;
 	private final static int OPERATOR_JOYSTICK_ID = 1;
