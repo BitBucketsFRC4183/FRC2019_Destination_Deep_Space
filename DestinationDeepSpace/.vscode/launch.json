@@ -6,7 +6,7 @@
   "configurations": [
     {
       "type": "java",
-      "name": "Debug (Launch Sim w/Physics)",
+      "name": "Debug (Launch) Physics Sim",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "console": "internalConsole",
@@ -16,11 +16,12 @@
       "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/",
       "env": {
         "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
-      }
+      },
+      "preLaunchTask": "extractSnobotSimJavaJNI"
     },
     {
       "type": "java",
-      "name": "Debug (Launch Sim)",
+      "name": "Debug (Launch) SnobotSim",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "console": "internalConsole",
@@ -30,7 +31,8 @@
       "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/",
       "env": {
         "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
-      }
+      },
+      "preLaunchTask": "extractSnobotSimJavaJNI"
     },
     {
       "type": "wpilib",

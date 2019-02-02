@@ -11,6 +11,16 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "extractSnobotSimJavaJNI",
+            "type": "shell",
+            "command": "gradle extractSnobotSimJavaJNI",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
         }
+
     ]
 }
