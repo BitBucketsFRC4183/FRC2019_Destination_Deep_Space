@@ -732,18 +732,41 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	@Override
 	public void periodic() {
-
+		clearDiagnosticsEnabled();
 		updateBaseDashboard();
 		if (getTelemetryEnabled())
 		{
 
 		}
+	}
+	/* Any hardware devices used in this subsystem must
+	*  have a check here to see if it is still connected and 
+	*  working properly. For motors check for current draw.
+	*  Return true iff all devices are working properly. Otherwise
+	*  return false. This sets all motors to percent output
+	*/
+	@Override
+	public void diagnosticsInitialize() {
+		
+	}
+	
+	@Override
+	public void diagnosticsPeriodic() {
+
+		updateBaseDashboard();
 		if (getDiagnosticsEnabled())
 		{
+		/// TODO: Add new diagnostics for this subsystem
 
 		}		
+
 	}
-  	
+	
+	@Override
+	public void diagnosticsCheck() {
+		/* Reset flag */
+		
+	}  	
 	public void disable() {
 		setAllMotorsZero();
 	}
@@ -902,35 +925,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		setPosition(rightFrontMotor, inchesToNativeTicks(value_inches));
 	}
 	
-	/* Any hardware devices used in this subsystem must
-	*  have a check here to see if it is still connected and 
-	*  working properly. For motors check for current draw.
-	*  Return true iff all devices are working properly. Otherwise
-	*  return false. This sets all motors to percent output
-	*/
-	@Override
-	public void diagnosticsInit() {
-		
-	}
-	
-	@Override
-	public void diagnosticsExecute() {
-
-		/* Init Diagnostics */
-		SmartDashboard.putBoolean(getName()+"/RunningDiag", true);
-		
-		rightFrontMotor.set(ControlMode.PercentOutput, DriveConstants.MOTOR_TEST_PERCENT);
-		rightRearMotor.set(ControlMode.PercentOutput, -DriveConstants.MOTOR_TEST_PERCENT);
-		leftFrontMotor.set(ControlMode.PercentOutput, -DriveConstants.MOTOR_TEST_PERCENT);
-		leftRearMotor.set(ControlMode.PercentOutput, DriveConstants.MOTOR_TEST_PERCENT);
-	}
-	
-	@Override
-	public void diagnosticsCheck() {
-		/* Reset flag */
-		
-	}
-
 	// Move is complete when we are within tolerance and can consider starting the next move
 	public boolean isMoveComplete(double distance_inches)	// At timeout should be used with this
 	{
