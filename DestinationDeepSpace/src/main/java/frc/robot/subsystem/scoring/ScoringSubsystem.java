@@ -275,7 +275,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			directArmTo(angle);
 		}
 
-		manualArmOperate();
+		// don't call this unless we are in test
+		// manualArmOperate();
 
 
 		// commands will handle dealing with arm manipulation
