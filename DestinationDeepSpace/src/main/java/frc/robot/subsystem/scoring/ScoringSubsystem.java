@@ -227,16 +227,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		return level;
 	}
 
-	public boolean getAnyLevelSelected() {
-		boolean hp = oi.hp();
-        boolean ground = oi.ground();
-        boolean bCargo = oi.bCargo();
-        boolean bLoadingStation = oi.bLoadingStation();
-		boolean bRocket1 = oi.bRocket1();
-
-		return hp || ground || bCargo || bLoadingStation || bRocket1;
-	}
-
 	public int getArmLevelTickError() {
 		return rotationMotor1.getClosedLoopError();
 	}
