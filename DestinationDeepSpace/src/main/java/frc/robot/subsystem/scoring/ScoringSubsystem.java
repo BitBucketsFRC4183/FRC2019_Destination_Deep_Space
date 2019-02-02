@@ -14,6 +14,7 @@ import frc.robot.utils.talonutils.TalonUtils;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -274,6 +275,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			directArmTo(angle);
 		}
 
+		manualArmOperate();
 
 
 		// commands will handle dealing with arm manipulation
@@ -293,5 +295,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 		SmartDashboard.putNumber(getName() + "/Test Angle", 0);
+	}
+
+	public TalonSRX getRotationMotor1() {
+		return rotationMotor1;
 	}
 }
