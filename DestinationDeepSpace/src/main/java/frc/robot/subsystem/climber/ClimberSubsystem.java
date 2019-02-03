@@ -25,7 +25,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	// Singleton method; use ClimberSubsystem.instance() to get the ClimberSubsystem instance.
 	Servo climbServo;
-	WPI_TalonSRX climbMotor1;
+	WPI_TalonSRX  climbMotor1;
 	WPI_TalonSRX climbMotor2;
 	// TODO: Set proper values for angles and motors
 	double highClimbAngle = 40;
@@ -69,7 +69,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public void periodic() {
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
-
+		System.out.println(state);
 		switch (state) {
 			case IDLE:{
 				if (oi.armClimber()){
@@ -147,6 +147,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	private int highClimb() {
 		int err = 0;
 		climbServo.setAngle(highClimbAngle);
+		
 		climbMotor1.set(highClimbSpeed);
 		climbMotor2.set(highClimbSpeed);
 		return (err);
