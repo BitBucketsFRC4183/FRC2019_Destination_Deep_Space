@@ -83,7 +83,7 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
 
         driveBaseLeftSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftFrontMotor().getMotorOutputPercent()));
         driveBaseLeftSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftRearMotor().getMotorOutputPercent()));
-        /// TODO: fix for position control: driveBaseLeftSide.setArmRotationSpeed((float) (ScoringSubsystem.instance().getRotationMotor1().getMotorOutputPercent()));
+        driveBaseLeftSide.setArmRotationSpeed((float) (ScoringSubsystem.instance().getRotationMotor1().getMotorOutputPercent()));
         camera.update();
 
         stage.act();
