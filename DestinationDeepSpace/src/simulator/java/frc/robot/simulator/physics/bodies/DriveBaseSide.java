@@ -14,7 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import frc.robot.simulator.physics.MathConstants;
 
 /**
- * Created by julienvillegas on 31/01/2017.
+ * Right, time to (try and) beat Mike's comment to code ratio while listening to 3 hours worth of videogame soundtracks.
+ * - Elias
  */
 
 public class DriveBaseSide extends Image {
@@ -23,9 +24,13 @@ public class DriveBaseSide extends Image {
     private World world;
     private Wheel frontWheel;
     private Wheel rearWheel;
+    private Roller topRoller;
+    private Roller bottomRoller;
     private Arm arm;
     RevoluteJoint frontWheelJoint;
     RevoluteJoint rearWheelJoint;
+    RevoluteJoint topRollerJoint;
+    RevoluteJoint bottomRollerJoint;
     RevoluteJoint armJoint;
     WeldJoint mountJoint;
     Mount mount;
@@ -55,11 +60,51 @@ public class DriveBaseSide extends Image {
         // you also define it's properties like density, restitution and others we will see shortly
         // If you are wondering, density and area are used to calculate over all mass
         FixtureDef fixtureDef = new FixtureDef();
+        // This is setting it's shape, which is obvious to both of us. Why am I telling you something you already know?
+        // To beat Mike's comment to code ratio.
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution= 0f;
         Fixture fixture = body.createFixture(fixtureDef);
+
+        // Here's some ASCII art!
+
+        // Hi             Hi         Hi Hi Hi           Hi
+        // Hi             Hi            Hi              Hi
+        // Hi             Hi            Hi              Hi
+        // Hi             Hi            Hi              Hi
+        // Hi Hi Hi Hi Hi Hi            Hi              Hi
+        // Hi             Hi            Hi              Hi
+        // Hi             Hi            Hi              Hi
+        // Hi             Hi            Hi              
+        // Hi             Hi            Hi              Hi
+        // Hi             Hi            Hi            Hi Hi
+        // Hi             Hi         Hi Hi Hi           Hi
+
+        /**
+         * 
+         *      111111                 111111                 111111                 111111                 111111                 111111     
+         *   111      111           111      111           111      111           111      111           111      111           111      111  
+         *  1            1         1            1         1            1         1            1         1            1         1            1 
+         * 1              1       1              1       1              1       1              1       1              1       1              1
+         * 1    000000    1       1    000000    1       1    000000    1       1    000000    1       1    000000    1       1    000000    1
+         * 1000001111000001       1000001111000001       1000001111000001       1000001111000001       1000001111000001       1000001111000001
+         * 0011111111111100       0011111111111100       0011111111111100       0011111111111100       0011111111111100       0011111111111100
+         * 0001111111111000       0001111111111000       0001111111111000       0001111111111000       0001111111111000       0001111111111000
+         * 0000001111000000       0000001111000000       0000001111000000       0000001111000000       0000001111000000       0000001111000000 
+         * 0000000000000000       0000000000000000       0000000000000000       0000000000000000       0000000000000000       0000000000000000
+         * 0000000000000000       0000000000000000       0000000000000000       0000000000000000       0000000000000000       0000000000000000
+         * 0000000000000000       0000000000000000       0000000000000000       0000000000000000       0000000000000000       0000000000000000
+         *  00000000000000         00000000000000         00000000000000         00000000000000         00000000000000         00000000000000 
+         *   000000000000           000000000000           000000000000           000000000000           000000000000           000000000000  
+         *    0000000000             0000000000             0000000000             0000000000             0000000000             0000000000   
+         * 
+         *                                                                 ^
+         *                                                                 |
+         *                                                            Bit Buckets!
+         */
+        
 
         // Shape is the only disposable of the lot, so get rid of it
         shape.dispose();
@@ -67,6 +112,7 @@ public class DriveBaseSide extends Image {
         addWheels(x, y);
         addMount(x, y);
         addArm(x, y);
+        addRollers(x, y);
 
         // move it to the x/y
         setTransform(x, y, 0);
@@ -111,6 +157,7 @@ public class DriveBaseSide extends Image {
     public void addArm(float x, float y) {
         arm = new Arm(world, x, y + getHeight()/2f + mount.getHeight());
 
+        //Unlike other robots, this one's well armed.
         RevoluteJointDef armJointDef = new RevoluteJointDef();
         armJointDef.bodyA = arm.getBody();
         armJointDef.bodyB = mount.getBody();
@@ -121,6 +168,32 @@ public class DriveBaseSide extends Image {
         armJointDef.maxMotorTorque = 100;
         armJoint = (RevoluteJoint) world.createJoint(armJointDef);
     }
+    public void addRollers(float x, float y) {
+        topRoller = new Roller(world, arm.getBody().getPosition().x/* X_X */+(7.665f*MathConstants.INCHES_TO_METERS), arm.getBody().getPosition().y+(21*MathConstants.INCHES_TO_METERS));
+        bottomRoller = new Roller(world, arm.getBody().getPosition().x/* O_O */-(7.665f*MathConstants.INCHES_TO_METERS), arm.getBody().getPosition().y+(21*MathConstants.INCHES_TO_METERS));
+
+        RevoluteJointDef topRollerJointDef = new RevoluteJointDef();
+        // Oh no! It's the joint revolution!
+        topRollerJointDef.bodyA = topRoller.getBody();
+        topRollerJointDef.bodyB = arm.getBody();
+        topRollerJointDef.localAnchorA.set(0, 0);
+        topRollerJointDef.localAnchorB.set(7.665f*MathConstants.INCHES_TO_METERS, 21*MathConstants.INCHES_TO_METERS);
+        topRollerJointDef.collideConnected = false;
+        topRollerJointDef.enableMotor = true;
+        topRollerJointDef.maxMotorTorque = 100;
+        topRollerJoint = (RevoluteJoint) world.createJoint(topRollerJointDef);
+
+        RevoluteJointDef bottomRollerJointDef = new RevoluteJointDef();
+        bottomRollerJointDef.bodyA = bottomRoller.getBody();
+        bottomRollerJointDef.bodyB = arm.getBody();
+        bottomRollerJointDef.localAnchorA.set(0, 0);
+        bottomRollerJointDef.localAnchorB.set(-7.665f*MathConstants.INCHES_TO_METERS, 21*MathConstants.INCHES_TO_METERS);
+        bottomRollerJointDef.enableMotor = true;
+        bottomRollerJointDef.maxMotorTorque = 100;
+        bottomRollerJointDef.collideConnected = false;
+        bottomRollerJoint = (RevoluteJoint) world.createJoint(bottomRollerJointDef);
+
+    }
     
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -128,6 +201,8 @@ public class DriveBaseSide extends Image {
         frontWheel.draw(batch, parentAlpha);
         rearWheel.draw(batch, parentAlpha);
         mount.draw(batch,parentAlpha);
+        topRoller.draw(batch,parentAlpha);
+        bottomRoller.draw(batch,parentAlpha);
         // TODO: Turn back on arm drawing after texture is fixed
         // arm.draw(batch,parentAlpha);
     }
@@ -142,6 +217,8 @@ public class DriveBaseSide extends Image {
         this.rearWheel.act(delta);
         this.mount.act(delta);
         this.arm.act(delta);
+        this.topRoller.act(delta);
+        this.bottomRoller.act(delta);
     }
 
     public void setFrontMotorSpeed(float motorSpeed) {
@@ -150,6 +227,14 @@ public class DriveBaseSide extends Image {
 
     public void setRearMotorSpeed(float motorSpeed) {
         rearWheelJoint.setMotorSpeed(motorSpeed);
+    }
+
+    public void setTopRollerSpeed(float motorSpeed) {
+        topRollerJoint.setMotorSpeed(motorSpeed);
+    }
+
+    public void setBottomRollerSpeed(float motorSpeed) {
+        bottomRollerJoint.setMotorSpeed(motorSpeed);
     }
 
     public Body getBody() {
