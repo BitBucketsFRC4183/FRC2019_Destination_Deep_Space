@@ -24,11 +24,6 @@ public class OrientationSwitch extends Command {
         scoringSubsystem.switchOrientation();
     }
 
-    
-
-    @Override
-    protected void execute() {}
-
 
 
     @Override
@@ -59,9 +54,11 @@ public class OrientationSwitch extends Command {
 
 
 
-        // get selected level on joystick
+        // get selected level on joystick (NONE if none selected, INVALID if multiple selected)
         ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
 
+        // if two levels are selected, there is uncertainty in what to do
+		// so don't change the state
         if (level == ScoringConstants.ScoringLevel.INVALID) {
             return false;
         }
