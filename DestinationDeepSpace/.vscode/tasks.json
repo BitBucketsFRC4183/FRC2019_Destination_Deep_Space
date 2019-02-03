@@ -10,17 +10,22 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "options": {
+                "env": {
+                    "JAVA_HOME": "${config:java.home}"
+                }
+            },
         },
         {
             "label": "extractSnobotSimJavaJNI",
             "type": "shell",
             "command": "gradle extractSnobotSimJavaJNI",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            }
-            
+            "options": {
+                "env": {
+                    "JAVA_HOME": "${config:java.home}"
+                }
+            },
         }
 
     ]
