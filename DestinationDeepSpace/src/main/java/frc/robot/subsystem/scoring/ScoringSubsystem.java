@@ -249,6 +249,11 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
+		if(oi.intakeActive()){
+			setRollers(1.0);
+		} else{
+			setRollers(0.0);
+		}
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
 		if (getTelemetryEnabled()) {
@@ -290,5 +295,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	public TalonSRX getRotationMotor1() {
 		return rotationMotor1;
+	}
+	public TalonSRX getRollerMotor() {
+		return rollerMotor;
 	}
 }
