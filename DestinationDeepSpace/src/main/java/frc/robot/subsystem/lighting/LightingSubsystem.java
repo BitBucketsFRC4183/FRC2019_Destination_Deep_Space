@@ -114,10 +114,37 @@ public class LightingSubsystem extends BitBucketSubsystem {
 			   500) ; 			// period_msec - nice default
 	}
 
-
-  	@Override
-	public void diagnosticsInit() {
+	@Override
+	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void periodic() {
+		clearDiagnosticsEnabled();		
+		updateBaseDashboard();
+		if (getTelemetryEnabled())
+		{
+			
+		}
+		
+	}
+
+
+	@Override
+	public void diagnosticsInitialize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void diagnosticsPeriodic() {
+		updateBaseDashboard();
+		if (getDiagnosticsEnabled())
+		{
+			
+		}
 		
 	}
 
@@ -127,31 +154,6 @@ public class LightingSubsystem extends BitBucketSubsystem {
 		
 	}
 	
-	@Override
-	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void periodic() {
-		updateBaseDashboard();
-		if (getTelemetryEnabled())
-		{
-			
-		}
-		if (getDiagnosticsEnabled())
-		{
-			
-		}
-		
-	}
-
-	@Override
-	public void diagnosticsExecute() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void initialize() {

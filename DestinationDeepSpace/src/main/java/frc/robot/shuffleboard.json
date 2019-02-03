@@ -10,7 +10,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "5,0": {
+          "7,0": {
             "size": [
               6,
               4
@@ -23,7 +23,7 @@
               "Visuals/Show velocity vectors": true
             }
           },
-          "11,1": {
+          "13,1": {
             "size": [
               4,
               1
@@ -34,7 +34,7 @@
               "_title": "SmartDashboard/DriveSubsystem/Turn Joystick Scale"
             }
           },
-          "11,0": {
+          "13,0": {
             "size": [
               4,
               1
@@ -45,7 +45,7 @@
               "_title": "SmartDashboard/DriveSubsystem/Forward Joystick Scale"
             }
           },
-          "5,4": {
+          "7,4": {
             "size": [
               6,
               1
@@ -56,7 +56,7 @@
               "_title": "SmartDashboard/DriveSubsystem/Drive Style"
             }
           },
-          "22,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -67,7 +67,7 @@
               "_title": "/SmartDashboard/DriveSubsystem/PeriodicCounter"
             }
           },
-          "21,1": {
+          "5,1": {
             "size": [
               2,
               2
@@ -78,7 +78,7 @@
               "_title": "SmartDashboard/DriveSubsystem/TelemetryEnabled"
             }
           },
-          "21,3": {
+          "5,3": {
             "size": [
               2,
               2
@@ -89,9 +89,9 @@
               "_title": "SmartDashboard/DriveSubsystem/DiagnosticsEnabled"
             }
           },
-          "11,3": {
+          "13,3": {
             "size": [
-              9,
+              7,
               3
             ],
             "content": {
@@ -102,9 +102,9 @@
               "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
             }
           },
-          "11,6": {
+          "13,6": {
             "size": [
-              9,
+              7,
               3
             ],
             "content": {
@@ -115,7 +115,7 @@
               "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
             }
           },
-          "15,0": {
+          "17,0": {
             "size": [
               3,
               1
@@ -194,7 +194,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "22,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -205,7 +205,7 @@
               "_title": "/SmartDashboard/NavigationSubsystem/PeriodicCounter"
             }
           },
-          "21,1": {
+          "5,1": {
             "size": [
               2,
               2
@@ -216,7 +216,7 @@
               "_title": "SmartDashboard/NavigationSubsystem/TelemetryEnabled"
             }
           },
-          "21,3": {
+          "5,3": {
             "size": [
               2,
               2
@@ -227,7 +227,7 @@
               "_title": "SmartDashboard/NavigationSubsystem/DiagnosticsEnabled"
             }
           },
-          "5,1": {
+          "7,1": {
             "size": [
               5,
               3
@@ -240,7 +240,7 @@
               "Visible data/SmartDashboard/NavigationSubsystem/Yaw Angle (deg)": true
             }
           },
-          "5,4": {
+          "7,4": {
             "size": [
               5,
               3
@@ -266,7 +266,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "22,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -299,7 +299,7 @@
               "_title": "/SmartDashboard/ScoringSubsystem/Arm Ticks"
             }
           },
-          "21,1": {
+          "5,1": {
             "size": [
               2,
               2
@@ -310,7 +310,7 @@
               "_title": "SmartDashboard/ScoringSubsystem/TelemetryEnabled"
             }
           },
-          "21,3": {
+          "5,3": {
             "size": [
               2,
               2
@@ -319,6 +319,17 @@
               "_type": "Toggle Switch",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/DiagnosticsEnabled",
               "_title": "SmartDashboard/ScoringSubsystem/DiagnosticsEnabled"
+            }
+          },
+          "7,0": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/CurrentCommand",
+              "_title": "SmartDashboard/ScoringSubsystem/CurrentCommand"
             }
           }
         }
@@ -334,7 +345,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "5,0": {
+          "7,0": {
             "size": [
               11,
               7
@@ -353,7 +364,7 @@
               "imageHeight": -1
             }
           },
-          "22,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -364,7 +375,7 @@
               "_title": "SmartDashboard/VisionSubsystem/PeriodicCounter"
             }
           },
-          "21,1": {
+          "5,1": {
             "size": [
               2,
               2
@@ -375,7 +386,7 @@
               "_title": "SmartDashboard/VisionSubsystem/TelemetryEnabled"
             }
           },
-          "21,3": {
+          "5,3": {
             "size": [
               2,
               2
@@ -399,7 +410,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "22,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -438,7 +449,7 @@
               "Slider Settings/Block increment": 1.0
             }
           },
-          "21,3": {
+          "5,3": {
             "size": [
               2,
               2
@@ -449,7 +460,7 @@
               "_title": "SmartDashboard/ClimberSubsystem/DiagnosticsEnabled"
             }
           },
-          "21,1": {
+          "5,1": {
             "size": [
               2,
               2
@@ -473,7 +484,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "22,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -484,7 +495,7 @@
               "_title": "/SmartDashboard/LightingSubsystem/PeriodicCounter"
             }
           },
-          "5,0": {
+          "7,0": {
             "size": [
               7,
               1
@@ -495,7 +506,7 @@
               "_title": "/SmartDashboard/LightingControl/Status"
             }
           },
-          "12,0": {
+          "14,0": {
             "size": [
               3,
               1
@@ -506,7 +517,7 @@
               "_title": "SmartDashboard/LightingControl/ConnectionAttempts"
             }
           },
-          "21,1": {
+          "5,1": {
             "size": [
               2,
               2
@@ -517,7 +528,7 @@
               "_title": "SmartDashboard/LightingSubsystem/TelemetryEnabled"
             }
           },
-          "21,3": {
+          "5,3": {
             "size": [
               2,
               2

@@ -31,7 +31,7 @@ public class DriveBaseSide extends Image {
     Mount mount;
 
 
-    public DriveBaseSide(World world, float x, float y){
+    public DriveBaseSide(World world, float x, float y) {
         super(new Texture("assets/Generic_Texture.png"));
         this.world = world;
 
@@ -64,18 +64,17 @@ public class DriveBaseSide extends Image {
         // Shape is the only disposable of the lot, so get rid of it
         shape.dispose();
 
-        addWheels();
-        addMount();
-        addArm();
-
+        addWheels(x, y);
+        addMount(x, y);
+        addArm(x, y);
 
         // move it to the x/y
         setTransform(x, y, 0);
     }
 
-    public void addWheels() {
-        rearWheel = new Wheel(world, getWidth()/3f, getY());
-        frontWheel = new Wheel(world, getWidth()/3 + getWidth(), getY());
+    public void addWheels(float x, float y) {
+        rearWheel = new Wheel(world, x + getWidth()/3f, y + getY());
+        frontWheel = new Wheel(world, x + getWidth()/3 + y + getWidth(), getY());
 
         RevoluteJointDef rearWheelJointDef = new RevoluteJointDef();
         rearWheelJointDef.bodyA = rearWheel.getBody();
@@ -98,8 +97,8 @@ public class DriveBaseSide extends Image {
         frontWheelJoint = (RevoluteJoint) world.createJoint(frontWheelJointDef);
 
     }
-    public void addMount() {
-        mount = new Mount(world, 0, getHeight()/2f);
+    public void addMount(float x, float y) {
+        mount = new Mount(world, x, y + getHeight()/2f);
         WeldJointDef mountJointDef = new WeldJointDef();
         mountJointDef.bodyA = mount.getBody();
         mountJointDef.bodyB = this.getBody();
@@ -109,19 +108,18 @@ public class DriveBaseSide extends Image {
         mountJoint = (WeldJoint) world.createJoint(mountJointDef);
 
     }
-    public void addArm() {
-        arm = new Arm(world, getWidth()/3 + getWidth(), getY());
+    public void addArm(float x, float y) {
+        arm = new Arm(world, x, y + getHeight()/2f + mount.getHeight());
 
         RevoluteJointDef armJointDef = new RevoluteJointDef();
         armJointDef.bodyA = arm.getBody();
         armJointDef.bodyB = mount.getBody();
-        armJointDef.localAnchorA.set(0, -arm.getHeight()/2);
-        armJointDef.localAnchorB.set(-arm.getWidth()/2, mount.getHeight()/2);
+        armJointDef.localAnchorA.set(0, 0);
+        armJointDef.localAnchorB.set(0, mount.getHeight()/2);
         armJointDef.collideConnected = false;
         armJointDef.enableMotor = true;
         armJointDef.maxMotorTorque = 100;
         armJoint = (RevoluteJoint) world.createJoint(armJointDef);
-
     }
     
     @Override
@@ -130,7 +128,8 @@ public class DriveBaseSide extends Image {
         frontWheel.draw(batch, parentAlpha);
         rearWheel.draw(batch, parentAlpha);
         mount.draw(batch,parentAlpha);
-        arm.draw(batch,parentAlpha);
+        // TODO: Turn back on arm drawing after texture is fixed
+        // arm.draw(batch,parentAlpha);
     }
 
     @Override

@@ -49,7 +49,7 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	}
 
   	@Override
-	public void diagnosticsInit() {
+	public void diagnosticsInitialize() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -73,6 +73,7 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
+		clearDiagnosticsEnabled();		
 		updateBaseDashboard();
 		if (getTelemetryEnabled())
 		{
@@ -87,7 +88,7 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	}
 
 	@Override
-	public void diagnosticsExecute() {
+	public void diagnosticsPeriodic() {
 		// TODO Auto-generated method stub
 		
 	}
