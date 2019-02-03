@@ -29,7 +29,15 @@ public class OrientationSwitch extends Command {
 
     @Override
     protected boolean isFinished() {
-        if (isTimedOut()) { return false; }
+        if (oi.operatorIdle()) {
+            return CommandUtils.stateChange(new Idle());
+        }
+
+
+
+        if (isTimedOut()) {
+            return CommandUtils.stateChange(new Idle());
+        }
 
 
         
