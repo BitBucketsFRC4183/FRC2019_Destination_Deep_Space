@@ -271,8 +271,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
