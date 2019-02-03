@@ -204,7 +204,7 @@ public class DriveBaseSide extends Image {
         topRoller.draw(batch,parentAlpha);
         bottomRoller.draw(batch,parentAlpha);
         // TODO: Turn back on arm drawing after texture is fixed
-        // arm.draw(batch,parentAlpha);
+        arm.draw(batch,parentAlpha);
     }
 
     @Override
