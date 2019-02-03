@@ -127,12 +127,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-	public void manualArmOperate() {
-		rotationMotor1.set(ControlMode.PercentOutput, oi.manualArmRotate());
-	}
-
-
-
 	/**
 	 * + pow --> spit out
 	 * - pow --> intake
@@ -334,5 +328,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	public TalonSRX getRotationMotor1() {
 		return rotationMotor1;
+	}
+	
+	public void manualArmOperate() {
+		rotationMotor1.set(ControlMode.PercentOutput, oi.manualArmRotate());
 	}
 }

@@ -2,8 +2,8 @@ package frc.robot.subsystem.scoring;
 
 public class ScoringConstants {
 	public enum ScoringLevel {
-		INVALID              (0),
-		NONE                 (0),
+		INVALID              (0),       // multiple levels are selected
+		NONE                 (0),       // no levels are selected
 
 		GROUND               (0),       // hatch panel ground pickup
 		
@@ -20,7 +20,7 @@ public class ScoringConstants {
 
 		ScoringLevel(double height_inch) {
 			HEIGHT_INCH = height_inch;
-			// tip of arm is given by (height off floor) + (length) * sin(angle)
+			// tip of arm is given by (height off floor) + (length) * cos(angle)
 			ANGLE_RAD = Math.acos((height_inch - ARM_AXIS_HEIGHT_OFF_FLOOR_INCH) / ARM_LENGTH_INCH);
 		}
 
@@ -40,5 +40,9 @@ public class ScoringConstants {
 
 
 	// TODO: actual value
-	public static int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 5;
+	public static final int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 5;
+
+
+
+	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 1.5;
 }
