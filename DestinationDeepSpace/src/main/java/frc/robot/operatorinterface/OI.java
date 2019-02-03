@@ -6,9 +6,6 @@ import frc.robot.subsystem.drive.DriveConstants;
 
 public class OI {
 
-	// private static ControllerMapper controllerMapper = ControllerMapper.ps4();
-	private static ControllerMapper controllerMapper;
-
 	// Singleton method; use OI.instance() to get the OI instance.
 	public static OI instance() {
 		if(inst == null)
@@ -20,6 +17,7 @@ public class OI {
 	}
 
 	// Only use the xbox joystick if we explicitly request it.
+	private static ControllerMapper controllerMapper;
 	static {
 		if (System.getProperty("xbox", null) != null) {
 			controllerMapper = ControllerMapper.xbox();
@@ -27,7 +25,7 @@ public class OI {
 			controllerMapper = ControllerMapper.ps4();
 		}
 	}
-
+  
 	private final static int DRIVER_JOYSTICK_ID = 0;
 	private final static int OPERATOR_JOYSTICK_ID = 1;
 
@@ -66,7 +64,6 @@ public class OI {
 	 */
 	public double manualArmRotate() {
 		return driverControl.getRawAxis(controllerMapper.getRightStickY());
-		// return 0;
 	}
 
 	/**

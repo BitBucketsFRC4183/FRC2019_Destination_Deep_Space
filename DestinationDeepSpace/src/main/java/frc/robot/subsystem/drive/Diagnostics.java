@@ -29,7 +29,7 @@ public class Diagnostics extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	driveSubsystem.diagnosticsInit();
+    	driveSubsystem.diagnosticsInitialize();
     	System.out.println("Entering Drive Diagnostics");
     }
 
@@ -37,7 +37,7 @@ public class Diagnostics extends Command {
     protected void execute() {
     	System.out.println("Executing Drive Diagnostics");
     	if(diagInitLoops < driveSubsystem.DIAG_LOOPS_RUN) {
-    		driveSubsystem.diagnosticsExecute();
+    		driveSubsystem.diagnosticsPeriodic();
     		diagInitLoops++;
     	}
     }
