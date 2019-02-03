@@ -9,10 +9,10 @@ import frc.robot.simulator.physics.MathConstants;
 
 public class Ball extends AbstractPhysicsBody {
 
-    private static float radius = 13 * MathConstants.INCHES_TO_METERS;
+    private static float diameter = 13 * MathConstants.INCHES_TO_METERS;
 
     public Ball(World world, Texture texture, float x, float y) {
-        super(world, texture, x, y, radius * 2, radius * 2);
+        super(world, texture, x, y, diameter, diameter);
     }
 
     @Override
@@ -25,7 +25,9 @@ public class Ball extends AbstractPhysicsBody {
     @Override
     protected Shape createShape() {
         CircleShape ballShape = new CircleShape();
-        ballShape.setRadius(radius/2);
+        ballShape.setRadius(diameter/2);
         return ballShape;
     }
+
+
 }

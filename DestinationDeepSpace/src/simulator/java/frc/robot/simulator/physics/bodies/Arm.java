@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -14,7 +15,7 @@ import frc.robot.simulator.physics.MathConstants;
 public class Arm extends AbstractPhysicsBody {
 
     public Arm(World world, float x, float y) {
-        super(world, new Texture("assets/Arm.png"), x, y, 8.665f * 2 * MathConstants.INCHES_TO_METERS, 21 * MathConstants.INCHES_TO_METERS);
+        super(world, new Texture("assets/ArmTexture.png"), x, y, 8.665f * 2 * MathConstants.INCHES_TO_METERS, 21 * MathConstants.INCHES_TO_METERS);
     }
 
     private void transformInchesToMeters(Vector2[] vertices) {
@@ -149,5 +150,19 @@ public class Arm extends AbstractPhysicsBody {
     protected void initImageOrigin() {
         setOrigin(getWidth() / 2, 0);
     }
+
+        /**
+     * Called by stage every render loop. This moves the texture in the world based on the physics body's 
+     * translations.
+     * 
+     * Override this to call act on childre, such as when the DriveBaseSide acts on the mount, arm, wheels, etc.
+     */
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        setRotation(body.getAngle()*  MathUtils.radiansToDegrees);
+        setPosition(body.getPosition().x-getWidth()/2,body.getPosition().y);
+    }
+
     
 }

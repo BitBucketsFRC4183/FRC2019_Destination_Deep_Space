@@ -15,7 +15,7 @@ import frc.robot.simulator.physics.MathConstants;
 
 public class Roller extends Image {
 
-    private float radius = 3.5f*MathConstants.INCHES_TO_METERS;
+    private float diameter = 3.5f*MathConstants.INCHES_TO_METERS;
 
     private Body roller;
     private World world;
@@ -30,7 +30,7 @@ public class Roller extends Image {
         roller = world.createBody(rollerBodyDef);
 
         CircleShape rollerShape = new CircleShape();
-        rollerShape.setRadius(radius/2);
+        rollerShape.setRadius(diameter/2);
 
         rollerFixtureDef.friction = 1f;
         rollerFixtureDef.restitution = 0.0f;
@@ -39,7 +39,7 @@ public class Roller extends Image {
         roller.createFixture(rollerFixtureDef);
         roller.setTransform(x, y, (float)Math.PI);
         rollerShape.dispose();
-        setSize(radius, radius);
+        setSize(diameter, diameter);
         setOrigin(getWidth() / 2, getHeight() / 2);
 
     }

@@ -59,7 +59,7 @@ public abstract class AbstractPhysicsBody extends Image {
         body.setTransform(x, y, 0);
 
         // Set the texture world size and origin on the body
-        setSize(width * MathConstants.INCHES_TO_METERS, height * MathConstants.INCHES_TO_METERS);
+        setSize(width, height);
         initImageOrigin();
     }
 
@@ -126,7 +126,7 @@ public abstract class AbstractPhysicsBody extends Image {
     public void act(float delta) {
         super.act(delta);
         setRotation(body.getAngle()*  MathUtils.radiansToDegrees);
-        setPosition(body.getPosition().x-getWidth()/2,body.getPosition().y);
+        setPosition(body.getPosition().x-getWidth()/2,body.getPosition().y-getHeight()/2);
     }
 
     /**
