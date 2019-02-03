@@ -68,11 +68,10 @@ dependencies {
     compile group: 'org.scream3r', name: 'jssc', version: '2.8.0'
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+ 
     testCompile 'junit:junit:4.12'
     testCompile 'org.powermock:powermock-module-junit4:2.0.0'
     testCompile 'org.powermock:powermock-api-mockito2:2.0.0'
-
-    snobotSimCompile snobotSimJava()
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

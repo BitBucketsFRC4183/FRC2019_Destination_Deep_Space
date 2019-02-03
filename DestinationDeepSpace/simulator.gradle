@@ -1,9 +1,22 @@
+repositories {
+    maven {
+        // this repo contains a custom build of snobot sim
+        url 'https://raw.githubusercontent.com/cpostbitbuckets/maven_repo/master'
+    }
+}
+
 import org.gradle.internal.os.OperatingSystem
 
 ext {
     gdxVersion = '1.9.5'
-    snobotSimOverrideVersion = "${snobotSim.snobotSimVersion}" //'2019-0.0.1-4183'
+    // snobotSimOverrideVersion = "${snobotSim.snobotSimVersion}" //'2019-0.0.1-4183'
+    snobotSimOverrideVersion = '2019-0.0.1-4183-SNAPSHOT'
 }
+
+snobotSim {
+    snobotSimVersion = "${snobotSimOverrideVersion}"
+}
+
 
 // If you have your own simulator code, you must tell GradleRio that you want that code compiled.
 // The recommended way to do it is to create a new source set, just for this, and jar it up later
@@ -28,7 +41,11 @@ dependencies {
 
     native3rdPartyDeps "net.java.jinput:jinput:2.0.7"
 
-    // add in deps for wpi
+    // make sure the snobotSimCompile configuration has snobotSimJava. This is required
+    // for the simulator to run
+    snobotSimCompile snobotSimJava()
+
+    // TODO: Figure out why we have to specify dependencies for each configuration.
     simulatorExtensionsCompile snobotSimJava()
     simulatorExtensionsCompile wpi.deps.wpilib()
     simulatorExtensionsCompile wpi.deps.vendor.java()
@@ -61,8 +78,6 @@ dependencies {
     testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
     testCompile snobotSimJava()
-    // testCompile sourceSets.simulatorExtensions.output
-
 }
 
 // You need to jar up the files in order for SnobotSim to know about your special classes. The task name has to be exactly this
