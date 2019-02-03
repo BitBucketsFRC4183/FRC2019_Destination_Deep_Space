@@ -13,6 +13,7 @@ public class OrientationSwitch extends Command {
 
     public OrientationSwitch() {
         requires(scoringSubsystem);
+        setTimeout(ScoringConstants.LEVEL_CHANGE_TIMEOUT_SEC);
     }
 
 
@@ -28,6 +29,10 @@ public class OrientationSwitch extends Command {
 
     @Override
     protected boolean isFinished() {
+        if (isTimedOut()) { return false; }
+
+
+        
         // if you already reached the desired level that this is at, allow a change
         // if the arm can move fast enough, we want this behavior (always preferred)
         // if not, then we may want to let the driver change the state while the

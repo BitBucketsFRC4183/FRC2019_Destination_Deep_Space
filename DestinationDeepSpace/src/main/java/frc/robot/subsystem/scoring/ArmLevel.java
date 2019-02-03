@@ -10,11 +10,18 @@ public class ArmLevel extends Command {
 
     private final ScoringConstants.ScoringLevel LEVEL;
 
+
+
     public ArmLevel(ScoringConstants.ScoringLevel level) {
         requires(scoringSubsystem);
+        setTimeout(ScoringConstants.LEVEL_CHANGE_TIMEOUT_SEC);
 
         LEVEL = level;
     }
+
+
+
+
 
     @Override
     protected void initialize() {
@@ -26,12 +33,11 @@ public class ArmLevel extends Command {
 
 
     @Override
-    protected void execute() {}
-
-
-
-    @Override
     protected boolean isFinished() {
+        if (isTimedOut()) { return false; }
+
+
+
         // if you already reached the desired level that this is at, allow a change
         // if the arm can move fast enough, we want this behavior (always preferred)
         // if not, then we may want to let the driver change the state while the
@@ -50,12 +56,14 @@ public class ArmLevel extends Command {
         // get selected level on joystick
         ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
 
-        if (level == ScoringConstants.ScoringLevel.INVALID) {
+        // if multiple levels are selected or this level is still selected,
+        // don't allow any state changes
+        if (level == ScoringConstants.ScoringLevel.INVALID || level == LEVEL) {
             return false;
         }
 
-        // if one level button is pressed that does not correspond to this level
-        boolean differentLevel = (level != ScoringConstants.ScoringLevel.NONE && level != LEVEL);
+        // if one level button is pressed
+        boolean differentLevel = level != ScoringConstants.ScoringLevel.NONE;
         
 
         // if trying to change the level and orientation, then don't allow it
@@ -71,12 +79,10 @@ public class ArmLevel extends Command {
             return CommandUtils.stateChange(new ArmLevel(level));
         }
 
+        // check if user trying to switch the orientation of the arm
         if (switchOrientation) {
             return CommandUtils.stateChange(new OrientationSwitch());
         }
-
-        // at this point, it is possible the driver is pressing the button corresponding
-        // to this state's level, so don't change to the same state
 
         return false;
     }
