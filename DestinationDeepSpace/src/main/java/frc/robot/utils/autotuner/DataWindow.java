@@ -5,9 +5,9 @@ public class DataWindow {
     private double[] data;
     private final int LENGTH;
 
-    private int next = 0; // next index to replace
-    private boolean filled = false;
-    private double sum = 0;
+    private int next; // next index to replace
+    private boolean filled;
+    private double sum;
 
     private boolean setExtremum = false;
     private double min;
@@ -15,9 +15,22 @@ public class DataWindow {
 
 
 
+    private Complex amplitudes[];
+    private final Complex[] units;
+
+
+
     public DataWindow(int length) {
         LENGTH = length;
         data = new double[LENGTH];
+
+        amplitudes = new Complex[LENGTH];
+        units = new Complex[LENGTH];
+        
+        for (int k = 0; k < LENGTH; k++) {
+        	amplitudes[k] = new Complex(0, 0);
+        	units[k] = Complex.unit(2 * Math.PI * k / LENGTH);
+        }
     }
 
 
@@ -29,8 +42,9 @@ public class DataWindow {
 
         setExtremum = false;
 
-        for (int i = 0; i < data.length; i++) {
-            data[i] = 0;
+        for (int k = 0; k < data.length; k++) {
+            data[k] = 0;
+            amplitudes[k] = new Complex(0, 0);
         }
     }
 
@@ -78,6 +92,21 @@ public class DataWindow {
             }
         }
 
+
+
+        // DFT changes
+        for (int k = 0; k < LENGTH; k++) {
+    		amplitudes[k] =
+    			units[k]
+    			.multiply(
+    				amplitudes[k].add(
+    					(n - data[next]) / LENGTH
+    				)
+    			);
+    	}
+
+
+
         sum -= data[next];
         sum += n;
 
@@ -107,6 +136,32 @@ public class DataWindow {
     public double maxDif() {
         return max - min;
     }
+
+
+
+    public double get(int i) {
+    	// change how data is accessed to make it look like you push back
+    	// old data to make space for new data
+    	return data[(next + i) % LENGTH];
+    }
+
+
+
+
+
+    // DFT utilities
+
+    /** Return complex amplitude of k-th frequency */
+    public Complex getAmplitude(int k) {
+        return amplitudes[k];
+    }
+
+    /** Get k-th frequency in 1/(units of data) */
+    public double getFrequency(int k) {
+        return ((double) k) / LENGTH;
+    }
+
+
 
 
 
