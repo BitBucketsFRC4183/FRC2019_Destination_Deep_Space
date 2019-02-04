@@ -1,11 +1,12 @@
 language: java
 matrix:
   include:
-  # - os: linux
-  #   dist: trusty
-    # sudo: required
+  - os: linux
+    dist: trusty
   - os: osx
     osx_image: xcode8
+  - os: windows
+
 before_cache:
 - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
