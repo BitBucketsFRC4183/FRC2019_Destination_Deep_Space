@@ -25,6 +25,7 @@ public class ControllerMapper {
     private int rStickButton;
 
     private int brandButton;
+    private int trackpad;
 
     public static ControllerMapper xbox() {
         if (xboxInstance == null) {
@@ -50,6 +51,8 @@ public class ControllerMapper {
             xboxInstance.lStickButton = XboxConstants.L_STICK.getValue();
             xboxInstance.rStickButton = XboxConstants.R_STICK.getValue();
             xboxInstance.brandButton = XboxConstants.XBOX_BUTTON.getValue();
+
+            xboxInstance.trackpad = XboxConstants.TRACKPAD.getValue();
         }
         return xboxInstance;
 
@@ -78,6 +81,8 @@ public class ControllerMapper {
             ps4Instance.lStickButton = PS4Constants.L_STICK.getValue();
             ps4Instance.rStickButton = PS4Constants.R_STICK.getValue();
             ps4Instance.brandButton = PS4Constants.PS4.getValue();
+
+            ps4Instance.trackpad = PS4Constants.TRACKPAD.getValue();
 
         }
         return ps4Instance;
@@ -151,4 +156,7 @@ public class ControllerMapper {
         return brandButton;
     }
 
+    public int getTrackpad() {
+        return trackpad;
+    }
 }

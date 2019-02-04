@@ -66,8 +66,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		TalonUtils.initializeMotorDefaults(rotationMotor1);
 		TalonUtils.initializeMotorDefaults(rotationMotor2);
 
-		rotationMotor1.setSelectedSensorPosition(0);
-		rotationMotor2.follow(rotationMotor1);
+		rotationMotor2.setInverted(true); // TODO: JUNIOR CONFIG
 
 
 
@@ -83,6 +82,15 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		TalonUtils.initializeMotorFPID        (rotationMotor2, kf, kp, ki, kd, izone);
 		TalonUtils.initializeQuadEncoderMotor (rotationMotor2, 1);
+
+		rotationMotor1.setSelectedSensorPosition(0);
+		rotationMotor2.setSelectedSensorPosition(0);
+
+		rotationMotor1.configMotionAcceleration(2897, 20);
+		rotationMotor2.configMotionAcceleration(2897, 20);
+
+		rotationMotor1.configMotionCruiseVelocity(15000, 20);
+		rotationMotor2.configMotionCruiseVelocity(15000, 20);
 
 
 
@@ -115,6 +123,15 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	/** Command the arm to a level */
 	public void goToLevel(ScoringConstants.ScoringLevel level) {
+		// neither level should get to here in the first place
+		//     ... but just in case
+		if (
+			level == ScoringConstants.ScoringLevel.NONE ||
+			level == ScoringConstants.ScoringLevel.INVALID
+		) {
+			return;
+		}
+
 		double angle_rad = level.getAngle_rad();
 
 		// .switchOrientation() needs to know the last level the arm was at
@@ -208,7 +225,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 	public int getArmLevelTickError() {
-		return rotationMotor1.getClosedLoopError();
+		int err1 = Math.abs(rotationMotor1.getClosedLoopError());
+		int err2 = Math.abs(rotationMotor2.getClosedLoopError());
+
+		return Math.max(err1, err2);
 	}
 
 
@@ -241,6 +261,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		}
 
 		rotationMotor1.set(ControlMode.MotionMagic, ticks);
+		rotationMotor2.set(ControlMode.MotionMagic, ticks);
 	}
 
 

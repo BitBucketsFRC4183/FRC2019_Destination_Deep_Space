@@ -16,7 +16,7 @@ public class KiStep extends TuningStep {
 
 
     public KiStep(int windowSize, WPI_TalonSRX motor, int kd_sserr, int target) {
-        super(windowSize, motor);
+        super(windowSize, motor, DataCollectionType.Position);
 
         IZONE = (int) (2.5 * kd_sserr);
 

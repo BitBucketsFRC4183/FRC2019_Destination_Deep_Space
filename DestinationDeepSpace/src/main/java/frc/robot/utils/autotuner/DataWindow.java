@@ -2,22 +2,22 @@ package frc.robot.utils.autotuner;
 
 /** Unordered data window */
 public class DataWindow {
-    private int[] data;
+    private double[] data;
     private final int LENGTH;
 
     private int next = 0; // next index to replace
     private boolean filled = false;
-    private int sum = 0;
+    private double sum = 0;
 
     private boolean setExtremum = false;
-    private int min;
-    private int max;
+    private double min;
+    private double max;
 
 
 
     public DataWindow(int length) {
         LENGTH = length;
-        data = new int[LENGTH];
+        data = new double[LENGTH];
     }
 
 
@@ -36,7 +36,7 @@ public class DataWindow {
 
 
 
-    public void add(int n) {
+    public void add(double n) {
         if (setExtremum == false) {
             min = n;
             max = n;
@@ -97,36 +97,15 @@ public class DataWindow {
         return filled;
     }
 
-    // yay java integer math! doesn't really matter tho, only trying to get an approximation
-    public int average() {
+    public double average() {
         return sum / LENGTH;
     }
 
 
 
     // used for determining whether it is safe to use the window for measurements
-    public int maxDif() {
+    public double maxDif() {
         return max - min;
-    }
-
-    // window length should be larger than the wavelength of the oscillation for this to work
-    public int getOscillations() {
-        int count = 0;
-
-        int avg = average();
-
-        float sign1 = Math.signum(data[0] - avg);
-        for (int i = 1; i < LENGTH; i++) {
-            float sign2 = Math.signum(data[i] - avg);
-
-            if (sign2 != sign1) {
-                count++;
-
-                sign1 = sign2;
-            }
-        }
-
-        return (count / 2);
     }
 
 
