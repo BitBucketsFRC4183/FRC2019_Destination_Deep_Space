@@ -30,8 +30,8 @@ public class ScoringConstants {
 	}
 
 
-	public static final double ARM_LENGTH_INCH = 0;
-	public static final double ARM_AXIS_HEIGHT_OFF_FLOOR_INCH = 0;
+	public static final double ARM_LENGTH_INCH = 27.5;
+	public static final double ARM_AXIS_HEIGHT_OFF_FLOOR_INCH = 19;
 
 
 
@@ -40,7 +40,7 @@ public class ScoringConstants {
 
 
 	// TODO: actual value
-	public static final int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 5;
+	public static final int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 50;
 
 
 

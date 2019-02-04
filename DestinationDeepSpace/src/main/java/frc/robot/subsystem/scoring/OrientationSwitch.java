@@ -1,13 +1,17 @@
 package frc.robot.subsystem.scoring;
 
-import edu.wpi.first.wpilibj.command.Command;
-
 import frc.robot.operatorinterface.OI;
 import frc.robot.utils.CommandUtils;
+
+import edu.wpi.first.wpilibj.command.Command;
 
 public class OrientationSwitch extends Command {
     private static OI oi = OI.instance();
     private static ScoringSubsystem scoringSubsystem = ScoringSubsystem.instance();
+
+
+
+    private boolean releasedButton = false;
 
 
 
@@ -29,15 +33,24 @@ public class OrientationSwitch extends Command {
 
     @Override
     protected boolean isFinished() {
-        if (oi.operatorIdle()) {
+        // whether or not the button to switch the orientation is pressed
+        boolean switchOrientation = oi.switchOrientation();
+
+        if (!switchOrientation) {
+            releasedButton = true;
+        }
+
+
+
+        boolean forceIdle = oi.operatorIdle();
+
+        if (forceIdle) {
             return CommandUtils.stateChange(new Idle());
         }
 
 
 
-        if (isTimedOut()) {
-            return CommandUtils.stateChange(new Idle());
-        }
+        boolean timeout = isTimedOut();
 
 
         
@@ -47,21 +60,20 @@ public class OrientationSwitch extends Command {
         //      robot is still trying to move the scoring arm
         int err = scoringSubsystem.getArmLevelTickError();
         // is the robot sufficiently within this state's level?
-        if (Math.abs(err) > ScoringConstants.ROTATION_MOTOR_ERROR_DEADBAND_TICKS) {
+        if (err > ScoringConstants.ROTATION_MOTOR_ERROR_DEADBAND_TICKS) {
+            if (timeout) {
+                return CommandUtils.stateChange(new Idle());
+            }
+
             return false;
         }
 
-
-
-        // whether or not the button to switch the orientation is pressed
-        boolean switchOrientation = oi.switchOrientation();
-
         // VERY IMPORTANT
-        // If the button to switch the orientation is pressed and the robot is
-        // in this state, we do not want any state changes
-        // If we allow state changes, the next state may detected a request
-        // to change back to this state, resulting in an infinite loop
-        if (switchOrientation) {
+        // If the user has not released the button while in this state
+        // then allowing a state change is BAD
+        // It may end up in an infinite loop of state changes of
+        // OrientationSwitch
+        if (switchOrientation && !releasedButton) {
             return false;
         }
 
@@ -76,9 +88,13 @@ public class OrientationSwitch extends Command {
             return false;
         }
 
-        // if some level is selected, go to it
-        if (level != ScoringConstants.ScoringLevel.NONE) {
-            return CommandUtils.stateChange(new ArmLevel(level));
+        if (level != ScoringConstants.ScoringLevel.NONE ^ switchOrientation) {
+            // if some level is selected, go to it
+            if (level != ScoringConstants.ScoringLevel.NONE) {
+                return CommandUtils.stateChange(new ArmLevel(level));
+            } else {
+                return CommandUtils.stateChange(new OrientationSwitch());
+            }
         }
 
         return false;

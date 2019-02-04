@@ -2,6 +2,7 @@ package frc.robot.subsystem.scoring;
 
 import frc.robot.operatorinterface.OI;
 import frc.robot.utils.CommandUtils;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ArmLevel extends Command {
@@ -34,15 +35,15 @@ public class ArmLevel extends Command {
 
     @Override
     protected boolean isFinished() {
-        if (oi.operatorIdle()) {
+        boolean forceIdle = oi.operatorIdle();
+
+        if (forceIdle) {
             return CommandUtils.stateChange(new Idle());
         }
 
 
 
-        if (isTimedOut()) {
-            return CommandUtils.stateChange(new Idle());
-        }
+        boolean timeout = isTimedOut();
 
 
 
@@ -52,7 +53,11 @@ public class ArmLevel extends Command {
         //      robot is still trying to move the scoring arm
         int err = scoringSubsystem.getArmLevelTickError();
         // is the robot sufficiently within this state's level?
-        if (Math.abs(err) > ScoringConstants.ROTATION_MOTOR_ERROR_DEADBAND_TICKS) {
+        if (err > ScoringConstants.ROTATION_MOTOR_ERROR_DEADBAND_TICKS) {
+            if (timeout) {
+                return CommandUtils.stateChange(new Idle());
+            }
+
             return false;
         }
 

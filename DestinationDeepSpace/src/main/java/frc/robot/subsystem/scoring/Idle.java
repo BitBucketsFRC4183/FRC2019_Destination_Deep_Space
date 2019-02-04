@@ -22,6 +22,14 @@ public class Idle extends Command {
 
     @Override
     protected boolean isFinished() {
+        boolean forceIdle = oi.operatorIdle();
+
+        if (forceIdle) {
+            return false;
+        }
+
+
+        
 		// get selected level on joystick (NONE if none selected, INVALID if multiple selected)
         ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
 

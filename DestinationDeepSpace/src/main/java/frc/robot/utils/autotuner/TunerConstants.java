@@ -38,4 +38,14 @@ public class TunerConstants {
 
 
 	public static final int DATA_WINDOW_SIZE = 25;
+
+
+
+	// maximum difference in a velocity data window for the data to be "stable"
+	// 45 degree / second maximum uncertainty
+	public static final int VELOCITY_STABILITY_THRESHOLD_TP100MS = (int) (45.0 / 3600 * 8192);
+
+	// TODO: probably good values, maybe experiment
+	public static final int POSITION_STABILITY_THRESHOLD_TICKS = 10;
+	public static final double POWER_STABILITY_THRESHOLD = 0.01;
 }

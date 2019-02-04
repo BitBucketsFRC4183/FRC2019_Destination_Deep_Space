@@ -13,12 +13,21 @@ import frc.robot.utils.autotuner.TunerConstants;
 
 public abstract class TuningStep {
     protected double value; // current value of tuning constant
+    protected String valueString; // how to store the value in the code
 
     protected boolean finishedPos = false; // has it finished collecting all positive data values?
     protected DataWindow pos; // positive data values
     protected DataWindow neg; // negative data values
+    protected DataWindow power_pos; // positive data power values
+    protected DataWindow power_neg; // negative data power values
 
     protected final WPI_TalonSRX MOTOR;
+
+
+
+    protected static enum DataCollectionType { Velocity, Position };
+    protected final DataCollectionType DATA_COLLECTION_TYPE; // what data this step collections
+    protected final int STABILITY_THRESHOLD;
 
 
 
@@ -27,12 +36,29 @@ public abstract class TuningStep {
      * @param motor
      * @param mode either MotionMagic or PercentOutput
      */
-    public TuningStep(int windowSize, WPI_TalonSRX motor) {
+    public TuningStep(int windowSize, WPI_TalonSRX motor, DataCollectionType dataCollectionType) {
+        valueString = "";
+
         finishedPos = false;
         pos = new DataWindow(windowSize);
         neg = new DataWindow(windowSize);
+        power_pos = new DataWindow(windowSize);
+        power_neg = new DataWindow(windowSize);
 
         MOTOR = motor;
+
+        DATA_COLLECTION_TYPE = dataCollectionType;
+        
+        switch (DATA_COLLECTION_TYPE) {
+            default: {}
+            case Velocity: {
+                STABILITY_THRESHOLD = TunerConstants.VELOCITY_STABILITY_THRESHOLD_TP100MS;
+                break;
+            }
+            case Position: {
+                STABILITY_THRESHOLD = TunerConstants.POSITION_STABILITY_THRESHOLD_TICKS;
+            }
+        }
     }
 
 
@@ -46,15 +72,27 @@ public abstract class TuningStep {
 
 
     /** Get whether or not the data is stable */
-    protected static boolean isStable() {
-        // TODO: implement automatic way to determine it if user chooses to use it instead
-        if (SmartDashboard.getBoolean(TunerConstants.STABLE_KEY, false)) {
-            SmartDashboard.putBoolean(TunerConstants.STABLE_KEY, false); // reset it for next data
-            
+    protected boolean isStable() {
+        boolean stable = SmartDashboard.getBoolean(TunerConstants.STABLE_KEY, false);
+        // manual detection if automatic isn't cooperating
+        if (stable) {
+            SmartDashboard.putBoolean(TunerConstants.STABLE_KEY, false);
+
             return true;
         }
 
-        return false;
+
+
+        if (!finishedPos) {
+            return pos.isFilled() && pos.maxDif() <= STABILITY_THRESHOLD &&
+            // position measurements don't require power measurements
+            (DATA_COLLECTION_TYPE == DataCollectionType.Position || power_pos.maxDif() <= TunerConstants.POWER_STABILITY_THRESHOLD);
+        } else {
+            return
+            (neg.isFilled() && neg.maxDif() <= STABILITY_THRESHOLD) &&
+            // position measurements don't require power measurements
+            (DATA_COLLECTION_TYPE == DataCollectionType.Position || power_neg.maxDif() <= TunerConstants.POWER_STABILITY_THRESHOLD);
+        }
     }
 
     /** Get whether or not the data is oscillating */
@@ -72,9 +110,9 @@ public abstract class TuningStep {
 
 
     /** Put some data on the Dashboard */
-    private void put(int val) {
+    private void put(int val, double power) {
         SmartDashboard.putNumber(TunerConstants.DATA_KEY, val);
-        SmartDashboard.putNumber(TunerConstants.POWER_DATA_KEY, MOTOR.getMotorOutputPercent());
+        SmartDashboard.putNumber(TunerConstants.POWER_DATA_KEY, power);
     }
 
 
@@ -91,11 +129,16 @@ public abstract class TuningStep {
         if (!finishedPos) {
             MOTOR.set(ControlMode.MotionMagic, target);
 
-            int data = MOTOR.getClosedLoopError(); // get position
-            put(data);
-            data = Math.abs(data); // make sure error is positive
+            int err = MOTOR.getClosedLoopError(); // get position
+            err = Math.abs(err); // make sure error is positive
+            pos.add(err); // add to + input data
 
-            pos.add(data); // add to + input data
+            double power = MOTOR.getMotorOutputPercent();
+            power_pos.add(power);
+
+
+            
+            put(err, power);
 
             if (isStable()) {
                 finishedPos = true;
@@ -104,10 +147,15 @@ public abstract class TuningStep {
             MOTOR.set(ControlMode.MotionMagic, -target);
 
             int data = MOTOR.getClosedLoopError(); // get position
-            put(data);
             data = Math.abs(data); // make sure error is positive
-
             neg.add(data); // add to - input data
+
+            double power = MOTOR.getMotorOutputPercent();
+            power_neg.add(power);
+
+
+
+            put(data, power);
 
             if (isStable()) {
                 finishedPos = false;
@@ -131,9 +179,14 @@ public abstract class TuningStep {
             MOTOR.set(ControlMode.PercentOutput, 1.0);
 
             int data = MOTOR.getSelectedSensorVelocity(); // get velocity
-            put(data);
             pos.add(data); // add to + input data
 
+            double power = MOTOR.getMotorOutputPercent();
+            power_pos.add(power);
+
+
+
+            put(data, power);
 
             if (isStable()) {
                 finishedPos = true;
@@ -142,8 +195,14 @@ public abstract class TuningStep {
             MOTOR.set(ControlMode.PercentOutput, -1.0);
 
             int data = MOTOR.getSelectedSensorVelocity(); // get velocity
-            put(data);
             neg.add(data); // add to - input data
+
+            double power = MOTOR.getMotorOutputPercent();
+            power_neg.add(power);
+
+
+            
+            put(data, power);
 
             // enough stable data
             if (isStable()) {

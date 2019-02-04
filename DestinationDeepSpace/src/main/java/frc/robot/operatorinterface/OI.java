@@ -122,8 +122,8 @@ public class OI {
 
 
 	// forced Idle for corresponding subsystems
-	private final static int DRIVER_IDLE   = controllerMapper.getBrandButton();
-	private final static int OPERATOR_IDLE = controllerMapper.getBrandButton();
+	private final static int DRIVER_IDLE   = controllerMapper.getTrackpad();
+	private final static int OPERATOR_IDLE = controllerMapper.getTrackpad();
 
 
 
@@ -210,7 +210,7 @@ public class OI {
 	}
 
 	public boolean operatorIdle() {
-		return operatorControl.getRawButton(DRIVER_IDLE);
+		return operatorControl.getRawButton(OPERATOR_IDLE);
 	}
 }
 
