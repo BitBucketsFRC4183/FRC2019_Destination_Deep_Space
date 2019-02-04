@@ -1,8 +1,10 @@
 package frc.robot.simulator.physics;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import frc.robot.Robot;
+import frc.robot.simulator.physics.bodies.Ball;
 import frc.robot.simulator.physics.bodies.DriveBaseSide;
 import frc.robot.simulator.physics.bodies.Flooer;
 import frc.robot.subsystem.drive.DriveSubsystem;
@@ -30,6 +33,8 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
     private MotorStatsText motorStatsText;
+    private Texture ballTexture;
+    private Ball ball;
 
     // no gravity, let stuff float
 
@@ -41,6 +46,7 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
     private Vector2 gravity = new Vector2(0, grav);
 
     public DriveBaseSideScreen(PhysicsSimulation physicsSimulation, Robot robot) {
+        ballTexture = new Texture("assets/Ball.png");
         this.physicsSimulation = physicsSimulation;
         this.robot = robot;
 
@@ -61,11 +67,13 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
         // create a couple actors
         driveBaseLeftSide = new DriveBaseSide(world, 2f, .6f);
         Flooer flooer = new Flooer(world);
+        ball = new Ball(world, ballTexture, 10, 10);
         motorStatsText = new MotorStatsText(camWidth / 2, camHeight/2);
 
         stage.addActor(driveBaseLeftSide);
         stage.addActor(flooer);
         stage.addActor(motorStatsText);
+        stage.addActor(ball);
     }
 
     @Override
@@ -83,7 +91,35 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
 
         driveBaseLeftSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftFrontMotor().getMotorOutputPercent()));
         driveBaseLeftSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftRearMotor().getMotorOutputPercent()));
-        driveBaseLeftSide.setArmRotationSpeed((float) (ScoringSubsystem.instance().getRotationMotor1().getMotorOutputPercent()));
+        // driveBaseLeftSide.setArmRotationSpeed((float) (ScoringSubsystem.instance().getRotationMotor1().getMotorOutputPercent()));
+        driveBaseLeftSide.setTopRollerSpeed((float) (motorSpeed * -ScoringSubsystem.instance().getRollerMotor().getMotorOutputPercent()));
+        driveBaseLeftSide.setBottomRollerSpeed((float) (motorSpeed * ScoringSubsystem.instance().getRollerMotor().getMotorOutputPercent()));
+
+        if (Gdx.input.isKeyPressed(Input.Keys.EQUALS) && camera.zoom > 0.1) {
+            camera.zoom -= 0.01*camera.zoom;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
+            camera.zoom -= 0.02;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.MINUS) && camera.zoom > 0.1) {
+            camera.zoom += 0.01*camera.zoom;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
+            camera.zoom += 0.02;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.F)) {
+            camera.translate(-2.0f*camera.zoom*delta, 0, 0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+            camera.translate(2*camera.zoom*delta, 0, 0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+            camera.translate(0, -2*camera.zoom*delta, 0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.T)) {
+            camera.translate(0, 2*camera.zoom*delta, 0);
+        }
+
         camera.update();
 
         stage.act();
