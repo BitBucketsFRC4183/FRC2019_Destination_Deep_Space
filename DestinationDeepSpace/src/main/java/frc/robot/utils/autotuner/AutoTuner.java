@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 import frc.robot.utils.autotuner.steps.KfStep;
@@ -265,9 +264,11 @@ public class AutoTuner {
 
 
     private static void cruiseTuneInit() {
+        motor.setSelectedSensorPosition(0, TunerConstants.kPIDLoopIdx, TunerConstants.kTimeoutMs);
+
         cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100(), TunerConstants.TARGET);
 
-        setCruise(cruise.getSpeed());
+        setCruise((int) cruise.getValue());
     }
 
     private static void cruiseTunePeriodic() {

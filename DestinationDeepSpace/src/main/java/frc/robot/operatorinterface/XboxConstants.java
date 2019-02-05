@@ -29,6 +29,7 @@ public enum XboxConstants
     L_STICK(9),
     R_STICK(10),
     XBOX_BUTTON(11),
+    TRACKPAD(11),
 
     // D-PAD
     D_PAD_UP(0),
