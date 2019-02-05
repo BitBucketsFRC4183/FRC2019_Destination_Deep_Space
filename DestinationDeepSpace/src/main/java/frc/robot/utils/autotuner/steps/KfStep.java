@@ -2,6 +2,12 @@ package frc.robot.utils.autotuner.steps;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+/**
+ * forward/reverse speed sample for Kf = (%v * 1023)/tp100
+ * Where
+ *     %v is percent of full power (ideally 100%)
+ *     tp100 is ticks per 100 ms
+ */
 public class KfStep extends TuningStep {
     private int tp100;
 

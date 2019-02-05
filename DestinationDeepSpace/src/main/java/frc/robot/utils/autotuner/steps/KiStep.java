@@ -4,6 +4,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
 
+/**
+ * Set I-Zone to define when Ki is needed
+	 *     Iz = sserr * 2.5
+	 *     Estimate Ki
+	 *     Ki = 0.001
+	 *     Keep doubling Ki until sserr gets sufficiently close to zero
+	 * 				Stop and back off if oscillations appear
+ */
 public class KiStep extends TuningStep {
     private final int TARGET;
     private final double KI0;
