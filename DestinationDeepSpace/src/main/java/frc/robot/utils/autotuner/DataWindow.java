@@ -2,22 +2,35 @@ package frc.robot.utils.autotuner;
 
 /** Unordered data window */
 public class DataWindow {
-    private int[] data;
+    private double[] data;
     private final int LENGTH;
 
-    private int next = 0; // next index to replace
-    private boolean filled = false;
-    private int sum = 0;
+    private int next; // next index to replace
+    private boolean filled;
+    private double sum;
 
     private boolean setExtremum = false;
-    private int min;
-    private int max;
+    private double min;
+    private double max;
+
+
+
+    private Complex amplitudes[];
+    private final Complex[] units;
 
 
 
     public DataWindow(int length) {
         LENGTH = length;
-        data = new int[LENGTH];
+        data = new double[LENGTH];
+
+        amplitudes = new Complex[LENGTH];
+        units = new Complex[LENGTH];
+        
+        for (int k = 0; k < LENGTH; k++) {
+        	amplitudes[k] = new Complex(0, 0);
+        	units[k] = Complex.unit(2 * Math.PI * k / LENGTH);
+        }
     }
 
 
@@ -29,14 +42,15 @@ public class DataWindow {
 
         setExtremum = false;
 
-        for (int i = 0; i < data.length; i++) {
-            data[i] = 0;
+        for (int k = 0; k < data.length; k++) {
+            data[k] = 0;
+            amplitudes[k] = new Complex(0, 0);
         }
     }
 
 
 
-    public void add(int n) {
+    public void add(double n) {
         if (setExtremum == false) {
             min = n;
             max = n;
@@ -78,6 +92,21 @@ public class DataWindow {
             }
         }
 
+
+
+        // DFT changes
+        for (int k = 0; k < LENGTH; k++) {
+    		amplitudes[k] =
+    			units[k]
+    			.multiply(
+    				amplitudes[k].add(
+    					(n - data[next]) / LENGTH
+    				)
+    			);
+    	}
+
+
+
         sum -= data[next];
         sum += n;
 
@@ -97,37 +126,42 @@ public class DataWindow {
         return filled;
     }
 
-    // yay java integer math! doesn't really matter tho, only trying to get an approximation
-    public int average() {
+    public double average() {
         return sum / LENGTH;
     }
 
 
 
     // used for determining whether it is safe to use the window for measurements
-    public int maxDif() {
+    public double maxDif() {
         return max - min;
     }
 
-    // window length should be larger than the wavelength of the oscillation for this to work
-    public int getOscillations() {
-        int count = 0;
 
-        int avg = average();
 
-        float sign1 = Math.signum(data[0] - avg);
-        for (int i = 1; i < LENGTH; i++) {
-            float sign2 = Math.signum(data[i] - avg);
-
-            if (sign2 != sign1) {
-                count++;
-
-                sign1 = sign2;
-            }
-        }
-
-        return (count / 2);
+    public double get(int i) {
+    	// change how data is accessed to make it look like you push back
+    	// old data to make space for new data
+    	return data[(next + i) % LENGTH];
     }
+
+
+
+
+
+    // DFT utilities
+
+    /** Return complex amplitude of k-th frequency */
+    public Complex getAmplitude(int k) {
+        return amplitudes[k];
+    }
+
+    /** Get k-th frequency in 1/(units of data) */
+    public double getFrequency(int k) {
+        return ((double) k) / LENGTH;
+    }
+
+
 
 
 

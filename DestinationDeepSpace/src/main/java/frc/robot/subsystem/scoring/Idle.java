@@ -22,20 +22,37 @@ public class Idle extends Command {
 
     @Override
     protected boolean isFinished() {
+        boolean forceIdle = oi.operatorIdle();
+
+        if (forceIdle) {
+            return false;
+        }
+
+
+        
+		// get selected level on joystick (NONE if none selected, INVALID if multiple selected)
         ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
+
+		// if two levels are selected, there is uncertainty in what to do
+		// so don't change the state
+        if (level == ScoringConstants.ScoringLevel.INVALID) {
+            return false;
+        }
         
         boolean switchOrientation = oi.switchOrientation();
 
-        if ((level != null) ^ switchOrientation) {
-            Command nextState = null;
-            
-            if (level != null) {
-                nextState = new ArmLevel(level);
-            } else {
-                nextState = new OrientationSwitch();
-            }
+        // if either a level is selected XOR the switch orientation button is pressed
+        // (we want changing the level and orientation to be mutually exclusive)
+        if ((level != ScoringConstants.ScoringLevel.NONE) ^ switchOrientation) {
+			// change to ArmLevel state corresponding to selected level
+            if (level != ScoringConstants.ScoringLevel.NONE) {
+				return CommandUtils.stateChange(new ArmLevel(level));
+			}
 
-            return CommandUtils.stateChange(nextState);
+			// change to OrientationSwitch state
+			if (switchOrientation) {
+				return CommandUtils.stateChange(new OrientationSwitch());
+            }
         }
 
         return false;

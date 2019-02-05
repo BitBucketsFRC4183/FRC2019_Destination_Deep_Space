@@ -2,6 +2,9 @@ package frc.robot.subsystem.scoring;
 
 public class ScoringConstants {
 	public enum ScoringLevel {
+		INVALID              (0),       // multiple levels are selected
+		NONE                 (0),       // no levels are selected
+
 		GROUND               (0),       // hatch panel ground pickup
 		
 		HP                   (19.0),    // cargo scoring
@@ -13,32 +16,33 @@ public class ScoringConstants {
 
 
 		private final double HEIGHT_INCH;
-		private final double ANGLE_DEG;
+		private final double ANGLE_RAD;
 
 		ScoringLevel(double height_inch) {
 			HEIGHT_INCH = height_inch;
-			// tip of arm is given by (height off floor) + (length) * sin(angle)
-			ANGLE_DEG = Math.toDegrees(Math.asin((height_inch - ARM_AXIS_HEIGHT_OFF_FLOOR_INCH) / ARM_LENGTH_INCH));
+			// tip of arm is given by (height off floor) + (length) * cos(angle)
+			ANGLE_RAD = Math.acos((height_inch - ARM_AXIS_HEIGHT_OFF_FLOOR_INCH) / ARM_LENGTH_INCH);
 		}
 
-		public double getAngle_deg() {
-			return ANGLE_DEG;
+		public double getAngle_rad() {
+			return ANGLE_RAD;
 		}
 	}
 
 
-	public static final double ARM_LENGTH_INCH = 0;
-	public static final double ARM_AXIS_HEIGHT_OFF_FLOOR_INCH = 0;
+	public static final double ARM_LENGTH_INCH = 27.5;
+	public static final double ARM_AXIS_HEIGHT_OFF_FLOOR_INCH = 19;
 
 
 
 	public static final int ARM_MOTOR_NATIVE_TICKS_PER_REV = 8192;
 
-	// if encoder reads a higher value, then the arm is in the back of the robot
-	public static final int ARM_MOTOR_SWITCH_THRESHOLD_TICKS = ARM_MOTOR_NATIVE_TICKS_PER_REV / 2;
-
 
 
 	// TODO: actual value
-	public static int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 5;
+	public static final int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 50;
+
+
+
+	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 1.5;
 }

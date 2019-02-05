@@ -122,6 +122,12 @@ public class OI {
 
 
 
+	// forced Idle for corresponding subsystems
+	private final static int DRIVER_IDLE   = controllerMapper.getTrackpad();
+	private final static int OPERATOR_IDLE = controllerMapper.getTrackpad();
+
+
+
 	public boolean lowSensitivity()
 	{
 		return driverControl.getRawButton(DRIVE_LOW_SENSITIVE_BUTTON);
@@ -201,6 +207,18 @@ public class OI {
 
 	public boolean switchOrientation() {
 		return operatorControl.getRawButton(SWITCH_ORIENTATION);
+	}
+
+
+
+
+
+	public boolean driverIdle() {
+		return driverControl.getRawButton(DRIVER_IDLE);
+	}
+
+	public boolean operatorIdle() {
+		return operatorControl.getRawButton(OPERATOR_IDLE);
 	}
 }
 
