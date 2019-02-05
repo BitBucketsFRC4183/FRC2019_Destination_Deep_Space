@@ -2,6 +2,12 @@ package frc.robot.utils.autotuner.steps;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+/**
+ * identification of initial cruise speed (85% of max)
+ *     Cs = 0.85 * tp100
+ * invocation of motion magic mode and command some rotations, R (e.g., 10)
+ *     Make note of the error in ticks (terr)
+ */
 public class CruiseStep extends TuningStep {
     private final int TARGET;
 

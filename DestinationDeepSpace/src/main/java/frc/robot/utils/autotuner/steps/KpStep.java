@@ -4,6 +4,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
 
+/**
+ * Compute initial Kp
+ *     Kp = (0.1 * 1023)/terr
+ *     Command another +/- R rotations
+ *     Test for oscillation or manually test for backdrive
+ *     Keep doubling Kp until oscillations start and then back off a little
+ *     Make note of overshoot
+ */
 public class KpStep extends TuningStep {
     private final int TARGET;
     private final double KP0;

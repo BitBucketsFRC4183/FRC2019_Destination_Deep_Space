@@ -2,6 +2,13 @@ package frc.robot.utils.autotuner.steps;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+/**
+ * Estimate initial Kd
+ *     Kd = 10 * Kp
+ *     Command another +/- R rotations
+ *     Test for oscilation and overshoot
+ *     Test for steady state error (sserr)
+ */
 public class KdStep extends TuningStep {
     private final int TARGET;
 
