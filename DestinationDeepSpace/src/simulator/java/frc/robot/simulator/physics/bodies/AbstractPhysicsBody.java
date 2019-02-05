@@ -143,6 +143,8 @@ public abstract class AbstractPhysicsBody extends Image {
         return world;
     }
 
-
+    public void setTransform(float x, float y, float angle) {
+        body.setTransform(x, y, angle);
+    }
     
 }

@@ -77,6 +77,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		double kd = 10 * kp;
 		int izone = 200;
 
+
 		TalonUtils.initializeMotorFPID        (rotationMotor1, kf, kp, ki, kd, izone);
 		TalonUtils.initializeQuadEncoderMotor (rotationMotor1, 1);
 
@@ -267,7 +268,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 	/** Get angle from normal of scoring arm (90 deg = exactly forward) */
-	private double getAngle_deg() {
+	public double getAngle_deg() {
 		int ticks = rotationMotor1.getSelectedSensorPosition(0);
 
 		return 360.0 * ticks / ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
@@ -306,6 +307,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		if (getTelemetryEnabled()) {
 			SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle_deg());
 			SmartDashboard.putNumber(getName() + "/Arm Ticks", rotationMotor1.getSelectedSensorPosition());
+			SmartDashboard.putNumber(getName() + "/Arm Error", rotationMotor1.getClosedLoopError());
 		}
 		// commands will handle dealing with arm manipulation
 	}
