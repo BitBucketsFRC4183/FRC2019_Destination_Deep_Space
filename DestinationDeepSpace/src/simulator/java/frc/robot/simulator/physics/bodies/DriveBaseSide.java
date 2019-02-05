@@ -251,4 +251,8 @@ public class DriveBaseSide extends Image {
 	public void setArmRotationSpeed(float motorSpeed) {
         armJoint.setMotorSpeed(motorSpeed);
 	}
+
+    public void setArmAngle(float angle) {
+        arm.setTransform(arm.getBody().getPosition().x, arm.getBody().getPosition().y, angle);
+    }
 }
