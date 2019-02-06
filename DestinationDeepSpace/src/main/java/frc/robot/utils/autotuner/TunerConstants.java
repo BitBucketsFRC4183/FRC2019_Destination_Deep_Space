@@ -1,12 +1,12 @@
 package frc.robot.utils.autotuner;
 
 public class TunerConstants {
-	public static final String PROCESS_KEY     = "AutoTuner/Current process";
-	public static final String DATA_KEY        = "AutoTuner/Data";
-	public static final String POWER_DATA_KEY  = "AutoTuner/Power output";
-    public static final String STABLE_KEY      = "AutoTuner/Stable";
-	public static final String OSCILLATING_KEY = "AutoTuner/Oscillating";
-	public static final String QUESTION_KEY    = "AutoTuner/What to do";
+	public static final String PROCESS_KEY     = "TestMode/AutoTuner/Current process";
+	public static final String DATA_KEY        = "TestMode/AutoTuner/Data";
+	public static final String POWER_DATA_KEY  = "TestMode/AutoTuner/Power output";
+    public static final String STABLE_KEY      = "TestMode/AutoTuner/Stable";
+	public static final String OSCILLATING_KEY = "TestMode/AutoTuner/Oscillating";
+	public static final String QUESTION_KEY    = "TestMode/AutoTuner/What to do";
 	
 
 	
@@ -31,18 +31,21 @@ public class TunerConstants {
     
 
 
+	// target rotations for position control
     public static final int ROTATIONS = 10;
     public static final int TICKS_PER_REV = 8192;
     public static final int TARGET = ROTATIONS * TICKS_PER_REV;
 
 
 
+	// how many data points to collect (same for + and -)
+	// manually we usually use 4
 	public static final int DATA_WINDOW_SIZE = 25;
 
 
 
 	// maximum difference in a velocity data window for the data to be "stable"
-	// 45 degree / second maximum uncertainty
+	// 45 degree / second maximum uncertainty (tested)
 	public static final int VELOCITY_STABILITY_THRESHOLD_TP100MS = (int) (45.0 / 3600 * 8192);
 
 	// TODO: probably good values, maybe experiment

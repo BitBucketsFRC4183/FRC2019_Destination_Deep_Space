@@ -15,7 +15,9 @@ import frc.robot.utils.autotuner.steps.KiStep;
 import frc.robot.utils.autotuner.steps.KdStep;
 
 
+
 public class AutoTuner {
+    // if you think about it enough, the Step really do just be a tuning state machine
     private static enum Step {
         None (""),
         Kf ("Tell if the velocity and power output datas are stable"),
@@ -23,6 +25,8 @@ public class AutoTuner {
         Kp ("Tell if the position data is stable and oscillating"),
         Kd ("Tell if the position data is stable"),
         Ki ("Tell if the position data is stable and oscillating");
+
+
 
         private final String INSTRUCTIONS;
         Step(String instructions) {
@@ -34,7 +38,29 @@ public class AutoTuner {
         }
     }
 
+
+
+
+
+    // select the tuning step
+    // 
+    // IMPORTANT: tuning will not start until you deselect it
+    // This is because it would go back to the same step
+    //     if you had it selected still.
+    // Ideally we would want to deselect a step upon user
+    //     request to tune a constant, but it doesn't let
+    //     you change the selection.
     private static SendableChooser<Step> stepSelector;
+    // Once in a step, there are two "parts" - init and periodic
+    // init just does the "first part" of each step
+    //     this could be setting up the tuner given previous
+    //     calculated constants. It can even give certain
+    //     constants to the motor to give it the correct
+    //     configuration for data collection
+    // periodic does the "data collection" of each step
+    //     and moves back to None. Once periodic is done
+    //     repeat is set back to false to make sure the next
+    //     step is properly initialized
     private static boolean repeat = false;
 
 
@@ -63,21 +89,44 @@ public class AutoTuner {
 
     /** Next iteration in tuning process */
     public static void periodic() {
+        // VERY IMPORTANT: step and selected are NOT the same
+        // step is the step the AutoTuner actually is in
+        // selected is the selected "requested" step on the dashboard
+        //
+        // Reason: if we let the step be the selected step on the dashboard,
+        // you could end up with the following behavior.
+        //     User wants to tune kF
+        //     AutoTuner starts tuning kF
+        //     AutoTuner finishes tuning kF
+        //     User still has kF selected
+        //     AutoTuner will now continue tuning kF
         Step selected = stepSelector.getSelected();
 
+
+
+        // if the tuner is currently doing nothing but you want to do something,
+        // get "ready" to do that "something"
         if (step == Step.None && selected != Step.None) {
             changeStep(selected);
 
+            // make sure init is called
             repeat = false;
 
+            // don't go further until the user deselects
             return;
         }
 
+        // if tuner is in a step but something is selected, don't allow it to
+        // continue (until deselected)
         if (step != Step.None && selected != Step.None) {
             return;
         }
 
-        // maybe find a better way to organize this?
+        // at this point, step != Step.None and selected == Step.None
+
+
+
+        // TODO: maybe find a better way to organize this?
         switch (step) {
             default: {}
             case None: {
@@ -264,6 +313,10 @@ public class AutoTuner {
 
 
     private static void cruiseTuneInit() {
+        if (kf == null) { return; }
+
+
+
         motor.setSelectedSensorPosition(0, TunerConstants.kPIDLoopIdx, TunerConstants.kTimeoutMs);
 
         cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100(), TunerConstants.TARGET);
@@ -284,6 +337,10 @@ public class AutoTuner {
 
 
     private static void kpTuneInit() {
+        if (cruise == null) { return; }
+
+
+
         kp = new KpStep(TunerConstants.DATA_WINDOW_SIZE, motor, cruise.getTickError(), TunerConstants.TARGET);
 
         setKp(kp.getValue());
@@ -304,6 +361,10 @@ public class AutoTuner {
 
 
     private static void kdTuneInit() {
+        if (kp == null) { return; }
+
+
+
         kd = new KdStep(TunerConstants.DATA_WINDOW_SIZE, motor, kp.getValue(), TunerConstants.TARGET);
 
         setKd(kd.getValue());
@@ -322,10 +383,14 @@ public class AutoTuner {
 
 
     private static void kiTuneInit() {
+        if (kd == null) { return; }
+
+
+
         ki = new KiStep(TunerConstants.DATA_WINDOW_SIZE, motor, kd.getSteadyStateError(), TunerConstants.TARGET);
 
         setIZone(ki.getIntegralZone());
-        setKi(ki.getValue());
+        setKi(ki.getValue()); // initial guess
 
         step = Step.Ki;
     }
