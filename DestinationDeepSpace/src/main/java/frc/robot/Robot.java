@@ -167,6 +167,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     driveSubsystem.startIdle();
+    climberSubsystem.startIdle();
   }
 
   /**
@@ -198,6 +199,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     driveSubsystem.startIdle();
     scoringSubsystem.startIdle();
+    climberSubsystem.startIdle();
 
   }
 
@@ -221,6 +223,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     driveSubsystem.startIdle();
     scoringSubsystem.startIdle();
+    climberSubsystem.startIdle();
   }
 
   /**
@@ -249,6 +252,8 @@ public class Robot extends TimedRobot {
     navigationSubsystem.diagnosticsInitialize();
     visionSubsystem.diagnosticsInitialize();
     lightingSubsystem.diagnosticsInitialize();    
+
+    climberSubsystem.startIdle();
 
     MotorTestModes.init();
   }  
