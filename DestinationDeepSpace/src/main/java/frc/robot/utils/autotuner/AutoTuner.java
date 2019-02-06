@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
+import frc.robot.utils.autotuner.steps.TuningStep;
 import frc.robot.utils.autotuner.steps.KfStep;
 import frc.robot.utils.autotuner.steps.CruiseStep;
 import frc.robot.utils.autotuner.steps.KpStep;
@@ -82,13 +83,26 @@ public class AutoTuner {
 
 
         
-        SmartDashboard.putData("AutoTuner/step", stepSelector);
+        SmartDashboard.putData("TestMode/AutoTuner/step", stepSelector);
+
+
+
+        SmartDashboard.putBoolean("TestMode/AutoTuner/Log DFT", false);
     }
     
 
 
     /** Next iteration in tuning process */
     public static void periodic() {
+        // button click
+        if (SmartDashboard.getBoolean("TestMode/AutoTuner/Log DFT", false)) {
+            SmartDashboard.putBoolean("TestMode/AutoTuner/Log DFT", false);
+
+            logDFT();
+        }
+
+
+
         // VERY IMPORTANT: step and selected are NOT the same
         // step is the step the AutoTuner actually is in
         // selected is the selected "requested" step on the dashboard
@@ -301,7 +315,7 @@ public class AutoTuner {
         boolean done = kf.update();
         // put the power output to the Dashboard to make sure its also stable
 
-        SmartDashboard.putNumber("AutoTuner/kf", kf.getValue());
+        SmartDashboard.putNumber("TestMode/AutoTuner/kf", kf.getValue());
 
         if (done) {
             changeStep(Step.None);
@@ -327,7 +341,7 @@ public class AutoTuner {
     private static void cruiseTunePeriodic() {
         boolean done = cruise.update();
 
-        SmartDashboard.putNumber("AutoTuner/Cruise", cruise.getValue());
+        SmartDashboard.putNumber("TestMode/AutoTuner/Cruise", cruise.getValue());
         
         if (done) {
             changeStep(Step.None);
@@ -349,7 +363,7 @@ public class AutoTuner {
     private static void kpTunePeriodic() {
         boolean done = kp.update();
 
-        SmartDashboard.putNumber("AutoTuner/kp", kp.getValue());
+        SmartDashboard.putNumber("TestMode/AutoTuner/kp", kp.getValue());
 
         if (done) {
             changeStep(Step.None);
@@ -373,7 +387,7 @@ public class AutoTuner {
     private static void kdTunePeriodic() {
         boolean done = kd.update();
 
-        SmartDashboard.putNumber("AutoTuner/kd", kd.getValue());
+        SmartDashboard.putNumber("TestMode/AutoTuner/kd", kd.getValue());
 
         if (done) {
             changeStep(Step.None);
@@ -398,13 +412,32 @@ public class AutoTuner {
     private static void kiTunePeriodic() {
         boolean done = ki.update(); // initial ki value
 
-        SmartDashboard.putNumber("AutoTuner/ki", ki.getValue());
+        SmartDashboard.putNumber("TestMode/AutoTuner/ki", ki.getValue());
 
         if (done) {
             step = Step.None;
         } else {
             setKi(ki.getValue());
         }
+    }
+
+
+
+
+
+
+
+
+
+    private static void logDFT() {
+        TuningStep s = kf;
+
+        if (step == Step.Cruise) { s = cruise; }
+        if (step == Step.Kp) { s = kp; }
+        if (step == Step.Kd) { s = kd; }
+        if (step == Step.Ki) { s = ki; }
+
+        s.logDFT();
     }
 
 
