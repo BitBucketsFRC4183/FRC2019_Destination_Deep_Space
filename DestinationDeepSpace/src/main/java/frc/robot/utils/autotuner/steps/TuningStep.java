@@ -222,4 +222,32 @@ public abstract class TuningStep {
 
     // how to update
     public abstract boolean update();
+
+
+
+
+
+
+
+
+
+    public void logDFT() {
+        for (int i = 0; i < 5; i++) { System.out.println(); }
+        System.out.println(getClass().getName() + " DISCRETE FOURIER TRANSFORM DATA");
+        for (int i = 0; i < 2; i++) { System.out.println(); }
+        System.out.println("POSITIVE VALUES");
+        for (int i = 0; i < pos.size(); i++) {
+            // units of getFrequency() in 50Hz
+            double f = pos.getFrequency(i) / 50;
+            System.out.println(i + ": f = " + f + ", A = " + pos.getAmplitude(i).norm());
+        }
+        for (int i = 0; i < 2; i++) { System.out.println(); }
+        System.out.println("NEGATIVE VALUES");
+        for (int i = 0; i < neg.size(); i++) {
+            // units of getFrequency() in 50Hz
+            double f = neg.getFrequency(i) / 50;
+            System.out.println(i + ": f = " + f + ", A = " + neg.getAmplitude(i).norm());
+        }
+        for (int i = 0; i < 5; i++) { System.out.println(); }
+    }
 }

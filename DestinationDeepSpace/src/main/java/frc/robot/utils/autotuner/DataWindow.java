@@ -145,6 +145,10 @@ public class DataWindow {
     	return data[(next + i) % LENGTH];
     }
 
+    public int size() {
+        return LENGTH;
+    }
+
 
 
 
@@ -156,7 +160,7 @@ public class DataWindow {
         return amplitudes[k];
     }
 
-    /** Get k-th frequency in 1/(units of data) */
+    /** Get k-th frequency in 1/(units of data separation interval) */
     public double getFrequency(int k) {
         return ((double) k) / LENGTH;
     }
