@@ -235,19 +235,41 @@ public abstract class TuningStep {
         for (int i = 0; i < 5; i++) { System.out.println(); }
         System.out.println(getClass().getName() + " DISCRETE FOURIER TRANSFORM DATA");
         for (int i = 0; i < 2; i++) { System.out.println(); }
+        
+
+
         System.out.println("POSITIVE VALUES");
         for (int i = 0; i < pos.size(); i++) {
             // units of getFrequency() in 50Hz
             double f = pos.getFrequency(i) / 50;
             System.out.println(i + ": f = " + f + ", A = " + pos.getAmplitude(i).norm());
         }
+        System.out.print("A = [");
+        for (int i = 0; i < pos.size() - 1; i++) {
+            System.out.println(pos.getAmplitude(i).norm() + ", ");
+        }
+        System.out.println(pos.getAmplitude(pos.size() - 1).norm() + "]");
+
+
+
         for (int i = 0; i < 2; i++) { System.out.println(); }
+
+
+        
         System.out.println("NEGATIVE VALUES");
         for (int i = 0; i < neg.size(); i++) {
             // units of getFrequency() in 50Hz
             double f = neg.getFrequency(i) / 50;
             System.out.println(i + ": f = " + f + ", A = " + neg.getAmplitude(i).norm());
         }
+        System.out.print("B = [");
+        for (int i = 0; i < neg.size() - 1; i++) {
+            System.out.println(neg.getAmplitude(i).norm() + ", ");
+        }
+        System.out.println(neg.getAmplitude(neg.size() - 1).norm() + "]");
+
+
+
         for (int i = 0; i < 5; i++) { System.out.println(); }
     }
 }
