@@ -106,7 +106,7 @@ public class OI {
 	// TODO: Make a get/set function instead of setting it to public
 	public  final static int ARM_CLIMBER                 = controllerMapper.getBrandButton();
 	private final static int HIGH_CLIMB                  = controllerMapper.getLStickButton();
-	private final static int LOW_CLIMB                   = controllerMapper.getLStickButton();
+	private final static int LOW_CLIMB                   = controllerMapper.getRStickButton();
 
 	private final static int TEST_MOVE_BY_BUTTON         = controllerMapper.getTriangle(); /// TODO: Temp, use dashboard instead
 
