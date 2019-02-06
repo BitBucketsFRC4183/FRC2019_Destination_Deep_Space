@@ -86,7 +86,6 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public void periodic() {
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
-		System.out.println(state);
 		switch (state) {
 			case IDLE:{
 				climbMotor1.set(0);
@@ -145,7 +144,6 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	public void updateDashboard()
 	{
-
 		SmartDashboard.putNumber(getName()+"/CurrentServoAngle(deg)",climbServo.getAngle());
 		SmartDashboard.putString(getName()+"/CurrentState()",state.name());
 	}
