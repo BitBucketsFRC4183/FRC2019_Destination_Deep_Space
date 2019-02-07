@@ -9,42 +9,35 @@ public class DataWindow {
     private boolean filled;
     private double sum;
 
-    private boolean setExtremum = false;
+    private boolean setExtremum;
     private double min;
     private double max;
 
 
 
-    private Complex amplitudes[];
-    private final Complex[] units;
-
-
 
     public DataWindow(int length) {
         LENGTH = length;
-        data = new double[LENGTH];
+        data   = new double[LENGTH];
 
-        amplitudes = new Complex[LENGTH];
-        units = new Complex[LENGTH];
-        
-        for (int k = 0; k < LENGTH; k++) {
-        	amplitudes[k] = new Complex(0, 0);
-        	units[k] = Complex.unit(2 * Math.PI * k / LENGTH);
-        }
+
+
+        reset();
     }
 
 
 
+
+
     public void reset() {
-        next = 0;
+        next   = 0;
         filled = false;
-        sum = 0;
+        sum    = 0;
 
         setExtremum = false;
 
         for (int k = 0; k < data.length; k++) {
             data[k] = 0;
-            amplitudes[k] = new Complex(0, 0);
         }
     }
 
@@ -94,19 +87,6 @@ public class DataWindow {
 
 
 
-        // DFT changes
-        for (int k = 0; k < LENGTH; k++) {
-    		amplitudes[k] =
-    			units[k]
-    			.multiply(
-    				amplitudes[k].add(
-    					(n - data[next]) / LENGTH
-    				)
-    			);
-    	}
-
-
-
         sum -= data[next];
         sum += n;
 
@@ -147,22 +127,6 @@ public class DataWindow {
 
     public int size() {
         return LENGTH;
-    }
-
-
-
-
-
-    // DFT utilities
-
-    /** Return complex amplitude of k-th frequency */
-    public Complex getAmplitude(int k) {
-        return amplitudes[k];
-    }
-
-    /** Get k-th frequency in 1/(units of data separation interval) */
-    public double getFrequency(int k) {
-        return ((double) k) / LENGTH;
     }
 
 

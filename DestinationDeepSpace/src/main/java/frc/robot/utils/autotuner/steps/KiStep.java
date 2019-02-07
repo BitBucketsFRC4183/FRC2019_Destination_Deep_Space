@@ -13,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  * 				Stop and back off if oscillations appear
  */
 public class KiStep extends TuningStep {
-    private final int TARGET;
     private final double KI0;
     private final int IZONE;
 
@@ -23,12 +22,11 @@ public class KiStep extends TuningStep {
 
 
 
-    public KiStep(int windowSize, WPI_TalonSRX motor, int kd_sserr, int target) {
+    public KiStep(int windowSize, WPI_TalonSRX motor, int kd_sserr) {
         super(windowSize, motor, DataCollectionType.Position);
 
         IZONE = (int) (2.5 * kd_sserr);
 
-        TARGET = target;
         KI0 = 0.001;
 
         value = KI0;
@@ -38,7 +36,7 @@ public class KiStep extends TuningStep {
 
     public boolean update() {
         // get + and - positions
-        boolean done = collectDataPosition(TARGET);
+        boolean done = collectData();
 
         if (done) {
             if (!isOscillating()) {
