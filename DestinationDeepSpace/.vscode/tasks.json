@@ -6,7 +6,12 @@
         {
             "label": "gradle",
             "type": "shell",
-            "command": "gradle build",
+            "windows": {
+                "command": "./gradlew.bat build",
+            },
+            "osx": {
+                "command": "./gradlew build",
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -20,7 +25,12 @@
         {
             "label": "extractSnobotSimJavaJNI",
             "type": "shell",
-            "command": "gradle extractSnobotSimJavaJNI",
+            "windows": {
+                "command": "./gradlew.bat extractSnobotSimJavaJNI",
+            },
+            "osx": {
+                "command": "./gradlew extractSnobotSimJavaJNI",
+            },
             "options": {
                 "env": {
                     "JAVA_HOME": "${config:java.home}"
