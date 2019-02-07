@@ -31,120 +31,57 @@ mPwm:
   mName: 0 - Middle Motor
   mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
 - mHandle: 101
-  mMotorModelConfig:
-    mGearReduction: 1.0
-    mGearboxEfficiency: 1.0
-    mHasBrake: false
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 1.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Left Drive Front (1)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 102
-  mMotorModelConfig:
-    mGearReduction: 1.0
-    mGearboxEfficiency: 1.0
-    mHasBrake: false
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 1.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Right Drive Front (2)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 103
-  mMotorModelConfig:
-    mGearReduction: 1.0
-    mGearboxEfficiency: 1.0
-    mHasBrake: false
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 1.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Right Drive Rear (3)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 104
-  mMotorModelConfig:
-    mGearReduction: 1.0
-    mGearboxEfficiency: 1.0
-    mHasBrake: false
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 1.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Left Drive Rear (4)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 105
-  mMotorModelConfig:
-    mGearReduction: 1.0
-    mGearboxEfficiency: 1.0
-    mHasBrake: false
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 1.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Intake Motor (5)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 107
-  mMotorModelConfig:
-    mGearReduction: 18.5
-    mGearboxEfficiency: 1.0
-    mHasBrake: true
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 1.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Rotation Motor 1 (7)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 108
-  mMotorModelConfig:
-    mGearReduction: 18.5
-    mGearboxEfficiency: 1.0
-    mHasBrake: true
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 1.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Rotation Motor 2 (8)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 109
-  mMotorModelConfig:
-    mGearReduction: 1.0
-    mGearboxEfficiency: 1.0
-    mHasBrake: false
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 1.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Climb Motor 1 (9)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 110
-  mMotorModelConfig:
-    mGearReduction: 1.0
-    mGearboxEfficiency: 1.0
-    mHasBrake: false
-    mInverted: false
-    mMotorType: Bag
-    mNumMotors: 1
-  mMotorSimConfig: !!com.snobot.simulator.motor_sim.StaticLoadMotorSimulationConfig
-    mConversionFactor: 1.0
-    mLoad: 0.0
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
   mName: Climb Motor 2 (10)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 mRelays: []
