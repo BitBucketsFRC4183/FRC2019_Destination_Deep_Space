@@ -333,7 +333,7 @@ public class AutoTuner {
 
         motor.setSelectedSensorPosition(0, TunerConstants.kPIDLoopIdx, TunerConstants.kTimeoutMs);
 
-        cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100(), TunerConstants.TARGET);
+        cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100());
 
         setCruise((int) cruise.getValue());
     }
@@ -379,7 +379,7 @@ public class AutoTuner {
 
 
 
-        kd = new KdStep(TunerConstants.DATA_WINDOW_SIZE, motor, kp.getValue(), TunerConstants.TARGET);
+        kd = new KdStep(TunerConstants.DATA_WINDOW_SIZE, motor, kp.getValue());
 
         setKd(kd.getValue());
     }
@@ -401,7 +401,7 @@ public class AutoTuner {
 
 
 
-        ki = new KiStep(TunerConstants.DATA_WINDOW_SIZE, motor, kd.getSteadyStateError(), TunerConstants.TARGET);
+        ki = new KiStep(TunerConstants.DATA_WINDOW_SIZE, motor, kd.getSteadyStateError());
 
         setIZone(ki.getIntegralZone());
         setKi(ki.getValue()); // initial guess

@@ -2,8 +2,12 @@ package frc.robot.utils.autotuner;
 
 public class TunerConstants {
 	public static final String PROCESS_KEY     = "TestMode/AutoTuner/Current process";
-	public static final String DATA_KEY        = "TestMode/AutoTuner/Data";
-	public static final String POWER_DATA_KEY  = "TestMode/AutoTuner/Power output";
+
+	public static final String ERROR_KEY       = "TestMode/AutoTuner/Error (ticks)";
+	public static final String VELOCITY_KEY    = "TestMode/AutoTuner/Velocity (ticks per 100ms)";
+	public static final String POWER_KEY       = "TestMode/AutoTuner/Power";
+	public static final String POSITION_KEY    = "TestMode/AutoTuner/Position";
+
     public static final String STABLE_KEY      = "TestMode/AutoTuner/Stable";
 	public static final String OSCILLATING_KEY = "TestMode/AutoTuner/Oscillating";
 	public static final String QUESTION_KEY    = "TestMode/AutoTuner/What to do";

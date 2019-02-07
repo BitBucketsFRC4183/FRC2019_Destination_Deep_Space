@@ -40,7 +40,7 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
     // no gravity, let stuff float
 
     // Ignore the previous statement.
-    float g = 10;
+    float g = 9.80665f;
     float grav = -g;
 
 
