@@ -407,6 +407,17 @@
               "_source0": "network_table:///SmartDashboard/VisionSubsystem/DiagnosticsEnabled",
               "_title": "SmartDashboard/VisionSubsystem/DiagnosticsEnabled"
             }
+          },
+          "5,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/BucketVisionState",
+              "_title": "BucketVision/BucketVisionState"
+            }
           }
         }
       }
