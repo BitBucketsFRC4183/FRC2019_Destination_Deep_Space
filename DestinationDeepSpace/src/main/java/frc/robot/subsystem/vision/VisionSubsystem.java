@@ -7,6 +7,9 @@
 
 package frc.robot.subsystem.vision;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.subsystem.lighting.LightingControl;
 import frc.robot.subsystem.lighting.LightingSubsystem;
@@ -43,6 +46,10 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 	private LightingSubsystem lightingSubsystem = LightingSubsystem.instance();
 
+	private NetworkTableInstance networkTable = NetworkTableInstance.getDefault();
+	private NetworkTable bvTable = networkTable.getTable("BucketVision");
+	private NetworkTableEntry bvStateEntry = bvTable.getEntry("BucketVisionState");
+
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
@@ -62,7 +69,14 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		}
 		else
 		{
-			setIlluminatorOn(VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
+			if (bvStateEntry.getString("UNKNOWN") != "UNKNOWN")
+			{
+				setIlluminatorOn(VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
+			}
+			else
+			{
+				setIlluminatorSnore();
+			}
 		}
 
 		updateBaseDashboard();	
@@ -101,6 +115,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		initializeBaseDashboard();
 
 		// Turn on illuminator in a snoring posture
+		bvStateEntry.setString("UNKNOWN");
 		setIlluminatorSnore();
 	}
 
