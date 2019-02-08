@@ -4,19 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import frc.robot.Robot;
-import frc.robot.simulator.physics.bodies.DriveBaseTop;
+import frc.robot.simulator.physics.bodies.BallTop;
 import frc.robot.simulator.physics.bodies.DriveBaseTop;
 import frc.robot.simulator.physics.bodies.TopDownField;
 import frc.robot.subsystem.drive.DriveSubsystem;
@@ -34,6 +31,7 @@ public class DriveBaseTopDownScreen extends AbstractPhysicsSimulationScreen {
     private DriveBaseTop driveBase;
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
+    private Texture ballTexture;
 
     // no gravity, let stuff float
     private Vector2 gravity = new Vector2(0, 0);
@@ -70,9 +68,15 @@ public class DriveBaseTopDownScreen extends AbstractPhysicsSimulationScreen {
         field.setTransform(worldWidth/2, worldHeight/2, 0);
         stage.addActor(field);
 
-        Vector2 startingPositionWorld = field.getFieldCoordsForPixel(1240, 410);
+        Vector2 startingPositionWorld = field.getFieldCoordsForPixel(1260, 400);
         driveBase = new DriveBaseTop(world, startingPositionWorld.x, startingPositionWorld.y);
         driveBase.setTransform(startingPositionWorld.x, startingPositionWorld.y, MathUtils.degreesToRadians*90);
+
+        ballTexture = new Texture("assets/Ball.png");
+        Vector2 ballStartingPosition = field.getFieldCoordsForPixel(1000, 400);
+        BallTop ball = new BallTop(world, ballTexture, ballStartingPosition.x, ballStartingPosition.y);
+        stage.addActor(ball);
+
         stage.addActor(driveBase);
     }
 
