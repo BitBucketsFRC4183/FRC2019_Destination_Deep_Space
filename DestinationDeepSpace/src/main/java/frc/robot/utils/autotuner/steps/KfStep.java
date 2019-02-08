@@ -21,12 +21,12 @@ public class KfStep extends TuningStep {
 
     public boolean update() {
         // get + and - velocities
-        boolean done = collectDataVelocity();
+        boolean done = collectData();
 
         // if done with that, get average speed at %
         if (done) {
             // avg of two speeds / avg of two power %s
-            tp100 = (int) ((pos.average() - neg.average()) / (power_pos.average() - power_neg.average()));
+            tp100 = (int) ((velocity_pos.average() - velocity_neg.average()) / (power_pos.average() - power_neg.average()));
 
             // calculate kf
             value = 1023.0 / tp100;
