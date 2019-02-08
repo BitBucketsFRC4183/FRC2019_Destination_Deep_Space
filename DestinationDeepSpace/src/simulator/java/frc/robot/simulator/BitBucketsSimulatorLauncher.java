@@ -68,10 +68,10 @@ public class BitBucketsSimulatorLauncher {
     private void createPhysicsSimulation() {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         // field is 1592 × 656
-        config.width = 1440;
+        config.width = 1592;
         config.height = 900;
-//        config.width = 1592;
-//        config.height = 656;
+    //    config.width = 1592;
+    //    config.height = 656;
         config.foregroundFPS = 60;
 
         // this creates a new application with access to our robot and simulator

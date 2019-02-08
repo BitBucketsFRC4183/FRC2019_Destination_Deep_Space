@@ -43,29 +43,36 @@ public class DriveBaseTopDownScreen extends AbstractPhysicsSimulationScreen {
         this.physicsSimulation = physicsSimulation;
         this.robot = robot;
 
-        // make our camera a 5x5 meter space
-        field = new TopDownField();
+        // create a world to simulate the physics in
+        world = new World(gravity, true);
+
+        // screen dimensions in pixels
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float aspectRatio = screenWidth / screenHeight;
+
+        // world size in meters, based on the entire image. Our field is shorter
+        // than the screen height, so make our viewport a "sqaure" into the world, set to
+        // world width and then scaled to account for the screen aspect ratio
+        field = new TopDownField(world);
         float worldWidth = field.getWidth();
-        float worldHeight = field.getHeight();
+        float worldHeight = worldWidth/aspectRatio;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, worldWidth,
-                worldHeight);
+        camera.setToOrtho(false, worldWidth, worldHeight);
         camera.update();
-        Viewport viewport = new FitViewport(worldWidth,
-                worldHeight, camera);
+        Viewport viewport = new FitViewport(worldWidth, worldHeight, camera);
 
         stage = new Stage(viewport);
         debugRenderer = new Box2DDebugRenderer();
 
-        // create a world to simulate the physics in
-        world = new World(gravity, true);
-
+        // center the field
+        field.setTransform(worldWidth/2, worldHeight/2, 0);
         stage.addActor(field);
 
-        driveBase = new DriveBaseTop(world, worldWidth/2, worldHeight/2);
         Vector2 startingPositionWorld = field.getFieldCoordsForPixel(1240, 410);
-        driveBase.setTransform( startingPositionWorld.x + driveBase.getWidth()/2, worldHeight - startingPositionWorld.y, -90 * MathUtils.degreesToRadians);
+        driveBase = new DriveBaseTop(world, startingPositionWorld.x, startingPositionWorld.y);
+        driveBase.setTransform(startingPositionWorld.x, startingPositionWorld.y, MathUtils.degreesToRadians*90);
         stage.addActor(driveBase);
     }
 
@@ -74,22 +81,14 @@ public class DriveBaseTopDownScreen extends AbstractPhysicsSimulationScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // wheels move at 20000 ticks / 100ms
-        // or 2.44140625 revolutions per 100ms
-        // or 24.4 revolutions per second
-        // motor speed is in radians per second
-        // 2 pi radians is a full revolution so
-        // 24.4 rev/s = 2(pi)*24.4 radians / sec so about 50
-        float motorOutput = 1f;
-
         driveBase.setFrontLeftMotorOutput(
-                (float) (motorOutput * DriveSubsystem.instance().getLeftFrontMotor().getMotorOutputPercent()));
+                (float) (DriveSubsystem.instance().getLeftFrontMotor().getMotorOutputPercent()));
         driveBase.setFrontRightOutput(
-                (float) (motorOutput * DriveSubsystem.instance().getRightFrontMotor().getMotorOutputPercent()));
+                (float) (DriveSubsystem.instance().getRightFrontMotor().getMotorOutputPercent()));
         driveBase.setRearLeftMotorOutput(
-                (float) (motorOutput * DriveSubsystem.instance().getLeftRearMotor().getMotorOutputPercent()));
+                (float) (DriveSubsystem.instance().getLeftRearMotor().getMotorOutputPercent()));
         driveBase.setRearRightMotorOutput(
-                (float) (motorOutput * DriveSubsystem.instance().getRightRearMotor().getMotorOutputPercent()));
+                (float) (DriveSubsystem.instance().getRightRearMotor().getMotorOutputPercent()));
 
         camera.update();
 
