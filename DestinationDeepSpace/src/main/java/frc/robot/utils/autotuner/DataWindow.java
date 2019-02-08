@@ -138,7 +138,7 @@ public class DataWindow {
         String ret = "";
 
         for (int i = 0; i < LENGTH; i++) {
-            ret += (data[i] + " ");
+            ret += "\t" + data[i] + "\n";
         }
 
         return ret;
