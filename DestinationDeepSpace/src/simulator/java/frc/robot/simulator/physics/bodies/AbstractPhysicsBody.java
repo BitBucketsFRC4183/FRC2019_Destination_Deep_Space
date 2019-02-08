@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -146,5 +147,43 @@ public abstract class AbstractPhysicsBody extends Image {
     public void setTransform(float x, float y, float angle) {
         body.setTransform(x, y, angle);
     }
-    
+
+    /**
+     * get the lateral velocity of a body as a new vector
+     * @return
+     */
+    Vector2 getLateralVelocity() {
+        Vector2 currentRightNormal = body.getWorldVector(new Vector2(1,0));
+        float dot = currentRightNormal.dot(body.getLinearVelocity());
+        return new Vector2(currentRightNormal.x * dot, currentRightNormal.y * dot);
+    }
+
+    /**
+     * get the forward velocity of the body as a new vector
+     * @return
+     */
+    Vector2 getForwardVelocity() {
+        Vector2 currentForwardNormal = body.getWorldVector(new Vector2(0,1));
+        float dot = currentForwardNormal.dot(body.getLinearVelocity());
+        return new Vector2(currentForwardNormal.x * dot, currentForwardNormal.y * dot);
+    }
+
+    public void setAngularVelocity(int angularVelocity) {
+        body.setAngularVelocity(0);
+    }
+
+    public void setLinearVelocity(float x, float y) {
+        body.setLinearVelocity(x, y);
+    }
+
+    /**
+     * Reset this object to a position in the world and set it's velocity and angular velocity to 0
+     * @param x
+     * @param y
+     */
+    public void resetToPosition(float x, float y) {
+        setTransform(x, y, 0);
+        setAngularVelocity(0);
+        setLinearVelocity(0, 0);
+    }   
 }
