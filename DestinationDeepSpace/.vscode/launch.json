@@ -27,6 +27,27 @@
     },
     {
       "type": "java",
+      "name": "Debug (Launch) Physics Sim Top Down",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopOnEntry": false,
+      "mainClass": "frc.robot.simulator.SimulatorMain",
+      "args": "",
+      "windows": {
+        "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/;build/tmp/jniExtractDir/ -Dxbox -Dsim=top",
+      },
+      "osx": {
+        "vmArgs": "-Djava.library.path=build/tmp/snobotSimJava/:build/tmp/jniExtractDir/ -Dxbox -Dsim=top",
+      },
+      "env": {
+        // mac only, windows doesn't care about this env var
+        "DYLD_LIBRARY_PATH": "build/tmp/snobotSimJava/:build/tmp/jniExtractDir/"
+      },
+      "preLaunchTask": "extractSnobotSimJavaJNI"
+    },
+    {
+      "type": "java",
       "name": "Debug (Launch) SnobotSim",
       "request": "launch",
       "cwd": "${workspaceFolder}",
