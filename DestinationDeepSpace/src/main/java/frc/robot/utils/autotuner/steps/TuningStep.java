@@ -20,14 +20,17 @@ public abstract class TuningStep {
 
     protected boolean finishedPos = false; // has it finished collecting all positive data values?
 
-    protected DFT_DataWindow error_pos;    // positive position values
-    protected DFT_DataWindow error_neg;    // negative position values
+    protected DataWindow     error_pos;    // positive error values
+    protected DataWindow     error_neg;    // negative error values
 
-    protected DataWindow velocity_pos; // positive velocity values
-    protected DataWindow velocity_neg; // negative data values
+    protected DFT_DataWindow position_pos; // position position values
+    protected DFT_DataWindow position_neg; // negative position values
 
-    protected DataWindow power_pos;    // positive data power values
-    protected DataWindow power_neg;    // negative data power values
+    protected DataWindow     velocity_pos; // positive velocity values
+    protected DataWindow     velocity_neg; // negative data values
+
+    protected DataWindow     power_pos;    // positive data power values
+    protected DataWindow     power_neg;    // negative data power values
 
 
 
@@ -39,6 +42,10 @@ public abstract class TuningStep {
     protected final DataCollectionType DATA_COLLECTION_TYPE; // what data this step collections
     private final ControlMode CONTROL_MODE;
     private final double      COMMAND_VALUE;
+
+
+
+    protected String report;
 
 
 
@@ -56,8 +63,11 @@ public abstract class TuningStep {
 
         finishedPos = false;
 
-        error_pos    = new DFT_DataWindow(windowSize);
-        error_neg    = new DFT_DataWindow(windowSize);
+        error_pos    = new DataWindow(windowSize);
+        error_neg    = new DataWindow(windowSize);
+
+        position_pos = new DFT_DataWindow(windowSize);
+        position_neg = new DFT_DataWindow(windowSize);
 
         velocity_pos = new DataWindow(windowSize);
         velocity_neg = new DataWindow(windowSize);
@@ -88,6 +98,10 @@ public abstract class TuningStep {
                 break;
             }
         }
+
+
+
+        report += "========== " + getClass().getName() + " TUNING REPORT ==========";
     }
 
 
@@ -150,11 +164,11 @@ public abstract class TuningStep {
 
 
     /** Put some data on the Dashboard */
-    private void put(int error, int velocity, double power, int position) {
-        SmartDashboard.putNumber(TunerConstants.ERROR_KEY, error);
-        SmartDashboard.putNumber(TunerConstants.VELOCITY_KEY, velocity);
-        SmartDashboard.putNumber(TunerConstants.POWER_KEY, power);
+    private void put(int error, int position, int velocity, double power) {
+        SmartDashboard.putNumber(TunerConstants.ERROR_KEY,    error);
         SmartDashboard.putNumber(TunerConstants.POSITION_KEY, position);
+        SmartDashboard.putNumber(TunerConstants.VELOCITY_KEY, velocity);
+        SmartDashboard.putNumber(TunerConstants.POWER_KEY,    power);
     }
 
 
@@ -167,20 +181,30 @@ public abstract class TuningStep {
 
 
 
-            int error    = MOTOR.getClosedLoopError();
+            int error    = Math.abs(MOTOR.getClosedLoopError());
+            int position = MOTOR.getSelectedSensorPosition();
             int velocity = MOTOR.getSelectedSensorVelocity();
             double power = MOTOR.getMotorOutputPercent();
-            int position = MOTOR.getSelectedSensorPosition();
             
             error_pos   .add(error);
+            position_pos.add(position);
             velocity_pos.add(velocity);
             power_pos   .add(power);
 
-            put(error, velocity, power, position);
+            put(error, position, velocity, power);
 
 
 
             if (isStable()) {
+                report += "Finished collecting stable positive data\n\n";
+                report += "errors (ticks):\n"               + error_pos   .toString() + "\n";
+                report += "positions (ticks):\n"            + position_pos.toString() + "\n";
+                report += "velocities (ticks per 100ms):\n" + velocity_pos.toString() + "\n";
+                report += "power outputs (%):\n"            + power_pos   .toString() + "\n";
+                report += "\n";
+                
+
+
                 finishedPos = true;
             }
         } else {
@@ -188,20 +212,30 @@ public abstract class TuningStep {
 
 
 
-            int error    = MOTOR.getClosedLoopError();
+            int error    = Math.abs(MOTOR.getClosedLoopError());
+            int position = MOTOR.getSelectedSensorPosition();
             int velocity = MOTOR.getSelectedSensorVelocity();
             double power = MOTOR.getMotorOutputPercent();
-            int position = MOTOR.getSelectedSensorPosition();
             
             error_neg   .add(error);
+            position_neg.add(position);
             velocity_neg.add(velocity);
             power_neg   .add(power);
 
-            put(error, velocity, power, position);
+            put(error, position, velocity, power);
 
 
 
             if (isStable()) {
+                report += "Finished collecting stable negative data\n\n";
+                report += "errors (ticks):\n"               + error_neg   .toString() + "\n";
+                report += "positions (ticks):\n"            + position_neg.toString() + "\n";
+                report += "velocities (ticks per 100ms):\n" + velocity_neg.toString() + "\n";
+                report += "power outputs (%):\n"            + power_neg   .toString() + "\n";
+                report += "\n";
+
+
+
                 finishedPos = false;
 
                 return true; // done collecting data
@@ -218,6 +252,11 @@ public abstract class TuningStep {
 
 
 
+    public String getReport() {
+        return report;
+    }
+
+
 
 
 
@@ -232,16 +271,16 @@ public abstract class TuningStep {
 
 
         System.out.println("POSITIVE VALUES");
-        for (int i = 0; i < error_pos.size(); i++) {
+        for (int i = 0; i < position_pos.size(); i++) {
             // units of getFrequency() in 50Hz
-            double f = error_pos.getFrequency(i) / 50;
-            System.out.println(i + ": f = " + f + ", A = " + error_pos.getAmplitude(i).norm());
+            double f = position_pos.getFrequency(i) / 50;
+            System.out.println(i + ": f = " + f + ", A = " + position_pos.getAmplitude(i).norm());
         }
         System.out.print("A = [");
-        for (int i = 0; i < error_pos.size() - 1; i++) {
-            System.out.println(error_pos.getAmplitude(i).norm() + ", ");
+        for (int i = 0; i < position_pos.size() - 1; i++) {
+            System.out.println(position_pos.getAmplitude(i).norm() + ", ");
         }
-        System.out.println(error_pos.getAmplitude(error_pos.size() - 1).norm() + "]");
+        System.out.println(position_pos.getAmplitude(position_pos.size() - 1).norm() + "]");
 
 
 
@@ -250,16 +289,16 @@ public abstract class TuningStep {
 
         
         System.out.println("NEGATIVE VALUES");
-        for (int i = 0; i < error_neg.size(); i++) {
+        for (int i = 0; i < position_neg.size(); i++) {
             // units of getFrequency() in 50Hz
-            double f = error_neg.getFrequency(i) / 50;
-            System.out.println(i + ": f = " + f + ", A = " + error_neg.getAmplitude(i).norm());
+            double f = position_neg.getFrequency(i) / 50;
+            System.out.println(i + ": f = " + f + ", A = " + position_neg.getAmplitude(i).norm());
         }
         System.out.print("B = [");
-        for (int i = 0; i < error_neg.size() - 1; i++) {
-            System.out.println(error_neg.getAmplitude(i).norm() + ", ");
+        for (int i = 0; i < position_neg.size() - 1; i++) {
+            System.out.println(position_neg.getAmplitude(i).norm() + ", ");
         }
-        System.out.println(error_neg.getAmplitude(error_neg.size() - 1).norm() + "]");
+        System.out.println(position_neg.getAmplitude(position_neg.size() - 1).norm() + "]");
 
 
 

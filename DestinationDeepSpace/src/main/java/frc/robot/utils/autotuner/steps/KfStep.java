@@ -25,11 +25,24 @@ public class KfStep extends TuningStep {
 
         // if done with that, get average speed at %
         if (done) {
+            report += "average positive velocity: "     + velocity_pos.average() + " ticks per 100ms \n";
+            report += "average positive power output: " + power_pos   .average() + "% \n";
+            report += "\n";
+            report += "average negative velocity: "     + velocity_neg.average() + " ticks per 100ms \n";
+            report += "average negative power output: " + power_neg   .average() + "% \n";
+            report += "\n";
+
+
             // avg of two speeds / avg of two power %s
             tp100 = (int) ((velocity_pos.average() - velocity_neg.average()) / (power_pos.average() - power_neg.average()));
+            report += "linearized maximum velocity: " + tp100 + " ticks per 100ms \n\n";
+
+
 
             // calculate kf
             value = 1023.0 / tp100;
+            valueString = value + "";
+            report += "kF: " + value;
         }
 
         return done;
