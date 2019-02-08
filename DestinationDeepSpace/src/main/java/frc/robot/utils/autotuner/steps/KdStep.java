@@ -10,16 +10,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  *     Test for steady state error (sserr)
  */
 public class KdStep extends TuningStep {
-    private final int TARGET;
-
     private int sserr;
 
 
     
-    public KdStep(int windowSize, WPI_TalonSRX motor, double kf, int target) {
+    public KdStep(int windowSize, WPI_TalonSRX motor, double kf) {
         super(windowSize, motor, DataCollectionType.Position);
-
-        TARGET = target;
 
         value = 10 * kf;
     }
@@ -28,11 +24,11 @@ public class KdStep extends TuningStep {
 
     public boolean update() {
         // get + and - positions
-        boolean done = collectDataPosition(TARGET);
+        boolean done = collectData();
 
         // if done with that, get average speed at %
         if (done) {
-            sserr = (int) ((pos.average() + neg.average()) / 2); // average of two (average) errors
+            sserr = (int) ((error_pos.average() + error_neg.average()) / 2); // average of two (average) errors
         }
 
         return done;

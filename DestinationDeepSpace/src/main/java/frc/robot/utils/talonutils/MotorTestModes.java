@@ -1,14 +1,12 @@
 package frc.robot.utils.talonutils;
 
-
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.autotuner.AutoTuner;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 
 public class MotorTestModes {
     public static enum TestMode { Manual, AutoTune }
@@ -73,7 +71,7 @@ public class MotorTestModes {
 
                 lastMotor.set(ControlMode.PercentOutput, v);
 
-                SmartDashboard.putNumber("AutoTuner/Power output", lastMotor.getMotorOutputVoltage());
+                SmartDashboard.putNumber("TestMode/AutoTuner/Power output", lastMotor.getMotorOutputVoltage());
             }
         } else {
             if (mode != lastTestMode) {

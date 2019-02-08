@@ -35,7 +35,7 @@ public class KpStep extends TuningStep {
 
     public boolean update() {
         // get + and - positions
-        boolean done = collectDataPosition(TARGET);
+        boolean done = collectData();
 
         if (done) {
             if (!isOscillating()) {
