@@ -151,7 +151,7 @@ public class Arm extends AbstractPhysicsBody {
         setOrigin(getWidth() / 2, 0);
     }
 
-        /**
+    /**
      * Called by stage every render loop. This moves the texture in the world based on the physics body's 
      * translations.
      * 
