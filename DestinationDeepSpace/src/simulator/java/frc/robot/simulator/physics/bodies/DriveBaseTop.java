@@ -1,88 +1,99 @@
 package frc.robot.simulator.physics.bodies;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.World;
+
 import frc.robot.simulator.physics.MathConstants;
 
 /**
- * Created by julienvillegas on 31/01/2017.
+ * Top down drive base for testing drive subsystem
  */
 
-public class DriveBaseTop extends Image {
+public class DriveBaseTop extends AbstractPhysicsBody {
 
-    private Body body;
-    private World world;
-
-    public static final float INCHES_TO_METERS = 0.0254f;
+    private float maxDriveForce = 2f;
 
     public DriveBaseTop(World world, float x, float y) {
-        super(new Texture("assets/drive_base_top_down.png"));
-        this.world = world;
-        setPosition(x, y);
-        setSize(30 * MathConstants.INCHES_TO_METERS, 30 * MathConstants.INCHES_TO_METERS);
-        setOrigin(getWidth() / 2, getHeight() / 2);
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(getX(), getY());
-        // Create a body in the world using our definition
-        body = this.world.createBody(bodyDef);
-        body.setTransform(getX() + getWidth() / 2, getY() + getHeight() / 2, 0);
-
-        // Now define the dimensions of the physics shape
-        PolygonShape shape = new PolygonShape();
-
-        // our actual collision box is shaped like the drive base
-        // dimensions of texture is 473x512 for a ratio of .92
-        shape.setAsBox(30*.92f * MathConstants.INCHES_TO_METERS/2, 30 * MathConstants.INCHES_TO_METERS/2);
-
-        // FixtureDef is a confusing expression for physical properties
-        // Basically is where you, in addition to defining the shape of the body
-        // you also define it's properties like density, restitution and others we will see shortly
-        // If you are wondering, density and area are used to calculate over all mass
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1;
-        fixtureDef.friction = 1;
-        fixtureDef.restitution = .2f;
-        Fixture fixture = body.createFixture(fixtureDef);
-        shape.dispose();
+        super(world, new Texture("assets/drive_base_top_down.png"), x, y, 30 * MathConstants.INCHES_TO_METERS,
+                30 * MathConstants.INCHES_TO_METERS);
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
+    protected void initFixtureDef() {
+        fixtureDef.density = 1;
+        fixtureDef.friction = 1;
+        fixtureDef.restitution = .2f;
+    }
 
+    @Override
+    protected Shape createShape() {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(30 * .92f * MathConstants.INCHES_TO_METERS / 2, 30 * MathConstants.INCHES_TO_METERS / 2);
+        return shape;
+    }
+
+    private Vector2 getForceVector(float factor) {
+        Vector2 currentForwardNormal = body.getWorldVector(new Vector2(0, 1));
+        Vector2 forceVector = currentForwardNormal.scl(maxDriveForce);
+        forceVector = forceVector.scl(factor);
+        return forceVector;
+    }
+
+    public void setFrontLeftMotorOutput(float motorOutput) {
+        if (motorOutput != 0) {
+            Vector2 forceVector = getForceVector(motorOutput);
+            body.applyForce(forceVector, body.getWorldPoint(new Vector2(-getWidth() / 2, getHeight() / 2)), true);
+        }
+    }
+
+    public void setFrontRightOutput(float motorOutput) {
+        if (motorOutput != 0) {
+            Vector2 forceVector = getForceVector(motorOutput);
+            body.applyForce(forceVector, body.getWorldPoint(new Vector2(getWidth() / 2, getHeight() / 2)), true);
+        }
+    }
+
+    public void setRearLeftMotorOutput(float motorOutput) {
+        if (motorOutput != 0) {
+            Vector2 forceVector = getForceVector(motorOutput);
+            body.applyForce(forceVector, body.getWorldPoint(new Vector2(-getWidth() / 2, -getHeight() / 2)), true);
+        }
+    }
+
+    public void setRearRightMotorOutput(float motorOutput) {
+        if (motorOutput != 0) {
+            Vector2 forceVector = getForceVector(motorOutput);
+            body.applyForce(forceVector, body.getWorldPoint(new Vector2(getWidth() / 2, -getHeight() / 2)), true);
+        }
+    }
+
+    void updateFriction() {
+        //lateral linear velocity
+        float maxLateralImpulse = 3f;
+        Vector2 lateralVelocity = getLateralVelocity().scl(-1f);
+        Vector2 impulse = lateralVelocity.scl(body.getMass());
+        if (impulse.len() > maxLateralImpulse)
+            impulse.scl(maxLateralImpulse / impulse.len());
+        body.applyLinearImpulse(impulse, body.getWorldCenter(), true);
+
+        //angular velocity
+        body.applyAngularImpulse(0.1f * body.getInertia() * -body.getAngularVelocity(), true);
+
+        //forward linear velocity
+        Vector2 currentForwardNormal = getForwardVelocity();
+        float currentForwardSpeed = currentForwardNormal.len();
+        float dragForceMagnitude = -2 * currentForwardSpeed;
+        body.applyForce(currentForwardNormal.scl(dragForceMagnitude), body.getWorldCenter(), true);
     }
 
     @Override
     public void act(float delta) {
+        updateFriction();
         super.act(delta);
-        setRotation(body.getAngle()*  MathUtils.radiansToDegrees);
-        setPosition(body.getPosition().x-getWidth()/2,body.getPosition().y-getHeight()/2);
     }
 
-    public void setTransform(float x, float y, float angle) {
-        this.getBody().setTransform(x, y, angle);
 
-    }
-
-    public Body getBody() {
-        return body;
-    }
-
-	public void setFrontLeftMotorOutput(float f) {
-	}
-
-	public void setFrontRightOutput(float f) {
-	}
-
-	public void setRearLeftMotorOutput(float f) {
-	}
-
-	public void setRearRightMotorOutput(float f) {
-	}
 }

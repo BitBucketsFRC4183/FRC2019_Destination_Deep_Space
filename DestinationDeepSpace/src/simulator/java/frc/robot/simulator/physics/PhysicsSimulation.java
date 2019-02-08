@@ -14,8 +14,11 @@ public class PhysicsSimulation extends Game {
 
 	@Override
 	public void create () {
-		this.setScreen(new DriveBaseSideScreen(this, robot));
-//		 this.setScreen(new DriveBaseTopDownScreen(this, robot));
+		if ("top".equals(System.getProperty("sim", "side").toLowerCase())) {
+			this.setScreen(new DriveBaseTopDownScreen(this, robot));
+		} else {
+			this.setScreen(new DriveBaseSideScreen(this, robot));
+		}
 	}
 
 	@Override
