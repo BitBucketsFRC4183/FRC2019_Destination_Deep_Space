@@ -100,7 +100,8 @@ public class OI {
 	private final static int DRIVE_INVERT_BUTTON         = controllerMapper.getR2();
 	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getL1();
 	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getL2();
-	private final static int DRIVE_INTAKE_BUTTON   		 = controllerMapper.getCross();
+	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getLeftTrigger(); // TODO: ask which triggers
+	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getRightTrigger();
 
 	// How do you like me now, Sam?
 	// TODO: Make a get/set function instead of setting it to public
@@ -157,13 +158,7 @@ public class OI {
 	{
 		return driverControl.getRawButton(DRIVE_LOCK_BUTTON);
 	}
-    /**
-	 * intakeActive - turns the intake rollers to rotate inwards when true, pulling balls inside.
-	 */
-	public boolean  intakeActive()
-	{
-		return driverControl.getRawButton(DRIVE_INTAKE_BUTTON);
-	}
+    
 
   public boolean testMoveBy() /// TODO: Temporary, use dashboard instead
   {
@@ -186,6 +181,11 @@ public class OI {
   }	
 
 
+
+
+	// these correspond to whether or not the buttons corresponding
+	// to each level are pressed
+	
 	public boolean hp() {
 		return operatorControl.getRawButton(SCORING_HATCH_PANEL);
 	}
@@ -207,6 +207,17 @@ public class OI {
 
 	public boolean switchOrientation() {
 		return operatorControl.getRawButton(SWITCH_ORIENTATION);
+	}
+
+	/**
+	 * intakeActive - turns the intake rollers to rotate inwards when true, pulling balls inside.
+	 */
+	public boolean infeedActive() {
+		return driverControl.getRawButton(DRIVE_INFEED_BUTTON);
+	}
+
+	public boolean outfeedActive() {
+		return driverControl.getRawButton(DRIVE_OUTFEED_BUTTON);
 	}
 
 
