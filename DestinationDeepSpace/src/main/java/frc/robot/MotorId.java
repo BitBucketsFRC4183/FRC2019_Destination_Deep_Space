@@ -24,7 +24,7 @@ public class MotorId {
         {
                 LEFT_DRIVE_MOTOR_FRONT_ID
                 /// TODO: Currently crashes simulation
-                //,LEFT_DRIVE_MOTOR_MIDDLE_ID
+                ,LEFT_DRIVE_MOTOR_MIDDLE_ID
                 ,LEFT_DRIVE_MOTOR_REAR_ID
         };
 
@@ -32,7 +32,7 @@ public class MotorId {
         {
                 RIGHT_DRIVE_MOTOR_FRONT_ID
                 /// TODO: Currently crashes simulation
-                //,RIGHT_DRIVE_MOTOR_MIDDLE_ID
+                ,RIGHT_DRIVE_MOTOR_MIDDLE_ID
                 ,RIGHT_DRIVE_MOTOR_REAR_ID
         };
         
