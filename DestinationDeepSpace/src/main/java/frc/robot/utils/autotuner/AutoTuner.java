@@ -355,7 +355,7 @@ public class AutoTuner {
 
 
 
-        kp = new KpStep(TunerConstants.DATA_WINDOW_SIZE, motor, cruise.getTickError(), TunerConstants.TARGET);
+        kp = new KpStep(TunerConstants.DATA_WINDOW_SIZE, motor, cruise.getTickError());
 
         setKp(kp.getValue());
     }
