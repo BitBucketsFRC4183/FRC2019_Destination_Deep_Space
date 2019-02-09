@@ -75,14 +75,14 @@ public class DriveConstants {
     public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG[] = 
     {
         true
-        //,false
+        ,false
         ,true
     };
 
     public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG[] = 
     {
         false
-        //,true
+        ,true
         ,false
     };
 
