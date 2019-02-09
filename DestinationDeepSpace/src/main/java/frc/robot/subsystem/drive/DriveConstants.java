@@ -8,6 +8,8 @@
 package frc.robot.subsystem.drive;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+
+import frc.robot.MotorId;
 /**
  * Add your docs here.
  */
@@ -72,11 +74,25 @@ public class DriveConstants {
     // then look for a function to disable it; in order to use both the WPI class
     // and other control modes in the robot, the motor the inversions (if needed) must be in
     // the physical controller firmware, not the software.
+    public static final int LEFT_DRIVE_MOTOR_IDS[] =
+    {
+            MotorId.LEFT_DRIVE_MOTOR_FRONT_ID
+            ,MotorId.LEFT_DRIVE_MOTOR_MIDDLE_ID
+            ,MotorId.LEFT_DRIVE_MOTOR_REAR_ID
+    };
+
     public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG[] = 
     {
         true
         ,false
         ,true
+    };
+
+    public static final int RIGHT_DRIVE_MOTOR_IDS[] =
+    {
+            MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID
+            ,MotorId.RIGHT_DRIVE_MOTOR_MIDDLE_ID
+            ,MotorId.RIGHT_DRIVE_MOTOR_REAR_ID
     };
 
     public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG[] = 
