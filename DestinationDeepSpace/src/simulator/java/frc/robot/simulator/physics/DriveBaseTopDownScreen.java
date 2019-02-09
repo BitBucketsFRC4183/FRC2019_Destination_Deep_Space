@@ -86,13 +86,15 @@ public class DriveBaseTopDownScreen extends AbstractPhysicsSimulationScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         driveBase.setFrontLeftMotorOutput(
-                (float) (DriveSubsystem.instance().getLeftFrontMotor().getMotorOutputPercent()));
+                (float) (DriveSubsystem.instance().getLeftMasterMotor().getMotorOutputPercent()));
         driveBase.setFrontRightOutput(
-                (float) (DriveSubsystem.instance().getRightFrontMotor().getMotorOutputPercent()));
+                (float) (DriveSubsystem.instance().getRightMasterMotor().getMotorOutputPercent()));
+
+        /// TODO: There could be more than one (1) slave motor per side; index 0 = master, above
         driveBase.setRearLeftMotorOutput(
-                (float) (DriveSubsystem.instance().getLeftRearMotor().getMotorOutputPercent()));
+                (float) (DriveSubsystem.instance().getLeftMotor(1).getMotorOutputPercent()));
         driveBase.setRearRightMotorOutput(
-                (float) (DriveSubsystem.instance().getRightRearMotor().getMotorOutputPercent()));
+                (float) (DriveSubsystem.instance().getRightMotor(1).getMotorOutputPercent()));
 
         camera.update();
 
