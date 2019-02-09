@@ -90,8 +90,9 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
         // 24.4 rev/s = 2(pi)*24.4 radians / sec so about 50
         float motorSpeed = 50f;
 
-        driveBaseLeftSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftFrontMotor().getMotorOutputPercent()));
-        driveBaseLeftSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftRearMotor().getMotorOutputPercent()));
+        driveBaseLeftSide.setFrontMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftMasterMotor().getMotorOutputPercent()));
+        /// TODO: There could be more than one (1) slave motor, index 0 = master, above
+        driveBaseLeftSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftMotor(1).getMotorOutputPercent()));
         driveBaseLeftSide.setArmAngle((float) (MathUtils.degreesToRadians * (ScoringSubsystem.instance().getAngle_deg())));
         driveBaseLeftSide.setTopRollerSpeed((float) (motorSpeed * -ScoringSubsystem.instance().getRollerMotor().getMotorOutputPercent()));
         driveBaseLeftSide.setBottomRollerSpeed((float) (motorSpeed * ScoringSubsystem.instance().getRollerMotor().getMotorOutputPercent()));
