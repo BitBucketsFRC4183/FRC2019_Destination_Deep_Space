@@ -8,6 +8,8 @@
 package frc.robot.subsystem.drive;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+
+import frc.robot.MotorId;
 /**
  * Add your docs here.
  */
@@ -16,7 +18,7 @@ public class DriveConstants {
 
     // Set velocity follower type to false when independent gear boxes are being used
     // Set to true of all wheels on one side are physically linked
-    public static final boolean CLOSED_LOOP_FOLLOWER = false;
+    public static final boolean CLOSED_LOOP_FOLLOWER = true;
 
     public static final double MAX_SPEED_IPS = 144.0;
     public static final double MAX_TURN_DPS  = 360.0;
@@ -72,8 +74,33 @@ public class DriveConstants {
     // then look for a function to disable it; in order to use both the WPI class
     // and other control modes in the robot, the motor the inversions (if needed) must be in
     // the physical controller firmware, not the software.
-    public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG = true;
-    public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG = false;
+    public static final int LEFT_DRIVE_MOTOR_IDS[] =
+    {
+            MotorId.LEFT_DRIVE_MOTOR_FRONT_ID
+            ,MotorId.LEFT_DRIVE_MOTOR_MIDDLE_ID
+            ,MotorId.LEFT_DRIVE_MOTOR_REAR_ID
+    };
+
+    public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG[] = 
+    {
+        true
+        ,false
+        ,true
+    };
+
+    public static final int RIGHT_DRIVE_MOTOR_IDS[] =
+    {
+            MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID
+            ,MotorId.RIGHT_DRIVE_MOTOR_MIDDLE_ID
+            ,MotorId.RIGHT_DRIVE_MOTOR_REAR_ID
+    };
+
+    public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG[] = 
+    {
+        false
+        ,true
+        ,false
+    };
 
     
     // Define some constants for using the motor controllers
@@ -130,14 +157,35 @@ public class DriveConstants {
     public static final double RIGHT_DRIVE_MOTOR_NEUTRAL_DEADBAND = 0.007;
         
     // Motion Magic Control Constant (JUNIOR)
+    // see documentation (2018 SRM Section 12.6)
+    // The gains are determined empirically following the Software Reference Manual
+    // Summary:
+    //	Run drive side at full speed, no-load, forward and initiate SelfTest on System Configuration web page
+    //  Observe the number of encoder ticks per 100 ms, the % output, and voltage
+    //  Collect data in both forward and backwards (e.g., 5 fwd, 5 back)
+    //  Average the absolute value of that number, adjust as measured_ticks / percentage_factor
+    //  Compute Kf = 1023 / adjusted_tick_average
+    //  The using that value, run the Motion Magic forward 10 revolutions at the encoder scale
+    //  Note the error (in ticks)
+    //  Compute Kp = 0.1 * 1023 / error as a starting point
+    //  Command any position through Motion Magic and attempt to turn the motor by hand while holding the command
+    //  If the axle turns, keep doubling the Kp until it stops turning (or at leasts resists vigorously without
+    //  oscillation); if it oscillates, you must drop the gain.
+    //  Run the Motion Magic for at least 10 rotations in each direction
+    //  Make not of any misses or overshoot.
+    //  If there is unacceptable overshoot then set Kd = 10 * Kp as a starting point and re-test
+    //
+    //  Put drive train on ground with weight and re-test to see if position is as commanded.
+    //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.    
     public static final int PID_MOTION_MAGIC_SLOT = 0;
     public static double MOTION_MAGIC_KF 	 = 0.05115; 
-    public static double MOTION_MAGIC_KP 	 = 0.005683*2*2*2*2*2*2*1.5;
+    public static double MOTION_MAGIC_KP 	 = 0.005683*2*2*2*2*2*2*1.5; // = 0.545568
     public static double MOTION_MAGIC_KI 	 = 0.001;
     public static double MOTION_MAGIC_KD 	 = 10 * MOTION_MAGIC_KP;	// Start with 10 x Kp for increased damping of overshoot
     public static int    MOTION_MAGIC_IZONE = 200; 
 
     // Velocity Control Constant (JUNIOR)
+    // Similar process but slightly different focus
     public static final int PID_VELOCITY_SLOT = 1;
     public static double VELOCITY_KF 	 = 0.05115; 
     public static double VELOCITY_KP 	 = 0.14014/2;

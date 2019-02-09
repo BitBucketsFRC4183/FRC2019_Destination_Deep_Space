@@ -14,10 +14,10 @@ public class MotorId {
     
         /*DRIVE SUBSYSTEM*/
         public static final int LEFT_DRIVE_MOTOR_FRONT_ID  = 1;	// TODO: These are Junior's Numbers, consider 
-        public static final int LEFT_DRIVE_MOTOR_MIDDLE_ID = 0;
+        public static final int LEFT_DRIVE_MOTOR_MIDDLE_ID = 11;
         public static final int LEFT_DRIVE_MOTOR_REAR_ID   = 4;
         public static final int RIGHT_DRIVE_MOTOR_FRONT_ID = 2;
-        public static final int RIGHT_DRIVE_MOTOR_MIDDLE_ID = 0;
+        public static final int RIGHT_DRIVE_MOTOR_MIDDLE_ID = 12;
         public static final int RIGHT_DRIVE_MOTOR_REAR_ID  = 3;
         
         public static final int INTAKE_MOTOR_ID = 5;
