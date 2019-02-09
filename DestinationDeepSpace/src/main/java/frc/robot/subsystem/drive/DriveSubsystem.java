@@ -117,7 +117,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	private boolean motionMode   = false;
 
 	// ASSUME left and right are symmetrical
-	private final int NUM_MOTORS_PER_SIDE = MotorId.LEFT_DRIVE_MOTOR_IDS.length;
+	private final int NUM_MOTORS_PER_SIDE = DriveConstants.LEFT_DRIVE_MOTOR_IDS.length;
 
   	private DriveSubsystem()
   	{
@@ -175,7 +175,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		rightMotors = new WPI_TalonSRX[NUM_MOTORS_PER_SIDE];
 		for (int i = 0; i < NUM_MOTORS_PER_SIDE; i++)
 		{
-			leftMotors[i] = new WPI_TalonSRX(MotorId.LEFT_DRIVE_MOTOR_IDS[i]);
+			leftMotors[i] = new WPI_TalonSRX(DriveConstants.LEFT_DRIVE_MOTOR_IDS[i]);
             leftMotors[i].setName(getName(),"Left_" + Integer.toString(i));
 
 			TalonUtils.initializeMotorDefaults(leftMotors[i]);
@@ -239,7 +239,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 			// !!!!!!!!!!!!!!! RIGHT !!!!!!!!!!!!!!!!!
 			// TODO: May make this into a function with a few arguments							
-			rightMotors[i] = new WPI_TalonSRX(MotorId.RIGHT_DRIVE_MOTOR_IDS[i]);
+			rightMotors[i] = new WPI_TalonSRX(DriveConstants.RIGHT_DRIVE_MOTOR_IDS[i]);
             rightMotors[i].setName(getName(),"Right_" + Integer.toString(i));			
 			TalonUtils.initializeMotorDefaults(rightMotors[i]);
 			if (i > 0)
@@ -712,12 +712,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	 */
 	private void setNeutral(NeutralMode neutralMode) 
 	{
-		for (int i = 0; i < MotorId.LEFT_DRIVE_MOTOR_IDS.length; ++i)
+		for (int i = 0; i < NUM_MOTORS_PER_SIDE; ++i)
 		{
 			leftMotors[i].setNeutralMode(neutralMode);
-		}	
-		for (int i = 0; i < MotorId.RIGHT_DRIVE_MOTOR_IDS.length; ++i)
-		{
 			rightMotors[i].setNeutralMode(neutralMode);
 		}		
 	}
