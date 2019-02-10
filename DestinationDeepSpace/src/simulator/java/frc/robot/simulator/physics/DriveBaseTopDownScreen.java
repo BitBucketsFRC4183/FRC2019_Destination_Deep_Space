@@ -73,7 +73,7 @@ public class DriveBaseTopDownScreen extends AbstractPhysicsSimulationScreen {
         driveBase.setTransform(startingPositionWorld.x, startingPositionWorld.y, MathUtils.degreesToRadians*90);
 
         ballTexture = new Texture("assets/Ball.png");
-        Vector2 ballStartingPosition = field.getFieldCoordsForPixel(1000, 400);
+        Vector2 ballStartingPosition = field.getFieldCoordsForPixel(1300, (int) (TopDownField.imageSize.y - 175));
         BallTop ball = new BallTop(world, ballTexture, ballStartingPosition.x, ballStartingPosition.y);
         stage.addActor(ball);
 
