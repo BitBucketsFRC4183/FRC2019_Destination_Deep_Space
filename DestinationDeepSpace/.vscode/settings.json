@@ -14,5 +14,16 @@
     "**/.settings": true,
     "**/.factorypath": true
   },
-  "wpilib.online": true
+  "wpilib.online": true,
+
+  "java.test.config": [
+    {
+        "name": "Unit Test",
+        "workingDirectory": "${workspaceFolder}",
+        "args": [ ],
+        "vmargs": [ "-Xmx512M" ],
+        "env": { },
+    },
+  ],
+  "java.test.defaultConfig": "Unit Test"
 }
