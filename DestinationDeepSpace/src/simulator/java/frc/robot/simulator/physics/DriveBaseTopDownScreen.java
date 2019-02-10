@@ -63,19 +63,36 @@ public class DriveBaseTopDownScreen extends AbstractPhysicsSimulationScreen {
 
         stage = new Stage(viewport);
         debugRenderer = new Box2DDebugRenderer();
+        debugRenderer.setDrawVelocities(true);
 
         // center the field
         field.setTransform(worldWidth/2, worldHeight/2, 0);
         stage.addActor(field);
 
-        Vector2 startingPositionWorld = field.getFieldCoordsForPixel(1260, 400);
+        Vector2 startingPositionWorld = field.getFieldMetersForPixels(1260, 400);
         driveBase = new DriveBaseTop(world, startingPositionWorld.x, startingPositionWorld.y);
         driveBase.setTransform(startingPositionWorld.x, startingPositionWorld.y, MathUtils.degreesToRadians*90);
 
         ballTexture = new Texture("assets/Ball.png");
-        Vector2 ballStartingPosition = field.getFieldCoordsForPixel(1000, 400);
+        
+        Vector2 ballStartingPosition = field.transformPixelmatorCoordsToWorldMeters(1300, 180);
         BallTop ball = new BallTop(world, ballTexture, ballStartingPosition.x, ballStartingPosition.y);
+        ballStartingPosition = field.transformPixelmatorCoordsToWorldMeters(1332, 180);
+        BallTop ball2 = new BallTop(world, ballTexture, ballStartingPosition.x, ballStartingPosition.y);
+        ballStartingPosition = field.transformPixelmatorCoordsToWorldMeters(1364, 180);
+        BallTop ball3 = new BallTop(world, ballTexture, ballStartingPosition.x, ballStartingPosition.y);
+        ballStartingPosition = field.transformPixelmatorCoordsToWorldMeters(1300, 212);
+        BallTop ball4 = new BallTop(world, ballTexture, ballStartingPosition.x, ballStartingPosition.y);
+        ballStartingPosition = field.transformPixelmatorCoordsToWorldMeters(1332, 212);
+        BallTop ball5 = new BallTop(world, ballTexture, ballStartingPosition.x, ballStartingPosition.y);
+        ballStartingPosition = field.transformPixelmatorCoordsToWorldMeters(1364, 212);
+        BallTop ball6 = new BallTop(world, ballTexture, ballStartingPosition.x, ballStartingPosition.y);
         stage.addActor(ball);
+        stage.addActor(ball2);
+        stage.addActor(ball3);
+        stage.addActor(ball4);
+        stage.addActor(ball5);
+        stage.addActor(ball6);
 
         stage.addActor(driveBase);
     }
