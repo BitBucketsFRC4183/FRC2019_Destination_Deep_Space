@@ -22,7 +22,15 @@ public class DataWindow {
 
 
 
-        reset();
+        next   = 0;
+        filled = false;
+        sum    = 0;
+
+        setExtremum = false;
+
+        for (int k = 0; k < LENGTH; k++) {
+            data[k] = 0;
+        }
     }
 
 
@@ -36,7 +44,7 @@ public class DataWindow {
 
         setExtremum = false;
 
-        for (int k = 0; k < data.length; k++) {
+        for (int k = 0; k < LENGTH; k++) {
             data[k] = 0;
         }
     }

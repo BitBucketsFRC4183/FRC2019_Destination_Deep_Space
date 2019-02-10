@@ -2,6 +2,11 @@ package frc.robot.utils.autotuner.steps;
 
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,7 +50,7 @@ public abstract class TuningStep {
 
 
 
-    protected String report;
+    //protected String report;
 
 
 
@@ -101,7 +106,7 @@ public abstract class TuningStep {
 
 
 
-        report += "========== " + getClass().getName() + " TUNING REPORT ==========";
+        log("========== " + getClass().getName() + " TUNING REPORT ==========");
     }
 
 
@@ -138,10 +143,10 @@ public abstract class TuningStep {
         }
 
         if (DATA_COLLECTION_TYPE == DataCollectionType.Position) {
-            DataWindow error = (!finishedPos) ? error_pos : error_neg;
+            DataWindow position = (!finishedPos) ? position_pos : position_neg;
 
             return
-                error.isFilled() && error.maxDif() <= TunerConstants.POSITION_STABILITY_THRESHOLD_TICKS;
+            position.isFilled() && position.maxDif() <= TunerConstants.POSITION_STABILITY_THRESHOLD_TICKS;
         }
 
 
@@ -176,6 +181,8 @@ public abstract class TuningStep {
 
 
     protected boolean collectData() {
+        String rep = "";
+
         if (!finishedPos) {
             MOTOR.set(CONTROL_MODE, COMMAND_VALUE);
 
@@ -196,12 +203,12 @@ public abstract class TuningStep {
 
 
             if (isStable()) {
-                report += "Finished collecting stable positive data\n\n";
-                report += "errors (ticks):\n"               + error_pos   .toString() + "\n";
-                report += "positions (ticks):\n"            + position_pos.toString() + "\n";
-                report += "velocities (ticks per 100ms):\n" + velocity_pos.toString() + "\n";
-                report += "power outputs (%):\n"            + power_pos   .toString() + "\n";
-                report += "\n";
+                rep += "Finished collecting stable positive data\n\n";
+                rep += "errors (ticks):\n"               + error_pos   .toString() + "\n";
+                rep += "positions (ticks):\n"            + position_pos.toString() + "\n";
+                rep += "velocities (ticks per 100ms):\n" + velocity_pos.toString() + "\n";
+                rep += "power outputs (%):\n"            + power_pos   .toString() + "\n";
+                rep += "\n";
                 
 
 
@@ -227,20 +234,24 @@ public abstract class TuningStep {
 
 
             if (isStable()) {
-                report += "Finished collecting stable negative data\n\n";
-                report += "errors (ticks):\n"               + error_neg   .toString() + "\n";
-                report += "positions (ticks):\n"            + position_neg.toString() + "\n";
-                report += "velocities (ticks per 100ms):\n" + velocity_neg.toString() + "\n";
-                report += "power outputs (%):\n"            + power_neg   .toString() + "\n";
-                report += "\n";
+                rep += "Finished collecting stable negative data\n\n";
+                rep += "errors (ticks):\n"               + error_neg   .toString() + "\n";
+                rep += "positions (ticks):\n"            + position_neg.toString() + "\n";
+                rep += "velocities (ticks per 100ms):\n" + velocity_neg.toString() + "\n";
+                rep += "power outputs (%):\n"            + power_neg   .toString() + "\n";
+                rep += "\n";
 
 
 
                 finishedPos = false;
 
+                log(rep);
+
                 return true; // done collecting data
             }
         }
+
+        log(rep);
 
         return false; // more data to collect still
     }
@@ -252,8 +263,26 @@ public abstract class TuningStep {
 
 
 
-    public String getReport() {
+    /*public String getReport() {
         return report;
+    }
+
+    public void writeReport() {
+        File f = new File(getClass().getName() + " tuner report.txt");
+        try {
+            PrintWriter w = new PrintWriter(f);
+
+            w.print(report);
+
+            w.close();
+        } catch (FileNotFoundException e) {
+
+        }
+    }*/
+
+    protected void log(String data) {
+        String console = SmartDashboard.getString("TestMode/AutoTuner/Console", "");
+        SmartDashboard.putString("TestMode/AutoTuner/Console", console + "\n" + data);
     }
 
 
