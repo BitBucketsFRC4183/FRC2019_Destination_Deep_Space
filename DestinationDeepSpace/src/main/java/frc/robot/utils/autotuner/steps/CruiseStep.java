@@ -19,8 +19,8 @@ public class CruiseStep extends TuningStep {
         value = (int) (0.75 * kf_tp100);
         valueString = value + "";
 
-        report += "cruise velocity: " + value + " ticks per 100ms\n\n";
-        report += "Getting error with kF and cruise velocity...";
+        log("cruise velocity: " + value + " ticks per 100ms\n");
+        log("Getting error with kF and cruise velocity...");
     }
 
     
@@ -31,12 +31,16 @@ public class CruiseStep extends TuningStep {
 
         // if done with that, get average speed at %
         if (done) {
-            report += "average positive error: " + error_pos.average() + " ticks \n";
-            report += "average negative error: " + error_neg.average() + " ticks \n\n";
+            String rep = "";
+
+            rep += "average positive error: " + error_pos.average() + " ticks \n";
+            rep += "average negative error: " + error_neg.average() + " ticks \n\n";
 
             terr = (int) ((error_pos.average() + error_neg.average()) / 2); // average of two (average) errors
 
-            report += "average total error: " + terr + " ticks";
+            rep += "average total error: " + terr + " ticks";
+
+            log(rep);
         }
 
         return done;

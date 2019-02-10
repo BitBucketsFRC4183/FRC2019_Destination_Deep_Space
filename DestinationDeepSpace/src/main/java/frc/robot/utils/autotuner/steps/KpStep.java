@@ -25,7 +25,7 @@ public class KpStep extends TuningStep {
         super(windowSize, motor, DataCollectionType.Position);
 
         KP0 = ((int) (1000000 * (0.1 * 1023) / cruise_terr)) / 1000000.0; // truncate to 6 decimal places
-        report += "initial kP guess: " + KP0 + "\n\n";
+        log("initial kP guess: " + KP0 + "\n");
 
         value = KP0;
         valueString = KP0 + "";
@@ -38,10 +38,12 @@ public class KpStep extends TuningStep {
         boolean done = collectData();
 
         if (done) {
+            String rep = "";
+
             if (!isOscillating()) {
                 // hasn't reached oscillations yet
                 if (hasOscillated == false) {
-                    report += "Data is not oscillating, doubling kP...";
+                    rep += "Data is not oscillating, doubling kP...";
 
                     // double kP
                     value *= 2;
@@ -66,8 +68,8 @@ public class KpStep extends TuningStep {
                     // KP0*2*2*2...*lastMultiplier
                     valueString += "*" + lastMultiplier;
 
-                    report += "Data has stopped oscillating\n\n";
-                    report += "kP: " + valueString + " = " + value;
+                    rep += "Data has stopped oscillating\n\n";
+                    rep += "kP: " + valueString + " = " + value;
 
 
                     return true; // your job is done here
@@ -87,9 +89,11 @@ public class KpStep extends TuningStep {
                 // new multiplier factor
                 value *= lastMultiplier;
 
-                report += "Data is oscillating, backing off...\n";
-                report += "kP: " + (valueString + "*" + lastMultiplier) + " = " + value + "\n\n";
+                rep += "Data is oscillating, backing off...\n";
+                rep += "kP: " + (valueString + "*" + lastMultiplier) + " = " + value + "\n\n";
             }
+
+            log(rep);
         }
 
         return false; // keep going
