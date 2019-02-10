@@ -1,6 +1,7 @@
 package frc.robot.utils.autotuner.steps;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * forward/reverse speed sample for Kf = (%v * 1023)/tp100
@@ -35,6 +36,8 @@ public class KfStep extends TuningStep {
 
             // avg of two speeds / avg of two power %s
             tp100 = (int) ((velocity_pos.average() - velocity_neg.average()) / (power_pos.average() - power_neg.average()));
+
+            SmartDashboard.putNumber("TestMode/AutoTuner/tp100", tp100);
             report += "linearized maximum velocity: " + tp100 + " ticks per 100ms \n\n";
 
 

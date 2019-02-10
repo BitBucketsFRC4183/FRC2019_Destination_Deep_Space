@@ -98,8 +98,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed Factor",
               "_title": "SmartDashboard/DriveSubsystem/Speed Factor",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
+              "Graph/Visible time": 30.0
             }
           },
           "13,6": {
@@ -111,8 +110,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Factor",
               "_title": "SmartDashboard/DriveSubsystem/Turn Factor",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
+              "Graph/Visible time": 30.0
             }
           },
           "17,0": {
@@ -574,12 +572,231 @@
           }
         }
       }
+    },
+    {
+      "title": "Test Mode",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/TestMode/mode",
+              "_title": "/SmartDashboard/TestMode/mode"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/Motor ID",
+              "_title": "/SmartDashboard/TestMode/Motor ID"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/% voltage",
+              "_title": "/SmartDashboard/TestMode/% voltage"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/step",
+              "_title": "/SmartDashboard/TestMode/AutoTuner/step"
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Current process",
+              "_title": "/SmartDashboard/TestMode/AutoTuner/Current process"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Log DFT",
+              "_title": "SmartDashboard/TestMode/AutoTuner/Log DFT"
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Oscillating",
+              "_title": "SmartDashboard/TestMode/AutoTuner/Oscillating"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Stable",
+              "_title": "SmartDashboard/TestMode/AutoTuner/Stable"
+            }
+          },
+          "3,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/What to do",
+              "_title": "/SmartDashboard/TestMode/AutoTuner/What to do"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/kf",
+              "_title": "/SmartDashboard/TestMode/AutoTuner/kf"
+            }
+          },
+          "7,0": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Velocity (ticks per 100ms)",
+              "_title": "SmartDashboard/TestMode/AutoTuner/Velocity (ticks per 100ms)",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/TestMode/AutoTuner/Velocity (ticks per 100ms)": true
+            }
+          },
+          "7,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Power",
+              "_title": "SmartDashboard/TestMode/AutoTuner/Power",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/TestMode/AutoTuner/Power": true
+            }
+          },
+          "5,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Position",
+              "_title": "SmartDashboard/TestMode/AutoTuner/Position",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/TestMode/AutoTuner/Position": true
+            }
+          },
+          "9,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Error (ticks)",
+              "_title": "SmartDashboard/TestMode/AutoTuner/Error (ticks)",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/TestMode/AutoTuner/Error (ticks)": true
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/Voltage",
+              "_title": "/SmartDashboard/TestMode/Voltage"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/tp100",
+              "_title": "/SmartDashboard/TestMode/AutoTuner/tp100"
+            }
+          },
+          "5,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Power",
+              "_title": "/SmartDashboard/TestMode/AutoTuner/Power"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Cruise",
+              "_title": "/SmartDashboard/TestMode/AutoTuner/Cruise"
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {
     "x": -8.0,
     "y": -8.0,
-    "width": 1936.0,
-    "height": 1015.0
+    "width": 1616.0,
+    "height": 876.0
   }
 }

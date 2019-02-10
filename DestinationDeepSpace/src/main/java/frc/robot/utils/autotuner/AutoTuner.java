@@ -336,12 +336,13 @@ public class AutoTuner {
         cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100());
 
         setCruise((int) cruise.getValue());
+        SmartDashboard.putNumber("TestMode/AutoTuner/Cruise", cruise.getValue());
+
+        motor.set(ControlMode.MotionMagic, 81920);
     }
 
     private static void cruiseTunePeriodic() {
         boolean done = cruise.update();
-
-        SmartDashboard.putNumber("TestMode/AutoTuner/Cruise", cruise.getValue());
         
         if (done) {
             changeStep(Step.None);

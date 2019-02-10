@@ -87,7 +87,7 @@ public abstract class TuningStep {
             default: {}
             case Velocity: {
                 CONTROL_MODE = ControlMode.PercentOutput;
-                COMMAND_VALUE = 1.0;
+                COMMAND_VALUE = 0.4;
 
                 break;
             }
@@ -138,10 +138,10 @@ public abstract class TuningStep {
         }
 
         if (DATA_COLLECTION_TYPE == DataCollectionType.Position) {
-            DataWindow error = (!finishedPos) ? error_pos : error_neg;
+            DataWindow position = (!finishedPos) ? position_pos : position_neg;
 
             return
-                error.isFilled() && error.maxDif() <= TunerConstants.POSITION_STABILITY_THRESHOLD_TICKS;
+            position.isFilled() && position.maxDif() <= TunerConstants.POSITION_STABILITY_THRESHOLD_TICKS;
         }
 
 

@@ -71,7 +71,7 @@ public class MotorTestModes {
 
                 lastMotor.set(ControlMode.PercentOutput, v);
 
-                SmartDashboard.putNumber("TestMode/AutoTuner/Power output", lastMotor.getMotorOutputVoltage());
+                SmartDashboard.putNumber("TestMode/Voltage", lastMotor.getMotorOutputVoltage());
             }
         } else {
             if (mode != lastTestMode) {
