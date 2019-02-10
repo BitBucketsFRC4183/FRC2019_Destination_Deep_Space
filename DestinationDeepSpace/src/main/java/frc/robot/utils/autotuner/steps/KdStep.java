@@ -20,8 +20,8 @@ public class KdStep extends TuningStep {
         value = 10 * kf;
         valueString = value + "";
         
-        report += "kD: " + value + "\n";
-        report += "Getting steady-state PDF error...\n";
+        log("kD: " + value);
+        log("Getting steady-state PDF error...");
     }
 
 
@@ -32,12 +32,16 @@ public class KdStep extends TuningStep {
 
         // if done with that, get average speed at %
         if (done) {
-            report += "average positive error: " + error_pos.average() + " ticks \n";
-            report += "average negative error: " + error_neg.average() + " ticks \n\n";
+            String rep = "";
+
+            rep += "average positive error: " + error_pos.average() + " ticks \n";
+            rep += "average negative error: " + error_neg.average() + " ticks \n\n";
 
             sserr = (int) ((error_pos.average() + error_neg.average()) / 2); // average of two (average) errors
 
-            report += "steady-state error: " + sserr + " ticks";
+            rep += "steady-state error: " + sserr + " ticks";
+
+            log(rep);
         }
 
         return done;

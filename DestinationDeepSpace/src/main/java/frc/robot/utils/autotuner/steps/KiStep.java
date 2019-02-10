@@ -26,10 +26,10 @@ public class KiStep extends TuningStep {
         super(windowSize, motor, DataCollectionType.Position);
 
         IZONE = (int) (2.5 * kd_sserr);
-        report += "iZone: " + IZONE + "\n";
+        log("iZone: " + IZONE + "\n");
 
         KI0 = 0.001;
-        report += "initial kI guess: " + KI0 + "\n\n";
+        log("initial kI guess: " + KI0 + "\n\n");
 
         value = KI0;
     }
@@ -41,10 +41,12 @@ public class KiStep extends TuningStep {
         boolean done = collectData();
 
         if (done) {
+            String rep = "";
+
             if (!isOscillating()) {
                 // hasn't reached oscillations yet
                 if (hasOscillated == false) {
-                    report += "Data is not oscillating, doubling kP...";
+                    rep += "Data is not oscillating, doubling kP...";
 
                     // double kI
                     value *= 2;
@@ -69,8 +71,8 @@ public class KiStep extends TuningStep {
                     // KI0*2*2*2...*lastMultiplier
                     valueString += "*" + lastMultiplier;
 
-                    report += "Data has stopped oscillating\n\n";
-                    report += "kI: " + valueString + " = " + value;
+                    rep += "Data has stopped oscillating\n\n";
+                    rep += "kI: " + valueString + " = " + value;
 
 
                     return true; // your job is done here
@@ -90,9 +92,11 @@ public class KiStep extends TuningStep {
                 // new multiplier factor
                 value *= lastMultiplier;
 
-                report += "Data is oscillating, backing off...\n";
-                report += "kI: " + (valueString + "*" + lastMultiplier) + " = " + value + "\n\n";
+                rep += "Data is oscillating, backing off...\n";
+                rep += "kI: " + (valueString + "*" + lastMultiplier) + " = " + value + "\n\n";
             }
+
+            log(rep);
         }
 
         return false; // keep going
