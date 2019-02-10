@@ -1,20 +1,19 @@
 package frc.robot.subsystem.drive;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.can.MotControllerJNI;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.hal.HAL;
-import edu.wpi.first.hal.HALUtil;
-import edu.wpi.first.hal.SPIJNI;
-import edu.wpi.first.networktables.NetworkTablesJNI;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.MotorId;
-import frc.robot.RobotMap;
-import frc.robot.subsystem.navigation.BitBucketsAHRS;
-import frc.robot.utils.JoystickScale;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,13 +22,14 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.lang.reflect.Constructor;
-
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.*;
+import edu.wpi.first.hal.HAL;
+import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.navigation.BitBucketsAHRS;
+import frc.robot.utils.JoystickScale;
 
 /**
  * The DriveSubsystemTest class will unit test the DriveSubsystem. This requires mocking out a bunch
@@ -63,13 +63,10 @@ public class DriveSubsystemTest {
     AHRS ahrs;
 
     @Mock
-    WPI_TalonSRX mockLeftFrontMotor;
+    WPI_TalonSRX mockLeftMotors[] = new WPI_TalonSRX[DriveSubsystem.NUM_MOTORS_PER_SIDE];
+
     @Mock
-    WPI_TalonSRX mockRightFrontMotor;
-    @Mock
-    WPI_TalonSRX mockLeftRearMotor;
-    @Mock
-    WPI_TalonSRX mockRightRearMotor;
+    WPI_TalonSRX mockRightMotors[] = new WPI_TalonSRX[DriveSubsystem.NUM_MOTORS_PER_SIDE];
 
     @Mock
     SendableChooser mockDriveStyleChooser;
@@ -89,10 +86,12 @@ public class DriveSubsystemTest {
 
         // For each test, return mock drive train motors when the DriveSubsystem creates them
         // This requires @PrepareForTest(DriveSubsystem.class)
-        whenNew(WPI_TalonSRX.class).withArguments(eq(MotorId.LEFT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockLeftFrontMotor);
-        whenNew(WPI_TalonSRX.class).withArguments(eq(MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID)).thenReturn(mockRightFrontMotor);
-        whenNew(WPI_TalonSRX.class).withArguments(eq(MotorId.RIGHT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockRightRearMotor);
-        whenNew(WPI_TalonSRX.class).withArguments(eq(MotorId.LEFT_DRIVE_MOTOR_REAR_ID)).thenReturn(mockLeftRearMotor);
+        for (int i = 0; i < DriveSubsystem.NUM_MOTORS_PER_SIDE; i++) {
+            mockLeftMotors[i] = mock(WPI_TalonSRX.class);
+            mockRightMotors[i] = mock(WPI_TalonSRX.class);
+            whenNew(WPI_TalonSRX.class).withArguments(eq(DriveConstants.LEFT_DRIVE_MOTOR_IDS[i])).thenReturn(mockLeftMotors[i]);
+            whenNew(WPI_TalonSRX.class).withArguments(eq(DriveConstants.RIGHT_DRIVE_MOTOR_IDS[i])).thenReturn(mockRightMotors[i]);
+        }
 
         // Wire up our mock sendable chooser.
         whenNew(SendableChooser.class).withNoArguments()
@@ -125,6 +124,10 @@ public class DriveSubsystemTest {
         DriveSubsystem instance = constructor.newInstance();
         mockStatic(DriveSubsystem.class);
         when(DriveSubsystem.instance()).thenReturn(instance);
+
+        Field dsField = BitBucketSubsystem.class.getDeclaredField("ds");
+        dsField.setAccessible(true);
+        dsField.set(null, driverStation);
     }
 
     /**
@@ -143,8 +146,8 @@ public class DriveSubsystemTest {
 
         // verify that each motor controller was called with the output we expected, in this case 0
         // in this case, only the front motors actually have their power output set
-        verify(mockLeftFrontMotor).set(eq(ControlMode.PercentOutput), eq(0.0));
-        verify(mockRightFrontMotor).set(eq(ControlMode.PercentOutput), eq(0.0));
+        verify(mockLeftMotors[0]).set(eq(ControlMode.PercentOutput), eq(0.0));
+        verify(mockRightMotors[0]).set(eq(ControlMode.PercentOutput), eq(0.0));    
     }
 
     /**
@@ -163,8 +166,8 @@ public class DriveSubsystemTest {
 
         // verify that each motor controller was called with the output we expected, in this case 1
         // on each motor
-        verify(mockLeftFrontMotor).set(eq(ControlMode.PercentOutput), eq(1.0));
-        verify(mockRightFrontMotor).set(eq(ControlMode.PercentOutput), eq(1.0));
+        verify(mockLeftMotors[0]).set(eq(ControlMode.PercentOutput), eq(1.0));
+        verify(mockRightMotors[0]).set(eq(ControlMode.PercentOutput), eq(1.0));    
     }
 
     /**
@@ -184,7 +187,7 @@ public class DriveSubsystemTest {
 
         // verify that each motor controller was called with the output we expected
         // in this case, we go heavy on the left side, light on the right side
-        verify(mockLeftFrontMotor).set(eq(ControlMode.PercentOutput), eq(1.5));
-        verify(mockRightFrontMotor).set(eq(ControlMode.PercentOutput), eq(.5));
+        verify(mockLeftMotors[0]).set(eq(ControlMode.PercentOutput), eq(1.5));
+        verify(mockRightMotors[0]).set(eq(ControlMode.PercentOutput), eq(0.5));    
     }
 }
