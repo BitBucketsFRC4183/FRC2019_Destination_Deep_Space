@@ -570,8 +570,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		int leftSpeed_tickP100 = speed_tickP100 + diffSpeed_tickP100;
 		int rightSpeed_tickP100 = speed_tickP100 - diffSpeed_tickP100;
 
-		SmartDashboard.putNumber(getName() + "/leftSpeed (tps)",leftSpeed_tickP100);
-		SmartDashboard.putNumber(getName() + "/rightSpeed (tps)",rightSpeed_tickP100);
+		SmartDashboard.putNumber(getName() + "/leftCommandSpeed (tp100)",leftSpeed_tickP100);
+		SmartDashboard.putNumber(getName() + "/rightCommandSpeed (tp100)",rightSpeed_tickP100);
 
 		leftMotors[0].set(ControlMode.Velocity, leftSpeed_tickP100);
 		rightMotors[0].set(ControlMode.Velocity, rightSpeed_tickP100);		
@@ -687,10 +687,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		{
 
 		}
-		if (getDiagnosticsEnabled())
-		{
-
-		}		
+		SmartDashboard.putBoolean(getName()+"/RunningDiag", false);		
 	}
   	
 	public void disable() {
@@ -903,8 +900,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	*/
 	@Override
 	public void diagnosticsInitialize() {
-		SmartDashboard.putNumber(getName() + "/Radius (in)", 0);
-		SmartDashboard.putNumber(getName() + "/Speed (in per sec)", 0);
+		SmartDashboard.putNumber(getName() + "/TestRadius (in)", 0);
+		SmartDashboard.putNumber(getName() + "/TestSpeed (in per sec)", 0);
 	}
 
 	@Override
@@ -919,8 +916,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// leftRearMotor.set(ControlMode.PercentOutput, DriveConstants.MOTOR_TEST_PERCENT);
 
 		if (getDiagnosticsEnabled()) {
-			double radius_in = SmartDashboard.getNumber(getName() + "/Radius (in)", 0);
-			double speed_ips = SmartDashboard.getNumber(getName() + "/Speed (in per sec)", 0);
+			double radius_in = SmartDashboard.getNumber(getName() + "/TestRadius (in)", 0);
+			double speed_ips = SmartDashboard.getNumber(getName() + "/TestSpeed (in per sec)", 0);
 
 			double radps = speed_ips / radius_in;
 
