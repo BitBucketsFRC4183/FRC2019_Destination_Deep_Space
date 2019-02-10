@@ -16,7 +16,7 @@ public class TopDownField extends AbstractPhysicsBody {
 
     // dimensions from
     // https://github.com/wpilibsuite/PathWeaver/blob/master/src/main/resources/edu/wpi/first/pathweaver/2019-deepspace.json
-    private static final Vector2 imageSize = new Vector2(1592, 656);
+    public static final Vector2 imageSize = new Vector2(1592, 656);
     private static final Vector2 topLeft = new Vector2(217, 40);
     private static final Vector2 bottomRight = new Vector2(1372, 615);
 
@@ -39,11 +39,11 @@ public class TopDownField extends AbstractPhysicsBody {
     private static final float height = inchesPerPixelHeight * imageSize.y * MathConstants.INCHES_TO_METERS;
 
     public TopDownField(World world) {
-        super(world, new Texture("assets/2019-field.jpg"), 0, 0, width, height);
+        super(world, new Texture("assets/2019-field.png"), 0, 0, width, height);
     }
 
     // 1220x400 is the robot start for red
-    public Vector2 getFieldCoordsForPixel(int x, int y) {
+    public Vector2 getFieldMetersForPixels(int x, int y) {
         return new Vector2(x * metersPerPixelWidth, y * metersPerPixelHeight);
     }
 
@@ -102,7 +102,7 @@ public class TopDownField extends AbstractPhysicsBody {
         rightBorder.setAsBox(rightBorderWidth / 2, height / 2, rightCenter, 0);
 
         PolygonShape cargoShip = new PolygonShape();
-        rightBorder.setAsBox(366.0f / 2 * metersPerPixelWidth, 90.0f / 2 * metersPerPixelHeight);
+        cargoShip.setAsBox(366.0f / 2 * metersPerPixelWidth, 90.0f / 2 * metersPerPixelHeight);
 
         PolygonShape rightPlatform = new PolygonShape();
         float rightPlatformWidth = 80 * metersPerPixelWidth;
@@ -180,4 +180,14 @@ public class TopDownField extends AbstractPhysicsBody {
         }
     }
 
+    /**
+     * Translate the coordinate system used by PixelMator (x 0 to width from the left, y 0 to height from the top)
+     * into world coords
+     */
+    public Vector2 transformPixelmatorCoordsToWorldMeters(int x, int y) {
+        return getBody().getWorldPoint(getFieldMetersForPixels(
+            (int) ((x - TopDownField.imageSize.x/2)),
+            (int) ((TopDownField.imageSize.y/2 - y))
+        ));
+    }
 }
