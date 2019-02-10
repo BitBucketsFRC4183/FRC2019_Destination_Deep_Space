@@ -72,6 +72,10 @@ public class AutoTuner {
 
 
     public static void init() {
+        SmartDashboard.putBoolean("TestMode/AutoTuner/Emergency Stop", false);
+        SmartDashboard.putString("TestMode/AutoTuner/Console", "");
+
+
         stepSelector = new SendableChooser<Step>();
 
         stepSelector.setDefaultOption("", Step.None);
@@ -94,6 +98,19 @@ public class AutoTuner {
 
     /** Next iteration in tuning process */
     public static void periodic() {
+        if (SmartDashboard.getBoolean("TestMode/AutoTuner/Emergency Stop", false)) {
+            SmartDashboard.putBoolean("TestMode/AutoTuner/Emergency Stop", false);
+
+            if (motor != null) {
+                motor.set(ControlMode.PercentOutput, 0);
+                changeStep(Step.None);
+            }
+
+            return;
+        }
+
+
+
         // button click
         if (SmartDashboard.getBoolean("TestMode/AutoTuner/Log DFT", false)) {
             SmartDashboard.putBoolean("TestMode/AutoTuner/Log DFT", false);
@@ -336,12 +353,13 @@ public class AutoTuner {
         cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100());
 
         setCruise((int) cruise.getValue());
+        SmartDashboard.putNumber("TestMode/AutoTuner/Cruise", cruise.getValue());
+
+        motor.set(ControlMode.MotionMagic, 81920);
     }
 
     private static void cruiseTunePeriodic() {
         boolean done = cruise.update();
-
-        SmartDashboard.putNumber("TestMode/AutoTuner/Cruise", cruise.getValue());
         
         if (done) {
             changeStep(Step.None);

@@ -297,11 +297,17 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	@Override
 	public void periodic() {
-		if(oi.intakeActive()){
-			setRollers(1.0);
-		} else{
-			setRollers(0.0);
+		boolean infeed = oi.infeedActive();
+		boolean outfeed = oi.outfeedActive();
+
+		if (!(infeed && outfeed)) { // if both are pressed, keep doing what you're doing
+			if      (infeed)  { setRollers(1.0);  }
+			else if (outfeed) { setRollers(-1.0); }
+			else              { setRollers(0.0);  }
 		}
+
+
+		
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
 		if (getTelemetryEnabled()) {

@@ -18,7 +18,7 @@ public class DriveConstants {
 
     // Set velocity follower type to false when independent gear boxes are being used
     // Set to true of all wheels on one side are physically linked
-    public static final boolean CLOSED_LOOP_FOLLOWER = true;
+    public static final boolean CLOSED_LOOP_FOLLOWER = false;
 
     public static final double MAX_SPEED_IPS = 144.0;
     public static final double MAX_TURN_DPS  = 360.0;
@@ -77,28 +77,28 @@ public class DriveConstants {
     public static final int LEFT_DRIVE_MOTOR_IDS[] =
     {
             MotorId.LEFT_DRIVE_MOTOR_FRONT_ID
-            ,MotorId.LEFT_DRIVE_MOTOR_MIDDLE_ID
+            //,MotorId.LEFT_DRIVE_MOTOR_MIDDLE_ID
             ,MotorId.LEFT_DRIVE_MOTOR_REAR_ID
     };
 
     public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG[] = 
     {
         true
-        ,false
+        //,false
         ,true
     };
 
     public static final int RIGHT_DRIVE_MOTOR_IDS[] =
     {
             MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID
-            ,MotorId.RIGHT_DRIVE_MOTOR_MIDDLE_ID
+            //,MotorId.RIGHT_DRIVE_MOTOR_MIDDLE_ID
             ,MotorId.RIGHT_DRIVE_MOTOR_REAR_ID
     };
 
     public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG[] = 
     {
         false
-        ,true
+        //,true
         ,false
     };
 
@@ -188,7 +188,7 @@ public class DriveConstants {
     // Similar process but slightly different focus
     public static final int PID_VELOCITY_SLOT = 1;
     public static double VELOCITY_KF 	 = 0.05115; 
-    public static double VELOCITY_KP 	 = 0.14014/2;
+    public static double VELOCITY_KP 	 = 0.14014;
     public static double VELOCITY_KI 	 = 0.001;
     public static double VELOCITY_KD 	 = 10 * VELOCITY_KP;	// Start with 10 x Kp for increased damping of overshoot
     public static int    VELOCITY_IZONE   = 400; 
