@@ -538,27 +538,14 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	{
 	   return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}
-	/**
-	 * velocityDrive converts inputs to physical unit limits and
-	 * drives the motors using a velocity control closed-loop profile
-	 */
-	public void velocityDrive(double speed, double turn)
-	{
+
+	private void velocityDrive_auto(double speed_ips, double turn_radps) {
 		// The following functions only do something if the state needs
 		// to be changed.
 		selectVelocityMode(true);
 
-		// Scale the input to physical units (with implied limits)
-		double speed_ips = map(speed,
-								 -1.0,
-								  1.0,
-								 -DriveConstants.MAX_SPEED_IPS,
-								 DriveConstants.MAX_SPEED_IPS);
-		double turn_radps   = map(turn,
-								 -1.0,
-								  1.0,
-								 -DriveConstants.MAX_TURN_RADPS,
-								 DriveConstants.MAX_TURN_RADPS);
+
+
 		SmartDashboard.putNumber(getName()+"/Commanded Speed (ips)", speed_ips);
 		SmartDashboard.putNumber(getName()+"/Commanded Turn (dps)", Math.toDegrees(turn_radps));
 
@@ -597,7 +584,29 @@ public class DriveSubsystem extends BitBucketSubsystem {
 				rightMotors[i].set(ControlMode.Velocity, rightSpeed_tickP100);
 			}
 		}		
+	}
 
+
+
+	/**
+	 * velocityDrive converts inputs to physical unit limits and
+	 * drives the motors using a velocity control closed-loop profile
+	 */
+	public void velocityDrive(double speed, double turn)
+	{
+		// Scale the input to physical units (with implied limits)
+		double speed_ips = map(speed,
+								 -1.0,
+								  1.0,
+								 -DriveConstants.MAX_SPEED_IPS,
+								 DriveConstants.MAX_SPEED_IPS);
+		double turn_radps   = map(turn,
+								 -1.0,
+								  1.0,
+								 -DriveConstants.MAX_TURN_RADPS,
+								 DriveConstants.MAX_TURN_RADPS);
+		
+		velocityDrive_auto(speed_ips, turn_radps);
 	}
 
 	public void doAutoTurn( double turn) {
@@ -894,7 +903,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	*/
 	@Override
 	public void diagnosticsInitialize() {
-
+		SmartDashboard.putNumber(getName() + "/Radius (in)", 0);
+		SmartDashboard.putNumber(getName() + "/Speed (in per sec)", 0);
 	}
 
 	@Override
@@ -907,6 +917,25 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// rightRearMotor.set(ControlMode.PercentOutput, -DriveConstants.MOTOR_TEST_PERCENT);
 		// leftMotors.set(ControlMode.PercentOutput, -DriveConstants.MOTOR_TEST_PERCENT);
 		// leftRearMotor.set(ControlMode.PercentOutput, DriveConstants.MOTOR_TEST_PERCENT);
+
+		if (getDiagnosticsEnabled()) {
+			double radius_in = SmartDashboard.getNumber(getName() + "/Radius (in)", 0);
+			double speed_ips = SmartDashboard.getNumber(getName() + "/Speed (in per sec)", 0);
+
+			double radps = speed_ips / radius_in;
+
+			if (radius_in == 0) {
+				radps = 0;
+			}
+
+			velocityDrive_auto(speed_ips, radps);
+
+			double left_inchps = leftMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
+			double right_inchps = leftMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
+
+			SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
+			SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);
+		}
 	}
 
 
