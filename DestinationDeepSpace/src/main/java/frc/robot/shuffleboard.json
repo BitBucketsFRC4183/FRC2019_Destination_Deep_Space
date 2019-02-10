@@ -98,7 +98,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed Factor",
               "_title": "SmartDashboard/DriveSubsystem/Speed Factor",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
             }
           },
           "13,6": {
@@ -110,7 +111,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Factor",
               "_title": "SmartDashboard/DriveSubsystem/Turn Factor",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
             }
           },
           "17,0": {
@@ -124,9 +126,9 @@
               "_title": "/SmartDashboard/DriveSubsystem/CurrentCommand"
             }
           },
-          "8,8": {
+          "7,8": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
@@ -177,6 +179,61 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Acheived Turn (dps)",
               "_title": "/SmartDashboard/DriveSubsystem/Acheived Turn (dps)"
+            }
+          },
+          "5,8": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Radius (inches)",
+              "_title": "SmartDashboard/DriveSubsystem/Turn Radius (inches)"
+            }
+          },
+          "10,8": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/TestRadius (in)",
+              "_title": "SmartDashboard/DriveSubsystem/TestRadius (in)"
+            }
+          },
+          "10,9": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/TestSpeed (in per sec)",
+              "_title": "SmartDashboard/DriveSubsystem/TestSpeed (in per sec)"
+            }
+          },
+          "5,9": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Real Left Speed (ips)",
+              "_title": "SmartDashboard/DriveSubsystem/Real Left Speed (ips)"
+            }
+          },
+          "7,9": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Real Right Speed (ips)",
+              "_title": "SmartDashboard/DriveSubsystem/Real Right Speed (ips)"
             }
           }
         }
@@ -702,8 +759,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Velocity (ticks per 100ms)",
               "_title": "SmartDashboard/TestMode/AutoTuner/Velocity (ticks per 100ms)",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/TestMode/AutoTuner/Velocity (ticks per 100ms)": true
+              "Graph/Visible time": 30.0
             }
           },
           "7,3": {
@@ -715,8 +771,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Power",
               "_title": "SmartDashboard/TestMode/AutoTuner/Power",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/TestMode/AutoTuner/Power": true
+              "Graph/Visible time": 30.0
             }
           },
           "5,2": {
@@ -728,8 +783,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Position",
               "_title": "SmartDashboard/TestMode/AutoTuner/Position",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/TestMode/AutoTuner/Position": true
+              "Graph/Visible time": 30.0
             }
           },
           "9,3": {
@@ -741,8 +795,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Error (ticks)",
               "_title": "SmartDashboard/TestMode/AutoTuner/Error (ticks)",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/TestMode/AutoTuner/Error (ticks)": true
+              "Graph/Visible time": 30.0
             }
           },
           "4,1": {
@@ -796,7 +849,7 @@
   "windowGeometry": {
     "x": -8.0,
     "y": -8.0,
-    "width": 1616.0,
-    "height": 876.0
+    "width": 1936.0,
+    "height": 1015.0
   }
 }
