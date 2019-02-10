@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public abstract class BitBucketSubsystem extends Subsystem {
 	
+	protected static DriverStation ds = DriverStation.getInstance(); // Convenience
+
 	protected boolean initializedBase = false;
 
 	// We require that extended telementry and diagnostics enabling
@@ -31,8 +33,6 @@ public abstract class BitBucketSubsystem extends Subsystem {
 	public int DIAG_LOOPS_RUN = 5;
 
 	protected int periodicCounter = 0;
-
-	protected static DriverStation ds = DriverStation.getInstance(); // Convenience
 	
 	public BitBucketSubsystem() {
 		

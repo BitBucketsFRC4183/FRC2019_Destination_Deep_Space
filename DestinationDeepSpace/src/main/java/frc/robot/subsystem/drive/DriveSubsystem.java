@@ -117,7 +117,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	private boolean motionMode   = false;
 
 	// ASSUME left and right are symmetrical
-	private final int NUM_MOTORS_PER_SIDE = DriveConstants.LEFT_DRIVE_MOTOR_IDS.length;
+	// This is package local so unit tests can use it
+	static final int NUM_MOTORS_PER_SIDE = DriveConstants.LEFT_DRIVE_MOTOR_IDS.length;
 
   	private DriveSubsystem()
   	{
