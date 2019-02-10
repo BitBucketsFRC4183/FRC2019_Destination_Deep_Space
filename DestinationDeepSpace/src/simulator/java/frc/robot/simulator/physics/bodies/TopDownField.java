@@ -16,7 +16,7 @@ public class TopDownField extends AbstractPhysicsBody {
 
     // dimensions from
     // https://github.com/wpilibsuite/PathWeaver/blob/master/src/main/resources/edu/wpi/first/pathweaver/2019-deepspace.json
-    private static final Vector2 imageSize = new Vector2(1592, 656);
+    public static final Vector2 imageSize = new Vector2(1592, 656);
     private static final Vector2 topLeft = new Vector2(217, 40);
     private static final Vector2 bottomRight = new Vector2(1372, 615);
 
@@ -39,7 +39,7 @@ public class TopDownField extends AbstractPhysicsBody {
     private static final float height = inchesPerPixelHeight * imageSize.y * MathConstants.INCHES_TO_METERS;
 
     public TopDownField(World world) {
-        super(world, new Texture("assets/2019-field.jpg"), 0, 0, width, height);
+        super(world, new Texture("assets/2019-field.png"), 0, 0, width, height);
     }
 
     // 1220x400 is the robot start for red
