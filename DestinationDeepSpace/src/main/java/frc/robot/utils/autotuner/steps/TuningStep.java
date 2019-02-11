@@ -170,10 +170,16 @@ public abstract class TuningStep {
 
     /** Put some data on the Dashboard */
     private void put(int error, int position, int velocity, double power) {
-        SmartDashboard.putNumber(TunerConstants.ERROR_KEY,    error);
-        SmartDashboard.putNumber(TunerConstants.POSITION_KEY, position);
-        SmartDashboard.putNumber(TunerConstants.VELOCITY_KEY, velocity);
-        SmartDashboard.putNumber(TunerConstants.POWER_KEY,    power);
+        // make sure the Dashboard adds the values while they
+        // accurately represent the data
+        // (Dashboard does not update if you put the same value as
+        // it was before)
+        double epsilon = Math.random() * 0.0001;
+
+        SmartDashboard.putNumber(TunerConstants.ERROR_KEY,    error + epsilon);
+        SmartDashboard.putNumber(TunerConstants.POSITION_KEY, position + epsilon);
+        SmartDashboard.putNumber(TunerConstants.VELOCITY_KEY, velocity + epsilon);
+        SmartDashboard.putNumber(TunerConstants.POWER_KEY,    power + epsilon);
     }
 
 
