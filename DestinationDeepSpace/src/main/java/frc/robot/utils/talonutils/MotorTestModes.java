@@ -50,6 +50,8 @@ public class MotorTestModes {
             lastMotorID = motorID;
 
             lastMotor = new WPI_TalonSRX(motorID);
+            TalonUtils.initializeMotorDefaults(lastMotor);
+            TalonUtils.initializeQuadEncoderMotor(lastMotor);
         }
 
 
@@ -70,8 +72,10 @@ public class MotorTestModes {
                 double v = SmartDashboard.getNumber("TestMode/% voltage", 0);
 
                 lastMotor.set(ControlMode.PercentOutput, v);
+                int pos_ticks = lastMotor.getSelectedSensorPosition();
 
                 SmartDashboard.putNumber("TestMode/Voltage", lastMotor.getMotorOutputVoltage());
+                SmartDashboard.putNumber("TestMode/Encoder (ticks)", pos_ticks);
             }
         } else {
             if (mode != lastTestMode) {

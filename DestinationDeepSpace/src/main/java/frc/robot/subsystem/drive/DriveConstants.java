@@ -77,29 +77,29 @@ public class DriveConstants {
     public static final int LEFT_DRIVE_MOTOR_IDS[] =
     {
             MotorId.LEFT_DRIVE_MOTOR_FRONT_ID
-            //,MotorId.LEFT_DRIVE_MOTOR_MIDDLE_ID
+            ,MotorId.LEFT_DRIVE_MOTOR_MIDDLE_ID
             ,MotorId.LEFT_DRIVE_MOTOR_REAR_ID
     };
 
     public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG[] = 
     {
-        true
-        //,false
-        ,true
+        false
+        ,false
+        ,false
     };
 
     public static final int RIGHT_DRIVE_MOTOR_IDS[] =
     {
             MotorId.RIGHT_DRIVE_MOTOR_FRONT_ID
-            //,MotorId.RIGHT_DRIVE_MOTOR_MIDDLE_ID
+            ,MotorId.RIGHT_DRIVE_MOTOR_MIDDLE_ID
             ,MotorId.RIGHT_DRIVE_MOTOR_REAR_ID
     };
 
     public static final boolean RIGHT_DRIVE_MOTOR_INVERSION_FLAG[] = 
     {
-        false
-        //,true
-        ,false
+        true
+        ,true
+        ,true
     };
 
     
