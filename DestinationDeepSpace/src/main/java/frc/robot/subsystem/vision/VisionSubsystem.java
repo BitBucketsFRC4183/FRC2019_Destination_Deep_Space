@@ -49,6 +49,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	private NetworkTableInstance networkTable = NetworkTableInstance.getDefault();
 	private NetworkTable bvTable = networkTable.getTable("BucketVision");
 	private NetworkTableEntry bvStateEntry = bvTable.getEntry("BucketVisionState");
+	private NetworkTable frontCameraTable = bvTable.getSubTable("FrontCamera");
 
 	@Override
 	protected void initDefaultCommand() {

@@ -841,6 +841,17 @@
               "_source0": "network_table:///SmartDashboard/TestMode/AutoTuner/Cruise",
               "_title": "/SmartDashboard/TestMode/AutoTuner/Cruise"
             }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/Encoder (ticks)",
+              "_title": "/SmartDashboard/TestMode/Encoder (ticks)"
+            }
           }
         }
       }
