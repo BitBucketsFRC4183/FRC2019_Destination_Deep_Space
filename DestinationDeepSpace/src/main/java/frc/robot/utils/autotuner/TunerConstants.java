@@ -31,7 +31,7 @@ public class TunerConstants {
 	 * set to zero to skip waiting for confirmation, set to nonzero to wait and
 	 * report to DS if action fails.
 	 */
-    public static final int kTimeoutMs = 30;
+    public static final int kTimeoutMs = 0;
     
 
 
