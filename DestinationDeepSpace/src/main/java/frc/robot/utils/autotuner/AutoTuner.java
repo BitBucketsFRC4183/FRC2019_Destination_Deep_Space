@@ -98,6 +98,7 @@ public class AutoTuner {
 
     /** Next iteration in tuning process */
     public static void periodic() {
+        // AutoTuner EStop
         if (SmartDashboard.getBoolean("TestMode/AutoTuner/Emergency Stop", false)) {
             SmartDashboard.putBoolean("TestMode/AutoTuner/Emergency Stop", false);
 
@@ -352,10 +353,33 @@ public class AutoTuner {
 
         cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100());
 
+        /*
+         * IMPORTANT: we have to command     some    position to the motor at this point
+         * At first, we weren't. Then, when we set the cruise velocity. However,
+         * previously, the motor was in percent output mode from kF.
+         * So, upon setting the motor to MotionMagic in cruiseTunePeriodic(), either
+         *     1) there was no cruise velocity set at all because it doesn't make sense
+         *         to have one in velocity mode (this one is more likely)
+         *     or
+         *     2) a cruise velocity was set, but when a new control mode was given, all
+         *         control settings were reset, so we had the default cruise velocity
+         *         which is just 0
+         * 
+         * Since we just zeroed the sensor, we might as well command it to 0 so
+         * it will "reach the target position" even with a cruise velocity of 0.
+         * 
+         * Past this point we won't have to deal with this again because all
+         * other steps are Position steps that require MotionMagic.
+         */
+        motor.set(ControlMode.MotionMagic, 0);
+
+        /*
+         * Now that a new control mode has been set in which is makes sense to
+         * have a cruise velocity, we can give it a cruise velocity that it will
+         * use for the control mode.
+         */
         setCruise((int) cruise.getValue());
         SmartDashboard.putNumber("TestMode/AutoTuner/Cruise", cruise.getValue());
-
-        motor.set(ControlMode.MotionMagic, 81920);
     }
 
     private static void cruiseTunePeriodic() {
