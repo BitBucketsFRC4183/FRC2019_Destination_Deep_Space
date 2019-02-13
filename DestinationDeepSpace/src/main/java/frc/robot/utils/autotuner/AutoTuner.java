@@ -71,6 +71,25 @@ public class AutoTuner {
 
 
 
+    public static WPI_TalonSRX getMotor() {
+        return motor;
+    }
+
+
+
+
+
+    public static void stop() {
+        if (motor != null) {
+            motor.set(ControlMode.PercentOutput, 0);
+            changeStep(Step.None);
+        }
+    }
+
+
+
+
+
     public static void init() {
         SmartDashboard.putBoolean("TestMode/AutoTuner/Emergency Stop", false);
         SmartDashboard.putString("TestMode/AutoTuner/Console", "");
@@ -102,10 +121,7 @@ public class AutoTuner {
         if (SmartDashboard.getBoolean("TestMode/AutoTuner/Emergency Stop", false)) {
             SmartDashboard.putBoolean("TestMode/AutoTuner/Emergency Stop", false);
 
-            if (motor != null) {
-                motor.set(ControlMode.PercentOutput, 0);
-                changeStep(Step.None);
-            }
+            stop();
 
             return;
         }

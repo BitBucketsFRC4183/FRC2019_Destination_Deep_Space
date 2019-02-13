@@ -3,14 +3,11 @@ package frc.robot.utils.autotuner.steps;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import frc.robot.utils.autotuner.AutoTuner;
 import frc.robot.utils.autotuner.DFT_DataWindow;
 import frc.robot.utils.autotuner.DataWindow;
 import frc.robot.utils.autotuner.TunerConstants;
@@ -39,7 +36,7 @@ public abstract class TuningStep {
 
 
 
-    protected final WPI_TalonSRX MOTOR;
+    //protected final WPI_TalonSRX MOTOR;
 
 
 
@@ -82,10 +79,6 @@ public abstract class TuningStep {
 
 
 
-        MOTOR = motor;
-
-
-
         DATA_COLLECTION_TYPE = dataCollectionType;
         
         switch (DATA_COLLECTION_TYPE) {
@@ -123,9 +116,8 @@ public abstract class TuningStep {
 
     /** Get whether or not the data is stable */
     protected boolean isStable() {
-        boolean stable = SmartDashboard.getBoolean(TunerConstants.STABLE_KEY, false);
         // manual detection if automatic isn't cooperating
-        if (stable) {
+        if (SmartDashboard.getBoolean(TunerConstants.STABLE_KEY, false)) {
             SmartDashboard.putBoolean(TunerConstants.STABLE_KEY, false);
 
             return true;
@@ -190,14 +182,14 @@ public abstract class TuningStep {
         String rep = "";
 
         if (!finishedPos) {
-            MOTOR.set(CONTROL_MODE, COMMAND_VALUE);
+            getMotor().set(CONTROL_MODE, COMMAND_VALUE);
 
 
 
-            int error    = Math.abs(MOTOR.getClosedLoopError());
-            int position = MOTOR.getSelectedSensorPosition();
-            int velocity = MOTOR.getSelectedSensorVelocity();
-            double power = MOTOR.getMotorOutputPercent();
+            int error    = Math.abs(getMotor().getClosedLoopError());
+            int position = getMotor().getSelectedSensorPosition();
+            int velocity = getMotor().getSelectedSensorVelocity();
+            double power = getMotor().getMotorOutputPercent();
             
             error_pos   .add(error);
             position_pos.add(position);
@@ -221,14 +213,14 @@ public abstract class TuningStep {
                 finishedPos = true;
             }
         } else {
-            MOTOR.set(CONTROL_MODE, -COMMAND_VALUE);
+            getMotor().set(CONTROL_MODE, -COMMAND_VALUE);
 
 
 
-            int error    = Math.abs(MOTOR.getClosedLoopError());
-            int position = MOTOR.getSelectedSensorPosition();
-            int velocity = MOTOR.getSelectedSensorVelocity();
-            double power = MOTOR.getMotorOutputPercent();
+            int error    = Math.abs(getMotor().getClosedLoopError());
+            int position = getMotor().getSelectedSensorPosition();
+            int velocity = getMotor().getSelectedSensorVelocity();
+            double power = getMotor().getMotorOutputPercent();
             
             error_neg   .add(error);
             position_neg.add(position);
@@ -338,5 +330,11 @@ public abstract class TuningStep {
 
 
         for (int i = 0; i < 5; i++) { System.out.println(); }
+    }
+
+
+
+    protected WPI_TalonSRX getMotor() {
+        return AutoTuner.getMotor();
     }
 }

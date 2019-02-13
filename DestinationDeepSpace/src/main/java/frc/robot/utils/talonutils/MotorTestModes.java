@@ -14,7 +14,7 @@ public class MotorTestModes {
 
 
     // TODO: maybe have an enum of all motors instead of selecting motors by ID?
-    private static WPI_TalonSRX lastMotor;
+    private static WPI_TalonSRX motor;
     private static int lastMotorID = 0; // ID of last "used" motor
     private static TestMode lastTestMode;
 
@@ -32,6 +32,7 @@ public class MotorTestModes {
 
         SmartDashboard.putData("TestMode/mode", modeChooser);
         SmartDashboard.putNumber("TestMode/Motor ID", 0);
+        SmartDashboard.putNumber("TestMode/% voltage", 0);
     }
 
 
@@ -47,11 +48,17 @@ public class MotorTestModes {
 
         // if it changed, update the motor to work with accordingly
         if (motorID != lastMotorID) {
+            // might have been in AutoTuner mode, stop AutoTuning
+            // the motor that was selected
+            AutoTuner.stop();
+
+
+
             lastMotorID = motorID;
 
-            lastMotor = new WPI_TalonSRX(motorID);
-            TalonUtils.initializeMotorDefaults(lastMotor);
-            TalonUtils.initializeQuadEncoderMotor(lastMotor);
+            motor = new WPI_TalonSRX(motorID);
+            TalonUtils.initializeMotorDefaults(motor);
+            TalonUtils.initializeQuadEncoderMotor(motor);
         }
 
 
@@ -63,6 +70,10 @@ public class MotorTestModes {
         if (mode == TestMode.Manual) {
             // if the mode changed
             if (mode != lastTestMode) {
+                AutoTuner.stop();
+
+
+
                 lastTestMode = mode;
 
                 // reset % voltage input to 0
@@ -71,10 +82,10 @@ public class MotorTestModes {
                 // read % voltage input and send it to motor
                 double v = SmartDashboard.getNumber("TestMode/% voltage", 0);
 
-                lastMotor.set(ControlMode.PercentOutput, v);
-                int pos_ticks = lastMotor.getSelectedSensorPosition();
+                motor.set(ControlMode.PercentOutput, v);
+                int pos_ticks = motor.getSelectedSensorPosition();
 
-                SmartDashboard.putNumber("TestMode/Voltage", lastMotor.getMotorOutputVoltage());
+                SmartDashboard.putNumber("TestMode/Voltage", motor.getMotorOutputVoltage());
                 SmartDashboard.putNumber("TestMode/Encoder (ticks)", pos_ticks);
             }
         } else {
@@ -83,7 +94,7 @@ public class MotorTestModes {
 
                 AutoTuner.init(); // add in the AutoTuner Step chooser to the Dashboard
 
-                AutoTuner.tune(lastMotor); // start the process for tuning the motor
+                AutoTuner.tune(motor); // start the process for tuning the motor
             } else {
                 AutoTuner.periodic();
             }
