@@ -57,7 +57,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 		rollerMotor    = new WPI_TalonSRX(MotorId.INTAKE_MOTOR_ID);
-		rotationMotor1 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR1_ID);
+		rotationMotor1 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR1_ID);	// TODO: Rename to armMotor1 and 2
 		rotationMotor2 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR2_ID);
 
 		// initialize motors before setting sensor positions and follower modes
@@ -65,6 +65,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		TalonUtils.initializeMotorDefaults(rollerMotor);
 		TalonUtils.initializeMotorDefaults(rotationMotor1);
 		TalonUtils.initializeMotorDefaults(rotationMotor2);
+
+		// TODO:Slave arm motor 2 to arm motor 1
+		// TODO: Remove inversion
 
 		rotationMotor2.setInverted(true); // TODO: JUNIOR CONFIG
 
@@ -79,11 +82,16 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 		TalonUtils.initializeMotorFPID        (rotationMotor1, kf, kp, ki, kd, izone);
+
+		// TODO: Configure armMotor1 to use initializeMagEncoderRelativeMotor
 		TalonUtils.initializeQuadEncoderMotor (rotationMotor1, 1);
 
+		// TODO: Slave motor does not need constants or  encoder
 		TalonUtils.initializeMotorFPID        (rotationMotor2, kf, kp, ki, kd, izone);
 		TalonUtils.initializeQuadEncoderMotor (rotationMotor2, 1);
 
+		// TODO: See the encoder with the SensorCollection position from the mag encoder
+		// NOTE: It may need to be biased based on where the shaft was set when assembled
 		rotationMotor1.setSelectedSensorPosition(0);
 		rotationMotor2.setSelectedSensorPosition(0);
 

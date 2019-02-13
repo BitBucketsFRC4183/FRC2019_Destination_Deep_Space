@@ -51,7 +51,7 @@ public class MotorTestModes {
 
             lastMotor = new WPI_TalonSRX(motorID);
             TalonUtils.initializeMotorDefaults(lastMotor);
-            TalonUtils.initializeQuadEncoderMotor(lastMotor);
+            TalonUtils.initializeQuadEncoderMotor(lastMotor); /// TODO: Create selector with choose MagEncoderRelative
         }
 
 
@@ -73,9 +73,13 @@ public class MotorTestModes {
 
                 lastMotor.set(ControlMode.PercentOutput, v);
                 int pos_ticks = lastMotor.getSelectedSensorPosition();
+                int abs_ticks = lastMotor.getSensorCollection().getPulseWidthPosition() & 0xFFF;
+                int vel_tickPer100ms = lastMotor.getSelectedSensorVelocity();
 
                 SmartDashboard.putNumber("TestMode/Voltage", lastMotor.getMotorOutputVoltage());
                 SmartDashboard.putNumber("TestMode/Encoder (ticks)", pos_ticks);
+                SmartDashboard.putNumber("TestMode/Encoder (abs ticks)", abs_ticks);
+                SmartDashboard.putNumber("TestMode/Encoder (ticksPer100ms)", vel_tickPer100ms);
             }
         } else {
             if (mode != lastTestMode) {
