@@ -98,8 +98,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed Factor",
               "_title": "SmartDashboard/DriveSubsystem/Speed Factor",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
+              "Graph/Visible time": 30.0
             }
           },
           "13,6": {
@@ -111,8 +110,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Factor",
               "_title": "SmartDashboard/DriveSubsystem/Turn Factor",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
+              "Graph/Visible time": 30.0
             }
           },
           "17,0": {
@@ -842,7 +840,7 @@
               "_title": "/SmartDashboard/TestMode/AutoTuner/Cruise"
             }
           },
-          "5,1": {
+          "3,5": {
             "size": [
               1,
               1
@@ -851,6 +849,28 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TestMode/Encoder (ticks)",
               "_title": "/SmartDashboard/TestMode/Encoder (ticks)"
+            }
+          },
+          "5,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/Encoder (ticksPer100ms)",
+              "_title": "/SmartDashboard/TestMode/Encoder (ticksPer100ms)"
+            }
+          },
+          "4,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TestMode/Encoder (abs ticks)",
+              "_title": "/SmartDashboard/TestMode/Encoder (abs ticks)"
             }
           }
         }
