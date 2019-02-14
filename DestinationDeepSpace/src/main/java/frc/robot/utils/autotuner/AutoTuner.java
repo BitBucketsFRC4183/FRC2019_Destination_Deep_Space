@@ -14,6 +14,7 @@ import frc.robot.utils.autotuner.steps.CruiseStep;
 import frc.robot.utils.autotuner.steps.KpStep;
 import frc.robot.utils.autotuner.steps.KiStep;
 import frc.robot.utils.autotuner.steps.KdStep;
+import frc.robot.utils.autotuner.steps.ManualStep;
 
 
 
@@ -25,7 +26,8 @@ public class AutoTuner {
         Cruise ("Tell if the position data is stable"),
         Kp ("Tell if the position data is stable and oscillating"),
         Kd ("Tell if the position data is stable"),
-        Ki ("Tell if the position data is stable and oscillating");
+        Ki ("Tell if the position data is stable and oscillating"),
+        Manual ("");
 
 
 
@@ -103,6 +105,7 @@ public class AutoTuner {
         stepSelector.addOption("Tune kP", Step.Kp);
         stepSelector.addOption("Tune kD", Step.Kd);
         stepSelector.addOption("Tune kI", Step.Ki);
+        stepSelector.addOption("Manual", Step.Manual);
 
 
         
@@ -229,6 +232,13 @@ public class AutoTuner {
                 
                 break;
             }
+            case Manual: {
+                if (!repeat) {
+                    manualInit();
+                } else {
+                    manualPeriodic();
+                }
+            }
         }
 
         // do the periodic for each step now that the inits have been done
@@ -284,33 +294,34 @@ public class AutoTuner {
     private static KpStep kp;
     private static KiStep ki;
     private static KdStep kd;
+    private static ManualStep manual;
 
 
 
 
 
     // helper functions because we don't like typing a lot
-    private static void setKf(double val) {
+    public static void setKf(double val) {
         motor.config_kF(TunerConstants.kSlotIdx, val, TunerConstants.kTimeoutMs);
     }
 
-    private static void setCruise(int val) {
+    public static void setCruise(int val) {
         motor.configMotionCruiseVelocity(val, TunerConstants.kTimeoutMs);
     }
 
-    private static void setKp(double val) {
+    public static void setKp(double val) {
         motor.config_kP(TunerConstants.kSlotIdx, val, TunerConstants.kTimeoutMs);
     }
 
-    private static void setKi(double val) {
+    public static void setKi(double val) {
         motor.config_kI(TunerConstants.kSlotIdx, val, TunerConstants.kTimeoutMs);
     }
 
-    private static void setIZone(int val) {
+    public static void setIZone(int val) {
         motor.config_IntegralZone(TunerConstants.kSlotIdx, val, TunerConstants.kTimeoutMs);
     }
 
-    private static void setKd(double val) {
+    public static void setKd(double val) {
         motor.config_kD(TunerConstants.kSlotIdx, val, TunerConstants.kTimeoutMs);
     }
 
@@ -342,7 +353,7 @@ public class AutoTuner {
 
 
     private static void kfTuneInit() {
-        kf = new KfStep(TunerConstants.DATA_WINDOW_SIZE, motor);
+        kf = new KfStep();
     }
 
     private static void kfTunePeriodic() {
@@ -367,7 +378,7 @@ public class AutoTuner {
 
         motor.setSelectedSensorPosition(0, TunerConstants.kPIDLoopIdx, TunerConstants.kTimeoutMs);
 
-        cruise = new CruiseStep(TunerConstants.DATA_WINDOW_SIZE, motor, kf.getTp100());
+        cruise = new CruiseStep(kf.getTp100());
 
         /*
          * IMPORTANT: we have to command     some    position to the motor at this point
@@ -413,7 +424,7 @@ public class AutoTuner {
 
 
 
-        kp = new KpStep(TunerConstants.DATA_WINDOW_SIZE, motor, cruise.getTickError());
+        kp = new KpStep(cruise.getTickError());
 
         setKp(kp.getValue());
     }
@@ -437,7 +448,7 @@ public class AutoTuner {
 
 
 
-        kd = new KdStep(TunerConstants.DATA_WINDOW_SIZE, motor, kp.getValue());
+        kd = new KdStep(kp.getValue());
 
         setKd(kd.getValue());
     }
@@ -459,7 +470,7 @@ public class AutoTuner {
 
 
 
-        ki = new KiStep(TunerConstants.DATA_WINDOW_SIZE, motor, kd.getSteadyStateError());
+        ki = new KiStep(kd.getSteadyStateError());
 
         setIZone(ki.getIntegralZone());
         setKi(ki.getValue()); // initial guess
@@ -477,6 +488,16 @@ public class AutoTuner {
         } else {
             setKi(ki.getValue());
         }
+    }
+
+
+
+    private static void manualInit() {
+        manual = new ManualStep();
+    }
+
+    private static void manualPeriodic() {
+        manual.update();
     }
 
 

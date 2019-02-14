@@ -36,14 +36,15 @@ public abstract class TuningStep {
 
 
 
-    //protected final WPI_TalonSRX MOTOR;
-
-
-
     protected static enum DataCollectionType { Velocity, Position };
     protected final DataCollectionType DATA_COLLECTION_TYPE; // what data this step collections
     private final ControlMode CONTROL_MODE;
     private final double      COMMAND_VALUE;
+
+
+
+    // whether to allow for automatic stability/oscillation detection
+    protected boolean autoDetection = true;
 
 
 
@@ -53,17 +54,14 @@ public abstract class TuningStep {
 
 
 
-    /**
-     * @param windowSize amount of +/- data to collect
-     * @param motor
-     * @param mode either MotionMagic or PercentOutput
-     */
-    public TuningStep(int windowSize, WPI_TalonSRX motor, DataCollectionType dataCollectionType) {
+    public TuningStep(DataCollectionType dataCollectionType) {
         valueString = "";
 
 
 
         finishedPos = false;
+
+        int windowSize = TunerConstants.DATA_WINDOW_SIZE;
 
         error_pos    = new DataWindow(windowSize);
         error_neg    = new DataWindow(windowSize);
@@ -125,6 +123,10 @@ public abstract class TuningStep {
 
 
 
+        if (autoDetection == false) { return false; }
+
+
+
         if (DATA_COLLECTION_TYPE == DataCollectionType.Velocity) {
             DataWindow velocity = (!finishedPos) ? velocity_pos : velocity_neg;
             DataWindow power    = (!finishedPos) ? power_pos    : power_neg;
@@ -147,13 +149,19 @@ public abstract class TuningStep {
     }
 
     /** Get whether or not the data is oscillating */
-    protected static boolean isOscillating() {
+    protected boolean isOscillating() {
         // TODO: implement automatic way to determine it if user chooses to use it instead
         if (SmartDashboard.getBoolean(TunerConstants.OSCILLATING_KEY, false)) {
             SmartDashboard.putBoolean(TunerConstants.OSCILLATING_KEY, false);
 
             return true;
         }
+
+
+
+        if (autoDetection == false) { return false; }
+
+
 
         return false;
     }
@@ -292,46 +300,43 @@ public abstract class TuningStep {
 
 
 
+    /** Push DFT info to dashboard */
     public void logDFT() {
-        for (int i = 0; i < 5; i++) { System.out.println(); }
+        /*for (int i = 0; i < 5; i++) { System.out.println(); }
         System.out.println(getClass().getName() + " DISCRETE FOURIER TRANSFORM DATA");
-        for (int i = 0; i < 2; i++) { System.out.println(); }
+        for (int i = 0; i < 2; i++) { System.out.println(); }*/
         
 
 
-        System.out.println("POSITIVE VALUES");
-        for (int i = 0; i < position_pos.size(); i++) {
-            // units of getFrequency() in 50Hz
-            double f = position_pos.getFrequency(i) / 50;
-            System.out.println(i + ": f = " + f + ", A = " + position_pos.getAmplitude(i).norm());
-        }
-        System.out.print("A = [");
+        String dft = "f_pos = [";
         for (int i = 0; i < position_pos.size() - 1; i++) {
-            System.out.println(position_pos.getAmplitude(i).norm() + ", ");
+            dft += (position_pos.getFrequency(i) / 50) + ", ";
         }
-        System.out.println(position_pos.getAmplitude(position_pos.size() - 1).norm() + "]");
+        dft += position_pos.getFrequency(position_pos.size() - 1) / 50 + "] | ";
 
-
-
-        for (int i = 0; i < 2; i++) { System.out.println(); }
-
-
-        
-        System.out.println("NEGATIVE VALUES");
-        for (int i = 0; i < position_neg.size(); i++) {
-            // units of getFrequency() in 50Hz
-            double f = position_neg.getFrequency(i) / 50;
-            System.out.println(i + ": f = " + f + ", A = " + position_neg.getAmplitude(i).norm());
+        dft += "A_pos = [";
+        for (int i = 0; i < position_pos.size() - 1; i++) {
+            dft += position_pos.getAmplitude(i).norm() + ", ";
         }
-        System.out.print("B = [");
+        dft += position_pos.getAmplitude(position_pos.size() - 1).norm() + "] | ";
+
+
+
+        dft += "f_neg = [";
         for (int i = 0; i < position_neg.size() - 1; i++) {
-            System.out.println(position_neg.getAmplitude(i).norm() + ", ");
+            dft += (position_neg.getFrequency(i) / 50) + ", ";
         }
-        System.out.println(position_neg.getAmplitude(position_neg.size() - 1).norm() + "]");
+        dft += position_neg.getFrequency(position_neg.size() - 1) / 50 + "] | ";
+
+        dft += "A_neg = [";
+        for (int i = 0; i < position_neg.size() - 1; i++) {
+            dft += position_neg.getAmplitude(i).norm() + ", ";
+        }
+        dft += position_neg.getAmplitude(position_neg.size() - 1).norm() + "]";
 
 
 
-        for (int i = 0; i < 5; i++) { System.out.println(); }
+        SmartDashboard.putString("TestMode/AutoTuner/DFT", dft);
     }
 
 
