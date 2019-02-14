@@ -181,6 +181,8 @@ public abstract class TuningStep {
     protected boolean collectData() {
         String rep = "";
 
+        if (getMotor() == null) { return false; }
+
         if (!finishedPos) {
             getMotor().set(CONTROL_MODE, COMMAND_VALUE);
 
@@ -334,6 +336,7 @@ public abstract class TuningStep {
 
 
 
+    /** Standardize motor across AutoTuner and all TuningSteps */
     protected WPI_TalonSRX getMotor() {
         return AutoTuner.getMotor();
     }

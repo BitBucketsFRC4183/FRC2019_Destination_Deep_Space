@@ -54,6 +54,12 @@ public class TalonUtils {
     public static void initializeQuadEncoderMotor(WPI_TalonSRX motor) {
         initializeQuadEncoderMotor(motor, MAX_STATUS_FRAME_PERIOD);
     }
+    public static void initializeMagEncoderRelativeMotor(WPI_TalonSRX motor) {
+        initializeMagEncoderRelativeMotor(motor, MAX_STATUS_FRAME_PERIOD);
+    }
+    public static void initializeMagEncoderAbsoluteMotor(WPI_TalonSRX motor) {
+        initializeMagEncoderAbsoluteMotor(motor, MAX_STATUS_FRAME_PERIOD);
+    }
 
     /**
      * Initializes the quad encoder motor, whatever that means.
@@ -68,4 +74,33 @@ public class TalonUtils {
         motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, statusFramePeriod, timeout);
 
     }
+
+    /**
+     * Initializes the motor controller to have a relative mag encoder.
+     */
+    public static void initializeMagEncoderRelativeMotor(WPI_TalonSRX motor, int statusFramePeriod) {
+        int timeout = RobotMap.CONTROLLER_TIMEOUT_MS;
+        int pidLoop = RobotMap.PRIMARY_PID_LOOP;
+
+
+        motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, pidLoop, timeout);
+        motor.setSelectedSensorPosition(0,pidLoop, timeout);
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, statusFramePeriod, timeout);
+
+    }
+
+    /**
+     * Initializes the motor controller to have a relative mag encoder.
+     */
+    public static void initializeMagEncoderAbsoluteMotor(WPI_TalonSRX motor, int statusFramePeriod) {
+        int timeout = RobotMap.CONTROLLER_TIMEOUT_MS;
+        int pidLoop = RobotMap.PRIMARY_PID_LOOP;
+
+
+        motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, pidLoop, timeout);
+        motor.setSelectedSensorPosition(0,pidLoop, timeout);
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, statusFramePeriod, timeout);
+
+    }
+
 }
