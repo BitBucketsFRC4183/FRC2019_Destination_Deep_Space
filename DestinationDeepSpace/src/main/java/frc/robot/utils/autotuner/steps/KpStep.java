@@ -21,8 +21,8 @@ public class KpStep extends TuningStep {
 
 
 
-    public KpStep(int windowSize, WPI_TalonSRX motor, int cruise_terr) {
-        super(windowSize, motor, DataCollectionType.Position);
+    public KpStep(int cruise_terr) {
+        super(DataCollectionType.Position);
 
         KP0 = ((int) (1000000 * (0.1 * 1023) / cruise_terr)) / 1000000.0; // truncate to 6 decimal places
         log("initial kP guess: " + KP0 + "\n");

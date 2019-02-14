@@ -13,8 +13,8 @@ public class CruiseStep extends TuningStep {
 
 
     
-    public CruiseStep(int windowSize, WPI_TalonSRX motor, int kf_tp100) {
-        super(windowSize, motor, DataCollectionType.Position);
+    public CruiseStep(int kf_tp100) {
+        super(DataCollectionType.Position);
 
         value = (int) (0.75 * kf_tp100);
         valueString = value + "";
