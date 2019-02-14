@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
+import frc.robot.utils.talonutils.MotorTestModes;
+
 import frc.robot.utils.autotuner.steps.TuningStep;
 import frc.robot.utils.autotuner.steps.KfStep;
 import frc.robot.utils.autotuner.steps.CruiseStep;
@@ -70,11 +72,12 @@ public class AutoTuner {
 
     private static Step step = Step.None;
     private static WPI_TalonSRX motor; // current motor for tuning
+    private static boolean stepDone = false;
 
 
 
     public static WPI_TalonSRX getMotor() {
-        return motor;
+        return MotorTestModes.getMotor();
     }
 
 
@@ -94,7 +97,6 @@ public class AutoTuner {
 
     public static void init() {
         SmartDashboard.putBoolean("TestMode/AutoTuner/Emergency Stop", false);
-        SmartDashboard.putString("TestMode/AutoTuner/Console", "");
 
 
         stepSelector = new SendableChooser<Step>();
@@ -140,36 +142,28 @@ public class AutoTuner {
 
 
 
-        // VERY IMPORTANT: step and selected are NOT the same
-        // step is the step the AutoTuner actually is in
-        // selected is the selected "requested" step on the dashboard
-        //
-        // Reason: if we let the step be the selected step on the dashboard,
-        // you could end up with the following behavior.
-        //     User wants to tune kF
-        //     AutoTuner starts tuning kF
-        //     AutoTuner finishes tuning kF
-        //     User still has kF selected
-        //     AutoTuner will now continue tuning kF
+        // as a precaution
+        if (motor == null) {
+            return;
+        }
+
+
+
+        // selected step on SmartDashboard
         Step selected = stepSelector.getSelected();
 
 
 
-        // if the tuner is currently doing nothing but you want to do something,
-        // get "ready" to do that "something"
-        if (step == Step.None && selected != Step.None) {
+        // if there was a change, change the step to
+        // selected step
+        if (selected != step) {
+            // (this goes through noneInit first)
             changeStep(selected);
-
-            // make sure init is called
-            repeat = false;
-
-            // don't go further until the user deselects
-            return;
         }
 
-        // if tuner is in a step but something is selected, don't allow it to
-        // continue (until deselected)
-        if (step != Step.None && selected != Step.None) {
+        // if done with the current step, don't continue
+        // running anything for it
+        if (stepDone) {
             return;
         }
 
@@ -180,13 +174,7 @@ public class AutoTuner {
         // TODO: maybe find a better way to organize this?
         switch (step) {
             default: {}
-            case None: {
-                if (!repeat) {
-                    //noneInit();
-                }
-
-                break;
-            }
+            case None: { break; }
             case Kf: {
                 if (!repeat) {
                     kfTuneInit();
@@ -241,7 +229,8 @@ public class AutoTuner {
             }
         }
 
-        // do the periodic for each step now that the inits have been done
+        // do the periodic for each step now that the inits
+        // are guaranteed to have been run
         repeat = true;
     }
 
@@ -259,9 +248,15 @@ public class AutoTuner {
 
         motor = m;
 
+        // AutoTuner shares the same motor as MotorTestModes
+        // so initialize the encoder from standardized method
+        // there
+        MotorTestModes.initializeEncoder();
+
         // copied from CTRE tuning helper code
 
-        motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, TunerConstants.kPIDLoopIdx, TunerConstants.kTimeoutMs);
+        
+        //motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, TunerConstants.kPIDLoopIdx, TunerConstants.kTimeoutMs);
 		motor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, TunerConstants.kTimeoutMs);
         motor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, TunerConstants.kTimeoutMs);
         
@@ -330,13 +325,10 @@ public class AutoTuner {
 
 
     private static void changeStep(Step s) {
+        noneInit(); // go through None first
         step = s;
-
-        if (s == Step.None) {
-            repeat = false; // once the step is changed, make sure init is called
-
-            noneInit();
-        }
+        repeat = false; // once step is changed, next should go through init
+        stepDone = false; // new step means it cannot be finished yet
 
         SmartDashboard.putString(TunerConstants.PROCESS_KEY, s.toString());
         SmartDashboard.putString(TunerConstants.QUESTION_KEY, s.getInstructions());
@@ -357,22 +349,28 @@ public class AutoTuner {
     }
 
     private static void kfTunePeriodic() {
-        boolean done = kf.update();
+        stepDone = kf.update();
         // put the power output to the Dashboard to make sure its also stable
 
         SmartDashboard.putNumber("TestMode/AutoTuner/kf", kf.getValue());
-
-        if (done) {
-            changeStep(Step.None);
-        } else {
-            setKf(kf.getValue());
-        }
     }
 
 
 
     private static void cruiseTuneInit() {
-        if (kf == null) { return; }
+        if (kf == null) {
+            // The step is not actually done, but it cannot
+            // start correctly until kf has been run first.
+            // By setting stepDone to true, the periodic
+            // AutoTuner loop won't continue by running this
+            // step's periodic, ensuring that it is not run
+            // until kf has been gone through first.
+            stepDone = true;
+
+            // don't continue trying to initialize the step
+            // until the proper conditions have been met
+            return;
+        }
 
 
 
@@ -410,17 +408,25 @@ public class AutoTuner {
     }
 
     private static void cruiseTunePeriodic() {
-        boolean done = cruise.update();
-        
-        if (done) {
-            changeStep(Step.None);
-        }
+        stepDone = cruise.update();
     }
 
 
 
     private static void kpTuneInit() {
-        if (cruise == null) { return; }
+        if (cruise == null) {
+            // The step is not actually done, but it cannot
+            // start correctly until cruise has been run first.
+            // By setting stepDone to true, the periodic
+            // AutoTuner loop won't continue by running this
+            // step's periodic, ensuring that it is not run
+            // until cruise has been gone through first.
+            stepDone = true;
+
+            // don't continue trying to initialize the step
+            // until the proper conditions have been met
+            return;
+        }
 
 
 
@@ -430,21 +436,29 @@ public class AutoTuner {
     }
 
     private static void kpTunePeriodic() {
-        boolean done = kp.update();
+        stepDone = kp.update();
 
         SmartDashboard.putNumber("TestMode/AutoTuner/kp", kp.getValue());
 
-        if (done) {
-            changeStep(Step.None);
-        } else {
-            setKp(kp.getValue());
-        }
+        setKp(kp.getValue());
     }
 
 
 
     private static void kdTuneInit() {
-        if (kp == null) { return; }
+        if (kp == null) {
+            // The step is not actually done, but it cannot
+            // start correctly until kp has been run first.
+            // By setting stepDone to true, the periodic
+            // AutoTuner loop won't continue by running this
+            // step's periodic, ensuring that it is not run
+            // until kp has been gone through first.
+            stepDone = true;
+
+            // don't continue trying to initialize the step
+            // until the proper conditions have been met
+            return;
+        }
 
 
 
@@ -454,19 +468,27 @@ public class AutoTuner {
     }
 
     private static void kdTunePeriodic() {
-        boolean done = kd.update();
+        stepDone = kd.update();
 
         SmartDashboard.putNumber("TestMode/AutoTuner/kd", kd.getValue());
-
-        if (done) {
-            changeStep(Step.None);
-        }
     }
 
 
 
     private static void kiTuneInit() {
-        if (kd == null) { return; }
+        if (kd == null) {
+            // The step is not actually done, but it cannot
+            // start correctly until kd has been run first.
+            // By setting stepDone to true, the periodic
+            // AutoTuner loop won't continue by running this
+            // step's periodic, ensuring that it is not run
+            // until kd has been gone through first.
+            stepDone = true;
+
+            // don't continue trying to initialize the step
+            // until the proper conditions have been met
+            return;
+        }
 
 
 
@@ -479,15 +501,11 @@ public class AutoTuner {
     }
 
     private static void kiTunePeriodic() {
-        boolean done = ki.update(); // initial ki value
+        stepDone = ki.update(); // initial ki value
 
         SmartDashboard.putNumber("TestMode/AutoTuner/ki", ki.getValue());
 
-        if (done) {
-            step = Step.None;
-        } else {
-            setKi(ki.getValue());
-        }
+        setKi(ki.getValue());
     }
 
 

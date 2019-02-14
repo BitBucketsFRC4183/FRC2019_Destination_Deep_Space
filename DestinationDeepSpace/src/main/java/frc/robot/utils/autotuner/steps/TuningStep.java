@@ -2,7 +2,6 @@ package frc.robot.utils.autotuner.steps;
 
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -289,8 +288,7 @@ public abstract class TuningStep {
     }*/
 
     protected void log(String data) {
-        String console = SmartDashboard.getString("TestMode/AutoTuner/Console", "");
-        SmartDashboard.putString("TestMode/AutoTuner/Console", console + "\n" + data);
+        // TODO: implement later in some way
     }
 
 
