@@ -21,7 +21,7 @@ public class MotorTestModes {
 
 
 
-    private static enum EncoderType { Quad, MagEncoderRelative, MagEncoderAbsolute }
+    public static enum EncoderType { Quad, MagEncoderRelative, MagEncoderAbsolute }
     private static SendableChooser<EncoderType> encoderChooser = new SendableChooser<EncoderType>();
     private static EncoderType lastEncoderType;
 
@@ -84,21 +84,7 @@ public class MotorTestModes {
 
             lastEncoderType = encoderType;
 
-            switch (encoderType) {
-                default: {}
-                case Quad: {
-                    TalonUtils.initializeQuadEncoderMotor(motor);
-                    break;
-                }
-                case MagEncoderAbsolute: {
-                    TalonUtils.initializeMagEncoderAbsoluteMotor(motor);
-                    break;
-                }
-                case MagEncoderRelative: {
-                    TalonUtils.initializeMagEncoderRelativeMotor(motor);
-                    break;
-                }
-            }
+            initializeEncoder();
         }
 
 
@@ -145,5 +131,31 @@ public class MotorTestModes {
                 AutoTuner.periodic();
             }
         }
+    }
+
+
+
+    public static void initializeEncoder() {
+        EncoderType encoderType = encoderChooser.getSelected();
+
+        switch (encoderType) {
+            default: {}
+            case Quad: {
+                TalonUtils.initializeQuadEncoderMotor(motor);
+                break;
+            }
+            case MagEncoderAbsolute: {
+                TalonUtils.initializeMagEncoderAbsoluteMotor(motor);
+                break;
+            }
+            case MagEncoderRelative: {
+                TalonUtils.initializeMagEncoderRelativeMotor(motor);
+                break;
+            }
+        }
+    }
+
+    public static WPI_TalonSRX getMotor() {
+        return motor;
     }
 }

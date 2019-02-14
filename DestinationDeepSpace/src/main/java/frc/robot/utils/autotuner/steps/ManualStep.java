@@ -2,6 +2,8 @@ package frc.robot.utils.autotuner.steps;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import frc.robot.utils.autotuner.AutoTuner;
 
 
@@ -16,6 +18,7 @@ public class ManualStep extends TuningStep {
 
 
 
+        SmartDashboard.putNumber(PREFIX + "Slave Motor ID", 0);
         SmartDashboard.putNumber(PREFIX + "kF",    0);
         SmartDashboard.putNumber(PREFIX + "kP",    0);
         SmartDashboard.putNumber(PREFIX + "kD",    0);
@@ -36,6 +39,17 @@ public class ManualStep extends TuningStep {
 
 
     public boolean update() {
+        int id = (int) SmartDashboard.getNumber(PREFIX + "Slave Motor ID", 0);
+
+        if (id != 0) {
+            WPI_TalonSRX slave = new WPI_TalonSRX(id);
+            slave.follow(getMotor());
+
+            SmartDashboard.putNumber(PREFIX + "Slave Motor ID", 0);
+        }
+
+
+
         boolean done = collectData();
 
         if (done) {
