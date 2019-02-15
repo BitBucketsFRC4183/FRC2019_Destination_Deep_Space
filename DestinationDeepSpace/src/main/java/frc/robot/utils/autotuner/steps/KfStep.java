@@ -14,8 +14,8 @@ public class KfStep extends TuningStep {
 
 
 
-    public KfStep(int windowSize, WPI_TalonSRX motor) {
-        super(windowSize, motor, DataCollectionType.Velocity);
+    public KfStep() {
+        super(DataCollectionType.Velocity);
     }
 
 
