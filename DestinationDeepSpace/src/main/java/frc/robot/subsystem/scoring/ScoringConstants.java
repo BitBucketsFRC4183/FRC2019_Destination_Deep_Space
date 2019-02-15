@@ -35,7 +35,7 @@ public class ScoringConstants {
 
 
 
-	public static final int ARM_MOTOR_NATIVE_TICKS_PER_REV = 8192;
+	public static final int ARM_MOTOR_NATIVE_TICKS_PER_REV = 4096;
 
 
 
