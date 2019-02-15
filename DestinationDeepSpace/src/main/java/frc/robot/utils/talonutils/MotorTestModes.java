@@ -9,18 +9,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 
 public class MotorTestModes {
-    public static enum TestMode { Manual, AutoTune }
-
-
-
-    // TODO: maybe have an enum of all motors instead of selecting motors by ID?
-    private static WPI_TalonSRX lastMotor;
-    private static int lastMotorID = 0; // ID of last "used" motor
+    private static enum TestMode { Manual, AutoTune }
+    private static SendableChooser<TestMode> modeChooser = new SendableChooser<TestMode>();
     private static TestMode lastTestMode;
 
 
 
-    private static SendableChooser<TestMode> modeChooser = new SendableChooser<TestMode>();
+    // TODO: maybe have an enum of all motors instead of selecting motors by ID?
+    private static WPI_TalonSRX motor;
+    private static int lastMotorID = 0; // ID of last "used" motor
+
+
+
+    public static enum EncoderType { Quad, MagEncoderRelative, MagEncoderAbsolute }
+    private static SendableChooser<EncoderType> encoderChooser = new SendableChooser<EncoderType>();
+    private static EncoderType lastEncoderType;
 
 
 
@@ -29,9 +32,21 @@ public class MotorTestModes {
         modeChooser.setDefaultOption("Manual", TestMode.Manual);
         modeChooser.addOption("Auto Tuner", TestMode.AutoTune);
 
-
         SmartDashboard.putData("TestMode/mode", modeChooser);
+
+
+
+        encoderChooser.setDefaultOption("Quad", EncoderType.Quad);
+        encoderChooser.addOption("MagEncoderRelative", EncoderType.MagEncoderRelative);
+        encoderChooser.addOption("MagEncoderAbsolute", EncoderType.MagEncoderAbsolute);
+
+        SmartDashboard.putData(encoderChooser);
+
+
+
         SmartDashboard.putNumber("TestMode/Motor ID", 0);
+        SmartDashboard.putNumber("TestMode/% voltage", 0);
+
     }
 
 
@@ -45,14 +60,34 @@ public class MotorTestModes {
             return;
         }
 
+
+
         // if it changed, update the motor to work with accordingly
         if (motorID != lastMotorID) {
+            // might have been in AutoTuner mode, stop AutoTuning
+            // the motor that was selected
+            AutoTuner.stop();
+
+
+
             lastMotorID = motorID;
 
-            lastMotor = new WPI_TalonSRX(motorID);
-            TalonUtils.initializeMotorDefaults(lastMotor);
-            TalonUtils.initializeQuadEncoderMotor(lastMotor); /// TODO: Create selector with choose MagEncoderRelative
+            motor = new WPI_TalonSRX(motorID);
+            TalonUtils.initializeMotorDefaults(motor);
         }
+
+
+        
+        EncoderType encoderType = encoderChooser.getSelected();
+        if (encoderType != lastEncoderType) {
+            TalonUtils.initializeMotorDefaults(motor);
+
+            lastEncoderType = encoderType;
+
+            initializeEncoder();
+        }
+
+
 
 
         // get the selected test mode
@@ -63,6 +98,10 @@ public class MotorTestModes {
         if (mode == TestMode.Manual) {
             // if the mode changed
             if (mode != lastTestMode) {
+                AutoTuner.stop();
+
+
+
                 lastTestMode = mode;
 
                 // reset % voltage input to 0
@@ -71,12 +110,12 @@ public class MotorTestModes {
                 // read % voltage input and send it to motor
                 double v = SmartDashboard.getNumber("TestMode/% voltage", 0);
 
-                lastMotor.set(ControlMode.PercentOutput, v);
-                int pos_ticks = lastMotor.getSelectedSensorPosition();
-                int abs_ticks = lastMotor.getSensorCollection().getPulseWidthPosition() & 0xFFF;
-                int vel_tickPer100ms = lastMotor.getSelectedSensorVelocity();
+                motor.set(ControlMode.PercentOutput, v);
+                int pos_ticks = motor.getSelectedSensorPosition();
+                int abs_ticks = motor.getSensorCollection().getPulseWidthPosition() & 0xFFF;
+                int vel_tickPer100ms = motor.getSelectedSensorVelocity();
 
-                SmartDashboard.putNumber("TestMode/Voltage", lastMotor.getMotorOutputVoltage());
+                SmartDashboard.putNumber("TestMode/Voltage", motor.getMotorOutputVoltage());
                 SmartDashboard.putNumber("TestMode/Encoder (ticks)", pos_ticks);
                 SmartDashboard.putNumber("TestMode/Encoder (abs ticks)", abs_ticks);
                 SmartDashboard.putNumber("TestMode/Encoder (ticksPer100ms)", vel_tickPer100ms);
@@ -87,10 +126,36 @@ public class MotorTestModes {
 
                 AutoTuner.init(); // add in the AutoTuner Step chooser to the Dashboard
 
-                AutoTuner.tune(lastMotor); // start the process for tuning the motor
+                AutoTuner.tune(motor); // start the process for tuning the motor
             } else {
                 AutoTuner.periodic();
             }
         }
+    }
+
+
+
+    public static void initializeEncoder() {
+        EncoderType encoderType = encoderChooser.getSelected();
+
+        switch (encoderType) {
+            default: {}
+            case Quad: {
+                TalonUtils.initializeQuadEncoderMotor(motor);
+                break;
+            }
+            case MagEncoderAbsolute: {
+                TalonUtils.initializeMagEncoderAbsoluteMotor(motor);
+                break;
+            }
+            case MagEncoderRelative: {
+                TalonUtils.initializeMagEncoderRelativeMotor(motor);
+                break;
+            }
+        }
+    }
+
+    public static WPI_TalonSRX getMotor() {
+        return motor;
     }
 }

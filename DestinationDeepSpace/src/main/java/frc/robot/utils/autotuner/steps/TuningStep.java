@@ -2,15 +2,11 @@ package frc.robot.utils.autotuner.steps;
 
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import frc.robot.utils.autotuner.AutoTuner;
 import frc.robot.utils.autotuner.DFT_DataWindow;
 import frc.robot.utils.autotuner.DataWindow;
 import frc.robot.utils.autotuner.TunerConstants;
@@ -39,14 +35,15 @@ public abstract class TuningStep {
 
 
 
-    protected final WPI_TalonSRX MOTOR;
-
-
-
     protected static enum DataCollectionType { Velocity, Position };
     protected final DataCollectionType DATA_COLLECTION_TYPE; // what data this step collections
     private final ControlMode CONTROL_MODE;
     private final double      COMMAND_VALUE;
+
+
+
+    // whether to allow for automatic stability/oscillation detection
+    protected boolean autoDetection = true;
 
 
 
@@ -56,17 +53,14 @@ public abstract class TuningStep {
 
 
 
-    /**
-     * @param windowSize amount of +/- data to collect
-     * @param motor
-     * @param mode either MotionMagic or PercentOutput
-     */
-    public TuningStep(int windowSize, WPI_TalonSRX motor, DataCollectionType dataCollectionType) {
+    public TuningStep(DataCollectionType dataCollectionType) {
         valueString = "";
 
 
 
         finishedPos = false;
+
+        int windowSize = TunerConstants.DATA_WINDOW_SIZE;
 
         error_pos    = new DataWindow(windowSize);
         error_neg    = new DataWindow(windowSize);
@@ -79,10 +73,6 @@ public abstract class TuningStep {
 
         power_pos    = new DataWindow(windowSize);
         power_neg    = new DataWindow(windowSize);
-
-
-
-        MOTOR = motor;
 
 
 
@@ -123,13 +113,16 @@ public abstract class TuningStep {
 
     /** Get whether or not the data is stable */
     protected boolean isStable() {
-        boolean stable = SmartDashboard.getBoolean(TunerConstants.STABLE_KEY, false);
         // manual detection if automatic isn't cooperating
-        if (stable) {
+        if (SmartDashboard.getBoolean(TunerConstants.STABLE_KEY, false)) {
             SmartDashboard.putBoolean(TunerConstants.STABLE_KEY, false);
 
             return true;
         }
+
+
+
+        if (autoDetection == false) { return false; }
 
 
 
@@ -155,13 +148,19 @@ public abstract class TuningStep {
     }
 
     /** Get whether or not the data is oscillating */
-    protected static boolean isOscillating() {
+    protected boolean isOscillating() {
         // TODO: implement automatic way to determine it if user chooses to use it instead
         if (SmartDashboard.getBoolean(TunerConstants.OSCILLATING_KEY, false)) {
             SmartDashboard.putBoolean(TunerConstants.OSCILLATING_KEY, false);
 
             return true;
         }
+
+
+
+        if (autoDetection == false) { return false; }
+
+
 
         return false;
     }
@@ -189,15 +188,17 @@ public abstract class TuningStep {
     protected boolean collectData() {
         String rep = "";
 
+        if (getMotor() == null) { return false; }
+
         if (!finishedPos) {
-            MOTOR.set(CONTROL_MODE, COMMAND_VALUE);
+            getMotor().set(CONTROL_MODE, COMMAND_VALUE);
 
 
 
-            int error    = Math.abs(MOTOR.getClosedLoopError());
-            int position = MOTOR.getSelectedSensorPosition();
-            int velocity = MOTOR.getSelectedSensorVelocity();
-            double power = MOTOR.getMotorOutputPercent();
+            int error    = Math.abs(getMotor().getClosedLoopError());
+            int position = getMotor().getSelectedSensorPosition();
+            int velocity = getMotor().getSelectedSensorVelocity();
+            double power = getMotor().getMotorOutputPercent();
             
             error_pos   .add(error);
             position_pos.add(position);
@@ -221,14 +222,14 @@ public abstract class TuningStep {
                 finishedPos = true;
             }
         } else {
-            MOTOR.set(CONTROL_MODE, -COMMAND_VALUE);
+            getMotor().set(CONTROL_MODE, -COMMAND_VALUE);
 
 
 
-            int error    = Math.abs(MOTOR.getClosedLoopError());
-            int position = MOTOR.getSelectedSensorPosition();
-            int velocity = MOTOR.getSelectedSensorVelocity();
-            double power = MOTOR.getMotorOutputPercent();
+            int error    = Math.abs(getMotor().getClosedLoopError());
+            int position = getMotor().getSelectedSensorPosition();
+            int velocity = getMotor().getSelectedSensorVelocity();
+            double power = getMotor().getMotorOutputPercent();
             
             error_neg   .add(error);
             position_neg.add(position);
@@ -287,8 +288,7 @@ public abstract class TuningStep {
     }*/
 
     protected void log(String data) {
-        String console = SmartDashboard.getString("TestMode/AutoTuner/Console", "");
-        SmartDashboard.putString("TestMode/AutoTuner/Console", console + "\n" + data);
+        // TODO: implement later in some way
     }
 
 
@@ -298,45 +298,49 @@ public abstract class TuningStep {
 
 
 
+    /** Push DFT info to dashboard */
     public void logDFT() {
-        for (int i = 0; i < 5; i++) { System.out.println(); }
+        /*for (int i = 0; i < 5; i++) { System.out.println(); }
         System.out.println(getClass().getName() + " DISCRETE FOURIER TRANSFORM DATA");
-        for (int i = 0; i < 2; i++) { System.out.println(); }
+        for (int i = 0; i < 2; i++) { System.out.println(); }*/
         
 
 
-        System.out.println("POSITIVE VALUES");
-        for (int i = 0; i < position_pos.size(); i++) {
-            // units of getFrequency() in 50Hz
-            double f = position_pos.getFrequency(i) / 50;
-            System.out.println(i + ": f = " + f + ", A = " + position_pos.getAmplitude(i).norm());
-        }
-        System.out.print("A = [");
+        String dft = "f_pos = [";
         for (int i = 0; i < position_pos.size() - 1; i++) {
-            System.out.println(position_pos.getAmplitude(i).norm() + ", ");
+            dft += (position_pos.getFrequency(i) / 50) + ", ";
         }
-        System.out.println(position_pos.getAmplitude(position_pos.size() - 1).norm() + "]");
+        dft += position_pos.getFrequency(position_pos.size() - 1) / 50 + "] | ";
 
-
-
-        for (int i = 0; i < 2; i++) { System.out.println(); }
-
-
-        
-        System.out.println("NEGATIVE VALUES");
-        for (int i = 0; i < position_neg.size(); i++) {
-            // units of getFrequency() in 50Hz
-            double f = position_neg.getFrequency(i) / 50;
-            System.out.println(i + ": f = " + f + ", A = " + position_neg.getAmplitude(i).norm());
+        dft += "A_pos = [";
+        for (int i = 0; i < position_pos.size() - 1; i++) {
+            dft += position_pos.getAmplitude(i).norm() + ", ";
         }
-        System.out.print("B = [");
+        dft += position_pos.getAmplitude(position_pos.size() - 1).norm() + "] | ";
+
+
+
+        dft += "f_neg = [";
         for (int i = 0; i < position_neg.size() - 1; i++) {
-            System.out.println(position_neg.getAmplitude(i).norm() + ", ");
+            dft += (position_neg.getFrequency(i) / 50) + ", ";
         }
-        System.out.println(position_neg.getAmplitude(position_neg.size() - 1).norm() + "]");
+        dft += position_neg.getFrequency(position_neg.size() - 1) / 50 + "] | ";
+
+        dft += "A_neg = [";
+        for (int i = 0; i < position_neg.size() - 1; i++) {
+            dft += position_neg.getAmplitude(i).norm() + ", ";
+        }
+        dft += position_neg.getAmplitude(position_neg.size() - 1).norm() + "]";
 
 
 
-        for (int i = 0; i < 5; i++) { System.out.println(); }
+        SmartDashboard.putString("TestMode/AutoTuner/DFT", dft);
+    }
+
+
+
+    /** Standardize motor across AutoTuner and all TuningSteps */
+    protected WPI_TalonSRX getMotor() {
+        return AutoTuner.getMotor();
     }
 }
