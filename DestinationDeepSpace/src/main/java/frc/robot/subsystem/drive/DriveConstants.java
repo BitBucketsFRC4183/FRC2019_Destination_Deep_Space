@@ -76,9 +76,9 @@ public class DriveConstants {
     // the physical controller firmware, not the software.
     public static final int LEFT_DRIVE_MOTOR_IDS[] =
     {
-            MotorId.LEFT_DRIVE_MOTOR_FRONT_ID
+            MotorId.LEFT_DRIVE_MOTOR_REAR_ID
             ,MotorId.LEFT_DRIVE_MOTOR_MIDDLE_ID
-            ,MotorId.LEFT_DRIVE_MOTOR_REAR_ID
+            ,MotorId.LEFT_DRIVE_MOTOR_FRONT_ID
     };
 
     public static final boolean LEFT_DRIVE_MOTOR_INVERSION_FLAG[] = 

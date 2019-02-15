@@ -14,8 +14,8 @@ public class KdStep extends TuningStep {
 
 
     
-    public KdStep(int windowSize, WPI_TalonSRX motor, double kf) {
-        super(windowSize, motor, DataCollectionType.Position);
+    public KdStep(double kf) {
+        super(DataCollectionType.Position);
 
         value = 10 * kf;
         valueString = value + "";

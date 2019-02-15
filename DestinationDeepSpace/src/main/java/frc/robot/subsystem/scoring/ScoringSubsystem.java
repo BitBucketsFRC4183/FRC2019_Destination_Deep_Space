@@ -18,9 +18,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-/**
- * Add your docs here.
- */
+
+
+
+
+
 public class ScoringSubsystem extends BitBucketSubsystem {
 	private final OI oi = OI.instance();
 
@@ -37,8 +39,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private Idle initialCommand;
 
 	private final WPI_TalonSRX rollerMotor;
-	private final WPI_TalonSRX rotationMotor1;
-	private final WPI_TalonSRX rotationMotor2;
+	private final WPI_TalonSRX armMotor1;
+	private final WPI_TalonSRX armMotor2;
 
 	// last orientation of the robot's arm
 	// true --> front
@@ -56,20 +58,15 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-		rollerMotor    = new WPI_TalonSRX(MotorId.INTAKE_MOTOR_ID);
-		rotationMotor1 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR1_ID);	// TODO: Rename to armMotor1 and 2
-		rotationMotor2 = new WPI_TalonSRX(MotorId.ROTATION_MOTOR2_ID);
+		rollerMotor = new WPI_TalonSRX(MotorId.INTAKE_MOTOR_ID);
+		armMotor1   = new WPI_TalonSRX(MotorId.ROTATION_MOTOR1_ID);	// TODO: Rename to armMotor1 and 2
+		armMotor2   = new WPI_TalonSRX(MotorId.ROTATION_MOTOR2_ID);
 
 		// initialize motors before setting sensor positions and follower modes
 		// otherwise, it may clear those settings
 		TalonUtils.initializeMotorDefaults(rollerMotor);
-		TalonUtils.initializeMotorDefaults(rotationMotor1);
-		TalonUtils.initializeMotorDefaults(rotationMotor2);
-
-		// TODO:Slave arm motor 2 to arm motor 1
-		// TODO: Remove inversion
-
-		rotationMotor2.setInverted(true); // TODO: JUNIOR CONFIG
+		TalonUtils.initializeMotorDefaults(armMotor1);
+		TalonUtils.initializeMotorDefaults(armMotor2);
 
 
 
@@ -81,25 +78,23 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		int izone = 200;
 
 
-		TalonUtils.initializeMotorFPID        (rotationMotor1, kf, kp, ki, kd, izone);
+		TalonUtils.initializeMotorFPID        (armMotor1, kf, kp, ki, kd, izone);
 
 		// TODO: Configure armMotor1 to use initializeMagEncoderRelativeMotor
-		TalonUtils.initializeQuadEncoderMotor (rotationMotor1, 1);
+		TalonUtils.initializeMagEncoderRelativeMotor(armMotor1, 1);
 
-		// TODO: Slave motor does not need constants or  encoder
-		TalonUtils.initializeMotorFPID        (rotationMotor2, kf, kp, ki, kd, izone);
-		TalonUtils.initializeQuadEncoderMotor (rotationMotor2, 1);
+		armMotor2.follow(armMotor1);
 
-		// TODO: See the encoder with the SensorCollection position from the mag encoder
+		// TODO:
 		// NOTE: It may need to be biased based on where the shaft was set when assembled
-		rotationMotor1.setSelectedSensorPosition(0);
-		rotationMotor2.setSelectedSensorPosition(0);
+		int abs_ticks = armMotor1.getSensorCollection().getPulseWidthPosition() & 0xFFF;
+		// set the ticks of relative magnetic encoder
+		// effectively telling the encoder where 0 is
+		armMotor1.setSelectedSensorPosition(abs_ticks);
 
-		rotationMotor1.configMotionAcceleration(2897, 20);
-		rotationMotor2.configMotionAcceleration(2897, 20);
-
-		rotationMotor1.configMotionCruiseVelocity(15000, 20);
-		rotationMotor2.configMotionCruiseVelocity(15000, 20);
+		// TODO: TEMPORARY VALUES
+		armMotor1.configMotionAcceleration(2897, 20);
+		armMotor1.configMotionCruiseVelocity(15000, 20);
 
 
 
@@ -234,10 +229,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 	public int getArmLevelTickError() {
-		int err1 = Math.abs(rotationMotor1.getClosedLoopError());
-		int err2 = Math.abs(rotationMotor2.getClosedLoopError());
+		int err1 = Math.abs(armMotor1.getClosedLoopError());
 
-		return Math.max(err1, err2);
+		return err1;
 	}
 
 
@@ -250,7 +244,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	private void setAllMotorsZero() {
 		rollerMotor.set(ControlMode.PercentOutput, 0);
-		rotationMotor1.set(ControlMode.PercentOutput, 0);
+		armMotor1.set(ControlMode.PercentOutput, 0);
 	}
 
 
@@ -269,15 +263,14 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			ticks *= -1;
 		}
 
-		rotationMotor1.set(ControlMode.MotionMagic, ticks);
-		rotationMotor2.set(ControlMode.MotionMagic, ticks);
+		armMotor1.set(ControlMode.MotionMagic, ticks);
 	}
 
 
 
 	/** Get angle from normal of scoring arm (90 deg = exactly forward) */
 	public double getAngle_deg() {
-		int ticks = rotationMotor1.getSelectedSensorPosition(0);
+		int ticks = armMotor1.getSelectedSensorPosition();
 
 		return 360.0 * ticks / ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
 	}
@@ -320,8 +313,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		updateBaseDashboard();
 		if (getTelemetryEnabled()) {
 			SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle_deg());
-			SmartDashboard.putNumber(getName() + "/Arm Ticks", rotationMotor1.getSelectedSensorPosition());
-			SmartDashboard.putNumber(getName() + "/Arm Error", rotationMotor1.getClosedLoopError());
+			SmartDashboard.putNumber(getName() + "/Arm Ticks", armMotor1.getSelectedSensorPosition());
+			SmartDashboard.putNumber(getName() + "/Arm Error", armMotor1.getClosedLoopError());
 		}
 		// commands will handle dealing with arm manipulation
 	}
@@ -367,11 +360,11 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 	public TalonSRX getRotationMotor1() {
-		return rotationMotor1;
+		return armMotor1;
 	}
 	
 	public void manualArmOperate() {
-		rotationMotor1.set(ControlMode.PercentOutput, oi.manualArmRotate());
+		armMotor1.set(ControlMode.PercentOutput, oi.manualArmRotate());
 	}
 	public TalonSRX getRollerMotor() {
 		return rollerMotor;
