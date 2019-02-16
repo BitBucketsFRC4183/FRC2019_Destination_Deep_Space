@@ -1,6 +1,15 @@
 package frc.robot.subsystem.scoring;
 
 public class ScoringConstants {
+
+	public final static boolean ARM_MOTOR_INVERSION = false;
+	public final static boolean ARM_MOTOR_SENSOR_PHASE = false;
+	public final static double ARM_MOTION_MAGIC_KF = 3.41;
+	public final static double ARM_MOTION_MAGIC_KP = 0.146143*2*2*2;
+	public final static double ARM_MOTION_MAGIC_KI = 0.0001;
+	public final static double ARM_MOTION_MAGIC_KD = 8.0*10.0*0.146143*2*2*2;
+	public final static int    ARM_MOTION_MAGIC_IZONE = 80;
+
 	public enum ScoringLevel {
 		INVALID              (0),       // multiple levels are selected
 		NONE                 (0),       // no levels are selected

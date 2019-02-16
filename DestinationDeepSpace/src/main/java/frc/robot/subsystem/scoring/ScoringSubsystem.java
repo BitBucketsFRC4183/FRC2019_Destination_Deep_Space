@@ -59,8 +59,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 		rollerMotor = new WPI_TalonSRX(MotorId.INTAKE_MOTOR_ID);
-		armMotor1   = new WPI_TalonSRX(MotorId.ROTATION_MOTOR1_ID);	// TODO: Rename to armMotor1 and 2
-		armMotor2   = new WPI_TalonSRX(MotorId.ROTATION_MOTOR2_ID);
+		armMotor1   = new WPI_TalonSRX(MotorId.ARM_MOTOR1_ID);	// TODO: Rename to armMotor1 and 2
+		armMotor2   = new WPI_TalonSRX(MotorId.ARM_MOTOR2_ID);
 
 		// initialize motors before setting sensor positions and follower modes
 		// otherwise, it may clear those settings
@@ -68,17 +68,12 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		TalonUtils.initializeMotorDefaults(armMotor1);
 		TalonUtils.initializeMotorDefaults(armMotor2);
 
-
-
-		// TODO: TEMPORARY VALUES + also not the best place to put them in the first place
-		double kf = 0.05115;
-		double kp = 0.005683*2*2*2*2*2*2*1.5;
-		double ki = 0.001;
-		double kd = 10 * kp;
-		int izone = 200;
-
-
-		TalonUtils.initializeMotorFPID        (armMotor1, kf, kp, ki, kd, izone);
+		TalonUtils.initializeMotorFPID(armMotor1, 
+							ScoringConstants.ARM_MOTION_MAGIC_KF, 
+							ScoringConstants.ARM_MOTION_MAGIC_KP, 
+							ScoringConstants.ARM_MOTION_MAGIC_KI, 
+							ScoringConstants.ARM_MOTION_MAGIC_KD, 
+							ScoringConstants.ARM_MOTION_MAGIC_IZONE);
 
 		// TODO: Configure armMotor1 to use initializeMagEncoderRelativeMotor
 		TalonUtils.initializeMagEncoderRelativeMotor(armMotor1, 1);
@@ -92,9 +87,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// effectively telling the encoder where 0 is
 		armMotor1.setSelectedSensorPosition(abs_ticks);
 
-		// TODO: TEMPORARY VALUES
-		armMotor1.configMotionAcceleration(2897, 20);
-		armMotor1.configMotionCruiseVelocity(15000, 20);
+		// TODO: Move to constants (max speed is ~300)
+		armMotor1.configMotionAcceleration((int)(0.75*300), 20);
+		armMotor1.configMotionCruiseVelocity((int)(0.75*300), 20);
 
 
 

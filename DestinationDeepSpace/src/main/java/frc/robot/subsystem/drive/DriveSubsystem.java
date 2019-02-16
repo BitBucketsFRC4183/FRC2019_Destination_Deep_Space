@@ -231,11 +231,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
 												DriveConstants.CONTROLLER_TIMEOUT_MS);
 
 			TalonUtils.initializeMotorFPID(leftMotors[i], 
-										DriveConstants.VELOCITY_KF, 
-										DriveConstants.VELOCITY_KP, 
-										DriveConstants.VELOCITY_KI, 
-										DriveConstants.VELOCITY_KD, 
-										DriveConstants.VELOCITY_IZONE,
+										DriveConstants.LEFT_VELOCITY_KF, 
+										DriveConstants.LEFT_VELOCITY_KP, 
+										DriveConstants.LEFT_VELOCITY_KI, 
+										DriveConstants.LEFT_VELOCITY_KD, 
+										DriveConstants.LEFT_VELOCITY_IZONE,
 										DriveConstants.PID_VELOCITY_SLOT);
 
 			// !!!!!!!!!!!!!!! RIGHT !!!!!!!!!!!!!!!!!
@@ -294,11 +294,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
 												DriveConstants.CONTROLLER_TIMEOUT_MS);
 
 			TalonUtils.initializeMotorFPID(rightMotors[i], 
-										DriveConstants.VELOCITY_KF, 
-										DriveConstants.VELOCITY_KP, 
-										DriveConstants.VELOCITY_KI, 
-										DriveConstants.VELOCITY_KD, 
-										DriveConstants.VELOCITY_IZONE,
+										DriveConstants.RIGHT_VELOCITY_KF, 
+										DriveConstants.RIGHT_VELOCITY_KP, 
+										DriveConstants.RIGHT_VELOCITY_KI, 
+										DriveConstants.RIGHT_VELOCITY_KD, 
+										DriveConstants.RIGHT_VELOCITY_IZONE,
 										DriveConstants.PID_VELOCITY_SLOT);
 
 									
@@ -928,7 +928,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			velocityDrive_auto(speed_ips, radps);
 
 			double left_inchps = leftMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
-			double right_inchps = leftMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
+			double right_inchps = rightMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
 
 			SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
 			SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);

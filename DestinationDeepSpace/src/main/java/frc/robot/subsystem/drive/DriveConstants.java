@@ -28,9 +28,8 @@ public class DriveConstants {
     public static final double LOCK_DEADBAND_IPS = 12.0;  // ignore button command changes above this speed
     public static final double ALIGN_DEADBAND_DPS = 45.0; // ignore button command changes above this turn rate
 
-    //TODO: substitute in correct values once we get them
-    public static final double WHEEL_TRACK_INCHES = 18.25;
-    public static final double WHEEL_DIAMETER_INCHES = 4.0;
+    public static final double WHEEL_TRACK_INCHES = 24.0;
+    public static final double WHEEL_DIAMETER_INCHES = 6.0;
     public static final double WHEEL_CIRCUMFERENCE_INCHES = Math.PI*WHEEL_DIAMETER_INCHES;
     public static final double TRACK_TO_CIRCUMFERENCE_RATIO = WHEEL_TRACK_INCHES / WHEEL_DIAMETER_INCHES;
     public static final double WHEEL_ROTATION_PER_FRAME_DEGREES = TRACK_TO_CIRCUMFERENCE_RATIO / 360.0;
@@ -64,8 +63,8 @@ public class DriveConstants {
     // E.g., start with false, if the counts go the correct direction you are good
     // to go; if not, set the flag to true (indicating the sensor inverted from the
     // positive input).
-    public static final boolean LEFT_DRIVE_MOTOR_SENSOR_PHASE = false;
-    public static final boolean RIGHT_DRIVE_MOTOR_SENSOR_PHASE = false;
+    public static final boolean LEFT_DRIVE_MOTOR_SENSOR_PHASE = true;
+    public static final boolean RIGHT_DRIVE_MOTOR_SENSOR_PHASE = true;
 
     // SECOND !!! if you need the motor to move in the opposite direction when
     // positive is commanded, set the appropriate inversion flag true
@@ -153,7 +152,7 @@ public class DriveConstants {
     // The values are determined empirically by simply driving the motors slowly
     // until they first start to move on one side and not the other. Increase the
     // values until the desired response is achieved.
-    public static final double LEFT_DRIVE_MOTOR_NEUTRAL_DEADBAND  = 0.003;
+    public static final double LEFT_DRIVE_MOTOR_NEUTRAL_DEADBAND  = 0.007;
     public static final double RIGHT_DRIVE_MOTOR_NEUTRAL_DEADBAND = 0.007;
         
     // Motion Magic Control Constant (JUNIOR)
@@ -178,22 +177,32 @@ public class DriveConstants {
     //  Put drive train on ground with weight and re-test to see if position is as commanded.
     //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.    
     public static final int PID_MOTION_MAGIC_SLOT = 0;
-    public static double MOTION_MAGIC_KF 	 = 0.05115; 
-    public static double MOTION_MAGIC_KP 	 = 0.005683*2*2*2*2*2*2*1.5; // = 0.545568
-    public static double MOTION_MAGIC_KI 	 = 0.001;
-    public static double MOTION_MAGIC_KD 	 = 10 * MOTION_MAGIC_KP;	// Start with 10 x Kp for increased damping of overshoot
-    public static int    MOTION_MAGIC_IZONE = 200; 
+    public static double MOTION_MAGIC_KF 	 = 0;//0.05115; 
+    public static double MOTION_MAGIC_KP 	 = 0;//0.005683*2*2*2*2*2*2*1.5; // = 0.545568
+    public static double MOTION_MAGIC_KI 	 = 0;//0.001;
+    public static double MOTION_MAGIC_KD 	 = 0;//10 * MOTION_MAGIC_KP;	// Start with 10 x Kp for increased damping of overshoot
+    public static int    MOTION_MAGIC_IZONE  = 0;//200; 
 
-    // Velocity Control Constant (JUNIOR)
+    // Velocity Control Constant
     // Similar process but slightly different focus
-    public static final int PID_VELOCITY_SLOT = 1;
-    public static double VELOCITY_KF 	 = 0.05115; 
-    public static double VELOCITY_KP 	 = 0.14014;
-    public static double VELOCITY_KI 	 = 0.001;
-    public static double VELOCITY_KD 	 = 10 * VELOCITY_KP;	// Start with 10 x Kp for increased damping of overshoot
-    public static int    VELOCITY_IZONE   = 400; 
 
+    public static final int PID_VELOCITY_SLOT = 1;
+    
+    // LEFT SIDE
+    public static double LEFT_VELOCITY_KF 	 = 0.113039; 
+    public static double LEFT_VELOCITY_KP 	 = 0.5115/2/1.5;
+    public static double LEFT_VELOCITY_KI 	 = 0.0001;
+    public static double LEFT_VELOCITY_KD 	 = 10.0*0.5115;
+    public static int    LEFT_VELOCITY_IZONE   = 200; 
+
+    // RIGHT SIDE    
+    public static double RIGHT_VELOCITY_KF 	 = 0.114944; 
+    public static double RIGHT_VELOCITY_KP 	 = 0.683333/2/2/1.5;
+    public static double RIGHT_VELOCITY_KI 	 = 0.0001;
+    public static double RIGHT_VELOCITY_KD 	 = 10*0.683333/2/1.5;
+    public static int    RIGHT_VELOCITY_IZONE   = 200; 
+   
     public static final double MOTOR_TEST_PERCENT = 0.5;
 
-	public static final double TURN_SIGN = 1.0; // For Junior
+	public static final double TURN_SIGN = 1.0;
 }
