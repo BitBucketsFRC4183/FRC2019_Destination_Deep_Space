@@ -53,5 +53,5 @@ public class ScoringConstants {
 
 
 
-	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 1.5;
+	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 3.0;
 }

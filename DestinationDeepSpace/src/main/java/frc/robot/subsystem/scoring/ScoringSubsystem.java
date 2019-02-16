@@ -45,7 +45,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	// last orientation of the robot's arm
 	// true --> front
 	// false --> back
-	private boolean front = true;
+	private boolean back = false;
 	// last level the arm was at
 	private ScoringConstants.ScoringLevel lastLevel = ScoringConstants.ScoringLevel.NONE;
 
@@ -67,6 +67,12 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		TalonUtils.initializeMotorDefaults(rollerMotor);
 		TalonUtils.initializeMotorDefaults(armMotor1);
 		TalonUtils.initializeMotorDefaults(armMotor2);
+
+		armMotor1.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
+		armMotor2.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
+
+		armMotor1.setSensorPhase(ScoringConstants.ARM_MOTOR_SENSOR_PHASE);
+
 
 		TalonUtils.initializeMotorFPID(armMotor1, 
 							ScoringConstants.ARM_MOTION_MAGIC_KF, 
@@ -176,7 +182,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	/* switch the orientation of the arm */
 	public void switchOrientation() {
-		front = !front;
+		back = !back;
 
 		// go to the last level the arm was at, but this time
 		// with the new orientation (handled by the method)
@@ -252,7 +258,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		double ticks = angle_rad * ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV / (2 * Math.PI);
 
 		// if the arm is in the back of the robot
-		if (front == false) {
+		if (back == false) {
 			// switch the ticks so that the arm will go to intended position on the back too
 			// ticks = 0 means arm is just up
 			ticks *= -1;
