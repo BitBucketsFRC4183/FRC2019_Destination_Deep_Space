@@ -21,8 +21,8 @@ public class MotorId {
         public static final int RIGHT_DRIVE_MOTOR_REAR_ID   = 4;
         
         public static final int INTAKE_MOTOR_ID = 10;
-        public static final int ROTATION_MOTOR1_ID = 9;
-        public static final int ROTATION_MOTOR2_ID = 12;
+        public static final int ARM_MOTOR1_ID = 9;
+        public static final int ARM_MOTOR2_ID = 12;
 
         public static final int CLIMB_MOTOR_1_ID = 8;
         public static final int CLIMB_MOTOR_2_ID = 11;
