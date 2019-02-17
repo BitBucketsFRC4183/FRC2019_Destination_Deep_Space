@@ -445,6 +445,56 @@
               "Graph/Visible time": 30.0,
               "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 1 Current": true
             }
+          },
+          "14,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm FRONT",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm FRONT",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "14,4": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Back Limit",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Back Limit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "14,6": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Front Limit",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Front Limit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "13,7": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Current Limit Count",
+              "_title": "/SmartDashboard/ScoringSubsystem/Arm Current Limit Count"
+            }
           }
         }
       }

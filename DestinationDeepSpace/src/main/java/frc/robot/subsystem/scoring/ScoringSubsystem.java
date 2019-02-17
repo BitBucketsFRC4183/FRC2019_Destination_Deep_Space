@@ -320,7 +320,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	public double getAngle_deg() {
 		int ticks = armMotor1.getSelectedSensorPosition();
 
-		return 360.0 * ticks / ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
+		return 360.0 * (double)ticks / (double)ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
 	}
 	
 
@@ -344,13 +344,33 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	protected void initDefaultCommand() {
 	}
 
+	private static int currentLimitCount = 0;
 	public boolean exceededCurrentLimit()
 	{
 		armMotor1Current_amps = armMotor1.getOutputCurrent();
 		armMotor2Current_amps = armMotor2.getOutputCurrent();
 
-		return (armMotor1Current_amps >= ScoringConstants.MAX_ARM_MOTOR_CURRENT_AMPS) ||
-			   (armMotor2Current_amps >= ScoringConstants.MAX_ARM_MOTOR_CURRENT_AMPS);
+		boolean currentLimit = (armMotor1Current_amps >= ScoringConstants.MAX_ARM_MOTOR_CURRENT_AMPS) ||
+							   (armMotor2Current_amps >= ScoringConstants.MAX_ARM_MOTOR_CURRENT_AMPS);
+		if (currentLimit)
+		{
+			currentLimitCount++;
+		}
+		SmartDashboard.putNumber(getName() + "/Arm Current Limit Count", currentLimitCount);
+		return currentLimit;
+	}
+
+	public boolean frontLimit()
+	{
+		boolean result = armMotor1.getSensorCollection().isRevLimitSwitchClosed();
+		SmartDashboard.putBoolean(getName()+"/Arm Front Limit", result);
+		return result;
+	}
+	public boolean backLimit()
+	{
+		boolean result = armMotor1.getSensorCollection().isFwdLimitSwitchClosed();
+		SmartDashboard.putBoolean(getName()+"/Arm Back Limit", result);
+		return result;
 	}
 
 	@Override
@@ -360,6 +380,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		{
 			startIdle();
 		}
+
+		// Just poll it
+		frontLimit();
+		backLimit();
 
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
@@ -376,6 +400,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
 		if (getTelemetryEnabled()) {
+			SmartDashboard.putBoolean(getName()+ "/Arm FRONT", !back);
 			SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle_deg());
 			SmartDashboard.putNumber(getName() + "/Arm Ticks", armMotor1.getSelectedSensorPosition());
 			SmartDashboard.putNumber(getName() + "/Arm Error", armMotor1.getClosedLoopError());

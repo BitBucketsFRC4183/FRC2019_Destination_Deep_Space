@@ -36,7 +36,8 @@ public class ArmLevel extends Command {
 
     @Override
     protected boolean isFinished() {
-        boolean forceIdle = oi.operatorIdle() || scoringSubsystem.exceededCurrentLimit();
+        boolean forceIdle = oi.operatorIdle() || 
+                            scoringSubsystem.exceededCurrentLimit();
 
         if (forceIdle) {
             return CommandUtils.stateChange(new Idle());

@@ -2,27 +2,27 @@ package frc.robot.subsystem.scoring;
 
 public class ScoringConstants {
 
-	public final static double MAX_ARM_MOTOR_CURRENT_AMPS = 30.0;
+	public final static double MAX_ARM_MOTOR_CURRENT_AMPS = 40.0;
 
-	public final static int ARM_BIAS_TICKS = 3737;
+	public final static int ARM_BIAS_TICKS = 3737 - 57; // subtracted from absolute encoder value
 
 	public final static int ARM_MAX_SPEED_TICKS_PER_100MS = 300;
-	public final static int ARM_CRUISE_SPEED_TICKS_PER_100MS = (int)(0.75 * ARM_MAX_SPEED_TICKS_PER_100MS);
+	public final static int ARM_CRUISE_SPEED_TICKS_PER_100MS = (int)(0.50 * ARM_MAX_SPEED_TICKS_PER_100MS);
 	public final static int ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC = ARM_CRUISE_SPEED_TICKS_PER_100MS;
 
 	public final static boolean ARM_MOTOR_INVERSION = false;
 	public final static boolean ARM_MOTOR_SENSOR_PHASE = false;
 	public final static double ARM_MOTION_MAGIC_KF = 3.41;
-	public final static double ARM_MOTION_MAGIC_KP = 0.146143*2*2*2  *2;
+	public final static double ARM_MOTION_MAGIC_KP = 0.146143*2*2*2  *2*1.5;
 	public final static double ARM_MOTION_MAGIC_KI = 0.001;
-	public final static double ARM_MOTION_MAGIC_KD = 8.0*10.0*0.146143*2*2*2 *2*2;
+	public final static double ARM_MOTION_MAGIC_KD = 8.0*10.0*0.146143*2*2*2 *2*2*1.5;
 	public final static int    ARM_MOTION_MAGIC_IZONE = 120;
 
 	public enum ScoringLevel {
 		INVALID              (0),       // multiple levels are selected
 		NONE                 (0),       // no levels are selected
         TOP_DEAD_CENTER      (0), //deg
-		GROUND               (111.25), //deg vs inches -->(5.0),       // hatch panel ground pickup
+		GROUND               (113), //deg vs inches -->(5.0),       // hatch panel ground pickup
 		
 		HP                   (83.0), //deg vs inches -->(19.0),    // cargo scoring
 
