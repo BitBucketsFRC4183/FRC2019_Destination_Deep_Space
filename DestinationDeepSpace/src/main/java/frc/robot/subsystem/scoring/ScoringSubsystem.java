@@ -387,6 +387,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
+		SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
+		SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
 
 		/// TODO: Need to add hatch panel release which is a SLOW infeed or outfeed roll
 		if (!(infeed && outfeed)) { // if both are pressed, keep doing what you're doing

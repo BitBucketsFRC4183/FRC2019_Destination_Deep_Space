@@ -495,6 +495,32 @@
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Current Limit Count",
               "_title": "/SmartDashboard/ScoringSubsystem/Arm Current Limit Count"
             }
+          },
+          "5,7": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Infeed",
+              "_title": "/SmartDashboard/ScoringSubsystem/Infeed",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,7": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Outfeed",
+              "_title": "/SmartDashboard/ScoringSubsystem/Outfeed",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
