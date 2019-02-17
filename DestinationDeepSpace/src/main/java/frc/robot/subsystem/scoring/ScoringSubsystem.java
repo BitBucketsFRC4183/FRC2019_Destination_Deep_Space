@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 
 
@@ -41,6 +44,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private final WPI_TalonSRX rollerMotor;
 	private final WPI_TalonSRX armMotor1;
 	private final WPI_TalonSRX armMotor2;
+	private double armMotor1Current_amps = 0;
+	private double armMotor2Current_amps = 0;
 
 	// last orientation of the robot's arm
 	// true --> front
@@ -73,6 +78,13 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		armMotor1.setSensorPhase(ScoringConstants.ARM_MOTOR_SENSOR_PHASE);
 
+		armMotor1.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
+		armMotor1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,0);
+		
+		armMotor1.overrideLimitSwitchesEnable(true);
+
+		armMotor1.setNeutralMode(NeutralMode.Brake);
+
 
 		TalonUtils.initializeMotorFPID(armMotor1, 
 							ScoringConstants.ARM_MOTION_MAGIC_KF, 
@@ -91,11 +103,18 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		int abs_ticks = armMotor1.getSensorCollection().getPulseWidthPosition() & 0xFFF;
 		// set the ticks of relative magnetic encoder
 		// effectively telling the encoder where 0 is
-		armMotor1.setSelectedSensorPosition(abs_ticks);
+		armMotor1.setSelectedSensorPosition(abs_ticks - ScoringConstants.ARM_BIAS_TICKS);
 
-		// TODO: Move to constants (max speed is ~300)
-		armMotor1.configMotionAcceleration((int)(0.75*300), 20);
-		armMotor1.configMotionCruiseVelocity((int)(0.75*300), 20);
+		// If arm is toward back side, then declare that we are back there
+		if (getAngle_deg() > 10.0)
+		{
+			back = true;
+		}
+
+		// Acceleration is the slope of the velocity profile used for motion magic
+		// Example: 250 tick/100ms/s is 2500 ticks/s/s
+		armMotor1.configMotionAcceleration(ScoringConstants.ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC, 20);
+		armMotor1.configMotionCruiseVelocity(ScoringConstants.ARM_CRUISE_SPEED_TICKS_PER_100MS, 20);
 
 
 
@@ -201,15 +220,34 @@ public class ScoringSubsystem extends BitBucketSubsystem {
         boolean bCargo = oi.bCargo();
         boolean bLoadingStation = oi.bLoadingStation();
 		boolean bRocket1 = oi.bRocket1();
+		boolean topDeadCenter = oi.topDeadCenter();
 		
 		ScoringConstants.ScoringLevel level = ScoringConstants.ScoringLevel.NONE;
+
 
 		if (hp) {
 			level = ScoringConstants.ScoringLevel.HP;
 		}
+		if (topDeadCenter)
+		{
+			if (level == ScoringConstants.ScoringLevel.NONE)
+			{ 
+				level = ScoringConstants.ScoringLevel.TOP_DEAD_CENTER; 
+			}
+			else 
+			{ 
+				return ScoringConstants.ScoringLevel.INVALID; 
+			}
+		}
 		if (ground) {
-			if (level == ScoringConstants.ScoringLevel.NONE) { level = ScoringConstants.ScoringLevel.GROUND; }
-			else { return ScoringConstants.ScoringLevel.INVALID; }
+			if (level == ScoringConstants.ScoringLevel.NONE)
+			{ 
+				level = ScoringConstants.ScoringLevel.GROUND; 
+			}
+			else 
+			{ 
+				return ScoringConstants.ScoringLevel.INVALID; 
+			}
 		}
 		if (bCargo) {
 			if (level == ScoringConstants.ScoringLevel.NONE) { level = ScoringConstants.ScoringLevel.BALL_CARGO; }
@@ -231,6 +269,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	public int getArmLevelTickError() {
 		int err1 = Math.abs(armMotor1.getClosedLoopError());
+
+		// Always output this
+		SmartDashboard.putNumber(getName() + "/ArmLevelError (ticks)", err1);
 
 		return err1;
 	}
@@ -262,6 +303,12 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			// switch the ticks so that the arm will go to intended position on the back too
 			// ticks = 0 means arm is just up
 			ticks *= -1;
+			SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(-angle_rad));
+
+		}
+		else
+		{
+			SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(angle_rad));
 		}
 
 		armMotor1.set(ControlMode.MotionMagic, ticks);
@@ -269,7 +316,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-	/** Get angle from normal of scoring arm (90 deg = exactly forward) */
+	/** Get angle from normal of scoring arm (-90 deg = exactly forward, +90 is backward) */
 	public double getAngle_deg() {
 		int ticks = armMotor1.getSelectedSensorPosition();
 
@@ -297,11 +344,27 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	protected void initDefaultCommand() {
 	}
 
+	public boolean exceededCurrentLimit()
+	{
+		armMotor1Current_amps = armMotor1.getOutputCurrent();
+		armMotor2Current_amps = armMotor2.getOutputCurrent();
+
+		return (armMotor1Current_amps >= ScoringConstants.MAX_ARM_MOTOR_CURRENT_AMPS) ||
+			   (armMotor2Current_amps >= ScoringConstants.MAX_ARM_MOTOR_CURRENT_AMPS);
+	}
+
 	@Override
 	public void periodic() {
+		
+		if (exceededCurrentLimit())
+		{
+			startIdle();
+		}
+
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
 
+		/// TODO: Need to add hatch panel release which is a SLOW infeed or outfeed roll
 		if (!(infeed && outfeed)) { // if both are pressed, keep doing what you're doing
 			if      (infeed)  { setRollers(1.0);  }
 			else if (outfeed) { setRollers(-1.0); }
@@ -316,6 +379,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle_deg());
 			SmartDashboard.putNumber(getName() + "/Arm Ticks", armMotor1.getSelectedSensorPosition());
 			SmartDashboard.putNumber(getName() + "/Arm Error", armMotor1.getClosedLoopError());
+			SmartDashboard.putNumber(getName() + "/Arm Motor 0 Current", armMotor1Current_amps);
+			SmartDashboard.putNumber(getName() + "/Arm Motor 1 Current", armMotor2Current_amps);
+			SmartDashboard.putNumber(getName() + "/Arm Motor TOTAL Current", armMotor1Current_amps+armMotor2Current_amps);
+
 		}
 		// commands will handle dealing with arm manipulation
 	}

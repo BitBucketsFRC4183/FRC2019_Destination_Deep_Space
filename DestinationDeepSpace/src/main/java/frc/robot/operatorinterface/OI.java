@@ -114,6 +114,7 @@ public class OI {
 
 
 	// TODO: configure correct IDs
+	private final static int SCORING_TOP_DEAD_CENTER = controllerMapper.getTriangle();
 	private final static int SCORING_HATCH_PANEL = controllerMapper.getCircle();
 	private final static int SCORING_GROUND      = controllerMapper.getCross();
 	private final static int SCORING_BALL_C      = controllerMapper.getL1();
@@ -188,6 +189,10 @@ public class OI {
 	
 	public boolean hp() {
 		return operatorControl.getRawButton(SCORING_HATCH_PANEL);
+	}
+	public boolean topDeadCenter()
+	{
+		return operatorControl.getRawButton(SCORING_TOP_DEAD_CENTER);
 	}
 	public boolean ground() {
 		return operatorControl.getRawButton(SCORING_GROUND);

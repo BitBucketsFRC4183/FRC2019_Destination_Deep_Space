@@ -98,7 +98,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed Factor",
               "_title": "SmartDashboard/DriveSubsystem/Speed Factor",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
             }
           },
           "13,6": {
@@ -110,7 +111,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Factor",
               "_title": "SmartDashboard/DriveSubsystem/Turn Factor",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
             }
           },
           "17,0": {
@@ -330,7 +332,7 @@
               "_title": "/SmartDashboard/ScoringSubsystem/PeriodicCounter"
             }
           },
-          "16,0": {
+          "10,0": {
             "size": [
               3,
               1
@@ -341,7 +343,7 @@
               "_title": "/SmartDashboard/ScoringSubsystem/Arm Angle"
             }
           },
-          "16,1": {
+          "10,1": {
             "size": [
               3,
               1
@@ -388,12 +390,60 @@
           "5,5": {
             "size": [
               4,
-              1
+              2
             ],
             "content": {
               "_type": "Split Button Chooser",
               "_source0": "network_table:///SmartDashboard/TestMode/mode",
               "_title": "SmartDashboard/TestMode/mode"
+            }
+          },
+          "13,0": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Command Angle (deg)",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Command Angle (deg)"
+            }
+          },
+          "13,1": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Error",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Error"
+            }
+          },
+          "10,2": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor 0 Current",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Motor 0 Current",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 0 Current": true
+            }
+          },
+          "10,4": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor 1 Current",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Motor 1 Current",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 1 Current": true
             }
           }
         }
@@ -875,12 +925,92 @@
           }
         }
       }
+    },
+    {
+      "title": "Tab 8",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "10,3": {
+            "size": [
+              9,
+              6
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/spd",
+              "_title": "SmartDashboard/spd",
+              "Graph/Visible time": 30.0
+            }
+          },
+          "7,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Vel    (tp100)",
+              "_title": "/SmartDashboard/Vel    (tp100)"
+            }
+          },
+          "7,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/RelPos (ticks)",
+              "_title": "/SmartDashboard/RelPos (ticks)"
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/AbsPos (ticks)",
+              "_title": "/SmartDashboard/AbsPos (ticks)"
+            }
+          },
+          "11,0": {
+            "size": [
+              6,
+              3
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Current1 (Amps)",
+              "_title": "SmartDashboard/Current1 (Amps)"
+            }
+          },
+          "5,0": {
+            "size": [
+              6,
+              3
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Current  (Amps)",
+              "_title": "SmartDashboard/Current  (Amps)"
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
-    "width": 1936.0,
-    "height": 1015.0
+    "x": -7.0,
+    "y": 1.0,
+    "width": 1932.0,
+    "height": 1005.0
   }
 }

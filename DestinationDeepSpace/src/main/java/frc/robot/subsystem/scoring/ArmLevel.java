@@ -4,6 +4,7 @@ import frc.robot.operatorinterface.OI;
 import frc.robot.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmLevel extends Command {
     private static OI oi = OI.instance();
@@ -35,7 +36,7 @@ public class ArmLevel extends Command {
 
     @Override
     protected boolean isFinished() {
-        boolean forceIdle = oi.operatorIdle();
+        boolean forceIdle = oi.operatorIdle() || scoringSubsystem.exceededCurrentLimit();
 
         if (forceIdle) {
             return CommandUtils.stateChange(new Idle());

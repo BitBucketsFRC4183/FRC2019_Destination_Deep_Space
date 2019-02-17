@@ -42,7 +42,7 @@ public class OrientationSwitch extends Command {
 
 
 
-        boolean forceIdle = oi.operatorIdle();
+        boolean forceIdle = oi.operatorIdle() || scoringSubsystem.exceededCurrentLimit();
 
         if (forceIdle) {
             return CommandUtils.stateChange(new Idle());
