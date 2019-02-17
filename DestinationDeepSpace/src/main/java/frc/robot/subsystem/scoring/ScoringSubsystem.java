@@ -388,6 +388,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
 		boolean hatchOutfeed = oi.hatchOutfeedActive();
+		SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
+		SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
 
 		if (!(
 			(infeed && outfeed) ||
