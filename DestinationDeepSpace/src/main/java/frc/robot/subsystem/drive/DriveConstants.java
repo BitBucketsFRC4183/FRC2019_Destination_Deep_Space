@@ -197,7 +197,7 @@ public class DriveConstants {
 
     // RIGHT SIDE    
     public static double RIGHT_VELOCITY_KF 	 = 0.114944; 
-    public static double RIGHT_VELOCITY_KP 	 = 0.683333/2/2/1.5;
+    public static double RIGHT_VELOCITY_KP 	 = 0.683333/2/2;///1.5;
     public static double RIGHT_VELOCITY_KI 	 = 0.0001;
     public static double RIGHT_VELOCITY_KD 	 = 10*0.683333/2/1.5;
     public static int    RIGHT_VELOCITY_IZONE   = 200; 
