@@ -124,7 +124,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 			case HIGH_CLIMB: {
 				highClimbManual();
 				//highClimb();
-				if (climbMotor1.getSensorCollection().isFwdLimitSwitchClosed()||climbMotor1current>30||climbMotor2current>30){
+				if (climbMotor1.getSensorCollection().isFwdLimitSwitchClosed()||climbMotor1current>200||climbMotor2current>200){
 					state=eState.IDLE;
 				}
 			}	
