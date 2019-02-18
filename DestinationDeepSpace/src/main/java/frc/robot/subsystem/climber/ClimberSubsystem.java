@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.MotorId;
 import frc.robot.ServoId;
 import frc.robot.operatorinterface.OI;
+import frc.robot.utils.talonutils.TalonUtils;
 /**
  * Add your docs here.
  */
@@ -59,12 +60,21 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		climbMotor1 = new WPI_TalonSRX(MotorId.CLIMB_MOTOR_1_ID);
 		climbMotor2 = new WPI_TalonSRX(MotorId.CLIMB_MOTOR_2_ID);
 
+		TalonUtils.initializeMotorDefaults(climbMotor1);
+		TalonUtils.initializeMotorDefaults(climbMotor2);
+
 		climbMotor1.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
 		climbMotor1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,0);
 		
 		climbMotor1.overrideLimitSwitchesEnable(true);
 
+		climbMotor1.setInverted(false);
+		climbMotor2.setInverted(false);
+
 		climbMotor1.setNeutralMode(NeutralMode.Brake);
+		climbMotor2.setNeutralMode(NeutralMode.Brake);
+
+		climbMotor2.follow(climbMotor1);
 	}
 
 	public static ClimberSubsystem instance() {
@@ -87,10 +97,15 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public void periodic() {
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
+		SmartDashboard.putBoolean(getName()+"/END Limit Switch", climbMotor1.getSensorCollection().isFwdLimitSwitchClosed());
+		SmartDashboard.putNumber(getName() + "/ManualJoystickCommand", oi.manualClimbControl());
+		double climbMotor1current = climbMotor1.getOutputCurrent();
+		double climbMotor2current = climbMotor2.getOutputCurrent();
+		SmartDashboard.putNumber(getName() + "/climbMotor1Current", climbMotor1current);
+		SmartDashboard.putNumber(getName() + "/climbMotor2Current", climbMotor2current);
 		switch (state) {
 			case IDLE:{
 				climbMotor1.set(0);
-				climbMotor2.set(0);
 				if (oi.armClimber()){
 					state = eState.ARMED;	
 				}
@@ -109,7 +124,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 			case HIGH_CLIMB: {
 				highClimbManual();
 				//highClimb();
-				if (climbMotor1.getSensorCollection().isFwdLimitSwitchClosed()) {
+				if (climbMotor1.getSensorCollection().isFwdLimitSwitchClosed()||climbMotor1current>30||climbMotor2current>30){
 					state=eState.IDLE;
 				}
 			}	
@@ -174,7 +189,6 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		climbServo.setAngle(highClimbAngle);
 		if (Timer.getFPGATimestamp() - start > 1.0) {
 			climbMotor1.set(highClimbSpeed);
-			climbMotor2.set(highClimbSpeed);
 		}
 		return (err);
 	}
@@ -183,8 +197,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	{
 		climbServo.setAngle(highClimbAngle);
 		if (Timer.getFPGATimestamp() - start > 1.0) {
-			climbMotor1.set(highClimbSpeed);
-			climbMotor2.set(highClimbSpeed);
+			climbMotor1.set(oi.manualClimbControl());
 		}
 	}
 
