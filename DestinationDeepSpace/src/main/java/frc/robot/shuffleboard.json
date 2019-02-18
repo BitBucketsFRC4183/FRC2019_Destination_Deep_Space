@@ -332,7 +332,7 @@
               "_title": "/SmartDashboard/ScoringSubsystem/PeriodicCounter"
             }
           },
-          "10,0": {
+          "16,0": {
             "size": [
               3,
               1
@@ -343,7 +343,7 @@
               "_title": "/SmartDashboard/ScoringSubsystem/Arm Angle"
             }
           },
-          "10,1": {
+          "16,1": {
             "size": [
               3,
               1
@@ -390,7 +390,7 @@
           "5,5": {
             "size": [
               4,
-              2
+              1
             ],
             "content": {
               "_type": "Split Button Chooser",
@@ -398,32 +398,49 @@
               "_title": "SmartDashboard/TestMode/mode"
             }
           },
-          "13,0": {
+          "17,3": {
             "size": [
-              3,
-              1
+              2,
+              2
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Command Angle (deg)",
-              "_title": "SmartDashboard/ScoringSubsystem/Arm Command Angle (deg)"
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm FRONT",
+              "_title": "/SmartDashboard/ScoringSubsystem/Arm FRONT",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           },
-          "13,1": {
+          "17,5": {
             "size": [
-              3,
-              1
+              2,
+              2
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Error",
-              "_title": "SmartDashboard/ScoringSubsystem/Arm Error"
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Front Limit",
+              "_title": "/SmartDashboard/ScoringSubsystem/Arm Front Limit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           },
-          "10,2": {
+          "17,7": {
             "size": [
-              4,
-              1
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Back Limit",
+              "_title": "/SmartDashboard/ScoringSubsystem/Arm Back Limit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "9,1": {
+            "size": [
+              5,
+              3
             ],
             "content": {
               "_type": "Graph",
@@ -433,10 +450,10 @@
               "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 0 Current": true
             }
           },
-          "10,4": {
+          "9,4": {
             "size": [
-              4,
-              1
+              5,
+              3
             ],
             "content": {
               "_type": "Graph",
@@ -446,46 +463,7 @@
               "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 1 Current": true
             }
           },
-          "14,2": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm FRONT",
-              "_title": "SmartDashboard/ScoringSubsystem/Arm FRONT",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "14,4": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Back Limit",
-              "_title": "SmartDashboard/ScoringSubsystem/Arm Back Limit",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "14,6": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Front Limit",
-              "_title": "SmartDashboard/ScoringSubsystem/Arm Front Limit",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "13,7": {
+          "9,7": {
             "size": [
               1,
               1
@@ -494,32 +472,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Current Limit Count",
               "_title": "/SmartDashboard/ScoringSubsystem/Arm Current Limit Count"
-            }
-          },
-          "5,7": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Infeed",
-              "_title": "/SmartDashboard/ScoringSubsystem/Infeed",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "7,7": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Outfeed",
-              "_title": "/SmartDashboard/ScoringSubsystem/Outfeed",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
             }
           }
         }
@@ -1001,92 +953,12 @@
           }
         }
       }
-    },
-    {
-      "title": "Tab 8",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 64.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "tiles": {
-          "10,3": {
-            "size": [
-              9,
-              6
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/spd",
-              "_title": "SmartDashboard/spd",
-              "Graph/Visible time": 30.0
-            }
-          },
-          "7,5": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Vel    (tp100)",
-              "_title": "/SmartDashboard/Vel    (tp100)"
-            }
-          },
-          "7,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/RelPos (ticks)",
-              "_title": "/SmartDashboard/RelPos (ticks)"
-            }
-          },
-          "7,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/AbsPos (ticks)",
-              "_title": "/SmartDashboard/AbsPos (ticks)"
-            }
-          },
-          "11,0": {
-            "size": [
-              6,
-              3
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Current1 (Amps)",
-              "_title": "SmartDashboard/Current1 (Amps)"
-            }
-          },
-          "5,0": {
-            "size": [
-              6,
-              3
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Current  (Amps)",
-              "_title": "SmartDashboard/Current  (Amps)"
-            }
-          }
-        }
-      }
     }
   ],
   "windowGeometry": {
-    "x": -7.0,
-    "y": 1.0,
-    "width": 1932.0,
-    "height": 1005.0
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1936.0,
+    "height": 1015.0
   }
 }
