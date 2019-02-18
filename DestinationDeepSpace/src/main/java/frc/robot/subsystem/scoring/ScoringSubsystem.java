@@ -73,6 +73,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		TalonUtils.initializeMotorDefaults(armMotor1);
 		TalonUtils.initializeMotorDefaults(armMotor2);
 
+		rollerMotor.setInverted(ScoringConstants.ROLLER_MOTOR_INVERSION);
 		armMotor1.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
 		armMotor2.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
 
