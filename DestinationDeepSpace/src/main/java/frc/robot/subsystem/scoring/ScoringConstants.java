@@ -18,6 +18,8 @@ public class ScoringConstants {
 	public final static double ARM_MOTION_MAGIC_KD = 8.0*10.0*0.146143*2*2*2 *2*2*1.5;
 	public final static int    ARM_MOTION_MAGIC_IZONE = 120;
 
+	public final static boolean ROLLER_MOTOR_INVERSION = true;
+
 	public enum ScoringLevel {
 		INVALID              (0),       // multiple levels are selected
 		NONE                 (0),       // no levels are selected
