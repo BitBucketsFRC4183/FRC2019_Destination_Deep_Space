@@ -73,6 +73,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		TalonUtils.initializeMotorDefaults(armMotor1);
 		TalonUtils.initializeMotorDefaults(armMotor2);
 
+		rollerMotor.setInverted(ScoringConstants.ROLLER_MOTOR_INVERSION);
 		armMotor1.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
 		armMotor2.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
 
@@ -387,14 +388,18 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
+		boolean hatchOutfeed = oi.hatchOutfeedActive();
 		SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
 		SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
 
-		/// TODO: Need to add hatch panel release which is a SLOW infeed or outfeed roll
-		if (!(infeed && outfeed)) { // if both are pressed, keep doing what you're doing
-			if      (infeed)  { setRollers(1.0);  }
-			else if (outfeed) { setRollers(-1.0); }
-			else              { setRollers(0.0);  }
+		if (!(
+			(infeed && outfeed) ||
+			(infeed && hatchOutfeed) || (outfeed && hatchOutfeed)
+			)) { // if both are pressed, keep doing what you're doing
+			if      (infeed)       { setRollers(1.0);  }
+			else if (outfeed)      { setRollers(-1.0); }
+			else if (hatchOutfeed) { setRollers(-0.1); }
+			else                   { setRollers(0.0);  }
 		}
 
 

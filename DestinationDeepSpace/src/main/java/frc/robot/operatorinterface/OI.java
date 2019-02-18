@@ -97,11 +97,12 @@ public class OI {
 	// BUTTON DEFINITIONS
 	//****************************
 	private final static int DRIVE_LOW_SENSITIVE_BUTTON  = controllerMapper.getR1();
-	private final static int DRIVE_INVERT_BUTTON         = controllerMapper.getR2();
-	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getL1();
-	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getL2();
-	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getLeftTrigger(); // TODO: ask which triggers
-	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getRightTrigger();
+	private final static int DRIVE_INVERT_BUTTON         = controllerMapper.getL1();
+	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getShare();
+	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getOption();
+	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getL2(); // TODO: ask which triggers
+	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getR2();
+	private final static int DRIVE_HATCH_OUTFEED_BUTTON	 = 0;//controllerMapper();
 
 	// How do you like me now, Sam?
 	// TODO: Make a get/set function instead of setting it to public
@@ -223,6 +224,10 @@ public class OI {
 
 	public boolean outfeedActive() {
 		return driverControl.getRawButton(DRIVE_OUTFEED_BUTTON);
+	}
+
+	public boolean hatchOutfeedActive() {
+		return false;//driverControl.getRawButton(DRIVE_HATCH_OUTFEED_BUTTON);
 	}
 
 

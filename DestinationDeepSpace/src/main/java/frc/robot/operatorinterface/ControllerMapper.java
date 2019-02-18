@@ -27,6 +27,9 @@ public class ControllerMapper {
     private int brandButton;
     private int trackpad;
 
+    private int share;
+    private int option;
+
     public static ControllerMapper xbox() {
         if (xboxInstance == null) {
             xboxInstance = new ControllerMapper();
@@ -83,6 +86,9 @@ public class ControllerMapper {
             ps4Instance.brandButton = PS4Constants.PS4.getValue();
 
             ps4Instance.trackpad = PS4Constants.TRACKPAD.getValue();
+
+            ps4Instance.share = PS4Constants.SHARE.getValue();
+            ps4Instance.option = PS4Constants.OPTIONS.getValue();
 
         }
         return ps4Instance;
@@ -158,5 +164,13 @@ public class ControllerMapper {
 
     public int getTrackpad() {
         return trackpad;
+    }
+
+    public int getShare() {
+        return share;
+    }
+
+    public int getOption() {
+        return option;
     }
 }

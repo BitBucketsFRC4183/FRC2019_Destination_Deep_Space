@@ -117,7 +117,7 @@ public class DriveConstants {
 
  
 
-    public static final double DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC   = 0.250;	// Second from neutral to full (easy on the gears)
+    public static final double DRIVE_MOTOR_OPEN_LOOP_RAMP_SEC   = 2;	// Second from neutral to full (easy on the gears)
     public static final double DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC = 0.0;	    // No ramp rate on closed loop (use Motion Magic)
 
     public static final double DRIVE_MOTOR_NATIVE_TICKS_PER_FRAME_DEGREES = DRIVE_MOTOR_NATIVE_TICKS_PER_REV * WHEEL_ROTATION_PER_FRAME_DEGREES;
