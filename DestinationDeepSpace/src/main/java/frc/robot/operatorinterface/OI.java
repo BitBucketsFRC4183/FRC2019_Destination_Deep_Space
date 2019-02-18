@@ -39,10 +39,16 @@ public class OI {
     private final static int DRIVE_SPEED_AXIS            = controllerMapper.getLeftStickY();
     private final static int DRIVE_TURN_AXIS             = controllerMapper.getRightStickX();
 
+	private final static int CLIMBER_JOYSTICK_TEST        = controllerMapper.getRightStickY();
 	/**
 	 * speed - returns a speed command from driver joystick in the normal range [-1,1]
 	 * except when the invertDrive button is indicated, which causes the range to be [1,-1]
 	 */
+
+	public double manualClimbControl()
+	{
+		return operatorControl.getRawAxis(CLIMBER_JOYSTICK_TEST);
+	}
 	public double speed()
     {
 		// Default to -1 to make up-stick positive because raw up-stick is negative
