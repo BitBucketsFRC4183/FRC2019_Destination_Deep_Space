@@ -98,7 +98,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed Factor",
               "_title": "SmartDashboard/DriveSubsystem/Speed Factor",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
             }
           },
           "13,6": {
@@ -110,7 +111,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Factor",
               "_title": "SmartDashboard/DriveSubsystem/Turn Factor",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
             }
           },
           "17,0": {
@@ -548,13 +550,76 @@
           },
           "7,1": {
             "size": [
-              2,
-              1
+              3,
+              2
             ],
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberSubsystem/CurrentState()",
               "_title": "/SmartDashboard/ClimberSubsystem/CurrentState()"
+            }
+          },
+          "7,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/END Limit Switch",
+              "_title": "/SmartDashboard/ClimberSubsystem/END Limit Switch",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/ManualJoystickCommand",
+              "_title": "SmartDashboard/ClimberSubsystem/ManualJoystickCommand",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ClimberSubsystem/ManualJoystickCommand": true
+            }
+          },
+          "5,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/ManualJoystickCommand",
+              "_title": "/SmartDashboard/ClimberSubsystem/ManualJoystickCommand"
+            }
+          },
+          "10,5": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/climbMotor1Current",
+              "_title": "SmartDashboard/ClimberSubsystem/climbMotor1Current",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ClimberSubsystem/climbMotor1Current": true
+            }
+          },
+          "13,5": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ClimberSubsystem/climbMotor2Current",
+              "_title": "SmartDashboard/ClimberSubsystem/climbMotor2Current",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ClimberSubsystem/climbMotor2Current": true
             }
           }
         }
@@ -880,7 +945,7 @@
   "windowGeometry": {
     "x": -8.0,
     "y": -8.0,
-    "width": 1936.0,
-    "height": 1015.0
+    "width": 1386.0,
+    "height": 788.0
   }
 }
