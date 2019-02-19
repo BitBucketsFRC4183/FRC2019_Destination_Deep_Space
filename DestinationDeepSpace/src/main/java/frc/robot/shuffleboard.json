@@ -490,7 +490,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor 0 Current",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Motor 0 Current",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 0 Current": true
             }
           },
           "9,4": {
@@ -502,7 +503,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor 1 Current",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Motor 1 Current",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 1 Current": true
             }
           },
           "9,7": {
@@ -525,7 +527,8 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Angle",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Angle",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ScoringSubsystem/Arm Angle": true
             }
           },
           "10,7": {
@@ -537,7 +540,19 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current": true
+            }
+          },
+          "10,0": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Command Angle (deg)",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Command Angle (deg)"
             }
           }
         }

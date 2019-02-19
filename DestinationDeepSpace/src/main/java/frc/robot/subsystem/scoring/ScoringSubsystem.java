@@ -301,7 +301,14 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	 * Direct the robot arm to a certain angle.
 	 */
 	// private because we only want other classes to change the angle via goToLevel()
+	private double targetAngle_rad = 0.0;
+	public double getTargetAngle_rad()
+	{
+		return targetAngle_rad;
+	}
+
 	private void directArmTo(double angle_rad) {
+		targetAngle_rad = angle_rad;
 		double ticks = angle_rad * ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV / (2 * Math.PI);
 
 		// if the arm is in the back of the robot
@@ -309,6 +316,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			// switch the ticks so that the arm will go to intended position on the back too
 			// ticks = 0 means arm is just up
 			ticks *= -1;
+			targetAngle_rad *= -1;
 			SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(-angle_rad));
 
 		}

@@ -33,14 +33,6 @@ public class OrientationSwitch extends Command {
 
     @Override
     protected boolean isFinished() {
-        // whether or not the button to switch the orientation is pressed
-        boolean switchOrientation = oi.switchOrientation();
-
-        if (!switchOrientation) {
-            releasedButton = true;
-        }
-
-
 
         boolean forceIdle = oi.operatorIdle() || 
                             scoringSubsystem.exceededCurrentLimit();
@@ -50,35 +42,39 @@ public class OrientationSwitch extends Command {
         }
 
 
+        boolean areWeThereYet = (Math.abs(Math.toDegrees(scoringSubsystem.getTargetAngle_rad()) - 
+                                         scoringSubsystem.getAngle_deg()) < ScoringConstants.ANGLE_TOLERANCE_DEG);
 
         boolean timeout = isTimedOut();
-
-
         
         // if you already reached the desired level that this is at, allow a change
         // if the arm can move fast enough, we want this behavior (always preferred)
         // if not, then we may want to let the driver change the state while the
         //      robot is still trying to move the scoring arm
-        int err = scoringSubsystem.getArmLevelTickError();
         // is the robot sufficiently within this state's level?
-        if (err > ScoringConstants.ROTATION_MOTOR_ERROR_DEADBAND_TICKS) {
-            if (timeout) {
+        if ( !areWeThereYet) {
+            if (timeout) 
+            {
+                /// TODO: Need to evaluate whether going Idle makes sense
+                /// or should we just hold position and signal a problem
+                /// some other way?
                 return CommandUtils.stateChange(new Idle());
             }
-
-            return false;
         }
 
         // VERY IMPORTANT
-        // If the user has not released the button while in this state
-        // then allowing a state change is BAD
-        // It may end up in an infinite loop of state changes of
-        // OrientationSwitch
-        if (switchOrientation && !releasedButton) {
+        
+        // Don't exit this command until they stop pressing the button
+        // This prevents toggling back and forth.
+        // The user must stop pressing this button to switch again
+        // or change height
+        boolean switchOrientation = oi.switchOrientation();
+        if (switchOrientation) {
             return false;
         }
 
-
+        // If we got this far then the user did release the button
+        // So we can now evaluate an in route level change
 
         // get selected level on joystick (NONE if none selected, INVALID if multiple selected)
         ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
@@ -89,13 +85,8 @@ public class OrientationSwitch extends Command {
             return false;
         }
 
-        if (level != ScoringConstants.ScoringLevel.NONE ^ switchOrientation) {
-            // if some level is selected, go to it
-            if (level != ScoringConstants.ScoringLevel.NONE) {
-                return CommandUtils.stateChange(new ArmLevel(level));
-            } else {
-                return CommandUtils.stateChange(new OrientationSwitch());
-            }
+        if (level != ScoringConstants.ScoringLevel.NONE) {
+            return CommandUtils.stateChange(new ArmLevel(level));
         }
 
         return false;
