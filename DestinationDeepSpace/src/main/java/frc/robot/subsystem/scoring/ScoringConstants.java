@@ -2,7 +2,7 @@ package frc.robot.subsystem.scoring;
 
 public class ScoringConstants {
 
-	public final static double MAX_ARM_MOTOR_CURRENT_AMPS = 40.0;
+	public final static double MAX_ARM_MOTOR_CURRENT_AMPS = 60.0;
 
 	public final static int ARM_BIAS_TICKS = 3737 - 57; // subtracted from absolute encoder value
 
@@ -18,7 +18,7 @@ public class ScoringConstants {
 	public final static double ARM_MOTION_MAGIC_KD = 8.0*10.0*0.146143*2*2*2 *2*2*1.5;
 	public final static int    ARM_MOTION_MAGIC_IZONE = 120;
 
-	public final static boolean ROLLER_MOTOR_INVERSION = true;
+	public final static boolean ROLLER_MOTOR_INVERSION = false;
 
 	public enum ScoringLevel {
 		INVALID              (0),       // multiple levels are selected
