@@ -306,7 +306,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 
 		// Now get the other modes set up
-		setNeutral(NeutralMode.Coast);
+		setNeutral(NeutralMode.Brake);
 		
 		// Now that we have the motor instances set up the differential drive
 		// as a 2-motor solution regardless of how manu actual motors we have

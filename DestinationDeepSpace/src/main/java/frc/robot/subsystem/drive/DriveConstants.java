@@ -20,15 +20,15 @@ public class DriveConstants {
     // Set to true of all wheels on one side are physically linked
     public static final boolean CLOSED_LOOP_FOLLOWER = false;
 
-    public static final double MAX_SPEED_IPS = 144.0;
-    public static final double MAX_TURN_DPS  = 360.0;
+    public static final double MAX_SPEED_IPS = 5.0*12.0;
+    public static final double MAX_TURN_DPS  = 180.0;
     public static final double MAX_TURN_RADPS = Math.toRadians(MAX_TURN_DPS);
     public static final double STANDARD_G_FTPSPS = 32.1740;
     public static final double MAX_LAT_ACCELERATION_IPSPS = STANDARD_G_FTPSPS * 12.0;
     public static final double LOCK_DEADBAND_IPS = 12.0;  // ignore button command changes above this speed
     public static final double ALIGN_DEADBAND_DPS = 45.0; // ignore button command changes above this turn rate
 
-    public static final double WHEEL_TRACK_INCHES = 24.0;
+    public static final double WHEEL_TRACK_INCHES = 23.5;
     public static final double WHEEL_DIAMETER_INCHES = 6.0;
     public static final double WHEEL_CIRCUMFERENCE_INCHES = Math.PI*WHEEL_DIAMETER_INCHES;
     public static final double TRACK_TO_CIRCUMFERENCE_RATIO = WHEEL_TRACK_INCHES / WHEEL_DIAMETER_INCHES;

@@ -53,7 +53,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private boolean back = false;
 	// last level the arm was at
 	private ScoringConstants.ScoringLevel lastLevel = ScoringConstants.ScoringLevel.NONE;
-
+	private ScoringConstants.ScoringLevel commandedLevel = ScoringConstants.ScoringLevel.NONE;
 
 
 
@@ -145,11 +145,16 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	// here. Call these from Commands.
 
 
+	public ScoringConstants.ScoringLevel getCommandedLevel()
+	{
+		return commandedLevel;
+	}
 
 	/** Command the arm to a level */
 	public void goToLevel(ScoringConstants.ScoringLevel level) {
 		// neither level should get to here in the first place
 		//     ... but just in case
+		commandedLevel = level;
 		if (
 			level == ScoringConstants.ScoringLevel.NONE ||
 			level == ScoringConstants.ScoringLevel.INVALID
@@ -388,17 +393,15 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
-		boolean hatchOutfeed = oi.hatchOutfeedActive();
+		boolean hatchOutfeed = (getCommandedLevel() == ScoringConstants.ScoringLevel.HP);
 		SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
 		SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
 
 		if (!(
-			(infeed && outfeed) ||
-			(infeed && hatchOutfeed) || (outfeed && hatchOutfeed)
+			(infeed && outfeed)
 			)) { // if both are pressed, keep doing what you're doing
-			if      (infeed)       { setRollers(1.0);  }
-			else if (outfeed)      { setRollers(-1.0); }
-			else if (hatchOutfeed) { setRollers(-0.1); }
+			if      (infeed)       { setRollers(hatchOutfeed?-0.5:-1.0);  }
+			else if (outfeed)      { setRollers(hatchOutfeed?0.5:1.0); }
 			else                   { setRollers(0.0);  }
 		}
 

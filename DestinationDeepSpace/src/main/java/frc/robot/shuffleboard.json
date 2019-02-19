@@ -235,6 +235,28 @@
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Real Right Speed (ips)",
               "_title": "SmartDashboard/DriveSubsystem/Real Right Speed (ips)"
             }
+          },
+          "11,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
+              "_title": "SmartDashboard/NavigationSubsystem/Yaw Rate (dps)"
+            }
+          },
+          "11,7": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Angle (deg)",
+              "_title": "SmartDashboard/NavigationSubsystem/Yaw Angle (deg)"
+            }
           }
         }
       }
@@ -332,9 +354,9 @@
               "_title": "/SmartDashboard/ScoringSubsystem/PeriodicCounter"
             }
           },
-          "16,0": {
+          "14,0": {
             "size": [
-              3,
+              2,
               1
             ],
             "content": {
@@ -343,9 +365,9 @@
               "_title": "/SmartDashboard/ScoringSubsystem/Arm Angle"
             }
           },
-          "16,1": {
+          "14,1": {
             "size": [
-              3,
+              2,
               1
             ],
             "content": {
@@ -398,7 +420,7 @@
               "_title": "SmartDashboard/TestMode/mode"
             }
           },
-          "17,3": {
+          "14,2": {
             "size": [
               2,
               2
@@ -411,7 +433,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "17,5": {
+          "14,4": {
             "size": [
               2,
               2
@@ -424,7 +446,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "17,7": {
+          "14,6": {
             "size": [
               2,
               2
@@ -473,6 +495,32 @@
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Current Limit Count",
               "_title": "/SmartDashboard/ScoringSubsystem/Arm Current Limit Count"
             }
+          },
+          "16,0": {
+            "size": [
+              7,
+              6
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Angle",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Angle",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ScoringSubsystem/Arm Angle": true
+            }
+          },
+          "10,7": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current": true
+            }
           }
         }
       }
@@ -487,25 +535,6 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "7,0": {
-            "size": [
-              11,
-              7
-            ],
-            "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://FrontCam",
-              "_title": "FrontCam",
-              "Crosshair/Show crosshair": false,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": 68.63934426229508,
-              "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
-            }
-          },
           "5,0": {
             "size": [
               1,
@@ -548,6 +577,47 @@
               "_type": "Text View",
               "_source0": "network_table:///BucketVision/BucketVisionState",
               "_title": "BucketVision/BucketVisionState"
+            }
+          },
+          "7,0": {
+            "size": [
+              9,
+              7
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://Camera0",
+              "_title": "Camera0",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": 43.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
+            }
+          },
+          "5,6": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/Exposure",
+              "_title": "BucketVision/Exposure"
+            }
+          },
+          "5,7": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/CameraNum",
+              "_title": "BucketVision/CameraNum"
             }
           }
         }
@@ -1021,7 +1091,7 @@
   "windowGeometry": {
     "x": -8.0,
     "y": -8.0,
-    "width": 1386.0,
-    "height": 788.0
+    "width": 1936.0,
+    "height": 1015.0
   }
 }

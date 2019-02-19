@@ -106,9 +106,8 @@ public class OI {
 	private final static int DRIVE_INVERT_BUTTON         = controllerMapper.getL1();
 	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getShare();
 	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getOption();
-	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getL2(); // TODO: ask which triggers
-	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getR2();
-	private final static int DRIVE_HATCH_OUTFEED_BUTTON	 = 0;//controllerMapper();
+	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getR2();
+	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getL2();
 
 	// How do you like me now, Sam?
 	// TODO: Make a get/set function instead of setting it to public
