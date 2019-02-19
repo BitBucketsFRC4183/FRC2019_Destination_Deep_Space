@@ -46,9 +46,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	// drive styles that driver can choose on the shuffleboard
 	public enum DriveStyle {
 		WPI_Arcade,
-		BB_Arcade,
 		Velocity
-		// add in curvature & velocity later
 	}
 	private static SendableChooser<DriveStyle> driveStyleChooser;
 
@@ -143,9 +141,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		
 
 		driveStyleChooser = new SendableChooser<DriveStyle>();
-		driveStyleChooser.setDefaultOption("WPI Arcade", DriveStyle.WPI_Arcade);
-		driveStyleChooser.addOption("Bit Buckets Arcade", DriveStyle.BB_Arcade);
-		driveStyleChooser.addOption("Velocity", DriveStyle.Velocity);
+		driveStyleChooser.addOption("WPI Arcade", DriveStyle.WPI_Arcade);
+		driveStyleChooser.setDefaultOption("Velocity", DriveStyle.Velocity);
 
 		SmartDashboard.putData( getName()+"/Drive Style", driveStyleChooser);
 
@@ -433,7 +430,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		turn = turnJoystickScaleChooser.getSelected().rescale(turn, DriveConstants.JOYSTICK_DEADBAND);
 		SmartDashboard.putNumber(getName()+"/Turn Factor",turn);
 
-		if(oi.lowSensitivity()) 
+		if(oi.lowSpeed()) 
 		{
 			speed *= LOW_SENS_GAIN;
 			turn *= LOW_SENS_GAIN;
@@ -460,17 +457,25 @@ public class DriveSubsystem extends BitBucketSubsystem {
 					selectFollowerState(true);
 					selectVelocityMode(false);
 					selectMotionMode(false);
+
+					speed = map(speed,
+					-1.0,
+					 1.0,
+					-DriveConstants.MAX_ALLOWED_PERCENT_SPEED,
+					DriveConstants.MAX_ALLOWED_PERCENT_SPEED);
+
+					turn = map(turn,
+					-1.0,
+					 1.0,
+					-DriveConstants.MAX_ALLOWED_PERCENT_TURN,
+					DriveConstants.MAX_ALLOWED_PERCENT_TURN);
+					SmartDashboard.putNumber(getName()+"/Percent Limited Speed",speed);
+					SmartDashboard.putNumber(getName()+"/Percent Limited Turn",turn);
+								
 					differentialDrive.arcadeDrive(speed, turn, false);
 
 					break;
 				}
-
-				case BB_Arcade: {
-					arcadeDrive(speed, turn);
-
-					break;
-				}
-
 				case Velocity: {
 					velocityDrive(speed, turn);
 
@@ -519,7 +524,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	// +turnStick produces right turn (CW from above, -yaw angle)
     /// TODO: Consider re-designing this to reduce turn by up to 50% at full forward speed
-	private void arcadeDrive(double speed, double turn) 
+	private void BBarcadeDrive(double speed, double turn) 
 	{
 		// The following functions on do something if the state needs to be changed
 		selectFollowerState(true);
@@ -598,19 +603,19 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		double speed_ips = map(speed,
 								 -1.0,
 								  1.0,
-								 -DriveConstants.MAX_SPEED_IPS,
-								 DriveConstants.MAX_SPEED_IPS);
+								 -DriveConstants.MAX_ALLOWED_SPEED_IPS,
+								 DriveConstants.MAX_ALLOWED_SPEED_IPS);
 		double turn_radps   = map(turn,
 								 -1.0,
 								  1.0,
-								 -DriveConstants.MAX_TURN_RADPS,
-								 DriveConstants.MAX_TURN_RADPS);
+								 -DriveConstants.MAX_ALLOWED_TURN_RADPS,
+								 DriveConstants.MAX_ALLOWED_TURN_RADPS);
 		
 		velocityDrive_auto(speed_ips, turn_radps);
 	}
 
 	public void doAutoTurn( double turn) {
-		arcadeDrive( 0.0, turn);				
+		BBarcadeDrive( 0.0, turn);				
 	}
 	
 	public void setAlignDrive(boolean start) {
@@ -621,7 +626,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	public void doAlignDrive(double fwdStick, double turnStick) {
 					
-		if(oi.lowSensitivity())
+		if(oi.lowSpeed())
 			fwdStick *= LOW_SENS_GAIN;
 		
 		fwdStick = shapeAxis(fwdStick);
@@ -640,7 +645,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());
 			error = -ALIGN_LOOP_GAIN * -navigation.getYawRate_degPerSec();
 			SmartDashboard.putNumber(getName()+"/IMU_ERROR", error);
-			arcadeDrive( fwdStick, error + yawCorrect());
+			BBarcadeDrive( fwdStick, error + yawCorrect());
 		}
 	}
 	
@@ -650,7 +655,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			setAllMotorsZero();
 		else {
 			double error = ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());				
-			arcadeDrive( fwd, error + yawCorrect());				
+			BBarcadeDrive( fwd, error + yawCorrect());				
 		}			
 	}
 	@Override

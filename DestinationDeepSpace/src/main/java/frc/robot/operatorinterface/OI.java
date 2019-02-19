@@ -136,7 +136,7 @@ public class OI {
 
 
 
-	public boolean lowSensitivity()
+	public boolean lowSpeed()
 	{
 		return driverControl.getRawButton(DRIVE_LOW_SENSITIVE_BUTTON);
 	}
