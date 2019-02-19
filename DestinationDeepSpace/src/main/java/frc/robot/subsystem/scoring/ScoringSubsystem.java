@@ -10,6 +10,7 @@ package frc.robot.subsystem.scoring;
 import frc.robot.MotorId;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.utils.talonutils.TalonUtils;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,6 +57,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private ScoringConstants.ScoringLevel commandedLevel = ScoringConstants.ScoringLevel.NONE;
 
 
+	private VisionSubsystem visionSubsystem = VisionSubsystem.instance();
 
 
 	private ScoringSubsystem() {
@@ -208,6 +210,15 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	/* switch the orientation of the arm */
 	public void switchOrientation() {
 		back = !back;
+
+		if (back)
+		{
+			visionSubsystem.enableBack();
+		}
+		else
+		{
+			visionSubsystem.enableFront();
+		}
 
 		// go to the last level the arm was at, but this time
 		// with the new orientation (handled by the method)

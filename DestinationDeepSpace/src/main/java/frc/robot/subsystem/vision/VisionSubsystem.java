@@ -49,7 +49,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	private NetworkTableInstance networkTable = NetworkTableInstance.getDefault();
 	private NetworkTable bvTable = networkTable.getTable("BucketVision");
 	private NetworkTableEntry bvStateEntry = bvTable.getEntry("BucketVisionState");
-	private NetworkTable frontCameraTable = bvTable.getSubTable("FrontCamera");
+	private NetworkTableEntry bvCameraNumber = bvTable.getEntry("CameraNum");
 
 	@Override
 	protected void initDefaultCommand() {
@@ -118,6 +118,15 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		// Turn on illuminator in a snoring posture
 		bvStateEntry.setString("UNKNOWN");
 		setIlluminatorSnore();
+	}
+
+	public void enableFront()
+	{
+		bvCameraNumber.setNumber(1.0);
+	}
+	public void enableBack()
+	{
+		bvCameraNumber.setNumber(0.0);
 	}
 
 	protected boolean isIlluminatorReady()

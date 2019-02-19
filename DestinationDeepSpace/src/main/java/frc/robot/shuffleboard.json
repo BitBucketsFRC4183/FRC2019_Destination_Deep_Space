@@ -98,8 +98,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Speed Factor",
               "_title": "SmartDashboard/DriveSubsystem/Speed Factor",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/DriveSubsystem/Speed Factor": true
+              "Graph/Visible time": 30.0
             }
           },
           "13,6": {
@@ -111,8 +110,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Factor",
               "_title": "SmartDashboard/DriveSubsystem/Turn Factor",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/DriveSubsystem/Turn Factor": true
+              "Graph/Visible time": 30.0
             }
           },
           "17,0": {
@@ -335,8 +333,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Angle (deg)",
               "_title": "SmartDashboard/NavigationSubsystem/Yaw Angle (deg)",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/NavigationSubsystem/Yaw Angle (deg)": true
+              "Graph/Visible time": 30.0
             }
           },
           "7,4": {
@@ -348,8 +345,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
               "_title": "SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/NavigationSubsystem/Yaw Rate (dps)": true
+              "Graph/Visible time": 30.0
             }
           }
         }
@@ -490,8 +486,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor 0 Current",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Motor 0 Current",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 0 Current": true
+              "Graph/Visible time": 30.0
             }
           },
           "9,4": {
@@ -503,8 +498,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor 1 Current",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Motor 1 Current",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor 1 Current": true
+              "Graph/Visible time": 30.0
             }
           },
           "9,7": {
@@ -527,8 +521,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Angle",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Angle",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/ScoringSubsystem/Arm Angle": true
+              "Graph/Visible time": 30.0
             }
           },
           "10,7": {
@@ -540,8 +533,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/ScoringSubsystem/Arm Motor TOTAL Current": true
+              "Graph/Visible time": 30.0
             }
           },
           "10,0": {
@@ -631,26 +623,32 @@
               "imageHeight": -1
             }
           },
-          "5,6": {
+          "7,7": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///BucketVision/Exposure",
-              "_title": "BucketVision/Exposure"
+              "_type": "Number Slider",
+              "_source0": "network_table:///BucketVision/CameraNum",
+              "_title": "BucketVision/CameraNum",
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 1.0,
+              "Slider Settings/Block increment": 0.5
             }
           },
-          "5,7": {
+          "9,7": {
             "size": [
-              1,
+              7,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///BucketVision/CameraNum",
-              "_title": "BucketVision/CameraNum"
+              "_type": "Number Slider",
+              "_source0": "network_table:///BucketVision/Exposure",
+              "_title": "BucketVision/Exposure",
+              "Slider Settings/Min": 0.0,
+              "Slider Settings/Max": 0.1,
+              "Slider Settings/Block increment": 1.0E-4
             }
           }
         }
@@ -760,8 +758,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ClimberSubsystem/ManualJoystickCommand",
               "_title": "SmartDashboard/ClimberSubsystem/ManualJoystickCommand",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/ClimberSubsystem/ManualJoystickCommand": true
+              "Graph/Visible time": 30.0
             }
           },
           "5,5": {
@@ -784,8 +781,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ClimberSubsystem/climbMotor1Current",
               "_title": "SmartDashboard/ClimberSubsystem/climbMotor1Current",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/ClimberSubsystem/climbMotor1Current": true
+              "Graph/Visible time": 30.0
             }
           },
           "13,5": {
@@ -797,8 +793,7 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/ClimberSubsystem/climbMotor2Current",
               "_title": "SmartDashboard/ClimberSubsystem/climbMotor2Current",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/ClimberSubsystem/climbMotor2Current": true
+              "Graph/Visible time": 30.0
             }
           }
         }

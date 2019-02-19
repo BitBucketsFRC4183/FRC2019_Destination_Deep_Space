@@ -77,7 +77,7 @@ public class OrientationSwitch extends Command {
         // So we can now evaluate an in route level change
 
         // get selected level on joystick (NONE if none selected, INVALID if multiple selected)
-        ScoringConstants.ScoringLevel level = scoringSubsystem.getSelectedLevel();
+        ScoringConstants.ScoringLevel level = scoringSubsystem.getCommandedLevel();
 
         // if two levels are selected, there is uncertainty in what to do
 		// so don't change the state
