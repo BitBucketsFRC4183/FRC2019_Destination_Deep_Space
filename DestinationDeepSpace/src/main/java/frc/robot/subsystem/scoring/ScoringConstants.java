@@ -20,6 +20,8 @@ public class ScoringConstants {
 
 	public final static boolean ROLLER_MOTOR_INVERSION = false;
 
+	public final static double ANGLE_TOLERANCE_DEG = 4.0; // If we made it to within this angle then call it good
+
 	public enum ScoringLevel {
 		INVALID              (0),       // multiple levels are selected
 		NONE                 (0),       // no levels are selected

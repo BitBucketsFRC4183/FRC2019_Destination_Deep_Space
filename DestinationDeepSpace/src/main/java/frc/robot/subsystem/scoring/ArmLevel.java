@@ -44,7 +44,8 @@ public class ArmLevel extends Command {
         }
 
 
-
+        boolean areWeThereYet = (Math.abs(Math.toDegrees(scoringSubsystem.getTargetAngle_rad()) - 
+                                         scoringSubsystem.getAngle_deg()) < ScoringConstants.ANGLE_TOLERANCE_DEG);
         boolean timeout = isTimedOut();
 
 
@@ -53,14 +54,15 @@ public class ArmLevel extends Command {
         // if the arm can move fast enough, we want this behavior (always preferred)
         // if not, then we may want to let the driver change the state while the
         //      robot is still trying to move the scoring arm
-        int err = scoringSubsystem.getArmLevelTickError();
         // is the robot sufficiently within this state's level?
-        if (err > ScoringConstants.ROTATION_MOTOR_ERROR_DEADBAND_TICKS) {
-            if (timeout) {
+        if ( !areWeThereYet) {
+            if (timeout) 
+            {
+                /// TODO: Need to evaluate whether going Idle makes sense
+                /// or should we just hold position and signal a problem
+                /// some other way?
                 return CommandUtils.stateChange(new Idle());
             }
-
-            return false;
         }
 
 
@@ -82,6 +84,8 @@ public class ArmLevel extends Command {
         
 
         // if trying to change the level and orientation, then don't allow it
+        // The user needs to hit buttons in order just to keep things simpler
+        // as Command objects
         if (differentLevel && switchOrientation) {
             return false;
         }
