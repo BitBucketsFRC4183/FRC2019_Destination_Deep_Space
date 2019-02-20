@@ -68,17 +68,6 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		{
 			setIlluminatorOff();			
 		}
-		else
-		{
-			if (bvStateEntry.getString("UNKNOWN") != "UNKNOWN")
-			{
-				setIlluminatorOn(VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
-			}
-			else
-			{
-				setIlluminatorSnore();
-			}
-		}
 
 		updateBaseDashboard();	
 		if (getTelemetryEnabled())
@@ -123,10 +112,13 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	public void enableFront()
 	{
 		bvCameraNumber.setNumber(1.0);
+		setIlluminatorOn(true,VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
+
 	}
 	public void enableBack()
 	{
 		bvCameraNumber.setNumber(0.0);
+		setIlluminatorOn(false,VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
 	}
 
 	protected boolean isIlluminatorReady()
@@ -138,39 +130,56 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	{
 		if (illuminatorState != IlluminatorState.OFF)
 		{
-			lightingSubsystem.set(LightingObjects.VISION_SUBSYSTEM,
+			lightingSubsystem.set(LightingObjects.FRONT_CAMERA,
 								LightingControl.FUNCTION_OFF,
 								LightingControl.COLOR_BLACK,
 								0,
 								0);
-			illuminatorState = lightingSubsystem.isReady()?IlluminatorState.OFF:illuminatorState.UNKNOWN;
+			lightingSubsystem.set(LightingObjects.BACK_CAMERA,
+								LightingControl.FUNCTION_OFF,
+								LightingControl.COLOR_BLACK,
+								0,
+								0);
+			illuminatorState = lightingSubsystem.isReady()?IlluminatorState.OFF:IlluminatorState.UNKNOWN;
 		}
 	}
 
-	protected void setIlluminatorOn(int brightness)
+	public void setIlluminatorOn(boolean front, int brightness)
 	{
 		if (illuminatorState != IlluminatorState.ON)
 		{
-			lightingSubsystem.set(LightingObjects.VISION_SUBSYSTEM,
+			lightingSubsystem.set(front?LightingObjects.FRONT_CAMERA:LightingObjects.BACK_CAMERA,
 								LightingControl.FUNCTION_ON,
 								LightingControl.COLOR_GREEN,
 								0,
 								0,
 								brightness);
+			lightingSubsystem.set(front?LightingObjects.BACK_CAMERA:LightingObjects.FRONT_CAMERA,
+								LightingControl.FUNCTION_OFF,
+								LightingControl.COLOR_BLACK,
+								0,
+								0,
+								0);
 
-			illuminatorState = lightingSubsystem.isReady()?IlluminatorState.ON:illuminatorState.UNKNOWN;
+			illuminatorState = lightingSubsystem.isReady()?IlluminatorState.ON:IlluminatorState.UNKNOWN;
 		}		
 	}
 	protected void setIlluminatorSnore()
 	{
 		if (illuminatorState != IlluminatorState.SNORE)
 		{
-			lightingSubsystem.set(LightingObjects.VISION_SUBSYSTEM,
+			lightingSubsystem.set(LightingObjects.FRONT_CAMERA,
 								LightingControl.FUNCTION_SNORE,
 								LightingControl.COLOR_VIOLET,
 								0,
 								0);			
-			illuminatorState = lightingSubsystem.isReady()?IlluminatorState.SNORE:illuminatorState.UNKNOWN;
+			lightingSubsystem.set(LightingObjects.BACK_CAMERA,
+								LightingControl.FUNCTION_SNORE,
+								LightingControl.COLOR_VIOLET,
+								0,
+								0);			
+
+			illuminatorState = lightingSubsystem.isReady()?IlluminatorState.SNORE:IlluminatorState.UNKNOWN;
 		}				
 	}
 
