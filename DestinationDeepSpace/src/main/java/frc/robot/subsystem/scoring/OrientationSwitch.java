@@ -69,8 +69,16 @@ public class OrientationSwitch extends Command {
         // The user must stop pressing this button to switch again
         // or change height
         boolean switchOrientation = oi.switchOrientation();
+
         if (switchOrientation) {
-            return false;
+            if (!releasedButton) {
+                // don't change the state if button to switch
+                // is pressed but hasn't been released in
+                // the duration of this state
+                return false;
+            }
+        } else {
+            releasedButton = false; // it has been released at this point
         }
 
         // If we got this far then the user did release the button
@@ -85,8 +93,14 @@ public class OrientationSwitch extends Command {
             return false;
         }
 
-        if (level != ScoringConstants.ScoringLevel.NONE) {
+        boolean changeLevel = (level == ScoringConstants.ScoringLevel.NONE);
+
+        if (changeLevel && !switchOrientation) {
             return CommandUtils.stateChange(new ArmLevel(level));
+        }
+
+        if (switchOrientation && !changeLevel) {
+            return CommandUtils.stateChange(new OrientationSwitch());
         }
 
         return false;
