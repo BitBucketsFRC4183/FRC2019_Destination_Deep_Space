@@ -4,7 +4,7 @@ public class ScoringConstants {
 
 	public final static double MAX_ARM_MOTOR_CURRENT_AMPS = 60.0;
 
-	public final static int ARM_BIAS_TICKS = 3737 - 57; // subtracted from absolute encoder value
+	public final static int ARM_BIAS_TICKS = 776; //BAG BOT IS: 3737 - 57; // subtracted from absolute encoder value
 
 	public final static int ARM_MAX_SPEED_TICKS_PER_100MS = 300;
 	public final static int ARM_CRUISE_SPEED_TICKS_PER_100MS = (int)(0.50 * ARM_MAX_SPEED_TICKS_PER_100MS);
@@ -28,7 +28,7 @@ public class ScoringConstants {
         TOP_DEAD_CENTER      (0), //deg
 		GROUND               (113), //deg vs inches -->(5.0),       // hatch panel ground pickup
 		
-		HP                   (83.0), //deg vs inches -->(19.0),    // cargo scoring
+		HP                   (86.5), //(83.0), //deg vs inches -->(19.0),    // cargo scoring
 
 		BALL_CARGO           (63.0), // deg vs inches -->(31.5),    // cargo scoring
 		BALL_LOADING_STATION (49.0), // deg vs inches -->(37.0),    // loading station pickup
