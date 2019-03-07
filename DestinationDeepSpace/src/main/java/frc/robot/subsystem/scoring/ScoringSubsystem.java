@@ -419,8 +419,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		if (!(
 			(infeed && outfeed)
 			)) { // if both are pressed, keep doing what you're doing
-			if      (infeed)       { setRollers(hatchOutfeed?-0.5:-1.0);  }
-			else if (outfeed)      { setRollers(hatchOutfeed?0.5:1.0); }
+			if      (infeed)       { setRollers(hatchOutfeed?-1.0:-1.0);  }
+			else if (outfeed)      { setRollers(hatchOutfeed?1.0:1.0); }
 			else                   { setRollers(0.0);  }
 		}
 
