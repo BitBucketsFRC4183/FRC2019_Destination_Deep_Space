@@ -97,7 +97,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public void periodic() {
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
-		SmartDashboard.putBoolean(getName()+"/END Limit Switch", climbMotor1.getSensorCollection().isFwdLimitSwitchClosed());
+		SmartDashboard.putBoolean(getName()+"/END Limit Switch", climbMotor1.getSensorCollection().isRevLimitSwitchClosed());
 		SmartDashboard.putNumber(getName() + "/ManualJoystickCommand", oi.manualClimbControl());
 		double climbMotor1current = climbMotor1.getOutputCurrent();
 		double climbMotor2current = climbMotor2.getOutputCurrent();
@@ -124,7 +124,9 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 			case HIGH_CLIMB: {
 				highClimbManual();
 				//highClimb();
-				if (climbMotor1.getSensorCollection().isFwdLimitSwitchClosed()||climbMotor1current>200||climbMotor2current>200){
+				if (
+					//climbMotor1.getSensorCollection().isRevLimitSwitchClosed()||
+					climbMotor1current>200||climbMotor2current>200){
 					state=eState.IDLE;
 				}
 			}	
