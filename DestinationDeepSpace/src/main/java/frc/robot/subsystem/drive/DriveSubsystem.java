@@ -19,7 +19,11 @@ import frc.robot.MotorId;
 import frc.robot.subsystem.drive.DriveConstants;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.autonomous.AutonomousConstants;
+import frc.robot.subsystem.autonomous.GuidanceAlgorithm;
 import frc.robot.subsystem.navigation.NavigationSubsystem;
+import frc.robot.subsystem.vision.CameraFeedback;
+import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.utils.Deadzone;
 import frc.robot.utils.JoystickScale;//for sam <3
 import frc.robot.utils.talonutils.TalonUtils;
@@ -41,7 +45,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	// Reference any other singletons we need
 	private final OI oi = OI.instance();
 	private final NavigationSubsystem navigation = NavigationSubsystem.instance();
-
+	private final VisionSubsystem vision = VisionSubsystem.instance();
+	private GuidanceAlgorithm guidance;
 
 	// drive styles that driver can choose on the shuffleboard
 	public enum DriveStyle {
@@ -121,7 +126,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
   	private DriveSubsystem()
   	{
 		setName("DriveSubsystem");
-						
+
+		guidance = new GuidanceAlgorithm();
+								
 		// Make joystick scale chooser and put it on the dashboard
 		forwardJoystickScaleChooser = new SendableChooser<JoystickScale>();
 		forwardJoystickScaleChooser.setDefaultOption( "Linear",    JoystickScale.LINEAR);
@@ -477,7 +484,50 @@ public class DriveSubsystem extends BitBucketSubsystem {
 					break;
 				}
 				case Velocity: {
-					velocityDrive(speed, turn);
+					if (oi.autoAlign())
+					{
+						double speed_ips = map(speed,
+						-1.0,
+						 1.0,
+						-DriveConstants.MAX_ALLOWED_SPEED_IPS,
+						DriveConstants.MAX_ALLOWED_SPEED_IPS);
+
+						CameraFeedback feedback = vision.getClosestObjectData();
+
+						double turnRate_radps = 0.0;
+				
+						if (feedback != null)
+						{
+							double offAxis = feedback.getOffAxis();
+							double parallax = feedback.getParallax();
+							double distance = feedback.getDistance();
+
+							SmartDashboard.putNumber(getName()+"/offAxis",offAxis);
+							SmartDashboard.putNumber(getName()+"/parallax",parallax);
+							SmartDashboard.putNumber(getName()+"/distance",distance);
+				
+							// no need to keep guiding if in a certain distance
+							if (distance <= AutonomousConstants.GUIDANCE_STOP) {
+								guidance.setOffAxis(0.0);
+								guidance.setParallax(0.0);
+							}
+							else {
+								guidance.setOffAxis(offAxis);
+								guidance.setParallax(parallax);
+				
+							}				
+				
+							turnRate_radps = guidance.getTurnRate(distance);
+						}						
+						velocityDrive_auto(
+											speed_ips,
+											turnRate_radps
+						);
+
+					}
+					else {
+						velocityDrive(speed, turn);
+					}
 
 					break;
 				}

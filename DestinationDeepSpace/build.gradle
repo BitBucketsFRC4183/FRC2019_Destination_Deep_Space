@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "idea"
-    id "edu.wpi.first.GradleRIO" version "2019.3.2"
+    id "edu.wpi.first.GradleRIO" version "2019.4.1"
     id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-0.2.0" apply false
 }
 

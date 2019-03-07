@@ -108,6 +108,7 @@ public class OI {
 	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getOption();
 	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getR2();
 	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getL2();
+	private final static int DRIVE_AUTO_ALIGN            = controllerMapper.getCross();
 
 	// How do you like me now, Sam?
 	// TODO: Make a get/set function instead of setting it to public
@@ -235,9 +236,9 @@ public class OI {
 		return false;//driverControl.getRawButton(DRIVE_HATCH_OUTFEED_BUTTON);
 	}
 
-
-
-
+	public boolean autoAlign(){
+		return driverControl.getRawButton(DRIVE_AUTO_ALIGN);
+	}
 
 	public boolean driverIdle() {
 		return driverControl.getRawButton(DRIVER_IDLE);
