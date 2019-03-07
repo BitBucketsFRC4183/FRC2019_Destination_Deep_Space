@@ -5,28 +5,28 @@ import frc.robot.utils.Controller;
 
 
 public class GuidanceAlgorithm {
-	private static Controller controlLoop_parallax = new Controller(
+	private Controller controlLoop_parallax = new Controller(
         AutonomousConstants.PARALLAX_KP,
         AutonomousConstants.PARALLAX_KI,
         AutonomousConstants.PARALLAX_KD,
         AutonomousConstants.CAMERA_FPS
     );
-	private static Controller controlLoop_offAxis = new Controller(
+	private Controller controlLoop_offAxis = new Controller(
         AutonomousConstants.OFF_AXIS_KP,
 		AutonomousConstants.OFF_AXIS_KI,
         AutonomousConstants.OFF_AXIS_KD,
         AutonomousConstants.CAMERA_FPS
     );
 	
-	private static double parallax;
-    private static double offAxis;
+	private double parallax;
+    private double offAxis;
 
-    private static double parallax_contribution;
-    private static double offAxis_contribution;
+    private double parallax_contribution;
+    private double offAxis_contribution;
 	
 	
 	
-	public static double getTurnRate(double distance) {
+	public double getTurnRate(double distance) {
 		parallax_contribution = controlLoop_parallax.newValue(parallax);
 		offAxis_contribution  = controlLoop_offAxis .newValue(offAxis);
 		
@@ -43,25 +43,25 @@ public class GuidanceAlgorithm {
 	
 	
 	
-	public static void setParallax(double p) {
+	public void setParallax(double p) {
 		parallax = p;
 	}
 	
-	public static void setOffAxis(double o) {
+	public void setOffAxis(double o) {
 		offAxis = o;
     }
     
-    public static double getParallaxContribution() {
+    public double getParallaxContribution() {
         return parallax_contribution;
     }
 
-    public static double offAxisContribution() {
+    public double offAxisContribution() {
         return offAxis_contribution;
     }
     
     
     
-	public static void reset() {
+	public void reset() {
 		parallax = 0;
 		offAxis = 0;
 		
