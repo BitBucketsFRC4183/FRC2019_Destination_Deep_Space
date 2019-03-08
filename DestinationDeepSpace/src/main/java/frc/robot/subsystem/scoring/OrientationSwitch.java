@@ -4,6 +4,7 @@ import frc.robot.operatorinterface.OI;
 import frc.robot.utils.CommandUtils;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OrientationSwitch extends Command {
     private static OI oi = OI.instance();
@@ -38,6 +39,7 @@ public class OrientationSwitch extends Command {
                             scoringSubsystem.exceededCurrentLimit();
 
         if (forceIdle) {
+            SmartDashboard.putString("OrientationStatus","Forced Idle");
             return CommandUtils.stateChange(new Idle());
         }
 
@@ -58,6 +60,7 @@ public class OrientationSwitch extends Command {
                 /// TODO: Need to evaluate whether going Idle makes sense
                 /// or should we just hold position and signal a problem
                 /// some other way?
+                SmartDashboard.putString("OrientationStatus","Timeout");
                 return CommandUtils.stateChange(new Idle());
             }
         }
@@ -71,14 +74,15 @@ public class OrientationSwitch extends Command {
         boolean switchOrientation = oi.switchOrientation();
 
         if (switchOrientation) {
-            if (!releasedButton) {
-                // don't change the state if button to switch
-                // is pressed but hasn't been released in
-                // the duration of this state
+            // if (!releasedButton) {
+            //     // don't change the state if button to switch
+            //     // is pressed but hasn't been released in
+            //     // the duration of this state
+                SmartDashboard.putString("OrientationStatus","Holding Button");
                 return false;
-            }
-        } else {
-            releasedButton = false; // it has been released at this point
+        //     }
+        // } else {
+        //     releasedButton = false; // it has been released at this point
         }
 
         // If we got this far then the user did release the button
@@ -90,19 +94,29 @@ public class OrientationSwitch extends Command {
         // if two levels are selected, there is uncertainty in what to do
 		// so don't change the state
         if (level == ScoringConstants.ScoringLevel.INVALID) {
+            SmartDashboard.putString("OrientationStatus","Invalid Level");
             return false;
         }
 
-        boolean changeLevel = (level == ScoringConstants.ScoringLevel.NONE);
-
-        if (changeLevel && !switchOrientation) {
-            return CommandUtils.stateChange(new ArmLevel(level));
+        if (level != ScoringConstants.ScoringLevel.NONE)
+        {
+            SmartDashboard.putString("OrientationStatus","New Level");
+            return CommandUtils.stateChange(new ArmLevel(level));            
         }
 
-        if (switchOrientation && !changeLevel) {
-            return CommandUtils.stateChange(new OrientationSwitch());
-        }
+        // boolean changeLevel = (level == ScoringConstants.ScoringLevel.NONE);
 
+        // if (changeLevel && !switchOrientation) {
+        //     SmartDashboard.putString("OrientationStatus","New Level");
+        //     return CommandUtils.stateChange(new ArmLevel(level));
+        // }
+
+        // if (switchOrientation && !changeLevel) {
+        //     SmartDashboard.putString("OrientationStatus","New Orientation Switch");
+        //     return CommandUtils.stateChange(new OrientationSwitch());
+        // }
+
+        SmartDashboard.putString("OrientationStatus","End of Is Finished");
         return false;
     }
 }

@@ -51,6 +51,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	private NetworkTable bvTable = networkTable.getTable("BucketVision");
 	private NetworkTableEntry bvStateEntry = bvTable.getEntry("BucketVisionState");
 	private NetworkTableEntry bvCameraNumber = bvTable.getEntry("CameraNum");
+	private NetworkTableEntry bvExposure = bvTable.getEntry("Exposure");
 
 	public CameraFeedback getClosestObjectData() {
 		if (bvTable.getEntry("NumTargets").getValue().isDouble())
@@ -175,6 +176,14 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		setIlluminatorSnore();
 	}
 
+	public void enableDriverExposure()
+	{
+		bvExposure.setNumber(VisionConstants.DRIVER_EXPOSURE);
+	}
+	public void enableAutonomousExposure()
+	{
+		bvExposure.setNumber(VisionConstants.AUTONOMOUS_EXPOSURE);
+	}
 	public void enableFront()
 	{
 		bvCameraNumber.setNumber(1.0);
