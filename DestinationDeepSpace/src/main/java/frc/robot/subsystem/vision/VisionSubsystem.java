@@ -41,6 +41,8 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	}
 	private IlluminatorState illuminatorState = IlluminatorState.UNKNOWN;
 
+	private boolean back;
+
 	private DigitalOutput frontOutput;
 	private DigitalOutput backOutput;
 	
@@ -186,24 +188,26 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	public void enableDriverExposure()
 	{
 		bvExposure.setNumber(VisionConstants.DRIVER_EXPOSURE);
+		frontOutput.set(false);
+		backOutput .set(false);
 	}
 	public void enableAutonomousExposure()
 	{
 		bvExposure.setNumber(VisionConstants.AUTONOMOUS_EXPOSURE);
+		frontOutput.set(!back);
+		backOutput .set(back);
 	}
 	public void enableFront()
 	{
 		bvCameraNumber.setNumber(VisionConstants.FRONT_CAMERA_ID);
-		frontOutput.set(true);
-		backOutput .set(false);
+		back = false;
 		setIlluminatorOn(true,VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
 
 	}
 	public void enableBack()
 	{
 		bvCameraNumber.setNumber(VisionConstants.BACK_CAMERA_ID);
-		frontOutput.set(false);
-		backOutput .set(true);
+		back = true;
 		setIlluminatorOn(false,VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
 	}
 
