@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.subsystem.lighting.LightingControl;
 import frc.robot.subsystem.lighting.LightingSubsystem;
@@ -39,6 +40,9 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		ON
 	}
 	private IlluminatorState illuminatorState = IlluminatorState.UNKNOWN;
+
+	private DigitalOutput frontOutput;
+	private DigitalOutput backOutput;
 	
 	private VisionSubsystem()
 	{
@@ -174,6 +178,9 @@ public class VisionSubsystem extends BitBucketSubsystem {
 		// Turn on illuminator in a snoring posture
 		bvStateEntry.setString("UNKNOWN");
 		setIlluminatorSnore();
+
+		frontOutput = new DigitalOutput(VisionConstants.FRONT_CAMERA_ID);
+		backOutput  = new DigitalOutput(VisionConstants.BACK_CAMERA_ID );
 	}
 
 	public void enableDriverExposure()
@@ -186,13 +193,17 @@ public class VisionSubsystem extends BitBucketSubsystem {
 	}
 	public void enableFront()
 	{
-		bvCameraNumber.setNumber(1.0);
+		bvCameraNumber.setNumber(VisionConstants.FRONT_CAMERA_ID);
+		frontOutput.set(true);
+		backOutput .set(false);
 		setIlluminatorOn(true,VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
 
 	}
 	public void enableBack()
 	{
-		bvCameraNumber.setNumber(0.0);
+		bvCameraNumber.setNumber(VisionConstants.BACK_CAMERA_ID);
+		frontOutput.set(false);
+		backOutput .set(true);
 		setIlluminatorOn(false,VisionConstants.DEFAULT_ILLUMINATOR_BRIGHTNESS);
 	}
 
