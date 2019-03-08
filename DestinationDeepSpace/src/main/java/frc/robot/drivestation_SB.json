@@ -212,23 +212,92 @@
               "_title": "BucketVision/CameraNum"
             }
           },
-          "8,4": {
+          "9,8": {
             "size": [
-              6,
-              4
+              1,
+              1
             ],
             "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://Camera0",
-              "_title": "Camera0",
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": 65.0,
-              "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/CameraNum",
+              "_title": "/BucketVision/CameraNum"
+            }
+          },
+          "10,8": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/Exposure",
+              "_title": "/BucketVision/Exposure"
+            }
+          },
+          "14,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/parallax",
+              "_title": "/SmartDashboard/DriveSubsystem/parallax"
+            }
+          },
+          "14,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/offAxis",
+              "_title": "/SmartDashboard/DriveSubsystem/offAxis"
+            }
+          },
+          "14,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/distance",
+              "_title": "/SmartDashboard/DriveSubsystem/distance"
+            }
+          },
+          "14,7": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/autoTurnRate_radps",
+              "_title": "/SmartDashboard/DriveSubsystem/autoTurnRate_radps"
+            }
+          },
+          "14,8": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/ManualTurnRate_radps",
+              "_title": "/SmartDashboard/DriveSubsystem/ManualTurnRate_radps"
+            }
+          },
+          "12,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/NumTargets",
+              "_title": "/BucketVision/NumTargets"
             }
           }
         }
@@ -236,9 +305,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
-    "width": 1936.0,
-    "height": 1015.0
+    "x": -7.0,
+    "y": 2.0,
+    "width": 1932.0,
+    "height": 1004.0
   }
 }

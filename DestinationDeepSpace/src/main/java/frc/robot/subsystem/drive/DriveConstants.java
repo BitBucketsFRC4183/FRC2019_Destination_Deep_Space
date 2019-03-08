@@ -26,10 +26,10 @@ public class DriveConstants {
     // if there was a lot of system lag; we must be cautious!
     // An alternative is to use an alpha filter on the inputs to prevent the user
     // from changing the command too rapidly
-    public static final double DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC = 0.2;	    // No ramp rate on closed loop (use Motion Magic)
+    public static final double DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC = 0.5;	    // No ramp rate on closed loop (use Motion Magic)
 
-    public static final double MAX_ALLOWED_SPEED_IPS = 5.0*12.0;
-    public static final double MAX_ALLOWED_TURN_DPS  = 90.0;
+    public static final double MAX_ALLOWED_SPEED_IPS = 10.0*12.0;
+    public static final double MAX_ALLOWED_TURN_DPS  = 360.0;
     public static final double MAX_ALLOWED_TURN_RADPS = Math.toRadians(MAX_ALLOWED_TURN_DPS);
     public static final double STANDARD_G_FTPSPS = 32.1740;
     public static final double MAX_LAT_ACCELERATION_IPSPS = STANDARD_G_FTPSPS * 12.0;
