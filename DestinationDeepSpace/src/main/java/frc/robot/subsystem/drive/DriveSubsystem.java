@@ -519,6 +519,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 							}				
 				
 							turnRate_radps = guidance.getTurnRate(distance);
+							SmartDashboard.putNumber(getName()+"/autoTurnRate_radps",turnRate_radps);
 						}						
 						velocityDrive_auto(
 											speed_ips,
@@ -663,6 +664,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 								 -DriveConstants.MAX_ALLOWED_TURN_RADPS,
 								 DriveConstants.MAX_ALLOWED_TURN_RADPS);
 		
+		SmartDashboard.putNumber(getName()+"/ManualTurnRate_radps",turn_radps);
+
 		velocityDrive_auto(speed_ips, turn_radps);
 	}
 

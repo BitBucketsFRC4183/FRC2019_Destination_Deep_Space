@@ -183,6 +183,8 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 		frontOutput = new DigitalOutput(VisionConstants.FRONT_CAMERA_ID);
 		backOutput  = new DigitalOutput(VisionConstants.BACK_CAMERA_ID );
+		frontOutput.set(false);
+		backOutput .set(false);
 	}
 
 	public void enableDriverExposure()
