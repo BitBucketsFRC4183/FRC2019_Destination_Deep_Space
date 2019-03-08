@@ -200,6 +200,36 @@
               "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Angle",
               "_title": "SmartDashboard/ScoringSubsystem/Arm Angle"
             }
+          },
+          "7,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/CameraNum",
+              "_title": "BucketVision/CameraNum"
+            }
+          },
+          "8,4": {
+            "size": [
+              6,
+              4
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://Camera0",
+              "_title": "Camera0",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": 65.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
+            }
           }
         }
       }
