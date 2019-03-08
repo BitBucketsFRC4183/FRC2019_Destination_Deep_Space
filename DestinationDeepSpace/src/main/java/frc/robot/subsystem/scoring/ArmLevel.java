@@ -40,6 +40,7 @@ public class ArmLevel extends Command {
                             scoringSubsystem.exceededCurrentLimit();
 
         if (forceIdle) {
+            SmartDashboard.putString("ArmLevelStatus","Forced Idle");
             return CommandUtils.stateChange(new Idle());
         }
 
@@ -61,6 +62,7 @@ public class ArmLevel extends Command {
                 /// TODO: Need to evaluate whether going Idle makes sense
                 /// or should we just hold position and signal a problem
                 /// some other way?
+                SmartDashboard.putString("ArmLevelStatus","Timeout");
                 return CommandUtils.stateChange(new Idle());
             }
         }
@@ -76,6 +78,7 @@ public class ArmLevel extends Command {
         // if multiple levels are selected or this level is still selected,
         // don't allow any state changes
         if (level == ScoringConstants.ScoringLevel.INVALID || level == LEVEL) {
+            SmartDashboard.putString("ArmLevelStatus","Invalid or Same Level");
             return false;
         }
 
@@ -87,6 +90,7 @@ public class ArmLevel extends Command {
         // The user needs to hit buttons in order just to keep things simpler
         // as Command objects
         if (differentLevel && switchOrientation) {
+            SmartDashboard.putString("ArmLevelStatus","different and switch (two buttons)");
             return false;
         }
 
@@ -94,15 +98,17 @@ public class ArmLevel extends Command {
         if (differentLevel) {
             // previous checks ensure robot is sufficiently within this state's level
             // so we can change it
-
+            SmartDashboard.putString("ArmLevelStatus","New Level");
             return CommandUtils.stateChange(new ArmLevel(level));
         }
 
         // check if user trying to switch the orientation of the arm
         if (switchOrientation) {
+            SmartDashboard.putString("ArmLevelStatus","Orientation Switch");
             return CommandUtils.stateChange(new OrientationSwitch());
         }
 
+        SmartDashboard.putString("ArmLevelStatus","End of Is Finished");
         return false;
     }
 }

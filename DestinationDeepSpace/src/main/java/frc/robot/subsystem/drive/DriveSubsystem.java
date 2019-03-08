@@ -486,6 +486,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 				case Velocity: {
 					if (oi.autoAlign())
 					{
+						vision.enableAutonomousExposure();
 						double speed_ips = map(speed,
 						-1.0,
 						 1.0,
@@ -526,6 +527,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 					}
 					else {
+						vision.enableDriverExposure();
 						velocityDrive(speed, turn);
 					}
 
