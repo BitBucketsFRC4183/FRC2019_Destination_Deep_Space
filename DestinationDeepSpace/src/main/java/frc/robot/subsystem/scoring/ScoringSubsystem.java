@@ -162,7 +162,11 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			level == ScoringConstants.ScoringLevel.INVALID
 		) {
 			return;
+		} else if (level == ScoringConstants.ScoringLevel.MANUAL){
+			lastLevel=ScoringConstants.ScoringLevel.MANUAL;
+			return;
 		}
+
 
 		double angle_rad = level.getAngle_rad();
 
@@ -238,10 +242,13 @@ public class ScoringSubsystem extends BitBucketSubsystem {
         boolean bLoadingStation = oi.bLoadingStation();
 		boolean bRocket1 = oi.bRocket1();
 		boolean topDeadCenter = oi.topDeadCenter();
+		double manual = oi.manualArmControl();
 		
 		ScoringConstants.ScoringLevel level = ScoringConstants.ScoringLevel.NONE;
 
-
+		if (manual > ScoringConstants.ARM_MANUAL_DEADBAND || manual < -ScoringConstants.ARM_MANUAL_DEADBAND) {
+			level = ScoringConstants.ScoringLevel.MANUAL;
+		}
 		if (hp) {
 			level = ScoringConstants.ScoringLevel.HP;
 		}
@@ -416,6 +423,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		if (!oi.autoAlign() && lastLevel == ScoringConstants.ScoringLevel.HP_AUTO) {
 			goToLevel(ScoringConstants.ScoringLevel.HP);
+		}
+
+		if (Math.abs(oi.manualArmControl())>ScoringConstants.ARM_MANUAL_DEADBAND && lastLevel == ScoringConstants.ScoringLevel.MANUAL) {
+			armMotor1.set(ControlMode.PercentOutput, oi.manualArmControl()*ScoringConstants.ARM_MANUAL_SPEED_MULTIPLIER);
 		}
 
 		boolean infeed = oi.infeedActive();
