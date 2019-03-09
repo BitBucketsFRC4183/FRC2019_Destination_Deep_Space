@@ -25,7 +25,7 @@ public class MotorId {
         public static final int ARM_MOTOR2_ID = 12;
 
         public static final int CLIMB_MOTOR_1_ID = 8;
-        public static final int CLIMB_MOTOR_2_ID = 11;
+        public static final int CLIMB_MOTOR_2_ID = 7;
 
 
     

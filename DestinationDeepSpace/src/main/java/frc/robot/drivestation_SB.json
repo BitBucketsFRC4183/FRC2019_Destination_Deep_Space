@@ -1,0 +1,313 @@
+{
+  "tabPane": [
+    {
+      "title": "Competition Console",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "2,4": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Split Button Chooser",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Joystick Scale",
+              "_title": "SmartDashboard/DriveSubsystem/Turn Joystick Scale"
+            }
+          },
+          "2,2": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Split Button Chooser",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Forward Joystick Scale",
+              "_title": "SmartDashboard/DriveSubsystem/Forward Joystick Scale"
+            }
+          },
+          "2,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Split Button Chooser",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Drive Style",
+              "_title": "SmartDashboard/DriveSubsystem/Drive Style"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/PeriodicCounter",
+              "_title": "/SmartDashboard/DriveSubsystem/PeriodicCounter"
+            }
+          },
+          "0,1": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/TelemetryEnabled",
+              "_title": "SmartDashboard/DriveSubsystem/TelemetryEnabled"
+            }
+          },
+          "0,3": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/DiagnosticsEnabled",
+              "_title": "SmartDashboard/DriveSubsystem/DiagnosticsEnabled"
+            }
+          },
+          "6,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Lat Accel (g)",
+              "_title": "/SmartDashboard/DriveSubsystem/Lat Accel (g)"
+            }
+          },
+          "6,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Turn Radius (inches)",
+              "_title": "SmartDashboard/DriveSubsystem/Turn Radius (inches)"
+            }
+          },
+          "6,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Real Left Speed (ips)",
+              "_title": "SmartDashboard/DriveSubsystem/Real Left Speed (ips)"
+            }
+          },
+          "8,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/Real Right Speed (ips)",
+              "_title": "SmartDashboard/DriveSubsystem/Real Right Speed (ips)"
+            }
+          },
+          "8,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Rate (dps)",
+              "_title": "SmartDashboard/NavigationSubsystem/Yaw Rate (dps)"
+            }
+          },
+          "8,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/NavigationSubsystem/Yaw Angle (deg)",
+              "_title": "SmartDashboard/NavigationSubsystem/Yaw Angle (deg)"
+            }
+          },
+          "7,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/Exposure",
+              "_title": "BucketVision/Exposure"
+            }
+          },
+          "10,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Back Limit",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Back Limit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "10,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Front Limit",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Front Limit",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "12,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Toggle Switch",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/TelemetryEnabled",
+              "_title": "SmartDashboard/ScoringSubsystem/TelemetryEnabled"
+            }
+          },
+          "12,2": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ScoringSubsystem/Arm Angle",
+              "_title": "SmartDashboard/ScoringSubsystem/Arm Angle"
+            }
+          },
+          "7,5": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/CameraNum",
+              "_title": "BucketVision/CameraNum"
+            }
+          },
+          "9,8": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/CameraNum",
+              "_title": "/BucketVision/CameraNum"
+            }
+          },
+          "10,8": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/Exposure",
+              "_title": "/BucketVision/Exposure"
+            }
+          },
+          "14,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/parallax",
+              "_title": "/SmartDashboard/DriveSubsystem/parallax"
+            }
+          },
+          "14,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/offAxis",
+              "_title": "/SmartDashboard/DriveSubsystem/offAxis"
+            }
+          },
+          "14,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/distance",
+              "_title": "/SmartDashboard/DriveSubsystem/distance"
+            }
+          },
+          "14,7": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/autoTurnRate_radps",
+              "_title": "/SmartDashboard/DriveSubsystem/autoTurnRate_radps"
+            }
+          },
+          "14,8": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveSubsystem/ManualTurnRate_radps",
+              "_title": "/SmartDashboard/DriveSubsystem/ManualTurnRate_radps"
+            }
+          },
+          "12,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///BucketVision/NumTargets",
+              "_title": "/BucketVision/NumTargets"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": -7.0,
+    "y": 2.0,
+    "width": 1932.0,
+    "height": 1004.0
+  }
+}
