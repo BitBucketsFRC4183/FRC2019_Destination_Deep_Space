@@ -21,11 +21,9 @@ public class LightingConstants {
     public enum LightingObjects
 	{
 		// Currently planning on lighting on these controls
-		VISION_SUBSYSTEM(0),
-		DRIVE_SUBSYSTEM(1),
-		SCORING_SUBSYSTEM(2),
-		CLIMB_SUBSYSTEM(3);
-		// RESERVED 4 - 9
+		FRONT_CAMERA(0),
+		BACK_CAMERA(1);
+		// RESERVED 2 - 9
 		
 		private int value;
 		

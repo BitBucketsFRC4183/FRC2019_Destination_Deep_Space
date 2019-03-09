@@ -39,10 +39,16 @@ public class OI {
     private final static int DRIVE_SPEED_AXIS            = controllerMapper.getLeftStickY();
     private final static int DRIVE_TURN_AXIS             = controllerMapper.getRightStickX();
 
+	private final static int CLIMBER_JOYSTICK_TEST        = controllerMapper.getRightStickY();
 	/**
 	 * speed - returns a speed command from driver joystick in the normal range [-1,1]
 	 * except when the invertDrive button is indicated, which causes the range to be [1,-1]
 	 */
+
+	public double manualClimbControl()
+	{
+		return operatorControl.getRawAxis(CLIMBER_JOYSTICK_TEST);
+	}
 	public double speed()
     {
 		// Default to -1 to make up-stick positive because raw up-stick is negative
@@ -97,11 +103,12 @@ public class OI {
 	// BUTTON DEFINITIONS
 	//****************************
 	private final static int DRIVE_LOW_SENSITIVE_BUTTON  = controllerMapper.getR1();
-	private final static int DRIVE_INVERT_BUTTON         = controllerMapper.getR2();
-	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getL1();
-	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getL2();
-	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getLeftTrigger(); // TODO: ask which triggers
-	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getRightTrigger();
+	private final static int DRIVE_INVERT_BUTTON         = controllerMapper.getL1();
+	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getShare();
+	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getOption();
+	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getR2();
+	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getL2();
+	private final static int DRIVE_AUTO_ALIGN            = controllerMapper.getCross();
 
 	// How do you like me now, Sam?
 	// TODO: Make a get/set function instead of setting it to public
@@ -114,6 +121,7 @@ public class OI {
 
 
 	// TODO: configure correct IDs
+	private final static int SCORING_TOP_DEAD_CENTER = controllerMapper.getTriangle();
 	private final static int SCORING_HATCH_PANEL = controllerMapper.getCircle();
 	private final static int SCORING_GROUND      = controllerMapper.getCross();
 	private final static int SCORING_BALL_C      = controllerMapper.getL1();
@@ -129,7 +137,7 @@ public class OI {
 
 
 
-	public boolean lowSensitivity()
+	public boolean lowSpeed()
 	{
 		return driverControl.getRawButton(DRIVE_LOW_SENSITIVE_BUTTON);
 	}
@@ -189,6 +197,10 @@ public class OI {
 	public boolean hp() {
 		return operatorControl.getRawButton(SCORING_HATCH_PANEL);
 	}
+	public boolean topDeadCenter()
+	{
+		return operatorControl.getRawButton(SCORING_TOP_DEAD_CENTER);
+	}
 	public boolean ground() {
 		return operatorControl.getRawButton(SCORING_GROUND);
 	}
@@ -220,9 +232,13 @@ public class OI {
 		return driverControl.getRawButton(DRIVE_OUTFEED_BUTTON);
 	}
 
+	public boolean hatchOutfeedActive() {
+		return false;//driverControl.getRawButton(DRIVE_HATCH_OUTFEED_BUTTON);
+	}
 
-
-
+	public boolean autoAlign(){
+		return driverControl.getRawButton(DRIVE_AUTO_ALIGN);
+	}
 
 	public boolean driverIdle() {
 		return driverControl.getRawButton(DRIVER_IDLE);

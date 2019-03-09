@@ -19,7 +19,11 @@ import frc.robot.MotorId;
 import frc.robot.subsystem.drive.DriveConstants;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.autonomous.AutonomousConstants;
+import frc.robot.subsystem.autonomous.GuidanceAlgorithm;
 import frc.robot.subsystem.navigation.NavigationSubsystem;
+import frc.robot.subsystem.vision.CameraFeedback;
+import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.utils.Deadzone;
 import frc.robot.utils.JoystickScale;//for sam <3
 import frc.robot.utils.talonutils.TalonUtils;
@@ -41,14 +45,13 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	// Reference any other singletons we need
 	private final OI oi = OI.instance();
 	private final NavigationSubsystem navigation = NavigationSubsystem.instance();
-
+	private final VisionSubsystem vision = VisionSubsystem.instance();
+	private GuidanceAlgorithm guidance;
 
 	// drive styles that driver can choose on the shuffleboard
 	public enum DriveStyle {
 		WPI_Arcade,
-		BB_Arcade,
 		Velocity
-		// add in curvature & velocity later
 	}
 	private static SendableChooser<DriveStyle> driveStyleChooser;
 
@@ -123,7 +126,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
   	private DriveSubsystem()
   	{
 		setName("DriveSubsystem");
-						
+
+		guidance = new GuidanceAlgorithm();
+								
 		// Make joystick scale chooser and put it on the dashboard
 		forwardJoystickScaleChooser = new SendableChooser<JoystickScale>();
 		forwardJoystickScaleChooser.setDefaultOption( "Linear",    JoystickScale.LINEAR);
@@ -143,9 +148,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		
 
 		driveStyleChooser = new SendableChooser<DriveStyle>();
-		driveStyleChooser.setDefaultOption("WPI Arcade", DriveStyle.WPI_Arcade);
-		driveStyleChooser.addOption("Bit Buckets Arcade", DriveStyle.BB_Arcade);
-		driveStyleChooser.addOption("Velocity", DriveStyle.Velocity);
+		driveStyleChooser.addOption("WPI Arcade", DriveStyle.WPI_Arcade);
+		driveStyleChooser.setDefaultOption("Velocity", DriveStyle.Velocity);
 
 		SmartDashboard.putData( getName()+"/Drive Style", driveStyleChooser);
 
@@ -433,7 +437,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		turn = turnJoystickScaleChooser.getSelected().rescale(turn, DriveConstants.JOYSTICK_DEADBAND);
 		SmartDashboard.putNumber(getName()+"/Turn Factor",turn);
 
-		if(oi.lowSensitivity()) 
+		if(oi.lowSpeed()) 
 		{
 			speed *= LOW_SENS_GAIN;
 			turn *= LOW_SENS_GAIN;
@@ -460,19 +464,73 @@ public class DriveSubsystem extends BitBucketSubsystem {
 					selectFollowerState(true);
 					selectVelocityMode(false);
 					selectMotionMode(false);
+
+					speed = map(speed,
+					-1.0,
+					 1.0,
+					-DriveConstants.MAX_ALLOWED_PERCENT_SPEED,
+					DriveConstants.MAX_ALLOWED_PERCENT_SPEED);
+
+					turn = map(turn,
+					-1.0,
+					 1.0,
+					-DriveConstants.MAX_ALLOWED_PERCENT_TURN,
+					DriveConstants.MAX_ALLOWED_PERCENT_TURN);
+					SmartDashboard.putNumber(getName()+"/Percent Limited Speed",speed);
+					SmartDashboard.putNumber(getName()+"/Percent Limited Turn",turn);
+								
 					differentialDrive.arcadeDrive(speed, turn, false);
 
 					break;
 				}
-
-				case BB_Arcade: {
-					arcadeDrive(speed, turn);
-
-					break;
-				}
-
 				case Velocity: {
-					velocityDrive(speed, turn);
+					if (oi.autoAlign())
+					{
+						vision.enableAutonomousExposure();
+						double speed_ips = map(speed,
+						-1.0,
+						 1.0,
+						-DriveConstants.MAX_ALLOWED_SPEED_IPS * 0.5,
+						DriveConstants.MAX_ALLOWED_SPEED_IPS * 0.5);
+
+						CameraFeedback feedback = vision.getClosestObjectData();
+
+						double turnRate_radps = 0.0;
+				
+						if (feedback != null)
+						{
+							double offAxis = feedback.getOffAxis();
+							double parallax = feedback.getParallax();
+							double distance = feedback.getDistance();
+
+							SmartDashboard.putNumber(getName()+"/offAxis",offAxis);
+							SmartDashboard.putNumber(getName()+"/parallax",parallax);
+							SmartDashboard.putNumber(getName()+"/distance",distance);
+				
+							// no need to keep guiding if in a certain distance
+							if (distance <= AutonomousConstants.GUIDANCE_STOP) {
+								guidance.setOffAxis(0.0);
+								guidance.setParallax(0.0);
+							}
+							else {
+								guidance.setOffAxis(offAxis);
+								guidance.setParallax(parallax);
+				
+							}				
+				
+							turnRate_radps = guidance.getTurnRate(distance);
+							SmartDashboard.putNumber(getName()+"/autoTurnRate_radps",turnRate_radps);
+						}						
+						velocityDrive_auto(
+											speed_ips,
+											turnRate_radps
+						);
+
+					}
+					else {
+						vision.enableDriverExposure();
+						velocityDrive(speed, turn);
+					}
 
 					break;
 				}
@@ -519,7 +577,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 	// +turnStick produces right turn (CW from above, -yaw angle)
     /// TODO: Consider re-designing this to reduce turn by up to 50% at full forward speed
-	private void arcadeDrive(double speed, double turn) 
+	private void BBarcadeDrive(double speed, double turn) 
 	{
 		// The following functions on do something if the state needs to be changed
 		selectFollowerState(true);
@@ -549,7 +607,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		SmartDashboard.putNumber(getName()+"/Commanded Speed (ips)", speed_ips);
 		SmartDashboard.putNumber(getName()+"/Commanded Turn (dps)", Math.toDegrees(turn_radps));
 
-		double diffSpeed_ips = turn_radps * DriveConstants.WHEEL_TRACK_INCHES / 2.0;
+		double diffSpeed_ips = turn_radps * DriveConstants.WHEEL_TRACK_INCHES / 2.0 ;
 
 		// Compute, report, and limit lateral acceleration
 		if (Math.abs(turn_radps * speed_ips) > DriveConstants.MAX_LAT_ACCELERATION_IPSPS)
@@ -598,19 +656,21 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		double speed_ips = map(speed,
 								 -1.0,
 								  1.0,
-								 -DriveConstants.MAX_SPEED_IPS,
-								 DriveConstants.MAX_SPEED_IPS);
+								 -DriveConstants.MAX_ALLOWED_SPEED_IPS,
+								 DriveConstants.MAX_ALLOWED_SPEED_IPS);
 		double turn_radps   = map(turn,
 								 -1.0,
 								  1.0,
-								 -DriveConstants.MAX_TURN_RADPS,
-								 DriveConstants.MAX_TURN_RADPS);
+								 -DriveConstants.MAX_ALLOWED_TURN_RADPS,
+								 DriveConstants.MAX_ALLOWED_TURN_RADPS);
 		
+		SmartDashboard.putNumber(getName()+"/ManualTurnRate_radps",turn_radps);
+
 		velocityDrive_auto(speed_ips, turn_radps);
 	}
 
 	public void doAutoTurn( double turn) {
-		arcadeDrive( 0.0, turn);				
+		BBarcadeDrive( 0.0, turn);				
 	}
 	
 	public void setAlignDrive(boolean start) {
@@ -621,7 +681,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	public void doAlignDrive(double fwdStick, double turnStick) {
 					
-		if(oi.lowSensitivity())
+		if(oi.lowSpeed())
 			fwdStick *= LOW_SENS_GAIN;
 		
 		fwdStick = shapeAxis(fwdStick);
@@ -640,7 +700,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());
 			error = -ALIGN_LOOP_GAIN * -navigation.getYawRate_degPerSec();
 			SmartDashboard.putNumber(getName()+"/IMU_ERROR", error);
-			arcadeDrive( fwdStick, error + yawCorrect());
+			BBarcadeDrive( fwdStick, error + yawCorrect());
 		}
 	}
 	
@@ -650,7 +710,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			setAllMotorsZero();
 		else {
 			double error = ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());				
-			arcadeDrive( fwd, error + yawCorrect());				
+			BBarcadeDrive( fwd, error + yawCorrect());				
 		}			
 	}
 	@Override
@@ -687,7 +747,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		{
 
 		}
-		SmartDashboard.putBoolean(getName()+"/RunningDiag", false);		
+		SmartDashboard.putBoolean(getName()+"/RunningDiag", false);  
 	}
   	
 	public void disable() {

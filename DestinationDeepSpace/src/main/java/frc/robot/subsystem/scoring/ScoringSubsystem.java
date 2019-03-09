@@ -10,6 +10,7 @@ package frc.robot.subsystem.scoring;
 import frc.robot.MotorId;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.utils.talonutils.TalonUtils;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 
 
@@ -41,6 +45,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private final WPI_TalonSRX rollerMotor;
 	private final WPI_TalonSRX armMotor1;
 	private final WPI_TalonSRX armMotor2;
+	private double armMotor1Current_amps = 0;
+	private double armMotor2Current_amps = 0;
 
 	// last orientation of the robot's arm
 	// true --> front
@@ -48,9 +54,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private boolean back = false;
 	// last level the arm was at
 	private ScoringConstants.ScoringLevel lastLevel = ScoringConstants.ScoringLevel.NONE;
+	private ScoringConstants.ScoringLevel commandedLevel = ScoringConstants.ScoringLevel.NONE;
 
 
-
+	private VisionSubsystem visionSubsystem = VisionSubsystem.instance();
 
 
 	private ScoringSubsystem() {
@@ -68,10 +75,18 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		TalonUtils.initializeMotorDefaults(armMotor1);
 		TalonUtils.initializeMotorDefaults(armMotor2);
 
+		rollerMotor.setInverted(ScoringConstants.ROLLER_MOTOR_INVERSION);
 		armMotor1.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
 		armMotor2.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
 
 		armMotor1.setSensorPhase(ScoringConstants.ARM_MOTOR_SENSOR_PHASE);
+
+		armMotor1.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
+		armMotor1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,0);
+		
+		armMotor1.overrideLimitSwitchesEnable(true);
+
+		armMotor1.setNeutralMode(NeutralMode.Brake);
 
 
 		TalonUtils.initializeMotorFPID(armMotor1, 
@@ -91,11 +106,18 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		int abs_ticks = armMotor1.getSensorCollection().getPulseWidthPosition() & 0xFFF;
 		// set the ticks of relative magnetic encoder
 		// effectively telling the encoder where 0 is
-		armMotor1.setSelectedSensorPosition(abs_ticks);
+		armMotor1.setSelectedSensorPosition(abs_ticks - ScoringConstants.ARM_BIAS_TICKS);
 
-		// TODO: Move to constants (max speed is ~300)
-		armMotor1.configMotionAcceleration((int)(0.75*300), 20);
-		armMotor1.configMotionCruiseVelocity((int)(0.75*300), 20);
+		// If arm is toward back side, then declare that we are back there
+		if (getAngle_deg() > 10.0)
+		{
+			back = true;
+		}
+
+		// Acceleration is the slope of the velocity profile used for motion magic
+		// Example: 250 tick/100ms/s is 2500 ticks/s/s
+		armMotor1.configMotionAcceleration(ScoringConstants.ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC, 20);
+		armMotor1.configMotionCruiseVelocity(ScoringConstants.ARM_CRUISE_SPEED_TICKS_PER_100MS, 20);
 
 
 
@@ -125,11 +147,16 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	// here. Call these from Commands.
 
 
+	public ScoringConstants.ScoringLevel getCommandedLevel()
+	{
+		return commandedLevel;
+	}
 
 	/** Command the arm to a level */
 	public void goToLevel(ScoringConstants.ScoringLevel level) {
 		// neither level should get to here in the first place
 		//     ... but just in case
+		commandedLevel = level;
 		if (
 			level == ScoringConstants.ScoringLevel.NONE ||
 			level == ScoringConstants.ScoringLevel.INVALID
@@ -184,6 +211,15 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	public void switchOrientation() {
 		back = !back;
 
+		if (back)
+		{
+			visionSubsystem.enableBack();
+		}
+		else
+		{
+			visionSubsystem.enableFront();
+		}
+
 		// go to the last level the arm was at, but this time
 		// with the new orientation (handled by the method)
 		goToLevel(lastLevel);
@@ -201,15 +237,34 @@ public class ScoringSubsystem extends BitBucketSubsystem {
         boolean bCargo = oi.bCargo();
         boolean bLoadingStation = oi.bLoadingStation();
 		boolean bRocket1 = oi.bRocket1();
+		boolean topDeadCenter = oi.topDeadCenter();
 		
 		ScoringConstants.ScoringLevel level = ScoringConstants.ScoringLevel.NONE;
+
 
 		if (hp) {
 			level = ScoringConstants.ScoringLevel.HP;
 		}
+		if (topDeadCenter)
+		{
+			if (level == ScoringConstants.ScoringLevel.NONE)
+			{ 
+				level = ScoringConstants.ScoringLevel.TOP_DEAD_CENTER; 
+			}
+			else 
+			{ 
+				return ScoringConstants.ScoringLevel.INVALID; 
+			}
+		}
 		if (ground) {
-			if (level == ScoringConstants.ScoringLevel.NONE) { level = ScoringConstants.ScoringLevel.GROUND; }
-			else { return ScoringConstants.ScoringLevel.INVALID; }
+			if (level == ScoringConstants.ScoringLevel.NONE)
+			{ 
+				level = ScoringConstants.ScoringLevel.GROUND; 
+			}
+			else 
+			{ 
+				return ScoringConstants.ScoringLevel.INVALID; 
+			}
 		}
 		if (bCargo) {
 			if (level == ScoringConstants.ScoringLevel.NONE) { level = ScoringConstants.ScoringLevel.BALL_CARGO; }
@@ -231,6 +286,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	public int getArmLevelTickError() {
 		int err1 = Math.abs(armMotor1.getClosedLoopError());
+
+		// Always output this
+		SmartDashboard.putNumber(getName() + "/ArmLevelError (ticks)", err1);
 
 		return err1;
 	}
@@ -254,7 +312,14 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	 * Direct the robot arm to a certain angle.
 	 */
 	// private because we only want other classes to change the angle via goToLevel()
+	private double targetAngle_rad = 0.0;
+	public double getTargetAngle_rad()
+	{
+		return targetAngle_rad;
+	}
+
 	private void directArmTo(double angle_rad) {
+		targetAngle_rad = angle_rad;
 		double ticks = angle_rad * ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV / (2 * Math.PI);
 
 		// if the arm is in the back of the robot
@@ -262,6 +327,13 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			// switch the ticks so that the arm will go to intended position on the back too
 			// ticks = 0 means arm is just up
 			ticks *= -1;
+			targetAngle_rad *= -1;
+			SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(-angle_rad));
+
+		}
+		else
+		{
+			SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(angle_rad));
 		}
 
 		armMotor1.set(ControlMode.MotionMagic, ticks);
@@ -269,11 +341,11 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-	/** Get angle from normal of scoring arm (90 deg = exactly forward) */
+	/** Get angle from normal of scoring arm (-90 deg = exactly forward, +90 is backward) */
 	public double getAngle_deg() {
 		int ticks = armMotor1.getSelectedSensorPosition();
 
-		return 360.0 * ticks / ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
+		return 360.0 * (double)ticks / (double)ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
 	}
 	
 
@@ -297,25 +369,90 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	protected void initDefaultCommand() {
 	}
 
+	private static int currentLimitCount = 0;
+	public boolean exceededCurrentLimit()
+	{
+		armMotor1Current_amps = armMotor1.getOutputCurrent();
+		armMotor2Current_amps = armMotor2.getOutputCurrent();
+
+		boolean currentLimit = (armMotor1Current_amps >= ScoringConstants.MAX_ARM_MOTOR_CURRENT_AMPS) ||
+							   (armMotor2Current_amps >= ScoringConstants.MAX_ARM_MOTOR_CURRENT_AMPS);
+		if (currentLimit)
+		{
+			currentLimitCount++;
+		}
+		SmartDashboard.putNumber(getName() + "/Arm Current Limit Count", currentLimitCount);
+		return currentLimit;
+	}
+
+	public boolean frontLimit()
+	{
+		boolean result = armMotor1.getSensorCollection().isRevLimitSwitchClosed();
+		SmartDashboard.putBoolean(getName()+"/Arm Front Limit", result);
+		return result;
+	}
+	public boolean backLimit()
+	{
+		boolean result = armMotor1.getSensorCollection().isFwdLimitSwitchClosed();
+		SmartDashboard.putBoolean(getName()+"/Arm Back Limit", result);
+		return result;
+	}
+
 	@Override
 	public void periodic() {
-		boolean infeed = oi.infeedActive();
-		boolean outfeed = oi.outfeedActive();
-
-		if (!(infeed && outfeed)) { // if both are pressed, keep doing what you're doing
-			if      (infeed)  { setRollers(1.0);  }
-			else if (outfeed) { setRollers(-1.0); }
-			else              { setRollers(0.0);  }
+		
+		if (exceededCurrentLimit())
+		{
+			startIdle();
 		}
 
+		// Just poll it
+		frontLimit();
+		backLimit();
+
+		if (oi.autoAlign() && lastLevel == ScoringConstants.ScoringLevel.HP) {
+			goToLevel(ScoringConstants.ScoringLevel.HP_AUTO);
+		}
+
+		if (!oi.autoAlign() && lastLevel == ScoringConstants.ScoringLevel.HP_AUTO) {
+			goToLevel(ScoringConstants.ScoringLevel.HP);
+		}
+
+		boolean infeed = oi.infeedActive();
+		boolean outfeed = oi.outfeedActive();
+		boolean hatchOutfeed = (getCommandedLevel() == ScoringConstants.ScoringLevel.HP);
+		SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
+		SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
+
+		if (!(
+			(infeed && outfeed)
+			)) { // if both are pressed, keep doing what you're doing
+			if      (infeed)       { setRollers(-1.0);  }
+			else if (outfeed)      { setRollers(1.0); }
+			else                   { setRollers(0.0);  }
+		}
+
+		if (back)
+		{
+			visionSubsystem.enableBack();
+		}
+		else
+		{
+			visionSubsystem.enableFront();
+		}
 
 		
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
+		SmartDashboard.putBoolean(getName()+ "/Arm FRONT", !back);
+		SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle_deg());
 		if (getTelemetryEnabled()) {
-			SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle_deg());
 			SmartDashboard.putNumber(getName() + "/Arm Ticks", armMotor1.getSelectedSensorPosition());
 			SmartDashboard.putNumber(getName() + "/Arm Error", armMotor1.getClosedLoopError());
+			SmartDashboard.putNumber(getName() + "/Arm Motor 0 Current", armMotor1Current_amps);
+			SmartDashboard.putNumber(getName() + "/Arm Motor 1 Current", armMotor2Current_amps);
+			SmartDashboard.putNumber(getName() + "/Arm Motor TOTAL Current", armMotor1Current_amps+armMotor2Current_amps);
+
 		}
 		// commands will handle dealing with arm manipulation
 	}

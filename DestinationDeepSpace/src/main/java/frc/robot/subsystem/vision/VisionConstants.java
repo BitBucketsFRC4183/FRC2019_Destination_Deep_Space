@@ -12,4 +12,9 @@ package frc.robot.subsystem.vision;
  */
 public class VisionConstants {
     public final static int DEFAULT_ILLUMINATOR_BRIGHTNESS = 50;
+	public static final double DRIVER_EXPOSURE = 50;
+	public static final double AUTONOMOUS_EXPOSURE = 0;
+
+	public static final int FRONT_CAMERA_ID = 1;
+	public static final int BACK_CAMERA_ID  = 0;
 }

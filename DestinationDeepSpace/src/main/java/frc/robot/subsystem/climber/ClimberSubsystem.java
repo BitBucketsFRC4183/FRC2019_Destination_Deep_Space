@@ -12,6 +12,7 @@ import frc.robot.subsystem.BitBucketSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.MotorId;
 import frc.robot.ServoId;
 import frc.robot.operatorinterface.OI;
+import frc.robot.utils.talonutils.TalonUtils;
 /**
  * Add your docs here.
  */
@@ -58,12 +60,21 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		climbMotor1 = new WPI_TalonSRX(MotorId.CLIMB_MOTOR_1_ID);
 		climbMotor2 = new WPI_TalonSRX(MotorId.CLIMB_MOTOR_2_ID);
 
+		TalonUtils.initializeMotorDefaults(climbMotor1);
+		TalonUtils.initializeMotorDefaults(climbMotor2);
+
 		climbMotor1.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
 		climbMotor1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,0);
 		
 		climbMotor1.overrideLimitSwitchesEnable(true);
 
+		climbMotor1.setInverted(true);
+		climbMotor2.setInverted(false);
+
 		climbMotor1.setNeutralMode(NeutralMode.Brake);
+		climbMotor2.setNeutralMode(NeutralMode.Brake);
+
+		climbMotor2.follow(climbMotor1);
 	}
 
 	public static ClimberSubsystem instance() {
@@ -86,10 +97,15 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public void periodic() {
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
+		SmartDashboard.putBoolean(getName()+"/END Limit Switch", climbMotor1.getSensorCollection().isRevLimitSwitchClosed());
+		SmartDashboard.putNumber(getName() + "/ManualJoystickCommand", oi.manualClimbControl());
+		double climbMotor1current = climbMotor1.getOutputCurrent();
+		double climbMotor2current = climbMotor2.getOutputCurrent();
+		SmartDashboard.putNumber(getName() + "/climbMotor1Current", climbMotor1current);
+		SmartDashboard.putNumber(getName() + "/climbMotor2Current", climbMotor2current);
 		switch (state) {
 			case IDLE:{
 				climbMotor1.set(0);
-				climbMotor2.set(0);
 				if (oi.armClimber()){
 					state = eState.ARMED;	
 				}
@@ -106,7 +122,13 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 			}
 				break;
 			case HIGH_CLIMB: {
-				highClimb();
+				highClimbManual();
+				//highClimb();
+				if (
+					//climbMotor1.getSensorCollection().isRevLimitSwitchClosed()||
+					climbMotor1current>200||climbMotor2current>200){
+					state=eState.IDLE;
+				}
 			}	
 				break;
 			case LOW_CLIMB: {
@@ -123,12 +145,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		{
 			updateDashboard();
 		}
-		
-		if (climbMotor1.getSensorCollection().isFwdLimitSwitchClosed()) {
-			climbMotor1.set(0);
-			climbMotor2.set(0);
-		}
-		
+	
 	}
 
 	@Override
@@ -174,10 +191,18 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		climbServo.setAngle(highClimbAngle);
 		if (Timer.getFPGATimestamp() - start > 1.0) {
 			climbMotor1.set(highClimbSpeed);
-			climbMotor2.set(highClimbSpeed);
 		}
 		return (err);
 	}
+
+	private void highClimbManual()
+	{
+		climbServo.setAngle(highClimbAngle);
+		if (Timer.getFPGATimestamp() - start > 1.0) {
+			climbMotor1.set(oi.manualClimbControl());
+		}
+	}
+
 
 	private int lowClimb() {
 		int err = 0;
