@@ -410,6 +410,14 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		frontLimit();
 		backLimit();
 
+		if (oi.autoAlign() && lastLevel == ScoringConstants.ScoringLevel.HP) {
+			goToLevel(ScoringConstants.ScoringLevel.HP_AUTO);
+		}
+
+		if (!oi.autoAlign() && lastLevel == ScoringConstants.ScoringLevel.HP_AUTO) {
+			goToLevel(ScoringConstants.ScoringLevel.HP);
+		}
+
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
 		boolean hatchOutfeed = (getCommandedLevel() == ScoringConstants.ScoringLevel.HP);

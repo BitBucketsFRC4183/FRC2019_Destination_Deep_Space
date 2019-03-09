@@ -29,6 +29,7 @@ public class ScoringConstants {
 		GROUND               (113), //deg vs inches -->(5.0),       // hatch panel ground pickup
 		
 		HP                   (90.0), //(83.0), //deg vs inches -->(19.0),    // cargo scoring
+		HP_AUTO              (93.0), // different for auto assist so that camera can see it
 
 		BALL_CARGO           (63.0), // deg vs inches -->(31.5),    // cargo scoring
 		BALL_LOADING_STATION (49.0), // deg vs inches -->(37.0),    // loading station pickup
