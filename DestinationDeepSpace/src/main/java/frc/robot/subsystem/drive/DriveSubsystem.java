@@ -747,7 +747,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		{
 
 		}
-		SmartDashboard.putBoolean(getName()+"/RunningDiag", false);		
+		SmartDashboard.putBoolean(getName()+"/RunningDiag", false);  
 	}
   	
 	public void disable() {
