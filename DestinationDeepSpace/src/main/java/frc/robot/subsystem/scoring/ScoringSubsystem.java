@@ -419,18 +419,26 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		if (!(
 			(infeed && outfeed)
 			)) { // if both are pressed, keep doing what you're doing
-			if      (infeed)       { setRollers(hatchOutfeed?-1.0:-1.0);  }
-			else if (outfeed)      { setRollers(hatchOutfeed?1.0:1.0); }
+			if      (infeed)       { setRollers(-1.0);  }
+			else if (outfeed)      { setRollers(1.0); }
 			else                   { setRollers(0.0);  }
 		}
 
+		if (back)
+		{
+			visionSubsystem.enableBack();
+		}
+		else
+		{
+			visionSubsystem.enableFront();
+		}
 
 		
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
+		SmartDashboard.putBoolean(getName()+ "/Arm FRONT", !back);
+		SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle_deg());
 		if (getTelemetryEnabled()) {
-			SmartDashboard.putBoolean(getName()+ "/Arm FRONT", !back);
-			SmartDashboard.putNumber(getName() + "/Arm Angle", getAngle_deg());
 			SmartDashboard.putNumber(getName() + "/Arm Ticks", armMotor1.getSelectedSensorPosition());
 			SmartDashboard.putNumber(getName() + "/Arm Error", armMotor1.getClosedLoopError());
 			SmartDashboard.putNumber(getName() + "/Arm Motor 0 Current", armMotor1Current_amps);

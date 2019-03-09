@@ -490,8 +490,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 						double speed_ips = map(speed,
 						-1.0,
 						 1.0,
-						-DriveConstants.MAX_ALLOWED_SPEED_IPS,
-						DriveConstants.MAX_ALLOWED_SPEED_IPS);
+						-DriveConstants.MAX_ALLOWED_SPEED_IPS * 0.5,
+						DriveConstants.MAX_ALLOWED_SPEED_IPS * 0.5);
 
 						CameraFeedback feedback = vision.getClosestObjectData();
 
