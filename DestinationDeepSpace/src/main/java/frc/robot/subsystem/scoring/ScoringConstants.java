@@ -28,7 +28,7 @@ public class ScoringConstants {
         TOP_DEAD_CENTER      (0), //deg
 		GROUND               (113), //deg vs inches -->(5.0),       // hatch panel ground pickup
 		
-		HP                   (88.5+3.0), //(83.0), //deg vs inches -->(19.0),    // cargo scoring
+		HP                   (90.0), //(83.0), //deg vs inches -->(19.0),    // cargo scoring
 
 		BALL_CARGO           (63.0), // deg vs inches -->(31.5),    // cargo scoring
 		BALL_LOADING_STATION (49.0), // deg vs inches -->(37.0),    // loading station pickup
@@ -66,5 +66,5 @@ public class ScoringConstants {
 
 
 
-	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 3.0;
+	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 6.0;
 }
