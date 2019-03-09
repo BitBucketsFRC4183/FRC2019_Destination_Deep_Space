@@ -24,6 +24,7 @@ public class ScoringConstants {
 
 	public enum ScoringLevel {
 		INVALID              (0),       // multiple levels are selected
+		MANUAL              (0),       // no description necessary, but it's here anyway. 
 		NONE                 (0),       // no levels are selected
         TOP_DEAD_CENTER      (0), //deg
 		GROUND               (113), //deg vs inches -->(5.0),       // hatch panel ground pickup
@@ -64,6 +65,12 @@ public class ScoringConstants {
 
 	// TODO: actual value
 	public static final int ROTATION_MOTOR_ERROR_DEADBAND_TICKS = 50;
+
+	// Set to a number between 0 and 1, controls the deadband for the manual arm control joystick.
+	public static final double ARM_MANUAL_DEADBAND = 0.2;
+
+	// Set to a positive number, manual control's output is multiplied by this value.
+	public static final double ARM_MANUAL_SPEED_MULTIPLIER = 0.6;
 
 
 
