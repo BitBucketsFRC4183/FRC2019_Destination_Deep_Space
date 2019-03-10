@@ -43,6 +43,9 @@ public class ArmLevel extends Command {
             SmartDashboard.putString("ArmLevelStatus","Forced Idle");
             return CommandUtils.stateChange(new Idle());
         }
+        if (Math.abs(oi.manualArmControl())<=ScoringConstants.ARM_MANUAL_DEADBAND && LEVEL == ScoringConstants.ScoringLevel.MANUAL) {
+			return CommandUtils.stateChange(new Idle());
+		}
 
 
         boolean areWeThereYet = (Math.abs(Math.toDegrees(scoringSubsystem.getTargetAngle_rad()) - 
