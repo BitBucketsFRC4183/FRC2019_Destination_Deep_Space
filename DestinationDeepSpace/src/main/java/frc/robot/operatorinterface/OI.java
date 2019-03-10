@@ -128,6 +128,7 @@ public class OI {
 	private final static int SCORING_BALL_LS     = controllerMapper.getR1();
 	private final static int SCORING_BALL_R1     = controllerMapper.getL2();
 	private final static int SWITCH_ORIENTATION  = controllerMapper.getSquare();
+	private final static int ARM_MANUAL  = controllerMapper.getLeftStickY();
 
 
 
@@ -219,6 +220,10 @@ public class OI {
 
 	public boolean switchOrientation() {
 		return operatorControl.getRawButton(SWITCH_ORIENTATION);
+	}
+
+	public double manualArmControl() {
+		return operatorControl.getRawAxis(ARM_MANUAL);
 	}
 
 	/**

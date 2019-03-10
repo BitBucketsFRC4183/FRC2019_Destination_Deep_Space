@@ -67,7 +67,8 @@ public class Idle extends Command {
 		// that is true in real DS. For now the solution is to test for the other
 		// two states together
 	  
-		if( ! ds.isAutonomous() && !ds.isDisabled()) 
+		// Autonomous for us is just driver control with vision. Unfortunately.
+		if( /*! ds.isAutonomous() &&*/ !ds.isDisabled()) 
 		{
 			return CommandUtils.stateChange(new DriverControl());
 		}

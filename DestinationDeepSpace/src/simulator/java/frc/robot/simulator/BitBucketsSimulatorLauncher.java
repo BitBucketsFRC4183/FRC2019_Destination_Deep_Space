@@ -45,7 +45,6 @@ public class BitBucketsSimulatorLauncher {
 
         // create an instance of our robot
         robot = new Robot();
-        robot.robotInit();
 
         // setup our custom simulator
         simulator.setRobot(robot);
