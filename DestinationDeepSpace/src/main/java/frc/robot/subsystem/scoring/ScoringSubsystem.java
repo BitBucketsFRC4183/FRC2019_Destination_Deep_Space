@@ -508,7 +508,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-	public TalonSRX getRotationMotor1() {
+	public TalonSRX getArmMotor1() {
 		return armMotor1;
 	}
 	
