@@ -11,4 +11,6 @@ package frc.robot.subsystem.climber;
  * Add your docs here.
  */
 public class ClimberConstants {
+    public static final double MANUAL_CLIMB_MAX = 0.8;
+    public static final double MANUAL_CLIMB_IN_MAX = 0.1;
 }

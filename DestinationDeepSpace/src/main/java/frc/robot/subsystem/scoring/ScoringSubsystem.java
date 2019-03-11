@@ -449,19 +449,17 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		}
 
+		// note: the OI is set up so that infeed and outfeed WILL BE MUTUALLY EXCLUSIVE
+		// and the operator has secondary priority for infeed and outfeed
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
 		boolean hatchOutfeed = (getCommandedLevel() == ScoringConstants.ScoringLevel.HP);
 		SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
 		SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
 
-		if (!(
-			(infeed && outfeed)
-			)) { // if both are pressed, keep doing what you're doing
-			if      (infeed)       { setRollers(-1.0);  }
-			else if (outfeed)      { setRollers(1.0); }
-			else                   { setRollers(0.0);  }
-		}
+		if      (infeed)  { setRollers(-1.0); }
+		else if (outfeed) { setRollers(1.0);  }
+		else              { setRollers(0.0);  }
 
 		if (back)
 		{

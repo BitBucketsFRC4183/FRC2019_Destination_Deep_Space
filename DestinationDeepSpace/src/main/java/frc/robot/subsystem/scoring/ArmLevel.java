@@ -2,6 +2,7 @@ package frc.robot.subsystem.scoring;
 
 import frc.robot.operatorinterface.OI;
 import frc.robot.utils.CommandUtils;
+import frc.robot.subsystem.climber.ClimberSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ArmLevel extends Command {
     private static OI oi = OI.instance();
     private static ScoringSubsystem scoringSubsystem = ScoringSubsystem.instance();
+    private static ClimberSubsystem climberSubsystem = ClimberSubsystem.instance();
 
     private final ScoringConstants.ScoringLevel LEVEL;
 
@@ -43,8 +45,10 @@ public class ArmLevel extends Command {
             SmartDashboard.putString("ArmLevelStatus","Forced Idle");
             return CommandUtils.stateChange(new Idle());
         }
-        
 
+        if (climberSubsystem.isHighClimb() && LEVEL != ScoringConstants.ScoringLevel.BALL_LOADING_STATION) {
+            return CommandUtils.stateChange(new ArmLevel(ScoringConstants.ScoringLevel.BALL_LOADING_STATION));
+        }
 
         boolean areWeThereYet = (Math.abs(Math.toDegrees(scoringSubsystem.getTargetAngle_rad()) - 
                                          scoringSubsystem.getAngle_deg()) < ScoringConstants.ANGLE_TOLERANCE_DEG);
