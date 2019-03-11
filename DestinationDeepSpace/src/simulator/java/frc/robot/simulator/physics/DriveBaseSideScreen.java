@@ -94,6 +94,7 @@ public class DriveBaseSideScreen extends AbstractPhysicsSimulationScreen {
         /// TODO: There could be more than one (1) slave motor, index 0 = master, above
         driveBaseLeftSide.setRearMotorSpeed((float) (motorSpeed * DriveSubsystem.instance().getLeftMotor(1).getMotorOutputPercent()));
         driveBaseLeftSide.setArmAngle((float) (MathUtils.degreesToRadians * (ScoringSubsystem.instance().getAngle_deg())));
+        // driveBaseLeftSide.setArmRotationSpeed((float) (ScoringSubsystem.instance().getArmMotor1().getMotorOutputPercent()));
         driveBaseLeftSide.setTopRollerSpeed((float) (motorSpeed * -ScoringSubsystem.instance().getRollerMotor().getMotorOutputPercent()));
         driveBaseLeftSide.setBottomRollerSpeed((float) (motorSpeed * ScoringSubsystem.instance().getRollerMotor().getMotorOutputPercent()));
 

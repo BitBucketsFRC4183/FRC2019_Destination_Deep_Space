@@ -51,6 +51,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	}
 
 	eState state = eState.IDLE;
+	private boolean released;
 
 	private final OI oi = OI.instance();
 
@@ -107,7 +108,8 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 			case IDLE:{
 				climbMotor1.set(ClimberConstants.BACK_DRIVE_POWER_FACTOR);
 				if (oi.armClimber()){
-					state = eState.ARMED;	
+					state = eState.HIGH_CLIMB;
+					released = false;
 				}
 			}
 				break;
@@ -122,12 +124,32 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 			}
 				break;
 			case HIGH_CLIMB: {
-				highClimbManual();
+				boolean climb = oi.armClimber();
+
+				// if arm buttons have been released
+				if (!climb) {
+					released = true;
+				}
+
+				if (climb) {
+					if (released) {
+						// disarm
+						state = eState.IDLE;
+					} else {
+						// manual climb b/c has not been released
+						highClimbManual();
+					}
+				} else {
+					// manual climb
+					highClimbManual();
+				}
 				//highClimb();
 				if (
 					//climbMotor1.getSensorCollection().isRevLimitSwitchClosed()||
-					climbMotor1current>200||climbMotor2current>200){
+					climbMotor1current>200||climbMotor2current>200
+				){
 					state=eState.IDLE;
+					released = true;
 				}
 			}	
 				break;
@@ -198,8 +220,16 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	private void highClimbManual()
 	{
 		climbServo.setAngle(highClimbAngle);
+		double control = oi.manualClimbControl();
+
+		if (control < 0) {
+			control *= ClimberConstants.MANUAL_CLIMB_MAX;
+		} else {
+			control *= ClimberConstants.MANUAL_CLIMB_IN_MAX;
+		}
+
 		if (Timer.getFPGATimestamp() - start > 1.0) {
-			climbMotor1.set(oi.manualClimbControl()*ClimberConstants.MAX_CLIMBER_POWER_FACTOR);
+			climbMotor1.set(control);
 		}
 	}
 
@@ -213,5 +243,9 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	public void startIdle() {
 		state = eState.IDLE;
 		climbServo.setAngle(0);
+	}
+
+	public boolean isHighClimb() {
+		return state == eState.HIGH_CLIMB;
 	}
 }

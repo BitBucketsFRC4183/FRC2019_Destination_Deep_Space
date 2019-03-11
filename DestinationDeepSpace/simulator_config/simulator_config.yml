@@ -4,7 +4,13 @@ mAnalogIn: []
 mAnalogOut: []
 mDefaultI2CWrappers: {}
 mDefaultSpiWrappers: {}
-mDigitalIO: []
+mDigitalIO:
+- mHandle: 0
+  mName: Digital IO Rear Camera (0)
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+- mHandle: 1
+  mName: Digital IO Front Camera (1)
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
 mEncoders:
 - mConnectedSpeedControllerHandle: 101
   mHandle: 101
@@ -14,13 +20,25 @@ mEncoders:
   mHandle: 102
   mName: Right Drive Front Encoder (2)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim$CtreEncoder
-- mConnectedSpeedControllerHandle: 107
-  mHandle: 107
-  mName: Rotation Motor 1 Encoder (7)
+- mConnectedSpeedControllerHandle: 103
+  mHandle: 103
+  mName: CAN Encoder (3)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim$CtreEncoder
-- mConnectedSpeedControllerHandle: 108
-  mHandle: 108
-  mName: Rotation Motor 2 Encoder (8)
+- mConnectedSpeedControllerHandle: 104
+  mHandle: 104
+  mName: CAN Encoder (4)
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim$CtreEncoder
+- mConnectedSpeedControllerHandle: 105
+  mHandle: 105
+  mName: CAN Encoder (5)
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim$CtreEncoder
+- mConnectedSpeedControllerHandle: 106
+  mHandle: 106
+  mName: CAN Encoder (6)
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim$CtreEncoder
+- mConnectedSpeedControllerHandle: 109
+  mHandle: 109
+  mName: CAN Encoder (9)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim$CtreEncoder
 mGyros: []
 mPwm:
@@ -28,61 +46,73 @@ mPwm:
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 0.0
-  mName: 0 - Middle Motor
+  mName: Unassigned (0)
   mType: com.snobot.simulator.module_wrapper.wpi.WpiPwmWrapper
 - mHandle: 101
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Left Drive Front (1)
+  mName: Left Drive Rear (1)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 102
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Right Drive Front (2)
+  mName: Left Drive Middle (2)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 103
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Right Drive Rear (3)
+  mName: Left Drive Front (3)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 104
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Left Drive Rear (4)
+  mName: Right Drive Rear (4)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 105
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Intake Motor (5)
+  mName: Right Drive Middle (5)
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 106
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
+  mName: Right Drive Front (6)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 107
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Rotation Motor 1 (7)
+  mName: Climb Motor 2 (7)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 108
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Rotation Motor 2 (8)
+  mName: Climb Motor 1 (8)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 109
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Climb Motor 1 (9)
+  mName: Arm Motor 1 (9)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 - mHandle: 110
   mMotorModelConfig: null
   mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
     mMaxSpeed: 3.0
-  mName: Climb Motor 2 (10)
+  mName: Intake Motor (10)
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 112
+  mMotorModelConfig: null
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.SimpleMotorSimulationConfig
+    mMaxSpeed: 3.0
+  mName: Arm Motor 2 (12)
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 mRelays: []
 mSimulatorComponents: []
