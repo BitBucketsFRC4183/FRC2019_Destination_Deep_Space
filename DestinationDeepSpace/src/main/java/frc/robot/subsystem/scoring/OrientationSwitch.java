@@ -45,7 +45,7 @@ public class OrientationSwitch extends Command {
             return CommandUtils.stateChange(new Idle());
         }
 
-        if (climberSubsystem.isHighClimb()) {
+        if (climberSubsystem.isClimbing()) {
             return CommandUtils.stateChange(new ArmLevel(ScoringConstants.ScoringLevel.BALL_LOADING_STATION));
         }
 
