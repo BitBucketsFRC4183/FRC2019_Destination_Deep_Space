@@ -332,7 +332,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		return targetAngle_rad;
 	}
 
-	private void directArmTo(double angle_rad) {
+	public void directArmTo(double angle_rad) {
 		targetAngle_rad = angle_rad;
 		double ticks = angle_rad * ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV / (2 * Math.PI);
 
@@ -433,7 +433,20 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		}
 
 		if (Math.abs(oi.manualArmControl())>ScoringConstants.ARM_MANUAL_DEADBAND && lastLevel == ScoringConstants.ScoringLevel.MANUAL) {
-			armMotor1.set(ControlMode.PercentOutput, oi.manualArmControl()*ScoringConstants.ARM_MANUAL_SPEED_MULTIPLIER);
+
+			// Sets the speed of the arm to a value between -10 and 10.
+			double manualArmSpeed = oi.manualArmControl() * ScoringConstants.ARM_MANUAL_SPEED_MAX;
+
+			// Gets the current arm angle in degrees.
+			double currentAngle = getAngle_deg();
+
+			// Sets targetAngle to the current arm angle plus the arm speed.
+			// Multiplying by the time period causes targetAngle to increment by manualArmSpeed degrees per second.
+			double targetAngle = currentAngle + manualArmSpeed * period;
+
+			// Tells the arm to move to targetAngle.
+			directArmTo(Math.toRadians(targetAngle));
+
 		}
 
 		boolean infeed = oi.infeedActive();

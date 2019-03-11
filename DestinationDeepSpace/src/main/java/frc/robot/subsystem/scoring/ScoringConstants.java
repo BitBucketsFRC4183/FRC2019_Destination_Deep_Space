@@ -69,8 +69,8 @@ public class ScoringConstants {
 	// Set to a number between 0 and 1, controls the deadband for the manual arm control joystick.
 	public static final double ARM_MANUAL_DEADBAND = 0.2;
 
-	// Set to a positive number, manual control's output is multiplied by this value.
-	public static final double ARM_MANUAL_SPEED_MULTIPLIER = 0.6;
+	// Set to a positive number, the maximum speed (degrees per second) in manual control is set to this number.
+	public static final double ARM_MANUAL_SPEED_MAX = 10;
 
 
 
