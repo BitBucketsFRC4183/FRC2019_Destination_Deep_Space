@@ -450,6 +450,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			// Multiplying by the time period causes targetAngle to increment by manualArmSpeed degrees per second.
 			double targetAngle = lastManualAngle + (manualArmSpeed * period);
 			lastManualAngle = targetAngle;
+			targetAngle = Math.abs(targetAngle);
 
 			SmartDashboard.putNumber(getName()+"/Arm Manual Target Angle (deg)", targetAngle);
 
