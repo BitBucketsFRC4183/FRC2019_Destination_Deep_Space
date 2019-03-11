@@ -45,9 +45,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	public enum eState {
 	IDLE,
-	ARMED,
-	HIGH_CLIMB,
-	LOW_CLIMB;
+	CLIMB;
 	}
 
 	eState state = eState.IDLE;
@@ -108,22 +106,15 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 			case IDLE:{
 				climbMotor1.set(ClimberConstants.BACK_DRIVE_POWER_FACTOR);
 				if (oi.armClimber()){
-					state = eState.HIGH_CLIMB;
+					state = eState.CLIMB;
+					start = Timer.getFPGATimestamp();
+
 					released = false;
 				}
-			}
+
 				break;
-			case ARMED:{
-				if (oi.highClimb()){
-					state = eState.HIGH_CLIMB;
-					start = Timer.getFPGATimestamp();
-				}
-				else if (oi.lowClimb()){
-					state = eState.LOW_CLIMB;
-				}
 			}
-				break;
-			case HIGH_CLIMB: {
+			case CLIMB: {
 				boolean climb = oi.armClimber();
 
 				// if arm buttons have been released
@@ -133,7 +124,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 				if (climb) {
 					if (released) {
-						// disarm
+						// no longer climbing, switch to idle
 						state = eState.IDLE;
 					} else {
 						// manual climb b/c has not been released
@@ -143,7 +134,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 					// manual climb
 					highClimbManual();
 				}
-				//highClimb();
+				
 				if (
 					//climbMotor1.getSensorCollection().isRevLimitSwitchClosed()||
 					climbMotor1current>200||climbMotor2current>200
@@ -151,12 +142,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 					state=eState.IDLE;
 					released = true;
 				}
-			}	
-				break;
-			case LOW_CLIMB: {
-				lowClimb();
-				}	
-					break;
+			}
 			default:{
 
 			}
@@ -245,7 +231,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		climbServo.setAngle(0);
 	}
 
-	public boolean isHighClimb() {
-		return state == eState.HIGH_CLIMB;
+	public boolean isClimbing() {
+		return state == eState.CLIMB;
 	}
 }

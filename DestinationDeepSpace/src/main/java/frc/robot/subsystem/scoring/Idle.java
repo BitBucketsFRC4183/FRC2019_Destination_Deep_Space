@@ -30,7 +30,7 @@ public class Idle extends Command {
             return false;
         }
 
-        if (climberSubsystem.isHighClimb()) {
+        if (climberSubsystem.isClimbing()) {
             return CommandUtils.stateChange(new ArmLevel(ScoringConstants.ScoringLevel.BALL_LOADING_STATION));
         }
 

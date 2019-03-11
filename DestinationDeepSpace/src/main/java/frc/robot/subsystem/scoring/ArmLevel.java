@@ -47,7 +47,7 @@ public class ArmLevel extends Command {
             return CommandUtils.stateChange(new Idle());
         }
 
-        if (climberSubsystem.isHighClimb() && LEVEL != ScoringConstants.ScoringLevel.BALL_LOADING_STATION) {
+        if (climberSubsystem.isClimbing() && LEVEL != ScoringConstants.ScoringLevel.BALL_LOADING_STATION) {
             return CommandUtils.stateChange(new ArmLevel(ScoringConstants.ScoringLevel.BALL_LOADING_STATION));
         }
 
