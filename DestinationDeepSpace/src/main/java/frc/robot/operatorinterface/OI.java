@@ -106,6 +106,7 @@ public class OI {
 	private final static int DRIVE_INVERT_BUTTON         = controllerMapper.getL1();
 	private final static int DRIVE_ALIGN_LOCK_BUTTON     = controllerMapper.getShare();
 	private final static int DRIVE_LOCK_BUTTON     		 = controllerMapper.getOption();
+	// Note: operator has secondary priority with POVs
 	private final static int DRIVE_INFEED_BUTTON   		 = controllerMapper.getR2();
 	private final static int DRIVE_OUTFEED_BUTTON    	 = controllerMapper.getL2();
 	private final static int DRIVE_AUTO_ALIGN            = controllerMapper.getCross();
@@ -128,6 +129,7 @@ public class OI {
 	private final static int SCORING_BALL_LS     = controllerMapper.getR1();
 	private final static int SCORING_BALL_R1     = controllerMapper.getL2();
 	private final static int SWITCH_ORIENTATION  = controllerMapper.getSquare();
+	private final static int ARM_MANUAL  = controllerMapper.getLeftStickY();
 
 
 
@@ -221,15 +223,39 @@ public class OI {
 		return operatorControl.getRawButton(SWITCH_ORIENTATION);
 	}
 
+	public double manualArmControl() {
+		return operatorControl.getRawAxis(ARM_MANUAL);
+	}
+
 	/**
 	 * intakeActive - turns the intake rollers to rotate inwards when true, pulling balls inside.
 	 */
-	public boolean infeedActive() {
+	public boolean infeedActive1() {
 		return driverControl.getRawButton(DRIVE_INFEED_BUTTON);
 	}
 
-	public boolean outfeedActive() {
+	public boolean infeedActive2() {
+		return operatorControl.getPOV() == 180;
+	}
+
+	public boolean outfeedActive1() {
 		return driverControl.getRawButton(DRIVE_OUTFEED_BUTTON);
+	}
+
+	public boolean outfeedActive2() {
+		return operatorControl.getPOV() == 0;
+	}
+
+	public boolean infeedActive() {
+		return
+			(infeedActive1() && !outfeedActive1()) ||
+			(infeedActive2() && !outfeedActive2() && !outfeedActive1());
+	}
+
+	public boolean outfeedActive() {
+		return
+			(!infeedActive1() && outfeedActive1()) ||
+			(!infeedActive2() && !infeedActive1() && outfeedActive2());
 	}
 
 	public boolean hatchOutfeedActive() {

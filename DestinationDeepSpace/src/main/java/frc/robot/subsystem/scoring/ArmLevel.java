@@ -2,6 +2,7 @@ package frc.robot.subsystem.scoring;
 
 import frc.robot.operatorinterface.OI;
 import frc.robot.utils.CommandUtils;
+import frc.robot.subsystem.climber.ClimberSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ArmLevel extends Command {
     private static OI oi = OI.instance();
     private static ScoringSubsystem scoringSubsystem = ScoringSubsystem.instance();
+    private static ClimberSubsystem climberSubsystem = ClimberSubsystem.instance();
 
     private final ScoringConstants.ScoringLevel LEVEL;
 
@@ -19,6 +21,7 @@ public class ArmLevel extends Command {
         setTimeout(ScoringConstants.LEVEL_CHANGE_TIMEOUT_SEC);
 
         LEVEL = level;
+        SmartDashboard.putString("Arm Level Level",LEVEL.toString());
     }
 
 
@@ -44,6 +47,9 @@ public class ArmLevel extends Command {
             return CommandUtils.stateChange(new Idle());
         }
 
+        if (climberSubsystem.isHighClimb() && LEVEL != ScoringConstants.ScoringLevel.BALL_LOADING_STATION) {
+            return CommandUtils.stateChange(new ArmLevel(ScoringConstants.ScoringLevel.BALL_LOADING_STATION));
+        }
 
         boolean areWeThereYet = (Math.abs(Math.toDegrees(scoringSubsystem.getTargetAngle_rad()) - 
                                          scoringSubsystem.getAngle_deg()) < ScoringConstants.ANGLE_TOLERANCE_DEG);
@@ -62,8 +68,8 @@ public class ArmLevel extends Command {
                 /// TODO: Need to evaluate whether going Idle makes sense
                 /// or should we just hold position and signal a problem
                 /// some other way?
-                SmartDashboard.putString("ArmLevelStatus","Timeout");
-                return CommandUtils.stateChange(new Idle());
+                //  SmartDashboard.putString("ArmLevelStatus","Timeout");
+                //  return CommandUtils.stateChange(new Idle());
             }
         }
 
@@ -78,6 +84,19 @@ public class ArmLevel extends Command {
         // if multiple levels are selected or this level is still selected,
         // don't allow any state changes
         if (level == ScoringConstants.ScoringLevel.INVALID || level == LEVEL) {
+
+                // Check if the level is MANUAL, and you're still pressing the joystick.
+            if (Math.abs(oi.manualArmControl())<=ScoringConstants.ARM_MANUAL_DEADBAND && LEVEL == ScoringConstants.ScoringLevel.MANUAL) {
+
+                // Get the current arm angle in degrees, then covert it into radians.
+                // This number is the current angle.
+                double currentAngle = Math.toRadians(scoringSubsystem.getAngle_deg());
+
+                // Direct the arm to the current angle.
+                scoringSubsystem.directArmTo(currentAngle);
+            }
+
+
             SmartDashboard.putString("ArmLevelStatus","Invalid or Same Level");
             return false;
         }
@@ -110,5 +129,6 @@ public class ArmLevel extends Command {
 
         SmartDashboard.putString("ArmLevelStatus","End of Is Finished");
         return false;
+        
     }
 }
