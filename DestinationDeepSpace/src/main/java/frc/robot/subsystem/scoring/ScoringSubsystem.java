@@ -250,7 +250,14 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			level = ScoringConstants.ScoringLevel.MANUAL;
 		}
 		if (hp) {
-			level = ScoringConstants.ScoringLevel.HP;
+			if (level == ScoringConstants.ScoringLevel.NONE)
+			{
+				level = ScoringConstants.ScoringLevel.HP;
+			}
+			else
+			{
+				level = ScoringConstants.ScoringLevel.INVALID;
+			}
 		}
 		if (topDeadCenter)
 		{
