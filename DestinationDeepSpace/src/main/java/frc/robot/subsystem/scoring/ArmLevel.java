@@ -43,9 +43,7 @@ public class ArmLevel extends Command {
             SmartDashboard.putString("ArmLevelStatus","Forced Idle");
             return CommandUtils.stateChange(new Idle());
         }
-        if (Math.abs(oi.manualArmControl())<=ScoringConstants.ARM_MANUAL_DEADBAND && LEVEL == ScoringConstants.ScoringLevel.MANUAL) {
-			return CommandUtils.stateChange(new Idle());
-		}
+        
 
 
         boolean areWeThereYet = (Math.abs(Math.toDegrees(scoringSubsystem.getTargetAngle_rad()) - 
@@ -65,8 +63,8 @@ public class ArmLevel extends Command {
                 /// TODO: Need to evaluate whether going Idle makes sense
                 /// or should we just hold position and signal a problem
                 /// some other way?
-                SmartDashboard.putString("ArmLevelStatus","Timeout");
-                return CommandUtils.stateChange(new Idle());
+                //  SmartDashboard.putString("ArmLevelStatus","Timeout");
+                //  return CommandUtils.stateChange(new Idle());
             }
         }
 
@@ -111,7 +109,19 @@ public class ArmLevel extends Command {
             return CommandUtils.stateChange(new OrientationSwitch());
         }
 
+        // Check if the level is MANUAL, and you're still pressing the joystick.
+        if (Math.abs(oi.manualArmControl())<=ScoringConstants.ARM_MANUAL_DEADBAND && LEVEL == ScoringConstants.ScoringLevel.MANUAL) {
+
+            // Get the current arm angle in degrees, then covert it into radians.
+            // This number is the current angle.
+            double currentAngle = Math.toRadians(scoringSubsystem.getAngle_deg());
+
+            // Direct the arm to the current angle.
+            scoringSubsystem.directArmTo(currentAngle);
+		}
+
         SmartDashboard.putString("ArmLevelStatus","End of Is Finished");
         return false;
+        
     }
 }
