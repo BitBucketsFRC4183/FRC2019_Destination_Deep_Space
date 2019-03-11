@@ -105,7 +105,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		SmartDashboard.putNumber(getName() + "/climbMotor2Current", climbMotor2current);
 		switch (state) {
 			case IDLE:{
-				climbMotor1.set(0);
+				climbMotor1.set(ClimberConstants.BACK_DRIVE_POWER_FACTOR);
 				if (oi.armClimber()){
 					state = eState.ARMED;	
 				}
@@ -199,7 +199,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 	{
 		climbServo.setAngle(highClimbAngle);
 		if (Timer.getFPGATimestamp() - start > 1.0) {
-			climbMotor1.set(oi.manualClimbControl());
+			climbMotor1.set(oi.manualClimbControl()*ClimberConstants.MAX_CLIMBER_POWER_FACTOR);
 		}
 	}
 
