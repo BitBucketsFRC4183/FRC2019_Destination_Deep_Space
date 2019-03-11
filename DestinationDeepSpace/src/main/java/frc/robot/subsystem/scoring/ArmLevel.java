@@ -21,6 +21,7 @@ public class ArmLevel extends Command {
         setTimeout(ScoringConstants.LEVEL_CHANGE_TIMEOUT_SEC);
 
         LEVEL = level;
+        SmartDashboard.putString("Arm Level Level",LEVEL.toString());
     }
 
 
@@ -83,6 +84,19 @@ public class ArmLevel extends Command {
         // if multiple levels are selected or this level is still selected,
         // don't allow any state changes
         if (level == ScoringConstants.ScoringLevel.INVALID || level == LEVEL) {
+
+                // Check if the level is MANUAL, and you're still pressing the joystick.
+            if (Math.abs(oi.manualArmControl())<=ScoringConstants.ARM_MANUAL_DEADBAND && LEVEL == ScoringConstants.ScoringLevel.MANUAL) {
+
+                // Get the current arm angle in degrees, then covert it into radians.
+                // This number is the current angle.
+                double currentAngle = Math.toRadians(scoringSubsystem.getAngle_deg());
+
+                // Direct the arm to the current angle.
+                scoringSubsystem.directArmTo(currentAngle);
+            }
+
+
             SmartDashboard.putString("ArmLevelStatus","Invalid or Same Level");
             return false;
         }
@@ -112,17 +126,6 @@ public class ArmLevel extends Command {
             SmartDashboard.putString("ArmLevelStatus","Orientation Switch");
             return CommandUtils.stateChange(new OrientationSwitch());
         }
-
-        // Check if the level is MANUAL, and you're still pressing the joystick.
-        if (Math.abs(oi.manualArmControl())<=ScoringConstants.ARM_MANUAL_DEADBAND && LEVEL == ScoringConstants.ScoringLevel.MANUAL) {
-
-            // Get the current arm angle in degrees, then covert it into radians.
-            // This number is the current angle.
-            double currentAngle = Math.toRadians(scoringSubsystem.getAngle_deg());
-
-            // Direct the arm to the current angle.
-            scoringSubsystem.directArmTo(currentAngle);
-		}
 
         SmartDashboard.putString("ArmLevelStatus","End of Is Finished");
         return false;
