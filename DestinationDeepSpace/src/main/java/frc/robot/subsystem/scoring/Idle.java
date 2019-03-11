@@ -2,11 +2,13 @@ package frc.robot.subsystem.scoring;
 
 import frc.robot.operatorinterface.OI;
 import frc.robot.utils.CommandUtils;
+import frc.robot.subsystem.climber.ClimberSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Idle extends Command {
     private static OI oi = OI.instance();
+    private static ClimberSubsystem climberSubsystem = ClimberSubsystem.instance();
     private static ScoringSubsystem scoringSubsystem = ScoringSubsystem.instance();
 
     public Idle() {
@@ -26,6 +28,10 @@ public class Idle extends Command {
 
         if (forceIdle) {
             return false;
+        }
+
+        if (climberSubsystem.isHighClimb()) {
+            return CommandUtils.stateChange(new ArmLevel(ScoringConstants.ScoringLevel.BALL_LOADING_STATION));
         }
 
 
