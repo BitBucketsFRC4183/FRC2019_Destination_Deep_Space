@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import frc.robot.subsystem.BitBucketSubsystem;
 import frc.robot.subsystem.climber.ClimberSubsystem;
 import frc.robot.subsystem.drive.DriveSubsystem;
 import frc.robot.subsystem.lighting.LightingSubsystem;
@@ -77,6 +78,9 @@ public class Robot extends TimedRobot {
     oi = OI.instance();
 
     ds = DriverStation.getInstance();
+
+
+    BitBucketSubsystem.period = getPeriod();
 
     // Reference the subsystems we need to initialize
     driveSubsystem = DriveSubsystem.instance();
