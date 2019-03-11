@@ -32,6 +32,9 @@ public abstract class BitBucketSubsystem extends Subsystem {
 	public DiagnosticsState lastKnownState = DiagnosticsState.UNKNOWN;
 	public int DIAG_LOOPS_RUN = 5;
 
+	// The time period between calls to Periodic() functions.
+	public static double period;
+
 	protected int periodicCounter = 0;
 	
 	public BitBucketSubsystem() {

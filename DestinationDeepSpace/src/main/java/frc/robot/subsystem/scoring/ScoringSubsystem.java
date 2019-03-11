@@ -56,6 +56,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private ScoringConstants.ScoringLevel lastLevel = ScoringConstants.ScoringLevel.NONE;
 	private ScoringConstants.ScoringLevel commandedLevel = ScoringConstants.ScoringLevel.NONE;
 
+	private double lastManualAngle = 0;
+
 
 	private VisionSubsystem visionSubsystem = VisionSubsystem.instance();
 
@@ -162,7 +164,12 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			level == ScoringConstants.ScoringLevel.INVALID
 		) {
 			return;
+		} else if (level == ScoringConstants.ScoringLevel.MANUAL){
+			lastLevel=ScoringConstants.ScoringLevel.MANUAL;
+			lastManualAngle = getAngle_deg();
+			return;
 		}
+
 
 		double angle_rad = level.getAngle_rad();
 
@@ -238,12 +245,22 @@ public class ScoringSubsystem extends BitBucketSubsystem {
         boolean bLoadingStation = oi.bLoadingStation();
 		boolean bRocket1 = oi.bRocket1();
 		boolean topDeadCenter = oi.topDeadCenter();
+		double manual = oi.manualArmControl();
 		
 		ScoringConstants.ScoringLevel level = ScoringConstants.ScoringLevel.NONE;
 
-
+		if (manual > ScoringConstants.ARM_MANUAL_DEADBAND || manual < -ScoringConstants.ARM_MANUAL_DEADBAND) {
+			level = ScoringConstants.ScoringLevel.MANUAL;
+		}
 		if (hp) {
-			level = ScoringConstants.ScoringLevel.HP;
+			if (level == ScoringConstants.ScoringLevel.NONE)
+			{
+				level = ScoringConstants.ScoringLevel.HP;
+			}
+			else
+			{
+				level = ScoringConstants.ScoringLevel.INVALID;
+			}
 		}
 		if (topDeadCenter)
 		{
@@ -318,7 +335,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		return targetAngle_rad;
 	}
 
-	private void directArmTo(double angle_rad) {
+	public void directArmTo(double angle_rad) {
 		targetAngle_rad = angle_rad;
 		double ticks = angle_rad * ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV / (2 * Math.PI);
 
@@ -418,19 +435,41 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			goToLevel(ScoringConstants.ScoringLevel.HP);
 		}
 
+		if (Math.abs(oi.manualArmControl())>ScoringConstants.ARM_MANUAL_DEADBAND && lastLevel == ScoringConstants.ScoringLevel.MANUAL) {
+
+			// Sets the speed of the arm to a value between -10 and 10.
+			double manualArmSpeed = oi.manualArmControl() * ScoringConstants.ARM_MANUAL_SPEED_MAX;
+
+			
+
+			if (lastManualAngle < 0){
+				manualArmSpeed = manualArmSpeed * -1;
+			}
+
+			// Sets targetAngle to the current arm angle plus the arm speed.
+			// Multiplying by the time period causes targetAngle to increment by manualArmSpeed degrees per second.
+			double targetAngle = lastManualAngle + (manualArmSpeed * period);
+			lastManualAngle = targetAngle;
+			targetAngle = Math.abs(targetAngle);
+
+			SmartDashboard.putNumber(getName()+"/Arm Manual Target Angle (deg)", targetAngle);
+
+			// Tells the arm to move to targetAngle.
+			directArmTo(Math.toRadians(targetAngle));
+
+		}
+
+		// note: the OI is set up so that infeed and outfeed WILL BE MUTUALLY EXCLUSIVE
+		// and the operator has secondary priority for infeed and outfeed
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
 		boolean hatchOutfeed = (getCommandedLevel() == ScoringConstants.ScoringLevel.HP);
 		SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
 		SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
 
-		if (!(
-			(infeed && outfeed)
-			)) { // if both are pressed, keep doing what you're doing
-			if      (infeed)       { setRollers(-1.0);  }
-			else if (outfeed)      { setRollers(1.0); }
-			else                   { setRollers(0.0);  }
-		}
+		if      (infeed)  { setRollers(-1.0); }
+		else if (outfeed) { setRollers(1.0);  }
+		else              { setRollers(0.0);  }
 
 		if (back)
 		{
@@ -497,7 +536,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 
 
-	public TalonSRX getRotationMotor1() {
+	public TalonSRX getArmMotor1() {
 		return armMotor1;
 	}
 	
