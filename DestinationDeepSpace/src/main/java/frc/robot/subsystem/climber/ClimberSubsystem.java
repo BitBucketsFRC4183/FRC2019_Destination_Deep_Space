@@ -106,7 +106,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		SmartDashboard.putNumber(getName() + "/climbMotor2Current", climbMotor2current);
 		switch (state) {
 			case IDLE:{
-				climbMotor1.set(0);
+				climbMotor1.set(ClimberConstants.BACK_DRIVE_POWER_FACTOR);
 				if (oi.armClimber()){
 					state = eState.HIGH_CLIMB;
 					released = false;
