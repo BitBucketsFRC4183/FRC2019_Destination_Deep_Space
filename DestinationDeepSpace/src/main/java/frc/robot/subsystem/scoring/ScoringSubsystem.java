@@ -56,6 +56,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private ScoringConstants.ScoringLevel lastLevel = ScoringConstants.ScoringLevel.NONE;
 	private ScoringConstants.ScoringLevel commandedLevel = ScoringConstants.ScoringLevel.NONE;
 
+	private double lastManualAngle = 0;
+
 
 	private VisionSubsystem visionSubsystem = VisionSubsystem.instance();
 
@@ -164,6 +166,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			return;
 		} else if (level == ScoringConstants.ScoringLevel.MANUAL){
 			lastLevel=ScoringConstants.ScoringLevel.MANUAL;
+			lastManualAngle = getAngle_deg();
 			return;
 		}
 
@@ -437,12 +440,18 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			// Sets the speed of the arm to a value between -10 and 10.
 			double manualArmSpeed = oi.manualArmControl() * ScoringConstants.ARM_MANUAL_SPEED_MAX;
 
-			// Gets the current arm angle in degrees.
-			double currentAngle = getAngle_deg();
+			
+
+			if (lastManualAngle < 0){
+				manualArmSpeed = manualArmSpeed * -1;
+			}
 
 			// Sets targetAngle to the current arm angle plus the arm speed.
 			// Multiplying by the time period causes targetAngle to increment by manualArmSpeed degrees per second.
-			double targetAngle = currentAngle + manualArmSpeed * period;
+			double targetAngle = lastManualAngle + (manualArmSpeed * period);
+			lastManualAngle = targetAngle;
+
+			SmartDashboard.putNumber(getName()+"/Arm Manual Target Angle (deg)", targetAngle);
 
 			// Tells the arm to move to targetAngle.
 			directArmTo(Math.toRadians(targetAngle));
