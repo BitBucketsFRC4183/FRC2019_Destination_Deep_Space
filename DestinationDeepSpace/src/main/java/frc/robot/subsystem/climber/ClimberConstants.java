@@ -12,7 +12,7 @@ package frc.robot.subsystem.climber;
  */
 public class ClimberConstants {
 
-	public static final double BACK_DRIVE_POWER_FACTOR = 0.0;
+	public static final double BACK_DRIVE_POWER_FACTOR = 0.05;
     public static final double MANUAL_CLIMB_MAX = 0.8;
     public static final double MANUAL_CLIMB_IN_MAX = 0.1;
 }

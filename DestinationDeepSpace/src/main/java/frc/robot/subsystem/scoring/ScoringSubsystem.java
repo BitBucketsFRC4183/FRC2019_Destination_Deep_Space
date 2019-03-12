@@ -110,12 +110,6 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// effectively telling the encoder where 0 is
 		armMotor1.setSelectedSensorPosition(abs_ticks - ScoringConstants.ARM_BIAS_TICKS);
 
-		// If arm is toward back side, then declare that we are back there
-		if (getAngle_deg() > 10.0)
-		{
-			back = true;
-		}
-
 		// Acceleration is the slope of the velocity profile used for motion magic
 		// Example: 250 tick/100ms/s is 2500 ticks/s/s
 		armMotor1.configMotionAcceleration(ScoringConstants.ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC, 20);
