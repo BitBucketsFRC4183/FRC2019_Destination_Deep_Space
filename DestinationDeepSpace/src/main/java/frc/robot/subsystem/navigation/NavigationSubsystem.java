@@ -67,8 +67,8 @@ public class NavigationSubsystem extends BitBucketSubsystem {
 	}
 
 	protected void updateDashboard() {
-		SmartDashboard.putNumber( getName() + "/Yaw Angle (deg)", getYaw_deg());
-		SmartDashboard.putNumber( getName() + "/Yaw Rate (dps)", getYawRate_degPerSec());
+		//SmartDashboard.putNumber( getName() + "/Yaw Angle (deg)", getYaw_deg());
+		//SmartDashboard.putNumber( getName() + "/Yaw Rate (dps)", getYawRate_degPerSec());
 	}
 
 	@Override

@@ -433,9 +433,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// Rescale to the desired shape
 		/// TODO: Add deadband to rescale
 		speed = forwardJoystickScaleChooser.getSelected().rescale(speed, DriveConstants.JOYSTICK_DEADBAND);
-		SmartDashboard.putNumber(getName()+"/Speed Factor",speed);
+		//SmartDashboard.putNumber(getName()+"/Speed Factor",speed);
 		turn = turnJoystickScaleChooser.getSelected().rescale(turn, DriveConstants.JOYSTICK_DEADBAND);
-		SmartDashboard.putNumber(getName()+"/Turn Factor",turn);
+		//SmartDashboard.putNumber(getName()+"/Turn Factor",turn);
 
 		if(oi.lowSpeed()) 
 		{
@@ -476,8 +476,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 					 1.0,
 					-DriveConstants.MAX_ALLOWED_PERCENT_TURN,
 					DriveConstants.MAX_ALLOWED_PERCENT_TURN);
-					SmartDashboard.putNumber(getName()+"/Percent Limited Speed",speed);
-					SmartDashboard.putNumber(getName()+"/Percent Limited Turn",turn);
+					//SmartDashboard.putNumber(getName()+"/Percent Limited Speed",speed);
+					//SmartDashboard.putNumber(getName()+"/Percent Limited Turn",turn);
 								
 					differentialDrive.arcadeDrive(speed, turn, false);
 
@@ -503,9 +503,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 							double parallax = feedback.getParallax();
 							double distance = feedback.getDistance();
 
-							SmartDashboard.putNumber(getName()+"/offAxis",offAxis);
-							SmartDashboard.putNumber(getName()+"/parallax",parallax);
-							SmartDashboard.putNumber(getName()+"/distance",distance);
+							//SmartDashboard.putNumber(getName()+"/offAxis",offAxis);
+							//SmartDashboard.putNumber(getName()+"/parallax",parallax);
+							//SmartDashboard.putNumber(getName()+"/distance",distance);
 				
 							// no need to keep guiding if in a certain distance
 							if (distance <= AutonomousConstants.GUIDANCE_STOP) {
@@ -519,7 +519,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 							}				
 				
 							turnRate_radps = guidance.getTurnRate(distance);
-							SmartDashboard.putNumber(getName()+"/autoTurnRate_radps",turnRate_radps);
+							//SmartDashboard.putNumber(getName()+"/autoTurnRate_radps",turnRate_radps);
 						}						
 						velocityDrive_auto(
 											speed_ips,
@@ -604,8 +604,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 
 
-		SmartDashboard.putNumber(getName()+"/Commanded Speed (ips)", speed_ips);
-		SmartDashboard.putNumber(getName()+"/Commanded Turn (dps)", Math.toDegrees(turn_radps));
+		//SmartDashboard.putNumber(getName()+"/Commanded Speed (ips)", speed_ips);
+		//SmartDashboard.putNumber(getName()+"/Commanded Turn (dps)", Math.toDegrees(turn_radps));
 
 		double diffSpeed_ips = turn_radps * DriveConstants.WHEEL_TRACK_INCHES / 2.0 ;
 
@@ -616,10 +616,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		}
 		double latAccel_gs = turn_radps * speed_ips / 12.0 / DriveConstants.STANDARD_G_FTPSPS;
 		double turnRadius_inches = speed_ips / turn_radps;
-		SmartDashboard.putNumber(getName()+"/Lat Accel (g)", latAccel_gs );
-		SmartDashboard.putNumber(getName()+"/Turn Radius (inches)",turnRadius_inches);
-		SmartDashboard.putNumber(getName()+"/Acheived Speed (ips)", speed_ips);
-		SmartDashboard.putNumber(getName()+"/Acheived Turn (dps)", Math.toDegrees(turn_radps));
+		//SmartDashboard.putNumber(getName()+"/Lat Accel (g)", latAccel_gs );
+		//SmartDashboard.putNumber(getName()+"/Turn Radius (inches)",turnRadius_inches);
+		//SmartDashboard.putNumber(getName()+"/Acheived Speed (ips)", speed_ips);
+		//SmartDashboard.putNumber(getName()+"/Acheived Turn (dps)", Math.toDegrees(turn_radps));
 
 
 		int speed_tickP100 = DriveConstants.ipsToTicksP100(speed_ips);
@@ -628,8 +628,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		int leftSpeed_tickP100 = speed_tickP100 + diffSpeed_tickP100;
 		int rightSpeed_tickP100 = speed_tickP100 - diffSpeed_tickP100;
 
-		SmartDashboard.putNumber(getName() + "/leftCommandSpeed (tp100)",leftSpeed_tickP100);
-		SmartDashboard.putNumber(getName() + "/rightCommandSpeed (tp100)",rightSpeed_tickP100);
+		//SmartDashboard.putNumber(getName() + "/leftCommandSpeed (tp100)",leftSpeed_tickP100);
+		//SmartDashboard.putNumber(getName() + "/rightCommandSpeed (tp100)",rightSpeed_tickP100);
 
 		leftMotors[0].set(ControlMode.Velocity, leftSpeed_tickP100);
 		rightMotors[0].set(ControlMode.Velocity, rightSpeed_tickP100);		
@@ -664,7 +664,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 								 -DriveConstants.MAX_ALLOWED_TURN_RADPS,
 								 DriveConstants.MAX_ALLOWED_TURN_RADPS);
 		
-		SmartDashboard.putNumber(getName()+"/ManualTurnRate_radps",turn_radps);
+		//SmartDashboard.putNumber(getName()+"/ManualTurnRate_radps",turn_radps);
 
 		velocityDrive_auto(speed_ips, turn_radps);
 	}
@@ -699,7 +699,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			
 			double error = -ALIGN_LOOP_GAIN * (yawSetPoint - navigation.getYaw_deg());
 			error = -ALIGN_LOOP_GAIN * -navigation.getYawRate_degPerSec();
-			SmartDashboard.putNumber(getName()+"/IMU_ERROR", error);
+			//SmartDashboard.putNumber(getName()+"/IMU_ERROR", error);
 			BBarcadeDrive( fwdStick, error + yawCorrect());
 		}
 	}
@@ -753,10 +753,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			double left_inchps = leftMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
 			double right_inchps = rightMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
 
-			SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
-			SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);
+			//SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
+			//SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);
 		}
-		SmartDashboard.putBoolean(getName()+"/RunningDiag", false);  
+		//SmartDashboard.putBoolean(getName()+"/RunningDiag", false);  
 	}
   	
 	public void disable() {
@@ -969,14 +969,14 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	*/
 	@Override
 	public void diagnosticsInitialize() {
-		SmartDashboard.putNumber(getName() + "/TestRadius (in)", 0);
-		SmartDashboard.putNumber(getName() + "/TestSpeed (in per sec)", 0);
+		//SmartDashboard.putNumber(getName() + "/TestRadius (in)", 0);
+		//SmartDashboard.putNumber(getName() + "/TestSpeed (in per sec)", 0);
 	}
 
 	@Override
 	public void diagnosticsPeriodic() {
 		/* Init Diagnostics */
-		SmartDashboard.putBoolean(getName()+"/RunningDiag", true);
+		//SmartDashboard.putBoolean(getName()+"/RunningDiag", true);
 		
 		/// COMMENTED OUT BECAUSE THIS IS NOT SAFE, we need a different way to test motors
 		// rightMotors.set(ControlMode.PercentOutput, DriveConstants.MOTOR_TEST_PERCENT);

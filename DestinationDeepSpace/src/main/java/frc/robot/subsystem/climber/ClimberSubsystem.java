@@ -97,11 +97,11 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
 		SmartDashboard.putBoolean(getName()+"/END Limit Switch", climbMotor1.getSensorCollection().isRevLimitSwitchClosed());
-		SmartDashboard.putNumber(getName() + "/ManualJoystickCommand", oi.manualClimbControl());
+		//SmartDashboard.putNumber(getName() + "/ManualJoystickCommand", oi.manualClimbControl());
 		double climbMotor1current = climbMotor1.getOutputCurrent();
 		double climbMotor2current = climbMotor2.getOutputCurrent();
-		SmartDashboard.putNumber(getName() + "/climbMotor1Current", climbMotor1current);
-		SmartDashboard.putNumber(getName() + "/climbMotor2Current", climbMotor2current);
+		//SmartDashboard.putNumber(getName() + "/climbMotor1Current", climbMotor1current);
+		//SmartDashboard.putNumber(getName() + "/climbMotor2Current", climbMotor2current);
 		switch (state) {
 			case IDLE:{
 				climbMotor1.set(ClimberConstants.BACK_DRIVE_POWER_FACTOR);
@@ -169,8 +169,8 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	public void updateDashboard()
 	{
-		SmartDashboard.putNumber(getName()+"/CurrentServoAngle(deg)",climbServo.getAngle());
-		SmartDashboard.putString(getName()+"/CurrentState()",state.name());
+		//SmartDashboard.putNumber(getName()+"/CurrentServoAngle(deg)",climbServo.getAngle());
+		//SmartDashboard.putString(getName()+"/CurrentState()",state.name());
 	}
 
 	public void initialize() {
@@ -181,7 +181,7 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 
 	void initializeDashboard()
 	{
-		SmartDashboard.putNumber(getName()+"/ServoTestAngle(deg)", 0.0);
+		//SmartDashboard.putNumber(getName()+"/ServoTestAngle(deg)", 0.0);
 	}
 
 	@Override
