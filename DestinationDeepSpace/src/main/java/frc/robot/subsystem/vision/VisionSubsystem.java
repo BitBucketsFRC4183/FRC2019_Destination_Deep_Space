@@ -73,7 +73,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 
 			numTargets = Math.min(distance.length,Math.min(pos_x.length,Math.min(pos_y.length,parallax.length))); /// TODO: Temporary
 
-			SmartDashboard.putNumber(getName() + "/Num Targets",numTargets);        
+			//SmartDashboard.putNumber(getName() + "/Num Targets",numTargets);        
 			if (numTargets == 0) {
 				return null; // null if no target found (do we want this behavior?)
 			}
@@ -92,7 +92,7 @@ public class VisionSubsystem extends BitBucketSubsystem {
 				}
 			}
 
-			SmartDashboard.putNumber(getName() + "/Min Index",min_index);
+			//SmartDashboard.putNumber(getName() + "/Min Index",min_index);
 
 			// If target is not acceptable
 			if (min_index == -1)

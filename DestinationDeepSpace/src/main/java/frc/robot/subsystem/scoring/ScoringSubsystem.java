@@ -299,7 +299,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		int err1 = Math.abs(armMotor1.getClosedLoopError());
 
 		// Always output this
-		SmartDashboard.putNumber(getName() + "/ArmLevelError (ticks)", err1);
+		//SmartDashboard.putNumber(getName() + "/ArmLevelError (ticks)", err1);
 
 		return err1;
 	}
@@ -339,12 +339,12 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			// ticks = 0 means arm is just up
 			ticks *= -1;
 			targetAngle_rad *= -1;
-			SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(-angle_rad));
+			//SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(-angle_rad));
 
 		}
 		else
 		{
-			SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(angle_rad));
+			//SmartDashboard.putNumber(getName()+"/Arm Command Angle (deg)", Math.toDegrees(angle_rad));
 		}
 
 		armMotor1.set(ControlMode.MotionMagic, ticks);
@@ -392,7 +392,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		{
 			currentLimitCount++;
 		}
-		SmartDashboard.putNumber(getName() + "/Arm Current Limit Count", currentLimitCount);
+		//SmartDashboard.putNumber(getName() + "/Arm Current Limit Count", currentLimitCount);
 		return currentLimit;
 	}
 
@@ -446,7 +446,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			lastManualAngle = targetAngle;
 			targetAngle = Math.abs(targetAngle);
 
-			SmartDashboard.putNumber(getName()+"/Arm Manual Target Angle (deg)", targetAngle);
+			//SmartDashboard.putNumber(getName()+"/Arm Manual Target Angle (deg)", targetAngle);
 
 			// Tells the arm to move to targetAngle.
 			directArmTo(Math.toRadians(targetAngle));
@@ -458,8 +458,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		boolean infeed = oi.infeedActive();
 		boolean outfeed = oi.outfeedActive();
 		boolean hatchOutfeed = (getCommandedLevel() == ScoringConstants.ScoringLevel.HP);
-		SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
-		SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
+		//SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
+		//SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
 
 		if      (infeed)  { setRollers(-1.0); }
 		else if (outfeed) { setRollers(1.0);  }
@@ -514,7 +514,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	public void initialize() {
 		initializeBaseDashboard();
 
-		SmartDashboard.putNumber(getName() + "/Test Angle", 0);
+		//SmartDashboard.putNumber(getName() + "/Test Angle", 0);
 	}
 
 
