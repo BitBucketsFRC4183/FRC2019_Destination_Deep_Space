@@ -67,8 +67,8 @@ public class ClimberSubsystem extends BitBucketSubsystem {
 		
 		climbMotor1.overrideLimitSwitchesEnable(true);
 
-		climbMotor1.setInverted(true);
-		climbMotor2.setInverted(false);
+		climbMotor1.setInverted(ClimberConstants.CLIMBER_INVERSION);
+		climbMotor2.setInverted(!ClimberConstants.CLIMBER_INVERSION);
 
 		climbMotor1.setNeutralMode(NeutralMode.Brake);
 		climbMotor2.setNeutralMode(NeutralMode.Brake);
