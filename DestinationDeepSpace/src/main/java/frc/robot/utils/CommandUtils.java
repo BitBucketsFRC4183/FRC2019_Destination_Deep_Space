@@ -28,7 +28,7 @@ public class CommandUtils {
 		// Only allow transition out of Idle when in either
 		// Teleop or Autonomous or Test (if we decide to process
 		// commands in test mode)
-		if (ds.isAutonomous() || ds.isTest())
+		if (ds.isTest())
 		{
 			// In auto or test, just return at completion
 			// but don't transition automatically

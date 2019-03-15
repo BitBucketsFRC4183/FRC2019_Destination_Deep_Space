@@ -89,7 +89,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	private final double YAW_CORRECT_VELOCITY = 0.0;  // Multiplied by inch/sec so value will be small!
 	private final double YAW_CORRECT_ACCEL = 0.0;
 	
-	private final double LOW_SENS_GAIN = 0.6;		
+	private final double LOW_SENS_GAIN = 0.5;		
 	private final double ALIGN_LOOP_GAIN = 0.04;
   
 	private final int EDGES_PER_ENCODER_COUNT = 4;	// Always for quadrature
@@ -439,7 +439,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 		if(oi.lowSpeed()) 
 		{
-			speed *= LOW_SENS_GAIN;
+			//speed *= LOW_SENS_GAIN;
 			turn *= LOW_SENS_GAIN;
 		}
 
@@ -745,7 +745,16 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		updateBaseDashboard();
 		if (getTelemetryEnabled())
 		{
+			SmartDashboard.putNumber(getName() + "/left encoder",  leftMotors[0].getSelectedSensorPosition());
+			SmartDashboard.putNumber(getName() + "/right encoder", rightMotors[0].getSelectedSensorPosition());
 
+
+
+			double left_inchps = leftMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
+			double right_inchps = rightMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
+
+			SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
+			SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);
 		}
 		SmartDashboard.putBoolean(getName()+"/RunningDiag", false);  
 	}
@@ -974,7 +983,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// rightRearMotor.set(ControlMode.PercentOutput, -DriveConstants.MOTOR_TEST_PERCENT);
 		// leftMotors.set(ControlMode.PercentOutput, -DriveConstants.MOTOR_TEST_PERCENT);
 		// leftRearMotor.set(ControlMode.PercentOutput, DriveConstants.MOTOR_TEST_PERCENT);
-
+			
 		if (getDiagnosticsEnabled()) {
 			double radius_in = SmartDashboard.getNumber(getName() + "/TestRadius (in)", 0);
 			double speed_ips = SmartDashboard.getNumber(getName() + "/TestSpeed (in per sec)", 0);
@@ -986,12 +995,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			}
 
 			velocityDrive_auto(speed_ips, radps);
-
-			double left_inchps = leftMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
-			double right_inchps = rightMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
-
-			SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
-			SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);
 		}
 	}
 

@@ -15,4 +15,9 @@ public class ClimberConstants {
 	public static final double BACK_DRIVE_POWER_FACTOR = 0.1;
     public static final double MANUAL_CLIMB_MAX = 0.8;
     public static final double MANUAL_CLIMB_IN_MAX = 0.1;
+
+
+
+    // this applies to 1, 2 is !1
+    public static final boolean CLIMBER_INVERSION = false;
 }

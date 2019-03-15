@@ -201,9 +201,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    driveSubsystem.startIdle();
+    teleopInit();
+    /*driveSubsystem.startIdle();
     scoringSubsystem.startIdle();
-    climberSubsystem.startIdle();
+    climberSubsystem.startIdle();*/
 
   }
 
@@ -216,6 +217,8 @@ public class Robot extends TimedRobot {
     // the actions here occur BEFORE the scheduled commands run; this means that
     // commands can be added during this execution cycle and will be acted upon
     // within the current cycle.
+
+    teleopPeriodic();
   }
 
   /**
