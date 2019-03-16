@@ -103,6 +103,20 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		armMotor2.follow(armMotor1);
 
+		
+		
+		// Acceleration is the slope of the velocity profile used for motion magic
+		// Example: 250 tick/100ms/s is 2500 ticks/s/s
+		armMotor1.configMotionAcceleration(ScoringConstants.ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC, 20);
+		armMotor1.configMotionCruiseVelocity(ScoringConstants.ARM_CRUISE_SPEED_TICKS_PER_100MS, 20);
+		
+
+
+		setAllMotorsZero();
+
+
+
+
 		// TODO:
 		// NOTE: It may need to be biased based on where the shaft was set when assembled
 		int abs_ticks = armMotor1.getSensorCollection().getPulseWidthPosition() & 0xFFF;
@@ -110,14 +124,15 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// effectively telling the encoder where 0 is
 		armMotor1.setSelectedSensorPosition(abs_ticks - ScoringConstants.ARM_BIAS_TICKS);
 
-		// Acceleration is the slope of the velocity profile used for motion magic
-		// Example: 250 tick/100ms/s is 2500 ticks/s/s
-		armMotor1.configMotionAcceleration(ScoringConstants.ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC, 20);
-		armMotor1.configMotionCruiseVelocity(ScoringConstants.ARM_CRUISE_SPEED_TICKS_PER_100MS, 20);
 
-
-
-		setAllMotorsZero();
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {}
+		double angle = getAngle_deg();
+		if (angle <= -180) {
+			angle += 360;
+		}
+		setAngle_deg(angle);
 	}
 
 
@@ -358,6 +373,14 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		return 360.0 * (double)ticks / (double)ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV;
 	}
+
+
+
+	public void setAngle_deg(double deg) {
+		int ticks = (int) (ScoringConstants.ARM_MOTOR_NATIVE_TICKS_PER_REV * deg / 360);
+
+		armMotor1.setSelectedSensorPosition(ticks);
+	}
 	
 
 
@@ -400,12 +423,22 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	{
 		boolean result = armMotor1.getSensorCollection().isRevLimitSwitchClosed();
 		SmartDashboard.putBoolean(getName()+"/Arm Front Limit", result);
+
+		if (result) {
+			setAngle_deg(ScoringConstants.FRONT_LIMIT_ANGLE);
+		}
+
 		return result;
 	}
 	public boolean backLimit()
 	{
 		boolean result = armMotor1.getSensorCollection().isFwdLimitSwitchClosed();
 		SmartDashboard.putBoolean(getName()+"/Arm Back Limit", result);
+
+		if (result) {
+			setAngle_deg(ScoringConstants.BACK_LIMIT_ANGLE);
+		}
+		
 		return result;
 	}
 
