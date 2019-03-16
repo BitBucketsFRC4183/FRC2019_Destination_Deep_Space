@@ -18,6 +18,9 @@ public class ScoringConstants {
 	public final static double ARM_MOTION_MAGIC_KD = 8.0*10.0*0.146143*2*2*2 *2*2*1.5;
 	public final static int    ARM_MOTION_MAGIC_IZONE = 120;
 
+	public final static double FRONT_LIMIT_ANGLE = -108.5;
+	public final static double BACK_LIMIT_ANGLE  = 111;
+
 	public final static boolean ROLLER_MOTOR_INVERSION = false;
 
 	public final static double ANGLE_TOLERANCE_DEG = 4.0; // If we made it to within this angle then call it good
