@@ -7,8 +7,8 @@ public class ScoringConstants {
 	public final static int ARM_BIAS_TICKS = 776 + 40 + 2974 - 78; //BAG BOT IS: 3737 - 57; // subtracted from absolute encoder value
 
 	public final static int ARM_MAX_SPEED_TICKS_PER_100MS = 300;
-	public final static int ARM_CRUISE_SPEED_TICKS_PER_100MS = (int)(0.50 * ARM_MAX_SPEED_TICKS_PER_100MS);
-	public final static int ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC = ARM_CRUISE_SPEED_TICKS_PER_100MS;
+	public final static int ARM_CRUISE_SPEED_TICKS_PER_100MS = (int)(0.50 * ARM_MAX_SPEED_TICKS_PER_100MS * 1.2);
+	public final static int ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC = (int) (ARM_CRUISE_SPEED_TICKS_PER_100MS * 1.5);
 
 	public final static boolean ARM_MOTOR_INVERSION = false;
 	public final static boolean ARM_MOTOR_SENSOR_PHASE = false;
