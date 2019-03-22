@@ -132,6 +132,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		if (angle <= -180) {
 			angle += 360;
 		}
+		else if (angle >= 180) {
+			angle -= 360;
+		}
 		setAngle_deg(angle);
 	}
 
