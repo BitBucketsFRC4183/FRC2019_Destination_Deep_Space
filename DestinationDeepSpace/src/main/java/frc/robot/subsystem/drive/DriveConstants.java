@@ -197,7 +197,7 @@ public class DriveConstants {
     public static final int PID_VELOCITY_SLOT = 1;
     
     // LEFT SIDE
-    public static double LEFT_VELOCITY_KF 	 = 0.113039; 
+    public static double LEFT_VELOCITY_KF 	 = 0.114944; //0.113039; 
     public static double LEFT_VELOCITY_KP 	 = 0.683333/2/2; //0.5115/2/1.5;
     public static double LEFT_VELOCITY_KI 	 = 0.0001;
     public static double LEFT_VELOCITY_KD 	 = 10*0.683333/2/1.5; //10.0*0.5115;

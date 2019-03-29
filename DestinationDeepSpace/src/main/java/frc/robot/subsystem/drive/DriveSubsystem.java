@@ -602,11 +602,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		// to be changed.
 		selectVelocityMode(true);
 
-
-
-		//SmartDashboard.putNumber(getName()+"/Commanded Speed (ips)", speed_ips);
-		//SmartDashboard.putNumber(getName()+"/Commanded Turn (dps)", Math.toDegrees(turn_radps));
-
 		double diffSpeed_ips = turn_radps * DriveConstants.WHEEL_TRACK_INCHES / 2.0 ;
 
 		// Compute, report, and limit lateral acceleration
@@ -616,10 +611,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		}
 		double latAccel_gs = turn_radps * speed_ips / 12.0 / DriveConstants.STANDARD_G_FTPSPS;
 		double turnRadius_inches = speed_ips / turn_radps;
-		//SmartDashboard.putNumber(getName()+"/Lat Accel (g)", latAccel_gs );
-		//SmartDashboard.putNumber(getName()+"/Turn Radius (inches)",turnRadius_inches);
-		//SmartDashboard.putNumber(getName()+"/Acheived Speed (ips)", speed_ips);
-		//SmartDashboard.putNumber(getName()+"/Acheived Turn (dps)", Math.toDegrees(turn_radps));
 
 
 		int speed_tickP100 = DriveConstants.ipsToTicksP100(speed_ips);
@@ -627,9 +618,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 		int leftSpeed_tickP100 = speed_tickP100 + diffSpeed_tickP100;
 		int rightSpeed_tickP100 = speed_tickP100 - diffSpeed_tickP100;
-
-		//SmartDashboard.putNumber(getName() + "/leftCommandSpeed (tp100)",leftSpeed_tickP100);
-		//SmartDashboard.putNumber(getName() + "/rightCommandSpeed (tp100)",rightSpeed_tickP100);
 
 		leftMotors[0].set(ControlMode.Velocity, leftSpeed_tickP100);
 		rightMotors[0].set(ControlMode.Velocity, rightSpeed_tickP100);		
@@ -641,7 +629,19 @@ public class DriveSubsystem extends BitBucketSubsystem {
 				leftMotors[i].set(ControlMode.Velocity, leftSpeed_tickP100);
 				rightMotors[i].set(ControlMode.Velocity, rightSpeed_tickP100);
 			}
-		}		
+		}	
+
+		if (getTelemetryEnabled())
+		{
+			SmartDashboard.putNumber(getName()+"/Commanded Speed (ips)", speed_ips);
+			SmartDashboard.putNumber(getName()+"/Commanded Turn (dps)", Math.toDegrees(turn_radps));
+			SmartDashboard.putNumber(getName()+"/Lat Accel (g)", latAccel_gs );
+			SmartDashboard.putNumber(getName()+"/Turn Radius (inches)",turnRadius_inches);
+			SmartDashboard.putNumber(getName()+"/Acheived Speed (ips)", speed_ips);
+			SmartDashboard.putNumber(getName()+"/Acheived Turn (dps)", Math.toDegrees(turn_radps));
+			SmartDashboard.putNumber(getName()+"/leftCommandSpeed (ips)",DriveConstants.ticksP100ToIps(leftSpeed_tickP100));
+			SmartDashboard.putNumber(getName()+"/rightCommandSpeed (ips)",DriveConstants.ticksP100ToIps(rightSpeed_tickP100));
+		}
 	}
 
 
@@ -750,11 +750,11 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 
 
-			double left_inchps = leftMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
-			double right_inchps = rightMotors[0].getSelectedSensorVelocity() * 10.0 * 4 * Math.PI / 8192;
+			double left_inchps = DriveConstants.ticksP100ToIps(leftMotors[0].getSelectedSensorVelocity());
+			double right_inchps = DriveConstants.ticksP100ToIps(rightMotors[0].getSelectedSensorVelocity());
 
-			//SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
-			//SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);
+			SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
+			SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);
 		}
 		//SmartDashboard.putBoolean(getName()+"/RunningDiag", false);  
 	}
