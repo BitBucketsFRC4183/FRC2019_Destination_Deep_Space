@@ -144,7 +144,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// set the ticks of relative magnetic encoder
 		// effectively telling the encoder where 0 is
 		armMotor1.setSelectedSensorPosition(abs_ticks - ScoringConstants.ARM_BIAS_TICKS);
-		beakMotor.setSelectedSensorPosition(abs_ticks - 0);
+		beakMotor.setSelectedSensorPosition(0);
 
 
 
