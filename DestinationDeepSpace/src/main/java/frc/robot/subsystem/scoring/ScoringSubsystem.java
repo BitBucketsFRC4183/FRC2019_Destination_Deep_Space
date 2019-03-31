@@ -548,7 +548,11 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		switch(beakPosition)
 		{
 			case HATCH_GRAPPLE_BEAK:
-				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
+				if(beakMotor.getOutputCurrent() >= ScoringConstants.BEAK_MAX_CURRENT_AMPS) {
+					beakMotor.set(ControlMode.MotionMagic, beakMotor.getSelectedSensorPosition()); // Tell the beak motor to holod it's current position if the current output exceeds BEAK_MAX_CURRENT_AMPS.
+				} else {
+					beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
+				}
 				break;
 
 			case HATCH_RELEASE_BEAK:
