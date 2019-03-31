@@ -80,15 +80,10 @@ public class ScoringConstants {
 
 	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 30.0;
 
-	// public static double BEAK_MAX_POWER = 0.25;
 
 	public enum BeakPosition {
-		// INVALID_BEAK           (0),    // Multiple positions are selected.
-		// MANUAL_BEAK            (0),    // Yet again, no description needed.
-		// NULL_BEAK              (0),    // No positions are selected.
-		// BALL_POSITION_BEAK     (00),   // Pull the beak out of the way of the ball intake.
 		HATCH_GRAPPLE_BEAK     (3*BEAK_MOTOR_NATIVE_TICKS_PER_REV),   // Grapple a hatch panel.
-		HATCH_RELEASE_BEAK     (00);   // Release a hatch panel by releasing the beak.
+		HATCH_RELEASE_BEAK     (0);   // Release a hatch panel by releasing the beak.
 		
 		private final double BEAK_TICKS;
 
