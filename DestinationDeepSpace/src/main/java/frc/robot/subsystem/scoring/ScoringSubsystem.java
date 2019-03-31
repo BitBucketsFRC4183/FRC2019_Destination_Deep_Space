@@ -144,7 +144,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// set the ticks of relative magnetic encoder
 		// effectively telling the encoder where 0 is
 		armMotor1.setSelectedSensorPosition(abs_ticks - ScoringConstants.ARM_BIAS_TICKS);
-		beakMotor.setSelectedSensorPosition(0);
+		beakMotor.setSelectedSensorPosition(0); // The beak is normally at rest during initialization, this makes sure the motor knows that.
 
 
 
@@ -548,11 +548,11 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		switch(beakPosition)
 		{
 			case HATCH_GRAPPLE_BEAK:
-				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks());
+				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
 				break;
 
 			case HATCH_RELEASE_BEAK:
-				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks());
+				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
 				break;
 
 			default:
@@ -569,9 +569,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			SmartDashboard.putNumber(getName() + "/Arm Motor 0 Current", armMotor1Current_amps);
 			SmartDashboard.putNumber(getName() + "/Arm Motor 1 Current", armMotor2Current_amps);
 			SmartDashboard.putNumber(getName() + "/Arm Motor TOTAL Current", armMotor1Current_amps+armMotor2Current_amps);
-			SmartDashboard.putNumber(getName() + "/Beak Ticks", beakMotor.getSelectedSensorPosition());
-			SmartDashboard.putNumber(getName() + "/Beak Error", beakMotor.getClosedLoopError());
-			SmartDashboard.putNumber(getName() + "/Beak Motor Current", beakMotor.getOutputCurrent());
+			SmartDashboard.putNumber(getName() + "/Beak Ticks", beakMotor.getSelectedSensorPosition());     // Log the beak motor rotation in ticks.
+			SmartDashboard.putNumber(getName() + "/Beak Error", beakMotor.getClosedLoopError());            // Log the beak motor error in ticks.
+			SmartDashboard.putNumber(getName() + "/Beak Motor Current", beakMotor.getOutputCurrent());      // Log the beak output current in amps.
 
 		}
 		// commands will handle dealing with arm manipulation
