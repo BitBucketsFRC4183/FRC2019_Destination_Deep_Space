@@ -27,7 +27,7 @@ public class ScoringConstants {
 
 	public enum ScoringLevel {
 		INVALID              (0),       // multiple levels are selected
-		MANUAL              (0),       // no description necessary, but it's here anyway. 
+		MANUAL               (0),       // no description necessary, but it's here anyway. 
 		NONE                 (0),       // no levels are selected
         TOP_DEAD_CENTER      (0), //deg
 		GROUND               (113), //deg vs inches -->(5.0),       // hatch panel ground pickup
@@ -63,6 +63,7 @@ public class ScoringConstants {
 
 
 	public static final int ARM_MOTOR_NATIVE_TICKS_PER_REV = 4096;
+	public static final int BEAK_MOTOR_NATIVE_TICKS_PER_REV = 4096;
 
 
 
@@ -78,4 +79,38 @@ public class ScoringConstants {
 
 
 	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 30.0;
+
+	// public static double BEAK_MAX_POWER = 0.25;
+
+	public enum BeakPosition {
+		// INVALID_BEAK           (0),    // Multiple positions are selected.
+		// MANUAL_BEAK            (0),    // Yet again, no description needed.
+		// NULL_BEAK              (0),    // No positions are selected.
+		// BALL_POSITION_BEAK     (00),   // Pull the beak out of the way of the ball intake.
+		HATCH_GRAPPLE_BEAK     (3*BEAK_MOTOR_NATIVE_TICKS_PER_REV),   // Grapple a hatch panel.
+		HATCH_RELEASE_BEAK     (00);   // Release a hatch panel by releasing the beak.
+		
+		private final double BEAK_TICKS;
+
+		BeakPosition(double targetBeakTicks) {
+			
+			BEAK_TICKS = targetBeakTicks;
+			
+		}
+		public double getBeak_ticks() {
+			return BEAK_TICKS;
+		}
+	}
+										  
+	public final static int     BEAK_MAX_SPEED_TICKS_PER_100MS = 9500;
+	public final static int     BEAK_CRUISE_SPEED_TICKS_PER_100MS = (int)(0.75 * BEAK_MAX_SPEED_TICKS_PER_100MS);
+	public final static int     BEAK_ACCELERATION_TICKS_PER_100MS_PER_SEC = (int) (BEAK_CRUISE_SPEED_TICKS_PER_100MS * 1.5);
+
+	public final static boolean BEAK_MOTOR_INVERSION = false;
+	public final static boolean BEAK_MOTOR_SENSOR_PHASE = false;
+	public final static double  BEAK_MOTION_MAGIC_KF = 1023.0/9500.0;
+	public final static double  BEAK_MOTION_MAGIC_KP = (0.1 * 1023 / 1800)*2*2*2*2;
+	public final static double  BEAK_MOTION_MAGIC_KI = .001;
+	public final static double  BEAK_MOTION_MAGIC_KD = 10*(0.1 * 1023 / 1800)*2*2*2*2;
+	public final static int     BEAK_MOTION_MAGIC_IZONE = 200;
 }
