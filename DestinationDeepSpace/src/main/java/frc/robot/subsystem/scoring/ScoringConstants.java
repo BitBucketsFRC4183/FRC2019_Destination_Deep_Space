@@ -96,6 +96,7 @@ public class ScoringConstants {
 			return BEAK_TICKS;
 		}
 	}
+	public final static double  BEAK_MAX_CURRENT_AMPS = 3;
 										  
 	public final static int     BEAK_MAX_SPEED_TICKS_PER_100MS = 9500;
 	public final static int     BEAK_CRUISE_SPEED_TICKS_PER_100MS = (int)(0.75 * BEAK_MAX_SPEED_TICKS_PER_100MS);
