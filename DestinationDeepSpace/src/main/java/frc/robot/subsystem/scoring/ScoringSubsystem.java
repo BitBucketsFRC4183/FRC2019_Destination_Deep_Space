@@ -10,6 +10,7 @@ package frc.robot.subsystem.scoring;
 import frc.robot.MotorId;
 import frc.robot.operatorinterface.OI;
 import frc.robot.subsystem.BitBucketSubsystem;
+import frc.robot.subsystem.scoring.ScoringConstants.BeakPosition;
 import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.utils.talonutils.TalonUtils;
 
@@ -39,12 +40,15 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private static ScoringSubsystem inst;
 
 
+	private BeakPosition beakPosition = BeakPosition.HATCH_RELEASE_BEAK;
+
 
 	private Idle initialCommand;
 
 	private final WPI_TalonSRX rollerMotor;
 	private final WPI_TalonSRX armMotor1;
 	private final WPI_TalonSRX armMotor2;
+	private final WPI_TalonSRX beakMotor;
 	private double armMotor1Current_amps = 0;
 	private double armMotor2Current_amps = 0;
 
@@ -70,18 +74,22 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		rollerMotor = new WPI_TalonSRX(MotorId.INTAKE_MOTOR_ID);
 		armMotor1   = new WPI_TalonSRX(MotorId.ARM_MOTOR1_ID);	// TODO: Rename to armMotor1 and 2
 		armMotor2   = new WPI_TalonSRX(MotorId.ARM_MOTOR2_ID);
+		beakMotor   = new WPI_TalonSRX(MotorId.BEAK_MOTOR_ID);
 
 		// initialize motors before setting sensor positions and follower modes
 		// otherwise, it may clear those settings
 		TalonUtils.initializeMotorDefaults(rollerMotor);
 		TalonUtils.initializeMotorDefaults(armMotor1);
 		TalonUtils.initializeMotorDefaults(armMotor2);
+		TalonUtils.initializeMotorDefaults(beakMotor);
 
 		rollerMotor.setInverted(ScoringConstants.ROLLER_MOTOR_INVERSION);
 		armMotor1.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
 		armMotor2.setInverted(ScoringConstants.ARM_MOTOR_INVERSION);
+		beakMotor.setInverted(ScoringConstants.BEAK_MOTOR_INVERSION);
 
 		armMotor1.setSensorPhase(ScoringConstants.ARM_MOTOR_SENSOR_PHASE);
+		beakMotor.setSensorPhase(ScoringConstants.BEAK_MOTOR_SENSOR_PHASE);
 
 		armMotor1.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
 		armMotor1.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,0);
@@ -89,6 +97,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		armMotor1.overrideLimitSwitchesEnable(true);
 
 		armMotor1.setNeutralMode(NeutralMode.Brake);
+		beakMotor.setNeutralMode(NeutralMode.Brake);
 
 
 		TalonUtils.initializeMotorFPID(armMotor1, 
@@ -97,9 +106,18 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 							ScoringConstants.ARM_MOTION_MAGIC_KI, 
 							ScoringConstants.ARM_MOTION_MAGIC_KD, 
 							ScoringConstants.ARM_MOTION_MAGIC_IZONE);
+		
+		TalonUtils.initializeMotorFPID(beakMotor, 
+							ScoringConstants.BEAK_MOTION_MAGIC_KF, 
+							ScoringConstants.BEAK_MOTION_MAGIC_KP, 
+							ScoringConstants.BEAK_MOTION_MAGIC_KI, 
+							ScoringConstants.BEAK_MOTION_MAGIC_KD, 
+							ScoringConstants.BEAK_MOTION_MAGIC_IZONE);
 
 		// TODO: Configure armMotor1 to use initializeMagEncoderRelativeMotor
 		TalonUtils.initializeMagEncoderRelativeMotor(armMotor1, 1);
+		TalonUtils.initializeMagEncoderRelativeMotor(beakMotor, 1);
+
 
 		armMotor2.follow(armMotor1);
 
@@ -109,6 +127,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// Example: 250 tick/100ms/s is 2500 ticks/s/s
 		armMotor1.configMotionAcceleration(ScoringConstants.ARM_ACCELERATION_TICKS_PER_100MS_PER_SEC, 20);
 		armMotor1.configMotionCruiseVelocity(ScoringConstants.ARM_CRUISE_SPEED_TICKS_PER_100MS, 20);
+
+		beakMotor.configMotionAcceleration(ScoringConstants.BEAK_ACCELERATION_TICKS_PER_100MS_PER_SEC, 20);
+		beakMotor.configMotionCruiseVelocity(ScoringConstants.BEAK_CRUISE_SPEED_TICKS_PER_100MS, 20);
 		
 
 
@@ -123,6 +144,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		// set the ticks of relative magnetic encoder
 		// effectively telling the encoder where 0 is
 		armMotor1.setSelectedSensorPosition(abs_ticks - ScoringConstants.ARM_BIAS_TICKS);
+		beakMotor.setSelectedSensorPosition(abs_ticks - 0);
+
 
 
 		try {
@@ -333,6 +356,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private void setAllMotorsZero() {
 		rollerMotor.set(ControlMode.PercentOutput, 0);
 		armMotor1.set(ControlMode.PercentOutput, 0);
+		beakMotor.set(ControlMode.PercentOutput, 0);
 	}
 
 
@@ -510,6 +534,30 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			visionSubsystem.enableFront();
 		}
 
+		boolean grapple = oi.beakGrapple();
+		boolean release = oi.beakRelease();
+		if (grapple)
+		{
+			beakPosition = BeakPosition.HATCH_GRAPPLE_BEAK;
+		}
+		else if (release)
+		{
+			beakPosition = BeakPosition.HATCH_RELEASE_BEAK;
+		}
+
+		switch(beakPosition)
+		{
+			case HATCH_GRAPPLE_BEAK:
+				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks());
+				break;
+
+			case HATCH_RELEASE_BEAK:
+				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks());
+				break;
+
+			default:
+				break;
+		}
 		
 		clearDiagnosticsEnabled();
 		updateBaseDashboard();
@@ -521,6 +569,9 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 			SmartDashboard.putNumber(getName() + "/Arm Motor 0 Current", armMotor1Current_amps);
 			SmartDashboard.putNumber(getName() + "/Arm Motor 1 Current", armMotor2Current_amps);
 			SmartDashboard.putNumber(getName() + "/Arm Motor TOTAL Current", armMotor1Current_amps+armMotor2Current_amps);
+			SmartDashboard.putNumber(getName() + "/Beak Ticks", beakMotor.getSelectedSensorPosition());
+			SmartDashboard.putNumber(getName() + "/Beak Error", beakMotor.getClosedLoopError());
+			SmartDashboard.putNumber(getName() + "/Beak Motor Current", beakMotor.getOutputCurrent());
 
 		}
 		// commands will handle dealing with arm manipulation
