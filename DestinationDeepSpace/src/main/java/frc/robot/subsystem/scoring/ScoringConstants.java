@@ -21,7 +21,7 @@ public class ScoringConstants {
 	public final static double FRONT_LIMIT_ANGLE = -108.5;
 	public final static double BACK_LIMIT_ANGLE  = 111;
 
-	public final static boolean ROLLER_MOTOR_INVERSION = false;
+	public final static boolean ROLLER_MOTOR_INVERSION = true; // 775pro is inverted from BAG
 
 	public final static double ANGLE_TOLERANCE_DEG = 4.0; // If we made it to within this angle then call it good
 
@@ -36,8 +36,8 @@ public class ScoringConstants {
 		HP_AUTO              (93.0), // different for auto assist so that camera can see it
 
 		BALL_CARGO           (63.0), // deg vs inches -->(31.5),    // cargo scoring
-		BALL_LOADING_STATION (49.0), // deg vs inches -->(37.0),    // loading station pickup
-		BALL_ROCKET_1        (72.0); // deg vs inches -->(27.5);    // rocket 1 scoring
+		BALL_LOADING_STATION (45.0), // was 49 deg vs inches -->(37.0),    // loading station pickup
+		BALL_ROCKET_1        (75.0); // 72 wasdeg vs inches -->(27.5);    // rocket 1 scoring
 
 
 
