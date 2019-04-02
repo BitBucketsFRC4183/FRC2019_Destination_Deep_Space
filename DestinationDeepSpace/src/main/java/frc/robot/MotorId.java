@@ -24,11 +24,11 @@ public class MotorId {
         public static final int INTAKE_MOTOR_ID             = 10;
         public static final int ARM_MOTOR1_ID               = 9;
         public static final int ARM_MOTOR2_ID               = 12;
-        public static final int BEAK_MOTOR_ID               = 7;       // 11 on Focused Excellence.
+        public static final int BEAK_MOTOR_ID               = 11;       // 11 on Focused Excellence.
         
         /*CLIMBER SUBSYSTEM*/
         public static final int CLIMB_MOTOR_1_ID            = 8;
-        public static final int CLIMB_MOTOR_2_ID            = 11;      // 7 on Focused Excellence.
+        public static final int CLIMB_MOTOR_2_ID            = 7;      // 7 on Focused Excellence.
 
 
     
