@@ -28,7 +28,7 @@ public class DriveConstants {
     // from changing the command too rapidly
     public static final double DRIVE_MOTOR_CLOSED_LOOP_RAMP_SEC = 0.4;	    // No ramp rate on closed loop (use Motion Magic)
 
-    public static final double MAX_ALLOWED_SPEED_IPS = 6.0*12.0;
+    public static final double MAX_ALLOWED_SPEED_IPS = 8.0*12.0;
     public static final double MAX_ALLOWED_TURN_DPS  = 180.0;
     public static final double MAX_ALLOWED_TURN_RADPS = Math.toRadians(MAX_ALLOWED_TURN_DPS);
     public static final double STANDARD_G_FTPSPS = 32.1740;
@@ -197,10 +197,10 @@ public class DriveConstants {
     public static final int PID_VELOCITY_SLOT = 1;
     
     // LEFT SIDE
-    public static double LEFT_VELOCITY_KF 	 = 0.113039; 
-    public static double LEFT_VELOCITY_KP 	 = 0.5115/2/1.5;
+    public static double LEFT_VELOCITY_KF 	 = 0.114944; //0.113039; 
+    public static double LEFT_VELOCITY_KP 	 = 0.683333/2/2; //0.5115/2/1.5;
     public static double LEFT_VELOCITY_KI 	 = 0.0001;
-    public static double LEFT_VELOCITY_KD 	 = 10.0*0.5115;
+    public static double LEFT_VELOCITY_KD 	 = 10*0.683333/2/1.5; //10.0*0.5115;
     public static int    LEFT_VELOCITY_IZONE   = 200; 
 
     // RIGHT SIDE    

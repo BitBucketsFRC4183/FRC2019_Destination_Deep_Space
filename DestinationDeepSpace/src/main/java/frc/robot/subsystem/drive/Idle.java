@@ -11,9 +11,11 @@ import frc.robot.utils.CommandUtils;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystem.drive.DriveConstants;
+import frc.robot.subsystem.vision.VisionSubsystem;
 
 public class Idle extends Command {
 	private final DriveSubsystem driveSubsystem = DriveSubsystem.instance();
+	private final VisionSubsystem vision = VisionSubsystem.instance();
 	
 	static double lastTestModeTime_sec = 0.0;
 	
@@ -40,7 +42,7 @@ public class Idle extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
+    	vision.enableDriverExposure();
     }
 
     // Make this return true when this Command no longer needs to run execute()
