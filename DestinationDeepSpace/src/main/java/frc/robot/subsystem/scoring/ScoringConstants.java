@@ -83,7 +83,8 @@ public class ScoringConstants {
 
 	public enum BeakPosition {
 		HATCH_GRAPPLE_BEAK     (3*BEAK_MOTOR_NATIVE_TICKS_PER_REV),   // Grapple a hatch panel.
-		HATCH_RELEASE_BEAK     (0);   // Release a hatch panel by releasing the beak.
+		HATCH_RELEASE_BEAK     (0),                                   // Release a hatch panel by releasing the beak.
+		HATCH_HOLDPOS_BEAK     (000);                                 //
 		
 		private final double BEAK_TICKS;
 
