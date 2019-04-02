@@ -119,6 +119,8 @@ public class OI {
 
 	private final static int TEST_MOVE_BY_BUTTON         = controllerMapper.getTriangle(); /// TODO: Temp, use dashboard instead
 
+	private final static int BEAK_GRAPPLE_BUTTON   		 = controllerMapper.getR2();
+	private final static int BEAK_RELEASE_BUTTON    	 = controllerMapper.getL2();
 
 
 	// TODO: configure correct IDs
@@ -127,7 +129,7 @@ public class OI {
 	private final static int SCORING_GROUND      = controllerMapper.getCross();
 	private final static int SCORING_BALL_C      = controllerMapper.getL1();
 	private final static int SCORING_BALL_LS     = controllerMapper.getR1();
-	private final static int SCORING_BALL_R1     = controllerMapper.getL2();
+	// private final static int SCORING_BALL_R1     = controllerMapper.getL2();
 	private final static int SWITCH_ORIENTATION  = controllerMapper.getSquare();
 	private final static int ARM_MANUAL  = controllerMapper.getLeftStickY();
 
@@ -216,7 +218,8 @@ public class OI {
 	}
 
 	public boolean bRocket1() {
-		return operatorControl.getRawButton(SCORING_BALL_R1);
+		// return operatorControl.getRawButton(SCORING_BALL_R1);
+		return false;
 	}
 
 	public boolean switchOrientation() {
@@ -272,6 +275,14 @@ public class OI {
 
 	public boolean operatorIdle() {
 		return operatorControl.getRawButton(OPERATOR_IDLE);
+	}
+
+	public boolean beakGrapple() {
+		return operatorControl.getRawButton(BEAK_GRAPPLE_BUTTON);
+	}
+
+	public boolean beakRelease() {
+		return operatorControl.getRawButton(BEAK_RELEASE_BUTTON);
 	}
 }
 
