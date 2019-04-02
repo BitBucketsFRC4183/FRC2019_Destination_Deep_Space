@@ -4,7 +4,7 @@ public class ScoringConstants {
 
 	public final static double MAX_ARM_MOTOR_CURRENT_AMPS = 60.0;
 
-	public final static int ARM_BIAS_TICKS = 765; //FLAGSTAFF: 776 + 40 + 2974 - 78; //BAG BOT IS: 3737 - 57; // subtracted from absolute encoder value
+	public final static int ARM_BIAS_TICKS = 776 + 40 + 2974 - 78; //BAG BOT IS: 3737 - 57; // subtracted from absolute encoder value
 
 	public final static int ARM_MAX_SPEED_TICKS_PER_100MS = 300;
 	public final static int ARM_CRUISE_SPEED_TICKS_PER_100MS = (int)(0.50 * ARM_MAX_SPEED_TICKS_PER_100MS * 1.2);
