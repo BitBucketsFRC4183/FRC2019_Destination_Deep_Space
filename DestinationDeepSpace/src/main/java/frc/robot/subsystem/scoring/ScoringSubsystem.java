@@ -536,31 +536,36 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		boolean grapple = oi.beakGrapple();
 		boolean release = oi.beakRelease();
-		if (grapple)
-		{
-			beakPosition = BeakPosition.HATCH_GRAPPLE_BEAK;
-		}
-		else if (release)
-		{
-			beakPosition = BeakPosition.HATCH_RELEASE_BEAK;
+
+		if (grapple ^ release) {
+			if (grapple) {
+				beakPosition = BeakPosition.HATCH_GRAPPLE_BEAK;
+			} else if (release) {
+				beakPosition = BeakPosition.HATCH_RELEASE_BEAK;
+			}
 		}
 
-		switch(beakPosition)
-		{
-			case HATCH_GRAPPLE_BEAK:
-				if(beakMotor.getOutputCurrent() >= ScoringConstants.BEAK_MAX_CURRENT_AMPS) {
-					beakMotor.set(ControlMode.MotionMagic, beakMotor.getSelectedSensorPosition()); // Tell the beak motor to holod it's current position if the current output exceeds BEAK_MAX_CURRENT_AMPS.
-				} else {
-					beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
-				}
-				break;
-
-			case HATCH_RELEASE_BEAK:
+		switch (beakPosition) {
+		case HATCH_GRAPPLE_BEAK:
+			if (beakMotor.getOutputCurrent() >= ScoringConstants.BEAK_MAX_CURRENT_AMPS) {
+				beakMotor.set(ControlMode.MotionMagic, beakMotor.getSelectedSensorPosition());
+				beakPosition = BeakPosition.HATCH_HOLDPOS_BEAK; // Tell the beak motor to enter HOLDPOS mode if the current output exceeds BEAK_MAX_CURRENT_AMPS.
+			} else {
 				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
-				break;
+			}
+			break;
 
-			default:
-				break;
+		case HATCH_RELEASE_BEAK:
+			beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
+			break;
+
+		case HATCH_HOLDPOS_BEAK:
+			beakMotor.set(ControlMode.MotionMagic, beakMotor.getSelectedSensorPosition()); // Tell the beak motor to hold it's current position while in HOLDPOS mode.
+
+			break;
+
+		default:
+			break;
 		}
 		
 		clearDiagnosticsEnabled();
