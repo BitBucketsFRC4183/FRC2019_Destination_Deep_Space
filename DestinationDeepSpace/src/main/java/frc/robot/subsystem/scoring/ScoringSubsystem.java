@@ -40,7 +40,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private static ScoringSubsystem inst;
 
 
-	private BeakPosition beakPosition = BeakPosition.HATCH_RELEASE_BEAK;
+	private BeakPosition beakPosition = BeakPosition.HATCH_GRAPPLE_BEAK;
 
 
 	private Idle initialCommand;
@@ -55,7 +55,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	// last orientation of the robot's arm
 	// true --> front
 	// false --> back
-	private boolean back = false;
+	private boolean back = true;
 	// last level the arm was at
 	private ScoringConstants.ScoringLevel lastLevel = ScoringConstants.ScoringLevel.NONE;
 	private ScoringConstants.ScoringLevel commandedLevel = ScoringConstants.ScoringLevel.NONE;
@@ -116,7 +116,7 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		// TODO: Configure armMotor1 to use initializeMagEncoderRelativeMotor
 		TalonUtils.initializeMagEncoderRelativeMotor(armMotor1, 1);
-		TalonUtils.initializeMagEncoderRelativeMotor(beakMotor, 1);
+		TalonUtils.initializeQuadEncoderMotor(beakMotor, 1);
 
 
 		armMotor2.follow(armMotor1);
@@ -251,6 +251,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 	/* switch the orientation of the arm */
 	public void switchOrientation() {
+		if (beakPosition == BeakPosition.HATCH_GRAPPLE_BEAK) {
+			return;
+		}
+
 		back = !back;
 
 		if (back)
@@ -536,23 +540,34 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 
 		boolean grapple = oi.beakGrapple();
 		boolean release = oi.beakRelease();
+		// if (grapple || release)
+		// {
+		// 	beakMotor.set(ControlMode.PercentOutput, 0.3);
+		// }
+		// else
+		// {
+		// 	beakMotor.set(ControlMode.PercentOutput, 0.0);
+		// }
 
-		if (grapple ^ release) {
+		if (!back) {
+			beakPosition = BeakPosition.HATCH_RELEASE_BEAK;
+		} else if (grapple ^ release) {
 			if (grapple) {
 				beakPosition = BeakPosition.HATCH_GRAPPLE_BEAK;
 			} else if (release) {
 				beakPosition = BeakPosition.HATCH_RELEASE_BEAK;
 			}
 		}
-
+		// beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
+			
 		switch (beakPosition) {
 		case HATCH_GRAPPLE_BEAK:
-			if (beakMotor.getOutputCurrent() >= ScoringConstants.BEAK_MAX_CURRENT_AMPS) {
+			/*if (beakMotor.getOutputCurrent() >= ScoringConstants.BEAK_MAX_CURRENT_AMPS) {
 				beakMotor.set(ControlMode.MotionMagic, beakMotor.getSelectedSensorPosition()); // Tell the beak motor to hold it's current position while in HOLDPOS mode.
 				beakPosition = BeakPosition.HATCH_HOLDPOS_BEAK; // Tell the beak motor to enter HOLDPOS mode if the current output exceeds BEAK_MAX_CURRENT_AMPS.
-			} else {
+			} else {*/
 				beakMotor.set(ControlMode.MotionMagic, beakPosition.getBeak_ticks()); // Tell the beak to go to the position set in the enum.
-			}
+			//}
 			break;
 
 		case HATCH_RELEASE_BEAK:
