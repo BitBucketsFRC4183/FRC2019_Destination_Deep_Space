@@ -81,8 +81,9 @@ public class ScoringConstants {
 	public static final double LEVEL_CHANGE_TIMEOUT_SEC = 30.0;
 
 
+	// not a beak anymore, now a claw, but no need to rename
 	public enum BeakPosition {
-		HATCH_GRAPPLE_BEAK     (3*BEAK_MOTOR_NATIVE_TICKS_PER_REV),   // Grapple a hatch panel.
+		HATCH_GRAPPLE_BEAK     (1.25*BEAK_MOTOR_NATIVE_TICKS_PER_REV),   // Grapple a hatch panel.
 		HATCH_RELEASE_BEAK     (0),                                   // Release a hatch panel by releasing the beak.
 		HATCH_HOLDPOS_BEAK     (000);                                 //
 		
