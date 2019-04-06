@@ -36,7 +36,7 @@ public class ScoringConstants {
 		HP_AUTO              (93.0), // different for auto assist so that camera can see it
 
 		BALL_CARGO           (63.0), // deg vs inches -->(31.5),    // cargo scoring
-		BALL_LOADING_STATION (45.0), // was 49 deg vs inches -->(37.0),    // loading station pickup
+		BALL_LOADING_STATION (47.5), // was 49 deg vs inches -->(37.0),    // loading station pickup
 		BALL_ROCKET_1        (75.0); // 72 wasdeg vs inches -->(27.5);    // rocket 1 scoring
 
 
@@ -83,7 +83,7 @@ public class ScoringConstants {
 
 	// not a beak anymore, now a claw, but no need to rename
 	public enum BeakPosition {
-		HATCH_GRAPPLE_BEAK     (1.25*BEAK_MOTOR_NATIVE_TICKS_PER_REV),   // Grapple a hatch panel.
+		HATCH_GRAPPLE_BEAK     (2048*1.1),   // Grapple a hatch panel.
 		HATCH_RELEASE_BEAK     (0),                                   // Release a hatch panel by releasing the beak.
 		HATCH_HOLDPOS_BEAK     (000);                                 //
 		
