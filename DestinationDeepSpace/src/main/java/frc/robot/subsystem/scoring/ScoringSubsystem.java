@@ -525,8 +525,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		//SmartDashboard.putBoolean(getName()+"/Infeed", infeed);
 		//SmartDashboard.putBoolean(getName()+"/Outfeed", outfeed);
 
-		if      (infeed)  { setRollers(-1.0); }
-		else if (outfeed) { setRollers(1.0);  }
+		if      (infeed)  { setRollers(-0.7); }
+		else if (outfeed) { setRollers(0.7);  }
 		else              { setRollers(0.0);  }
 
 		if (back)
