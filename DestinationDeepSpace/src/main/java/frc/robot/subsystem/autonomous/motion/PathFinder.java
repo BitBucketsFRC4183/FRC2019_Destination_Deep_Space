@@ -10,43 +10,69 @@ package frc.robot.subsystem.autonomous.motion;
  * Add your docs here.
  */
 public class PathFinder {
-
+    // waypoints to cross
     private Waypoint[] waypoints;
     public PathType pathType;
 
-    public Spline[] splines; 
+    public Spline[] splines;
+    // types of splines, currently only 3rd and 5th order Hermite (linear at end points) implemented
     public enum PathType{
-        CUBIC_HERMITE,
-        QUINTIC_HERMITE,
-        B_SPLINE;
+        CUBIC_HERMITE, // 3rd order in x and y
+        QUINTIC_HERMITE, // 5th order in x and y
+        B_SPLINE; // not implemented
     }
 
+    /**
+     * Create a PathFinder of a certain PathType between Waypoints
+     */
     public PathFinder(Waypoint[] waypoints, PathType pathType)
     {
+        // copy the waypoints into this.waypoints
         copy(waypoints);
+        // set path type
         this.pathType=pathType;
+        // ge
         generateAllSplines();
     }
 
+    /**
+     * copy waypoints into this.waypoints
+     * 
+     * @param waypoints
+     */
     private void copy(Waypoint[] waypoints)
     {
         this.waypoints = new Waypoint[waypoints.length];
         for(int i=0; i<waypoints.length; i++)
+            // go through each waypoint and add a copy to this.waypoints
             this.waypoints[i] = new Waypoint(waypoints[i].x, waypoints[i].y, waypoints[i].deg);
     }
 
     private boolean generateAllSplines()
     {
+        // splines between waypoints
         splines = new Spline[waypoints.length-1];
         for(int i=0; i<splines.length; i++)
         {
+            // initialize the i-th spline
             splines[i] = new Spline();
+            // generate spline between points
             splines[i]=generateASpline(waypoints[i], waypoints[i+1], splines[i]);
+
+            // accumulated length up to start of this spline
+            // take accumulate length of previous spline and add length of previous spline
             if(i>0) splines[i].previousLength = splines[i-1].previousLength+splines[i-1].arcLength;
         }
+
+        // yes
         return true;
     }
 
+    /**
+     * Generate a spline between two points
+     * 
+     * @param temp temporary spline that is used to set result to
+     */
     private Spline generateASpline(Waypoint start, Waypoint end, Spline temp)
     {
         return generateASpline(start.x, start.y, start.deg, end.x, end.y, end.deg, temp);
@@ -54,8 +80,11 @@ public class PathFinder {
 
     private Spline generateASpline(double x0, double y0, double theta0, double x1, double y1, double theta1, Spline temp)
     {
+        // distance between start and ending waypoints on polynomial
         temp.knot_Distance = Math.sqrt((x1-x0)*(x1-x0)+(y1-y0)*(y1-y0));
         
+        // who knows what any of this does, we just know it works :) (hopefully)
+
         double cc=temp.knot_Distance*1.25;//tangent vector magnitude, Matlab investigates this a little more.
         //tangent magnitude doesnt "mean" much. Matlab experimentation shows different values and why they're chosen
         double a0x=0;//Second Derivative variable, there are only so many letters of the alphabet.
@@ -106,10 +135,15 @@ public class PathFinder {
             temp.ycoef[1]=m0y;
             temp.ycoef[0]=y0;
         }
+
+        // polynomial coefficients generated, now take derivatives and evalute arc length
         initializeSpline(temp);
         return temp;
     }
 
+    /**
+     * Evaluate x and y derivatives of spline, and take arc length
+     */
     private void initializeSpline(Spline temp)
     {
         temp.xprimecoef = SabaMath.takeDerivative(temp.xcoef);
@@ -121,18 +155,31 @@ public class PathFinder {
         temp.setArcLength();
     }
 
+    /**
+     * Get polynomial in spline that contains point d distance units into spline
+     * 
+     * @return [index of polynomial, how far into this polynomial d is]
+     */
     public double[] getSplineNo(double d)
     {
         double[] result = new double[2];//first element is spline #, 2nd is how far in the spline it is
+        // go through each spline
         for(int i=0; i<splines.length; i++)
         {
+            // see if it lies between starting and ending arc lengths of polynomial
             if(d>=splines[i].previousLength& d<=(splines[i].previousLength+splines[i].arcLength))
             {
+                // set index to this one
                 result[0]=i;
+                // set distance to distance into this polynomial (subtract distance accumulated before this polynomial)
                 result[1]=d-splines[i].previousLength;
+
+                // return the result
                 return result;
             }
         }
+
+        // ig return [0, 0] if outside of spline (d < 0 or d > arc length)
         return result;
     }
 }
