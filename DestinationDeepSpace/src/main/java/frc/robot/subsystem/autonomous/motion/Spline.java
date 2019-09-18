@@ -56,13 +56,19 @@ public class Spline
         // approximate arc length of one small interval of size ds
         double integrand=0;
         double s=0;
+
+        double xprime, yprime;
+
         // start at s=0, go to s=1
         for(int i=1; i<=NUM_STEPS; i++)
         {
             // ending point of interval at i*ds, bc i intervals so far of width ds
             s=i*ds;
+            // derivatives of function at the point
+            xprime = evaluateFunction(xprimecoef, s);
+            yprime = evaluateFunction(yprimecoef, s);
             // sqrt((dx/ds)^2 + (dy/ds)^2) ds - pythagorean theorem
-            integrand=Math.sqrt(Math.pow(evaluateFunction(xprimecoef, s), 2)+ Math.pow(evaluateFunction(yprimecoef, s), 2));
+            integrand = Math.sqrt(Math.pow(xprime, 2) + Math.pow(yprime, 2));
             // add the integrand to the accumulated arc length
             arcLength+=integrand*ds;
             // add (accumulated arc length, s) pair to ltos

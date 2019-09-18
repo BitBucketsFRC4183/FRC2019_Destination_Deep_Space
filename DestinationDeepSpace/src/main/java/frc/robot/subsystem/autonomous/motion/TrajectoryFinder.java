@@ -7,6 +7,12 @@
 
 package frc.robot.subsystem.autonomous.motion;
 
+import frc.robot.subsystem.autonomous.AutonomousConstants;
+
+import frc.robot.subsystem.drive.DriveConstants;
+
+
+
 public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
     MotionProfile profile;
     PathFinder pathfinder;
@@ -41,9 +47,7 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
     public double t_total;
 
     // motion points to cross
-    MotionPoint[] mPoints;
-    // frequency of motion controller loop
-    public double LOOP_HERTZ=200;
+    private MotionPoint[] mPoints;
 
     public enum MotionProfile{
         TRIANGULAR,
@@ -202,7 +206,7 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
 
         // always at least starting point -> +1
         // total time * frequency = number of times it will run in the total time interval
-        mPoints = new MotionPoint[(int) ((t_acc + t_cruise + t_dec)*LOOP_HERTZ + 1)];
+        mPoints = new MotionPoint[(int) ((t_acc + t_cruise + t_dec)*AutonomousConstants.LOOP_HERTZ + 1)];
         // go through each point loop will run at
         // and get the motion point at that time
         double time;
@@ -210,18 +214,18 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
         {
             // time into path so far -> i-th iteration in loop of LOOP_HERTZ frequency
             // time = #/(# per second)
-            time=i/LOOP_HERTZ;
+            time=i/AutonomousConstants.LOOP_HERTZ;
             // generate i-th motion point
             mPoints[i] = getMotionPoint(time);
         }
         for(int i=0; i<mPoints.length; i++)//sets their rotational acclerations
         {
             // calculate time at i-th MP
-            time=i/LOOP_HERTZ;
+            time=i/AutonomousConstants.LOOP_HERTZ;
             // want it to have no angular acceleration at the end
             if(i==0||i==mPoints.length-1) mPoints[i].r_acc=0;
             // approximate angular acceleration with symmetric derivative approximation
-            else mPoints[i].r_acc=(mPoints[i+1].r_vel-mPoints[i-1].r_vel)*2/LOOP_HERTZ;
+            else mPoints[i].r_acc=(mPoints[i+1].r_vel-mPoints[i-1].r_vel)*2/AutonomousConstants.LOOP_HERTZ;
         }
     }
 
@@ -248,15 +252,34 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
         double ypp=pathfinder.splines[splno].evaluateFunction(pathfinder.splines[splno].ydoubleprimecoef, sval);
 
         // fancy equation for curvature of path at point
-        double curv=Math.abs(xpp*yp-ypp*xp)/Math.pow((xp*xp + yp*yp), 1.5);// curvature is 1/radius
+        // follows right hand coordinate system: x in front of robot, y to the right, z down
+        // allow negative curvature so we can get negative angular velocity
+        double curv=(ypp*xp-xpp*yp)/Math.pow((xp*xp + yp*yp), 1.5);// curvature is 1/radius
 
         // angle robot is facing
         double rotpos=Math.atan2(yp, xp);
         // angular velocity
         double rotvel=linvel*curv;//cuz curvature is 1/radius
+
+        double diffSpeed = rotvel * DriveConstants.WHEEL_TRACK_INCHES / 2.0;
+
+        // Compute, report, and limit lateral acceleration
+		if (Math.abs(rotvel * linvel) > DriveConstants.MAX_LAT_ACCELERATION_IPSPS)
+		{
+			linvel = Math.signum(linvel)*DriveConstants.MAX_LAT_ACCELERATION_IPSPS/Math.abs(rotvel);
+        }
+        
+        double left_speed = linvel + diffSpeed;
+		double right_speed = linvel - diffSpeed;
         
         // create the MP given data of motion at the point
-        return new MotionPoint(linpos, linvel, linacc,rotpos, rotvel);
+        MotionPoint mp = new MotionPoint(linpos, linvel, linacc,rotpos, rotvel, left_speed, right_speed);
+        mp.setT(t);
+
+        return mp;
     }       
 
+    public MotionPoint[] getMotionPoints() {
+        return mPoints;
+    }
 }

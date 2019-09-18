@@ -15,7 +15,13 @@ public class MotionPoint {
     public double r_pos;
     public double r_vel;
     public double r_acc;
-    public MotionPoint(double l_pos, double l_vel, double l_acc, double r_pos, double r_vel)
+
+    public double left_vel;
+    public double right_vel;
+
+    public double t;
+
+    public MotionPoint(double l_pos, double l_vel, double l_acc, double r_pos, double r_vel, double left_vel, double right_vel)
     {
         //long story short: r_acc not in constructor bc it is calculated after entirety of other points
         //are calculated. But it shouldn't be null
@@ -24,5 +30,12 @@ public class MotionPoint {
         this.l_acc=l_acc;
         this.r_pos=r_pos;
         this.r_vel=r_vel;
+
+        this.left_vel  = left_vel;
+        this.right_vel = right_vel;
+    }
+
+    public void setT(double time) {
+        t = time;
     }
 }

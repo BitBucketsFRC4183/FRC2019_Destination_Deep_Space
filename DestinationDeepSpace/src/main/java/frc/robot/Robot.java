@@ -201,7 +201,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    teleopInit();
+    driveSubsystem.startAuto();
+    scoringSubsystem.startIdle();
+    climberSubsystem.startIdle();
     /*driveSubsystem.startIdle();
     scoringSubsystem.startIdle();
     climberSubsystem.startIdle();*/

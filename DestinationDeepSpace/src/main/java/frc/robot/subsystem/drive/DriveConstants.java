@@ -75,6 +75,11 @@ public class DriveConstants {
         return rps * WHEEL_CIRCUMFERENCE_INCHES;
     }
 
+    // TODO: i feel like this is already a thing somewhere...
+    public static int inchToTicks(double inch) {
+        return (int) (DRIVE_MOTOR_NATIVE_TICKS_PER_REV * inch / WHEEL_CIRCUMFERENCE_INCHES);
+    }
+
     // FIRST !!! get the sensor phase correct.
     // If positive input to motor controller (green LED) makes the sensor
     // return positive increasing counts then the sensor phase is set correctly.
@@ -137,17 +142,20 @@ public class DriveConstants {
     public static final double MAXIMUM_MOTION_ERROR_INCHES = 0.125;	// Convert into native ticks later
     public static final double MAXIMUM_ROTATION_ERROR_INCHES = 0.50;
 
- // These Motion Magic values defined the shape of the trapezoidal profile for speed
- // The cruise speed is the maximum speed during the profile and is chosen to keep   		// below the maximum (which varies with battery voltage). The acceleration is the
+    // These Motion Magic values defined the shape of the trapezoidal profile for speed
+    // The cruise speed is the maximum speed during the profile and is chosen to keep
+    // below the maximum (which varies with battery voltage). The acceleration is the
     // slope allowed to reach the cruise speed or zero (hence, a trapezoid)
- //
- // Setting this to 80% of maximum is a reasonable place to start;
- // However, the acceleration is currently default to reach cruising speed within 1 second 
- // and may need to be increased or decreased depending on static friction limits of tires
+    //
+    // Setting this to 80% of maximum is a reasonable place to start;
+    // However, the acceleration is currently default to reach cruising speed within 1 second 
+    // and may need to be increased or decreased depending on static friction limits of tires
         
     public static final int DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.75 * 
          DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
+    public static final double DRIVE_MOTOR_MOTION_CRUISE_SPEED_IPS = ticksP100ToIps(DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS);
     public static final int DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = (int) (4346/1.5); // 0.26 g on wood//DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
+    public static final double DRIVE_MOTOR_MOTION_ACCELERATION_IPSPS = ticksP100ToIps(DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS) * 10;
 
     public static final int DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS = (int) (MAXIMUM_MOTION_ERROR_INCHES * DRIVE_MOTOR_NATIVE_TICKS_PER_REV / WHEEL_CIRCUMFERENCE_INCHES);
     public static final int DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION = (int) (MAXIMUM_ROTATION_ERROR_INCHES * DRIVE_MOTOR_NATIVE_TICKS_PER_REV / WHEEL_CIRCUMFERENCE_INCHES);
@@ -208,9 +216,36 @@ public class DriveConstants {
     public static double RIGHT_VELOCITY_KP 	 = 0.683333/2/2;///1.5;
     public static double RIGHT_VELOCITY_KI 	 = 0.0001;
     public static double RIGHT_VELOCITY_KD 	 = 10*0.683333/2/1.5;
-    public static int    RIGHT_VELOCITY_IZONE   = 200; 
+    public static int    RIGHT_VELOCITY_IZONE   = 200;
+
+
+
+    // MOTION PROFILING CONSTANTS
+    // TODO: tune these, not even sure if correct constants (check reference to here to see)
+    public static final int PID_MP_SLOT = 2;
+    
+    // LEFT SIDE
+    public static double LEFT_MP_KF 	 = 0;
+    public static double LEFT_MP_KP 	 = 0;
+    public static double LEFT_MP_KI 	 = 0;
+    public static double LEFT_MP_KD 	 = 0;
+    public static int    LEFT_MP_IZONE   = 0;
+
+    // RIGHT SIDE    
+    public static double RIGHT_MP_KF 	 = 0;
+    public static double RIGHT_MP_KP 	 = 0;
+    public static double RIGHT_MP_KI 	 = 0;
+    public static double RIGHT_MP_KD 	 = 0;
+    public static int    RIGHT_MP_IZONE  = 0;
    
     public static final double MOTOR_TEST_PERCENT = 0.5;
 
-	public static final double TURN_SIGN = 1.0;
+    public static final double TURN_SIGN = 1.0;
+    
+
+
+    // Josh said it's this and not WHEEL_TRACK_INCHES
+    // but we already use WHEEL_TRACK_INCHES so ig we can keep doing that for now
+    // just has to work for now
+    public static final double ROBOT_WIDTH_INCH = 26.08;
 }

@@ -139,6 +139,8 @@ public class OI {
 	private final static int DRIVER_IDLE   = controllerMapper.getTrackpad();
 	private final static int OPERATOR_IDLE = controllerMapper.getTrackpad();
 
+	private final static int FORCE_EXIT_AUTO = controllerMapper.getCircle();
+
 
 
 	public boolean lowSpeed()
@@ -283,6 +285,10 @@ public class OI {
 
 	public boolean beakRelease() {
 		return operatorControl.getRawButton(BEAK_RELEASE_BUTTON);
+	}
+
+	public boolean forceExitAuto() {
+		return driverControl.getRawButton(FORCE_EXIT_AUTO);
 	}
 }
 

@@ -65,8 +65,15 @@ public class TalonUtils {
      * Initializes the quad encoder motor, whatever that means.
      */
     public static void initializeQuadEncoderMotor(WPI_TalonSRX motor, int statusFramePeriod) {
+        initializeQuadEncoderMotor(motor, statusFramePeriod, RobotMap.PRIMARY_PID_LOOP);
+
+    }
+
+    /**
+     * Initializes the quad encoder motor, whatever that means.
+     */
+    public static void initializeQuadEncoderMotor(WPI_TalonSRX motor, int statusFramePeriod, int pidLoop) {
         int timeout = RobotMap.CONTROLLER_TIMEOUT_MS;
-        int pidLoop = RobotMap.PRIMARY_PID_LOOP;
 
 
         motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, pidLoop, timeout);

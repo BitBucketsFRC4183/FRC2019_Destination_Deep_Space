@@ -27,6 +27,7 @@ import frc.robot.subsystem.vision.VisionSubsystem;
 import frc.robot.utils.Deadzone;
 import frc.robot.utils.JoystickScale;//for sam <3
 import frc.robot.utils.talonutils.TalonUtils;
+import frc.robot.RobotMap;
 
 
 /**
@@ -217,6 +218,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 													
 			// For ALL motors in case we disable slaving
 			TalonUtils.initializeQuadEncoderMotor(leftMotors[i]);
+			TalonUtils.initializeQuadEncoderMotor(leftMotors[i], RobotMap.CONTROLLER_TIMEOUT_MS, DriveConstants.PID_MP_SLOT);
 
 			// Set closed loop gains in different slots for different uses
 			TalonUtils.initializeMotorFPID(leftMotors[i], 
@@ -241,6 +243,14 @@ public class DriveSubsystem extends BitBucketSubsystem {
 										DriveConstants.LEFT_VELOCITY_KD, 
 										DriveConstants.LEFT_VELOCITY_IZONE,
 										DriveConstants.PID_VELOCITY_SLOT);
+
+			TalonUtils.initializeMotorFPID(leftMotors[i], 
+										DriveConstants.LEFT_MP_KF, 
+										DriveConstants.LEFT_MP_KP, 
+										DriveConstants.LEFT_MP_KI, 
+										DriveConstants.LEFT_MP_KD, 
+										DriveConstants.LEFT_MP_IZONE,
+										DriveConstants.PID_MP_SLOT);
 
 			// !!!!!!!!!!!!!!! RIGHT !!!!!!!!!!!!!!!!!
 			// TODO: May make this into a function with a few arguments							
@@ -280,6 +290,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 													
 			// For ALL motors in case we disable slaving
 			TalonUtils.initializeQuadEncoderMotor(rightMotors[i]);
+			TalonUtils.initializeQuadEncoderMotor(rightMotors[i], RobotMap.CONTROLLER_TIMEOUT_MS, DriveConstants.PID_MP_SLOT);
 
 			// Set closed loop gains in different slots for different uses
 			TalonUtils.initializeMotorFPID(rightMotors[i], 
@@ -305,7 +316,13 @@ public class DriveSubsystem extends BitBucketSubsystem {
 										DriveConstants.RIGHT_VELOCITY_IZONE,
 										DriveConstants.PID_VELOCITY_SLOT);
 
-									
+			TalonUtils.initializeMotorFPID(leftMotors[i], 
+										DriveConstants.RIGHT_MP_KF, 
+										DriveConstants.RIGHT_MP_KP, 
+										DriveConstants.RIGHT_MP_KI, 
+										DriveConstants.RIGHT_MP_KD, 
+										DriveConstants.RIGHT_MP_IZONE,
+										DriveConstants.PID_MP_SLOT);
 		}	
 
 
@@ -597,7 +614,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	   return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}
 
-	private void velocityDrive_auto(double speed_ips, double turn_radps) {
+	public void velocityDrive_auto(double speed_ips, double turn_radps) {
 		// The following functions only do something if the state needs
 		// to be changed.
 		selectVelocityMode(true);
@@ -731,6 +748,12 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			initialCommand = new Idle();	// Only create it once
 		}
 		initialCommand.start();
+	}
+
+	public void startAuto() {
+		AutoDrive ad = new AutoDrive();
+
+		ad.start();
 	}
 
 	// Plase one-time initialization here
