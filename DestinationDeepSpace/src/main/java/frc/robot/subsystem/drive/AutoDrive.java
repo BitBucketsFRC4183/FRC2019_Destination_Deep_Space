@@ -10,6 +10,7 @@ import frc.robot.utils.CommandUtils;
 
 
 public class AutoDrive extends Command {
+    // creates the AutoPeriod instance, starting loop
     private AutoPeriod auto = AutoPeriod.instance();
     private OI oi = OI.instance();
 

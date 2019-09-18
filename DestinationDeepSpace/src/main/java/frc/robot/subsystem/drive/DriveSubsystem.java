@@ -316,7 +316,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 										DriveConstants.RIGHT_VELOCITY_IZONE,
 										DriveConstants.PID_VELOCITY_SLOT);
 
-			TalonUtils.initializeMotorFPID(leftMotors[i], 
+			TalonUtils.initializeMotorFPID(rightMotors[i], 
 										DriveConstants.RIGHT_MP_KF, 
 										DriveConstants.RIGHT_MP_KP, 
 										DriveConstants.RIGHT_MP_KI, 
@@ -614,7 +614,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	   return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}
 
-	public void velocityDrive_auto(double speed_ips, double turn_radps) {
+	private void velocityDrive_auto(double speed_ips, double turn_radps) {
 		// The following functions only do something if the state needs
 		// to be changed.
 		selectVelocityMode(true);

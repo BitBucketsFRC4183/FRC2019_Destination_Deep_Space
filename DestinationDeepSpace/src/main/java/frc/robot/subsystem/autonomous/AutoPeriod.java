@@ -64,9 +64,17 @@ public class AutoPeriod {
 
     private class AutoLoop implements Runnable {
         public void run() {
+            if (isFinished) {
+                return;
+            }
+
+
+
+            // run the motors according to next MP
             leftMotor.processMotionProfileBuffer();
             rightMotor.processMotionProfileBuffer();
 
+            // get the current status of the profiles
             leftMotor. getMotionProfileStatus(leftStatus);
             rightMotor.getMotionProfileStatus(rightStatus);
 
@@ -93,7 +101,8 @@ public class AutoPeriod {
 
             if (!finishedPushing) {
                 // if you can add points to the buffer, do that
-                if (leftStatus.btmBufferCnt != 128 && rightStatus.btmBufferCnt != 128) {
+                if (leftStatus.btmBufferCnt != AutonomousConstants.TALON_MP_POINTS
+                    || rightStatus.btmBufferCnt != 128) {
                     addNextMPs();
                 }
             }
@@ -108,7 +117,7 @@ public class AutoPeriod {
         leftMotor = drive.getLeftMotor(0);
         rightMotor = drive.getRightMotor(0);
 
-        // control twice as fast as duration of trajectory points
+        // download MPs twice as fast as execution time of an MP
         leftMotor.changeMotionControlFramePeriod((int) (AutonomousConstants.LOOP_MS_PER / 2));
         rightMotor.changeMotionControlFramePeriod((int) (AutonomousConstants.LOOP_MS_PER / 2));
 
@@ -148,6 +157,8 @@ public class AutoPeriod {
 
         double dt = t - lastT;
 
+        // really bad approximation of acculumated position but best we have rn
+        // without restructing all the MP code
         leftPos  += mp.left_vel  * dt;
         rightPos += mp.right_vel * dt;
 
@@ -208,5 +219,7 @@ public class AutoPeriod {
 
     public void stop() {
         notifier.close();
+
+        setMPValue(SetValueMotionProfile.Disable);
     }
 }
