@@ -53,8 +53,8 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 	private double armMotor2Current_amps = 0;
 
 	// last orientation of the robot's arm
-	// true --> front
-	// false --> back
+	// true --> back
+	// false --> front
 	private boolean back = true;
 	// last level the arm was at
 	private ScoringConstants.ScoringLevel lastLevel = ScoringConstants.ScoringLevel.NONE;

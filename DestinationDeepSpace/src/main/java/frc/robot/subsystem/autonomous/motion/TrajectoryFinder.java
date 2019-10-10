@@ -79,6 +79,10 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
         initializeTraj();
         generateMotionProfile();
     }
+    
+    public PathFinder getPathFinder() {
+    	return this.pathfinder;
+    }
 
     /**
      * Set total arc length and calculate details about the path
@@ -144,7 +148,7 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
         if(profile==MotionProfile.TRAPEZOIDAL)
         {
             // check if in accelerating stage
-            if(t>=0&t<=t_acc)
+            if(t<=t_acc)
             {
                 // get distance travelled so far up to t
                 result[0]=v_start*t+0.5*acc*t*t;
@@ -155,7 +159,7 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
                 return result;
             }
             // check if in cruise phase
-            if(t>=t_acc&t<=(t_cruise+t_acc))
+            if(t>=t_acc && t<=(t_cruise+t_acc))
             {
                 // get distance travelled so far in cruise stage + distance that was travelled in acceleration phase
                 result[0]=d_acc+(t-t_acc)*v_cruise;
@@ -166,7 +170,7 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
                 return result;
             }
             // check if in deceleration phase
-            if(t>=(t_acc+t_cruise)&t<(t_acc+t_cruise+t_dec))
+            if(t>=(t_acc+t_cruise))
             {
                 // distance travelled in last two phases + distance travelled up to time t in deceleration phase
                 result[0]=d_acc+d_cruise+((t-t_acc-t_cruise)*v_cruise+(t-t_acc-t_cruise)*(t-t_acc-t_cruise)*dec*0.5);
@@ -206,11 +210,13 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
 
         // always at least starting point -> +1
         // total time * frequency = number of times it will run in the total time interval
-        mPoints = new MotionPoint[(int) ((t_acc + t_cruise + t_dec)*AutonomousConstants.LOOP_HERTZ + 1)];
+    	// +1 for start
+    	// +1 for end (basically impossible total time is a multiple of period, and can't hurt since 0 acceleration)
+        mPoints = new MotionPoint[(int) ((t_acc + t_cruise + t_dec)*AutonomousConstants.LOOP_HERTZ + 2)];
         // go through each point loop will run at
         // and get the motion point at that time
         double time;
-        for(int i=0; i<mPoints.length; i++)
+        for(int i=0; i<mPoints.length - 1; i++)
         {
             // time into path so far -> i-th iteration in loop of LOOP_HERTZ frequency
             // time = #/(# per second)
@@ -218,6 +224,8 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
             // generate i-th motion point
             mPoints[i] = getMotionPoint(time);
         }
+        mPoints[mPoints.length - 1] = getMotionPoint(t_total);
+        
         for(int i=0; i<mPoints.length; i++)//sets their rotational acclerations
         {
             // calculate time at i-th MP
@@ -242,6 +250,10 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
         double d=pathfinder.getSplineNo(linpos)[1];
         // get parameter value for polynomial at distance d into it
         double sval=pathfinder.splines[splno].ltos.ceilingEntry(d).getValue();
+        // calculate x at point
+        double x = pathfinder.splines[splno].evaluateFunction(pathfinder.splines[splno].xcoef, sval);
+        // calculate y at point
+        double y = pathfinder.splines[splno].evaluateFunction(pathfinder.splines[splno].ycoef, sval);
         // calculate x derivative at point
         double xp=pathfinder.splines[splno].evaluateFunction(pathfinder.splines[splno].xprimecoef, sval);
         // calculate x double derivative at point
@@ -275,6 +287,9 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
         // create the MP given data of motion at the point
         MotionPoint mp = new MotionPoint(linpos, linvel, linacc,rotpos, rotvel, left_speed, right_speed);
         mp.setT(t);
+        
+        mp.setX(x);
+        mp.setY(y);
 
         return mp;
     }       

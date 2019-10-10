@@ -47,6 +47,10 @@ public class PathFinder {
             // go through each waypoint and add a copy to this.waypoints
             this.waypoints[i] = new Waypoint(waypoints[i].x, waypoints[i].y, waypoints[i].deg);
     }
+    
+    public Waypoint[] getWaypoints() {
+    	return waypoints;
+    }
 
     private boolean generateAllSplines()
     {
@@ -66,6 +70,14 @@ public class PathFinder {
 
         // yes
         return true;
+    }
+    
+    public double getPathLength() {
+    	return splines[splines.length - 1].previousLength + splines[splines.length - 1].arcLength;
+    }
+    
+    public Spline[] getSplines() {
+    	return splines;
     }
 
     /**
@@ -93,7 +105,7 @@ public class PathFinder {
         double a0y=0;
         double m0y=cc*Math.sin(SabaMath.d2r(theta0));
 
-        double k0 = Math.abs(m0x*a0y-m0y*a0x)/Math.pow(m0x*m0x+m0y*m0y,1.5);//for ease of change in future, this is 0 anyway
+        //double k0 = Math.abs(m0x*a0y-m0y*a0x)/Math.pow(m0x*m0x+m0y*m0y,1.5);//for ease of change in future, this is 0 anyway
 
         double a1x=0;
         double m1x = cc*Math.cos(SabaMath.d2r(theta1));
@@ -101,7 +113,7 @@ public class PathFinder {
         double a1y=0;
         double m1y=cc*Math.sin(SabaMath.d2r(theta1));
 
-        double k1 = Math.abs(m1x*a1y-m1y*a1x)/Math.pow(m1x*m1x+m1y*m1y, 1.5);
+        //double k1 = Math.abs(m1x*a1y-m1y*a1x)/Math.pow(m1x*m1x+m1y*m1y, 1.5);
 
         if (pathType==PathType.CUBIC_HERMITE)//Equations come from my heart and soul, and totally not basis functions
         {

@@ -13,7 +13,7 @@ public class ScoringConstants {
 	public final static boolean ARM_MOTOR_INVERSION = false;
 	public final static boolean ARM_MOTOR_SENSOR_PHASE = false;
 	public final static double ARM_MOTION_MAGIC_KF = 3.41;
-	public final static double ARM_MOTION_MAGIC_KP = 0.146143*2*2*2  *2*1.5;
+	public final static double ARM_MOTION_MAGIC_KP = 0.146143*2*2*2  *2*1.5*1.25;
 	public final static double ARM_MOTION_MAGIC_KI = 0.001;
 	public final static double ARM_MOTION_MAGIC_KD = 8.0*10.0*0.146143*2*2*2 *2*2*1.5;
 	public final static int    ARM_MOTION_MAGIC_IZONE = 120;

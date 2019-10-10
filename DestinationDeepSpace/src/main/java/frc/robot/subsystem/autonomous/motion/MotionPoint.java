@@ -20,6 +20,9 @@ public class MotionPoint {
     public double right_vel;
 
     public double t;
+    
+    public double x;
+    public double y;
 
     public MotionPoint(double l_pos, double l_vel, double l_acc, double r_pos, double r_vel, double left_vel, double right_vel)
     {
@@ -37,5 +40,13 @@ public class MotionPoint {
 
     public void setT(double time) {
         t = time;
+    }
+    
+    public void setX(double x) {
+    	this.x = x;
+    }
+    
+    public void setY(double y) {
+    	this.y = y;
     }
 }
