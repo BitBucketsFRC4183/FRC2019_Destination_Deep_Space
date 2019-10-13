@@ -221,18 +221,17 @@ public class DriveConstants {
 
 
     // MOTION PROFILING CONSTANTS
-    // TODO: tune these, not even sure if correct constants (check reference to here to see)
     public static final int PID_MP_SLOT = 2;
     
     // LEFT SIDE
-    public static double LEFT_MP_KF 	 = 0;
+    public static double LEFT_MP_KF 	 = LEFT_VELOCITY_KF; // velocity gets fed forward -> same constant
     public static double LEFT_MP_KP 	 = 0;
     public static double LEFT_MP_KI 	 = 0;
     public static double LEFT_MP_KD 	 = 0;
     public static int    LEFT_MP_IZONE   = 0;
 
     // RIGHT SIDE    
-    public static double RIGHT_MP_KF 	 = 0;
+    public static double RIGHT_MP_KF 	 = RIGHT_VELOCITY_KF; // velocity gets fed forward -> same constant
     public static double RIGHT_MP_KP 	 = 0;
     public static double RIGHT_MP_KI 	 = 0;
     public static double RIGHT_MP_KD 	 = 0;
