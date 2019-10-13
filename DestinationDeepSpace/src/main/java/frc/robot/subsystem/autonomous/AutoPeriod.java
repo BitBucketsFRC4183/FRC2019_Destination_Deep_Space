@@ -213,7 +213,7 @@ public class AutoPeriod {
         // calculate left trajectory point
         leftP.position = DriveConstants.inchToTicks(leftPos);
         leftP.velocity = DriveConstants.ipsToTicksP100(mp.left_vel);
-        leftP.profileSlotSelect0 = DriveConstants.PID_MP_SLOT;
+        leftP.profileSlotSelect0 = DriveConstants.MP_SLOT;
         leftP.timeDur = (int) (AutonomousConstants.LOOP_MS_PER);
         leftP.zeroPos = (iteration == 0); // zero encoders on first MP
         leftP.isLastPoint = (iteration == mps.length - 1);
@@ -221,7 +221,7 @@ public class AutoPeriod {
         // calculate right trajectory point
         rightP.position = DriveConstants.inchToTicks(rightPos);
         rightP.velocity = DriveConstants.ipsToTicksP100(mp.right_vel);
-        rightP.profileSlotSelect0 = DriveConstants.PID_MP_SLOT;
+        rightP.profileSlotSelect0 = DriveConstants.MP_SLOT;
         rightP.timeDur = (int) (AutonomousConstants.LOOP_MS_PER);
         rightP.zeroPos = (iteration == 0); // zero encoders on first MP
         rightP.isLastPoint = (iteration == mps.length - 1);

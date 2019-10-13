@@ -225,16 +225,16 @@ public class DriveSubsystem extends BitBucketSubsystem {
 													
 			// For ALL motors in case we disable slaving
 			TalonUtils.initializeQuadEncoderMotor(leftMotors[i]);
-			TalonUtils.initializeQuadEncoderMotor(leftMotors[i], RobotMap.CONTROLLER_TIMEOUT_MS, DriveConstants.PID_MP_SLOT);
+			TalonUtils.initializeQuadEncoderMotor(leftMotors[i], RobotMap.CONTROLLER_TIMEOUT_MS, DriveConstants.MP_SLOT);
 
 			// Set closed loop gains in different slots for different uses
 			TalonUtils.initializeMotorFPID(leftMotors[i], 
-										DriveConstants.MOTION_MAGIC_KF, 
-										DriveConstants.MOTION_MAGIC_KP, 
-										DriveConstants.MOTION_MAGIC_KI, 
-										DriveConstants.MOTION_MAGIC_KD, 
-										DriveConstants.MOTION_MAGIC_IZONE,
-										DriveConstants.PID_MOTION_MAGIC_SLOT);
+										DriveConstants.LEFT_MP_KF, 
+										DriveConstants.LEFT_MP_KP, 
+										DriveConstants.LEFT_MP_KI, 
+										DriveConstants.LEFT_MP_KD, 
+										DriveConstants.LEFT_MP_IZONE,
+										DriveConstants.MP_SLOT);
 
 			// Motion Magic likes to specify a trapezoidal speed profile
 			// These two settings provide the top speed and acceleration (slope) of profile
@@ -250,14 +250,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 										DriveConstants.LEFT_VELOCITY_KD, 
 										DriveConstants.LEFT_VELOCITY_IZONE,
 										DriveConstants.PID_VELOCITY_SLOT);
-
-			TalonUtils.initializeMotorFPID(leftMotors[i], 
-										DriveConstants.LEFT_MP_KF, 
-										DriveConstants.LEFT_MP_KP, 
-										DriveConstants.LEFT_MP_KI, 
-										DriveConstants.LEFT_MP_KD, 
-										DriveConstants.LEFT_MP_IZONE,
-										DriveConstants.PID_MP_SLOT);
 
 			// !!!!!!!!!!!!!!! RIGHT !!!!!!!!!!!!!!!!!
 			// TODO: May make this into a function with a few arguments							
@@ -297,16 +289,16 @@ public class DriveSubsystem extends BitBucketSubsystem {
 													
 			// For ALL motors in case we disable slaving
 			TalonUtils.initializeQuadEncoderMotor(rightMotors[i]);
-			TalonUtils.initializeQuadEncoderMotor(rightMotors[i], RobotMap.CONTROLLER_TIMEOUT_MS, DriveConstants.PID_MP_SLOT);
+			TalonUtils.initializeQuadEncoderMotor(rightMotors[i], RobotMap.CONTROLLER_TIMEOUT_MS, DriveConstants.MP_SLOT);
 
 			// Set closed loop gains in different slots for different uses
 			TalonUtils.initializeMotorFPID(rightMotors[i], 
-										DriveConstants.MOTION_MAGIC_KF, 
-										DriveConstants.MOTION_MAGIC_KP, 
-										DriveConstants.MOTION_MAGIC_KI, 
-										DriveConstants.MOTION_MAGIC_KD, 
-										DriveConstants.MOTION_MAGIC_IZONE,
-										DriveConstants.PID_MOTION_MAGIC_SLOT);
+										DriveConstants.RIGHT_MP_KF, 
+										DriveConstants.RIGHT_MP_KP, 
+										DriveConstants.RIGHT_MP_KI, 
+										DriveConstants.RIGHT_MP_KD, 
+										DriveConstants.RIGHT_MP_IZONE,
+										DriveConstants.MP_SLOT);
 
 			// Motion Magic likes to specify a trapezoidal speed profile
 			// These two settings provide the top speed and acceleration (slope) of profile
@@ -322,14 +314,6 @@ public class DriveSubsystem extends BitBucketSubsystem {
 										DriveConstants.RIGHT_VELOCITY_KD, 
 										DriveConstants.RIGHT_VELOCITY_IZONE,
 										DriveConstants.PID_VELOCITY_SLOT);
-
-			TalonUtils.initializeMotorFPID(rightMotors[i], 
-										DriveConstants.RIGHT_MP_KF, 
-										DriveConstants.RIGHT_MP_KP, 
-										DriveConstants.RIGHT_MP_KI, 
-										DriveConstants.RIGHT_MP_KD, 
-										DriveConstants.RIGHT_MP_IZONE,
-										DriveConstants.PID_MP_SLOT);
 		}	
 
 
@@ -424,6 +408,10 @@ public class DriveSubsystem extends BitBucketSubsystem {
 		}					
 	}
 
+	// will now be for Motion Profiling
+	// we don't use motion magic anymore
+	// and should be same constants anyways
+	// Talons can only keep two set of constants at a time
 	void selectMotionMode(boolean needMotionMode)
 	{
 		if (needMotionMode && ! motionMode)
@@ -433,9 +421,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 			for (int i = 0; i < NUM_MOTORS_PER_SIDE; ++i)
 			{
-				leftMotors[i].selectProfileSlot(DriveConstants.PID_MOTION_MAGIC_SLOT, 
+				leftMotors[i].selectProfileSlot(DriveConstants.MP_SLOT, 
 												DriveConstants.PRIMARY_PID_LOOP);
-				rightMotors[i].selectProfileSlot(DriveConstants.PID_MOTION_MAGIC_SLOT, 
+				rightMotors[i].selectProfileSlot(DriveConstants.MP_SLOT, 
 												DriveConstants.PRIMARY_PID_LOOP);
 			}
 			motionMode = true;

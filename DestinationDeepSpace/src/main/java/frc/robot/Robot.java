@@ -236,12 +236,6 @@ public class Robot extends TimedRobot {
     // the actions here occur BEFORE the scheduled commands run; this means that
     // commands can be added during this execution cycle and will be acted upon
     // within the current cycle.
-
-    if (false) {
-
-    } else {
-      teleopPeriodic();
-    }
   }
 
   /**

@@ -192,12 +192,16 @@ public class DriveConstants {
     //
     //  Put drive train on ground with weight and re-test to see if position is as commanded.
     //  If not, then add SMALL amounts of I-zone and Ki until final error is removed.    
+
+    // we don't use these anymore
+    /*
     public static final int PID_MOTION_MAGIC_SLOT = 0;
     public static double MOTION_MAGIC_KF 	 = 0;//0.05115; 
     public static double MOTION_MAGIC_KP 	 = 0;//0.005683*2*2*2*2*2*2*1.5; // = 0.545568
     public static double MOTION_MAGIC_KI 	 = 0;//0.001;
     public static double MOTION_MAGIC_KD 	 = 0;//10 * MOTION_MAGIC_KP;	// Start with 10 x Kp for increased damping of overshoot
-    public static int    MOTION_MAGIC_IZONE  = 0;//200; 
+    public static int    MOTION_MAGIC_IZONE  = 0;//200;
+    */
 
     // Velocity Control Constant
     // Similar process but slightly different focus
@@ -221,7 +225,7 @@ public class DriveConstants {
 
 
     // MOTION PROFILING CONSTANTS
-    public static final int PID_MP_SLOT = 2;
+    public static final int MP_SLOT = 0;
     
     // LEFT SIDE
     public static double LEFT_MP_KF 	 = LEFT_VELOCITY_KF; // velocity gets fed forward -> same constant
