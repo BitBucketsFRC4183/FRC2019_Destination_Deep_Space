@@ -256,7 +256,7 @@ public class AutoPeriod {
             PathFinder.PathType.QUINTIC_HERMITE, // 254 uses quintic so here we are
             autonomousSubsystem.getWaypoints(),
             DriveConstants.DRIVE_MOTOR_MOTION_ACCELERATION_IPSPS,
-            DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_IPS,
+            DriveConstants.MAX_ALLOWED_SPEED_IPS,
             -DriveConstants.DRIVE_MOTOR_MOTION_ACCELERATION_IPSPS,
             0, 0
         );
