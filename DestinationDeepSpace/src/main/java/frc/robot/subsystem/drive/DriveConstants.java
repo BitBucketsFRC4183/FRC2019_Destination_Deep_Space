@@ -151,11 +151,11 @@ public class DriveConstants {
     // However, the acceleration is currently default to reach cruising speed within 1 second 
     // and may need to be increased or decreased depending on static friction limits of tires
         
-    public static final int DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.75 * 
-         DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
-    public static final double DRIVE_MOTOR_MOTION_CRUISE_SPEED_IPS = ticksP100ToIps(DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS);
-    public static final int DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = (int) (4346/1.5); // 0.26 g on wood//DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
-    public static final double DRIVE_MOTOR_MOTION_ACCELERATION_IPSPS = ticksP100ToIps(DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS) * 10;
+    // public static final int DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS = (int)(0.75 * 
+    //      DRIVE_MOTOR_FULL_THROTTLE_AVERAGE_SPEED_NATIVE_TICKS);
+    // public static final double DRIVE_MOTOR_MOTION_CRUISE_SPEED_IPS = ticksP100ToIps(DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS);
+    // public static final int DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS = (int) (4346/1.5); // 0.26 g on wood//DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS;
+    // public static final double DRIVE_MOTOR_MOTION_ACCELERATION_IPSPS = ticksP100ToIps(DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS) * 10;
 
     public static final int DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS = (int) (MAXIMUM_MOTION_ERROR_INCHES * DRIVE_MOTOR_NATIVE_TICKS_PER_REV / WHEEL_CIRCUMFERENCE_INCHES);
     public static final int DRIVE_MOTOR_MAX_CLOSED_LOOP_ERROR_TICKS_ROTATION = (int) (MAXIMUM_ROTATION_ERROR_INCHES * DRIVE_MOTOR_NATIVE_TICKS_PER_REV / WHEEL_CIRCUMFERENCE_INCHES);
@@ -240,6 +240,12 @@ public class DriveConstants {
     public static double RIGHT_MP_KI 	 = 0;
     public static double RIGHT_MP_KD 	 = 0;
     public static int    RIGHT_MP_IZONE  = 0;
+
+    public static double MP_VELOCITY_IPS    = 0.5 * MAX_ALLOWED_SPEED_IPS;
+    public static double MP_CRUISE_VELOCITY = ipsToTicksP100(MAX_ALLOWED_SPEED_IPS);
+
+    public static double MP_ACCELERATION_IPSPS = 0;
+    public static int    MP_ACCELERATION       = (int) (ipsToTicksP100(MP_ACCELERATION_IPSPS) / 10);
    
     public static final double MOTOR_TEST_PERCENT = 0.5;
 

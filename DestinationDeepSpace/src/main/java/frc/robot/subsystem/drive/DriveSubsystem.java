@@ -238,9 +238,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 			// Motion Magic likes to specify a trapezoidal speed profile
 			// These two settings provide the top speed and acceleration (slope) of profile
-			leftMotors[i].configMotionCruiseVelocity(DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
+			leftMotors[i].configMotionCruiseVelocity(DriveConstants.MP_ACCELERATION, 
 												DriveConstants.CONTROLLER_TIMEOUT_MS);
-			leftMotors[i].configMotionAcceleration(DriveConstants.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
+			leftMotors[i].configMotionAcceleration(DriveConstants.MP_ACCELERATION, 
 												DriveConstants.CONTROLLER_TIMEOUT_MS);
 
 			TalonUtils.initializeMotorFPID(leftMotors[i], 
@@ -302,9 +302,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 			// Motion Magic likes to specify a trapezoidal speed profile
 			// These two settings provide the top speed and acceleration (slope) of profile
-			rightMotors[i].configMotionCruiseVelocity(DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS, 
+			rightMotors[i].configMotionCruiseVelocity(DriveConstants.MP_ACCELERATION, 
 												DriveConstants.CONTROLLER_TIMEOUT_MS);
-			rightMotors[i].configMotionAcceleration(DriveConstants.DRIVE_MOTOR_MOTION_ACCELERATION_NATIVE_TICKS, 
+			rightMotors[i].configMotionAcceleration(DriveConstants.MP_ACCELERATION, 
 												DriveConstants.CONTROLLER_TIMEOUT_MS);
 
 			TalonUtils.initializeMotorFPID(rightMotors[i], 
@@ -355,9 +355,9 @@ public class DriveSubsystem extends BitBucketSubsystem {
     {
 		for (int i = 0; i < NUM_MOTORS_PER_SIDE; ++i)
 		{
-			leftMotors[i].configMotionCruiseVelocity((int)(fraction_full_speed * DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
+			leftMotors[i].configMotionCruiseVelocity((int)(fraction_full_speed * DriveConstants.MP_ACCELERATION), 
 													DriveConstants.CONTROLLER_TIMEOUT_MS);
-			rightMotors[i].configMotionCruiseVelocity((int)(fraction_full_speed * DriveConstants.DRIVE_MOTOR_MOTION_CRUISE_SPEED_NATIVE_TICKS), 
+			rightMotors[i].configMotionCruiseVelocity((int)(fraction_full_speed * DriveConstants.MP_ACCELERATION), 
 													DriveConstants.CONTROLLER_TIMEOUT_MS);
 		}
     }
@@ -999,6 +999,8 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	public void diagnosticsInitialize() {
 		//SmartDashboard.putNumber(getName() + "/TestRadius (in)", 0);
 		//SmartDashboard.putNumber(getName() + "/TestSpeed (in per sec)", 0);
+
+		SmartDashboard.putBoolean(getName() + "/MP test", false);
 	}
 
 	@Override
@@ -1023,6 +1025,20 @@ public class DriveSubsystem extends BitBucketSubsystem {
 			}
 
 			velocityDrive_auto(speed_ips, radps);
+		}
+
+		boolean testMP = SmartDashboard.getBoolean(getName() + "/MP test", false);
+
+		if (testMP) {
+			selectMotionMode(true);
+
+			double dist = 12 * 8;
+			double ticks = DriveConstants.inchToTicks(dist);
+
+			leftMotors[0].set(ControlMode.MotionMagic, ticks);
+			rightMotors[0].set(ControlMode.MotionMagic, ticks);
+		} else {
+			selectVelocityMode(true);
 		}
 	}
 

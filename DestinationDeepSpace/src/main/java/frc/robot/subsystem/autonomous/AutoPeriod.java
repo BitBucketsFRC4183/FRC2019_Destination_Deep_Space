@@ -255,9 +255,9 @@ public class AutoPeriod {
             TrajectoryFinder.MotionProfile.TRAPEZOIDAL,
             PathFinder.PathType.QUINTIC_HERMITE, // 254 uses quintic so here we are
             autonomousSubsystem.getWaypoints(),
-            DriveConstants.DRIVE_MOTOR_MOTION_ACCELERATION_IPSPS,
-            DriveConstants.MAX_ALLOWED_SPEED_IPS,
-            -DriveConstants.DRIVE_MOTOR_MOTION_ACCELERATION_IPSPS,
+            DriveConstants.MP_ACCELERATION_IPSPS,
+            DriveConstants.MP_VELOCITY_IPS,
+            -DriveConstants.MP_ACCELERATION_IPSPS,
             0, 0
         );
     }
