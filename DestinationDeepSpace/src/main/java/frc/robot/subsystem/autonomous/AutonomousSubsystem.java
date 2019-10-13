@@ -100,7 +100,7 @@ public class AutonomousSubsystem extends BitBucketSubsystem {
         autoEndChooser.setDefaultOption("NONE", AutoEndChoices.NONE);
         autoEndChooser.addOption("LEFT",  AutoEndChoices.LEFT);
         autoEndChooser.addOption("RIGHT", AutoEndChoices.RIGHT);
-        SmartDashboard.putData("Auto Start", autoEndChooser);
+        SmartDashboard.putData("Auto End", autoEndChooser);
 
 
 
@@ -118,10 +118,15 @@ public class AutonomousSubsystem extends BitBucketSubsystem {
 
     public boolean doAuto() {
         return !(
+            // if either is none, auto cannot start
+            // it needs a start and end
+            // if either is not none, drivers most likely wanted
+            // an auto but it can't happen w/o drivers choosing sadly
             autoStartChooser.getSelected() == AutoStartChoices.NONE ||
             autoEndChooser.getSelected()   == AutoEndChoices.NONE
         );
     }
+    
     public Waypoint[] getWaypoints() {
         // in case gets called despite no auto
         if (!doAuto()) {
@@ -129,7 +134,7 @@ public class AutonomousSubsystem extends BitBucketSubsystem {
         }
 
         Waypoint[] start = autoStartChooser.getSelected().getWaypoints();
-        Waypoint end   = autoEndChooser.getSelected().getWaypoint();
+        Waypoint   end   = autoEndChooser.getSelected().getWaypoint();
 
         return new Waypoint[] {start[0], start[1], end};
     }

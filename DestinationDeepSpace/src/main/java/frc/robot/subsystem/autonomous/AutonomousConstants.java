@@ -24,6 +24,7 @@ public class AutonomousConstants {
 	// frequency of motion controller loop
 	public static final double LOOP_HERTZ = 100.0;
 	public static final double LOOP_MS_PER = 1000.0 / LOOP_HERTZ;
+	public static final double LOOP_S_PER = 1.0 / LOOP_HERTZ;
 
 
 	// waypoints to choose from

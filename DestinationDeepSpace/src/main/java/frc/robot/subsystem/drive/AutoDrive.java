@@ -37,7 +37,8 @@ public class AutoDrive extends Command {
             }
             // or continue to post auto align for hatch panel placement
             else {
-                return CommandUtils.stateChange(new PostAutoAlign());
+                // for now, auto align doesn't seem to be working
+                return CommandUtils.stateChange(new Idle());//new PostAutoAlign());
             }
         }
 
