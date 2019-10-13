@@ -30,8 +30,15 @@ public class AutoDrive extends Command {
 
         if (exit) {
             auto.stop();
-            
-            return CommandUtils.stateChange(new Idle());
+
+            // go into idle if force stop
+            if (!isFinished) {
+                return CommandUtils.stateChange(new Idle());
+            }
+            // or continue to post auto align for hatch panel placement
+            else {
+                return CommandUtils.stateChange(new PostAutoAlign());
+            }
         }
 
         return false;

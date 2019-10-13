@@ -27,13 +27,14 @@ public class AutonomousSubsystem extends BitBucketSubsystem {
 
 
 
-    public enum AutoChoices {
-        NONE       (new Waypoint[] {}),
-        RIGHT_HATCH(AutonomousConstants.LEFT_WAYPOINTS),
-        LEFT_HATCH (AutonomousConstants.RIGHT_WAYPOINTS);
+    public enum AutoStartChoices {
+        NONE   (new Waypoint[] {}),
+        LEFT   (new Waypoint[] {AutonomousConstants.START_LEFT,   AutonomousConstants.MID_LEFT}),
+        CENTER (new Waypoint[] {AutonomousConstants.START_CENTER, AutonomousConstants.MID_CENTER}),
+        RIGHT  (new Waypoint[] {AutonomousConstants.START_RIGHT,  AutonomousConstants.MID_RIGHT});
 
         private Waypoint[] waypoints;
-        AutoChoices(Waypoint[] wps) {
+        AutoStartChoices(Waypoint[] wps) {
             waypoints = wps;
         }
 
@@ -42,7 +43,23 @@ public class AutonomousSubsystem extends BitBucketSubsystem {
         }
     }
 
-    private static SendableChooser<AutoChoices> autoChooser;
+    public enum AutoEndChoices {
+        NONE  (null),
+        LEFT  (AutonomousConstants.END_LEFT),
+        RIGHT (AutonomousConstants.END_RIGHT);
+
+        private Waypoint waypoint;
+        AutoEndChoices(Waypoint wp) {
+            waypoint = wp;
+        }
+
+        public Waypoint getWaypoint() {
+            return waypoint;
+        }
+    }
+
+    private static SendableChooser<AutoStartChoices> autoStartChooser;
+    private static SendableChooser<AutoEndChoices> autoEndChooser;
     
 
 
@@ -72,11 +89,20 @@ public class AutonomousSubsystem extends BitBucketSubsystem {
     
     @Override
 	public void initialize() {
-        autoChooser = new SendableChooser<AutoChoices>();
-        autoChooser.setDefaultOption("NONE", AutoChoices.NONE);
-        autoChooser.addOption("LEFT",  AutoChoices.LEFT_HATCH);
-        autoChooser.addOption("RIGHT", AutoChoices.RIGHT_HATCH);
-        SmartDashboard.putData("Auto Choices", autoChooser);
+        autoStartChooser = new SendableChooser<AutoStartChoices>();
+        autoStartChooser.setDefaultOption("NONE", AutoStartChoices.NONE);
+        autoStartChooser.addOption("LEFT",  AutoStartChoices.LEFT);
+        autoStartChooser.addOption("CENTER", AutoStartChoices.CENTER);
+        autoStartChooser.addOption("RIGHT", AutoStartChoices.RIGHT);
+        SmartDashboard.putData("Auto Start", autoStartChooser);
+
+        autoEndChooser = new SendableChooser<AutoEndChoices>();
+        autoEndChooser.setDefaultOption("NONE", AutoEndChoices.NONE);
+        autoEndChooser.addOption("LEFT",  AutoEndChoices.LEFT);
+        autoEndChooser.addOption("RIGHT", AutoEndChoices.RIGHT);
+        SmartDashboard.putData("Auto Start", autoEndChooser);
+
+
 
 		initializeBaseDashboard();
     }
@@ -90,7 +116,21 @@ public class AutonomousSubsystem extends BitBucketSubsystem {
 
 
 
+    public boolean doAuto() {
+        return !(
+            autoStartChooser.getSelected() == AutoStartChoices.NONE ||
+            autoEndChooser.getSelected()   == AutoEndChoices.NONE
+        );
+    }
     public Waypoint[] getWaypoints() {
-        return autoChooser.getSelected().getWaypoints();
+        // in case gets called despite no auto
+        if (!doAuto()) {
+            return new Waypoint[] {};
+        }
+
+        Waypoint[] start = autoStartChooser.getSelected().getWaypoints();
+        Waypoint end   = autoEndChooser.getSelected().getWaypoint();
+
+        return new Waypoint[] {start[0], start[1], end};
     }
 }

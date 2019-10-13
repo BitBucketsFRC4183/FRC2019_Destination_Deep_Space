@@ -17,4 +17,7 @@ public class VisionConstants {
 
 	public static final int FRONT_CAMERA_ID = 1;
 	public static final int BACK_CAMERA_ID  = 0;
+
+	public static final double HORIZONTAL_FOV = 80;
+	public static final double HALF_FOV_RAD = HORIZONTAL_FOV * Math.PI / 360;
 }

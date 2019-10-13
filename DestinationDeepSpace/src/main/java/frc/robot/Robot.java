@@ -18,6 +18,7 @@ import frc.robot.operatorinterface.OI;
 import frc.robot.operatorinterface.PS4Constants;
 import frc.robot.utils.autotuner.AutoTuner;
 import frc.robot.utils.talonutils.MotorTestModes;
+import frc.robot.subsystem.autonomous.AutonomousSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -62,6 +63,9 @@ public class Robot extends TimedRobot {
   private VisionSubsystem     visionSubsystem;
   private LightingSubsystem   lightingSubsystem;
 
+  private AutonomousSubsystem autonomousSubsystem;
+  private boolean doAuto;
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -100,6 +104,11 @@ public class Robot extends TimedRobot {
 
     lightingSubsystem = LightingSubsystem.instance();
     lightingSubsystem.initialize();
+
+    autonomousSubsystem = AutonomousSubsystem.instance();
+    autonomousSubsystem.initialize();
+
+    doAuto = false;
   }
 
   /**
@@ -201,8 +210,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    driveSubsystem.startIdle();
-    scoringSubsystem.startIdle();
+    doAuto = false && autonomousSubsystem.doAuto();
+    
+    if (!doAuto) {
+      driveSubsystem.startIdle();
+      scoringSubsystem.startIdle();
+    } else {
+      driveSubsystem.startAuto();
+      scoringSubsystem.startAuto();
+    }
+
     climberSubsystem.startIdle();
     /*driveSubsystem.startIdle();
     scoringSubsystem.startIdle();
@@ -220,7 +237,11 @@ public class Robot extends TimedRobot {
     // commands can be added during this execution cycle and will be acted upon
     // within the current cycle.
 
-    teleopPeriodic();
+    if (false) {
+
+    } else {
+      teleopPeriodic();
+    }
   }
 
   /**

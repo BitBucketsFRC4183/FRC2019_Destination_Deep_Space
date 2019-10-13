@@ -212,11 +212,11 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
         // total time * frequency = number of times it will run in the total time interval
     	// +1 for start
     	// +1 for end (basically impossible total time is a multiple of period, and can't hurt since 0 acceleration)
-        mPoints = new MotionPoint[(int) ((t_acc + t_cruise + t_dec)*AutonomousConstants.LOOP_HERTZ + 2)];
+        mPoints = new MotionPoint[(int) ((t_acc + t_cruise + t_dec)*AutonomousConstants.LOOP_HERTZ + 1)];
         // go through each point loop will run at
         // and get the motion point at that time
         double time;
-        for(int i=0; i<mPoints.length - 1; i++)
+        for(int i=0; i<mPoints.length; i++)
         {
             // time into path so far -> i-th iteration in loop of LOOP_HERTZ frequency
             // time = #/(# per second)
@@ -224,9 +224,8 @@ public class TrajectoryFinder {//deceleration is NEGATIVE* remember that pls
             // generate i-th motion point
             mPoints[i] = getMotionPoint(time);
         }
-        mPoints[mPoints.length - 1] = getMotionPoint(t_total);
         
-        for(int i=0; i<mPoints.length; i++)//sets their rotational acclerations
+        for(int i=0; i<mPoints.length; i++)//sets their rotational accelerations
         {
             // calculate time at i-th MP
             time=i/AutonomousConstants.LOOP_HERTZ;

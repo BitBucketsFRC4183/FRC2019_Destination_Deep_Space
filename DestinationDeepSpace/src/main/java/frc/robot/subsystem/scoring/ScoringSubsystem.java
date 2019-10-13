@@ -426,6 +426,10 @@ public class ScoringSubsystem extends BitBucketSubsystem {
 		initialCommand.start();
 	}
 
+	public void startAuto() {
+		(new ArmLevel(ScoringConstants.ScoringLevel.BALL_CARGO)).start();
+	}
+
 
 
 

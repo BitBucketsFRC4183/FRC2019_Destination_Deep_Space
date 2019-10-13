@@ -614,7 +614,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	   return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 	}
 
-	private void velocityDrive_auto(double speed_ips, double turn_radps) {
+	public void velocityDrive_auto(double speed_ips, double turn_radps) {
 		// The following functions only do something if the state needs
 		// to be changed.
 		selectVelocityMode(true);
@@ -751,9 +751,7 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	}
 
 	public void startAuto() {
-		AutoDrive ad = new AutoDrive();
-
-		ad.start();
+		(new AutoDrive()).start();
 	}
 
 	// Plase one-time initialization here
