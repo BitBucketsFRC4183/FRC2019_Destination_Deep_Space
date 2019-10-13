@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -97,6 +98,12 @@ public class DriveSubsystem extends BitBucketSubsystem {
 	
 	// they always be saying "yee haw" but never "yaw hee" :(
 	private double yawSetPoint;
+
+
+
+	// used to keep track of acceleration
+	private double lastVel_inchps = 0;
+	private double lastT = Timer.getFPGATimestamp();
 	
 
 
@@ -776,6 +783,18 @@ public class DriveSubsystem extends BitBucketSubsystem {
 
 			SmartDashboard.putNumber(getName() + "/Real Left Speed (ips)", left_inchps);
 			SmartDashboard.putNumber(getName() + "/Real Right Speed (ips)", right_inchps);
+
+			// linear velocity of robot
+			double vel = (left_inchps + right_inchps) / 2;
+
+			double t = Timer.getFPGATimestamp();
+			double dt = t - lastT;
+			lastT = t;
+
+			// acceleration in ipsps
+			double acc = vel / dt;
+			
+			SmartDashboard.putNumber(getName() + "/Real acceleration (ipsps)", acc);
 		}
 		//SmartDashboard.putBoolean(getName()+"/RunningDiag", false);  
 	}
